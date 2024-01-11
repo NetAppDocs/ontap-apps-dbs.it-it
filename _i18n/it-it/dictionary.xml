@@ -618,7 +618,6 @@
   <block id="2c8c2171fc87c96e58fb40d8714f85cf" category="doc">Architettura PostgreSQL</block>
   <block id="ee62b4420d426c21a46d892ac084872a" category="paragraph">PostgreSQL è un RDBMS basato su architettura client e server. Un'istanza di PostgreSQL è nota come cluster di database, ovvero una raccolta di database anziché una raccolta di server.</block>
   <block id="89c30c326e106773af32af40255b92a8" category="inline-image-macro">Errore: Immagine non trovata</block>
-  <block id="b481f7d5d88ac812bb1a1d3d939b593b" category="paragraph"><block ref="b481f7d5d88ac812bb1a1d3d939b593b" category="inline-image-macro-rx" type="image"></block></block>
   <block id="54c2dd41fd1ad3efa25e80bee0bae549" category="paragraph">Un database PostgreSQL contiene tre elementi principali: Il postmaster, il front-end (client) e il back-end Il client invia richieste al postmaster con informazioni quali il protocollo IP e il database a cui connettersi. Il postmaster autentica la connessione e la passa al processo back-end per ulteriori comunicazioni. Il processo back-end esegue la query e invia i risultati direttamente al front-end (client).</block>
   <block id="9f96e07bbaf7c0237047d6d0f95301a8" category="paragraph">Un'istanza PostgreSQL si basa su un modello multiprocesso anziché su un modello multithread. Genera più processi per diversi processi e ogni processo ha una propria funzionalità. I processi principali includono il processo client, il processo di scrittura WAL, il processo di scrittura in background e il processo di checkpointer:</block>
   <block id="6aebf901bd4be26a765c56e4133b3798" category="list-text">Quando un processo client (in primo piano) invia richieste di lettura o scrittura all'istanza PostgreSQL, non legge o scrive dati direttamente sul disco. Innanzitutto, memorizza i dati nei buffer condivisi e nei buffer WAL (Write-ahead logging).</block>
@@ -4050,4 +4049,5 @@ Creare almeno due LIF per nodo per coppia ha. In base al carico di lavoro, potre
   <block id="4e0d7e0587bf99c9b7a64a84fd42f6bd" category="paragraph">Fare riferimento alle altre guide alle Best practice di NetApp e VMware specifiche per il protocollo selezionato. In generale, non vi sono modifiche diverse da quelle già menzionate.</block>
   <block id="97f87e9ab1d660463c63beb8745fd9e5" category="paragraph">*Esempio di configurazione di rete utilizzando vVol su NFS v3*</block>
   <block id="c80b3cc8b5013bd4039769fb0f783e60" category="paragraph"><block ref="c80b3cc8b5013bd4039769fb0f783e60" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d81c587aad705c1101db78ffea8e5bc3" category="paragraph"><block ref="d81c587aad705c1101db78ffea8e5bc3" category="inline-image-macro-rx" type="image"></block></block>
 </blocks>
