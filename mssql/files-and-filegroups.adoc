@@ -1,0 +1,77 @@
+---
+sidebar: sidebar 
+permalink: mssql/files-and-filegroups.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server su ONTAP 
+---
+= File di database e filegroup di Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+Un database SQL Server è un insieme di oggetti che consente di memorizzare e manipolare i dati.
+
+In teoria, SQL Server (a 64 bit) supporta 32.767 database per istanza e 524.272TB di dimensioni del database, sebbene l'installazione tipica abbia in genere diversi database. Tuttavia, il numero di database che SQL Server è in grado di gestire dipende dal carico e dall'hardware. Non è insolito vedere le istanze di SQL Server che ospitano decine, centinaia o persino migliaia di database di piccole dimensioni.
+
+Ogni database è costituito da uno o più file di dati e da uno o più file di registro delle transazioni. Il registro delle transazioni memorizza le informazioni sulle transazioni del database e tutte le modifiche apportate ai dati da ciascuna sessione. Ogni volta che i dati vengono modificati, SQL Server memorizza informazioni sufficienti nel log delle transazioni per annullare (eseguire il rollback) o ripristinare (riprodurre nuovamente) l'azione. Un log delle transazioni di SQL Server è parte integrante della reputazione di SQL Server in termini di integrità e robustezza dei dati. Il log delle transazioni è fondamentale per le funzionalità di atomicità, coerenza, isolamento e durata (ACID) di SQL Server. SQL Server scrive nel registro delle transazioni non appena si verifica una modifica alla pagina dei dati. Ogni istruzione DML (Data Manipulation Language) (ad esempio, SELECT, INSERT, Update o DELETE) è una transazione completa e il log delle transazioni garantisce che l'intera operazione basata su set abbia luogo, assicurando l'atomicità della transazione.
+
+Ogni database dispone di un file di dati primario che, per impostazione predefinita, ha l'estensione .mdf. Inoltre, ogni database può disporre di file di database secondari. Questi file, per impostazione predefinita, hanno estensioni .ndf.
+
+Tutti i file di database sono raggruppati in filegroup. Un filegroup è l'unità logica, che semplifica l'amministrazione del database. Consentono la separazione tra il posizionamento degli oggetti logici e i file di database fisici. Quando si creano le tabelle degli oggetti del database, si specifica in quale filegroup devono essere posizionati senza preoccuparsi della configurazione del file di dati sottostante.
+
+image:./media/filegroups.png["Errore: Immagine grafica mancante"]
+
+La possibilità di inserire più file di dati all'interno del filegroup consente di distribuire il carico su diversi dispositivi di archiviazione, migliorando le prestazioni di i/o del sistema. Al contrario, il log delle transazioni non trae vantaggio dai file multipli poiché SQL Server scrive nel log delle transazioni in modo sequenziale.
+
+La separazione tra il posizionamento degli oggetti logici nei filegroup e i file di database fisici consente di ottimizzare il layout dei file di database, ottenendo il massimo dal sottosistema di storage. Ad esempio, i fornitori di software indipendenti (ISV) che distribuiscono i propri prodotti a clienti diversi possono regolare il numero di file di database in base alla configurazione i/o sottostante e alla quantità prevista di dati durante la fase di implementazione. Tali modifiche sono trasparenti per gli sviluppatori di applicazioni, che posizionano gli oggetti database nei filegroup anziché nei file di database.
+
+
+TIP: *NetApp recommended* evitare l'utilizzo del filegroup primario per oggetti diversi da quelli di sistema. La creazione di un filegroup separato o di un set di filegroup per gli oggetti utente semplifica l'amministrazione del database e il ripristino di emergenza, soprattutto nel caso di database di grandi dimensioni.
+
+È possibile specificare le dimensioni iniziali del file e i parametri di crescita automatica al momento della creazione del database o dell'aggiunta di nuovi file a un database esistente. SQL Server utilizza un algoritmo di riempimento proporzionale quando sceglie in quale file di dati scrivere i dati. Scrive una quantità di dati proporzionalmente allo spazio libero disponibile nei file. Maggiore è lo spazio libero nel file, maggiore è il numero di scritture gestite.
+
+
+TIP: *NetApp consiglia* che tutti i file nel singolo filegroup abbiano le stesse dimensioni iniziali e parametri di crescita automatica, con la dimensione di crescita definita in megabyte piuttosto che in percentuali. Questo aiuta l'algoritmo di riempimento proporzionale a bilanciare uniformemente le attività di scrittura nei file di dati.
+
+Ogni volta che SQL Server espande i file, riempie di zero lo spazio appena allocato nei file. Questo processo blocca tutte le sessioni che devono scrivere nel file corrispondente o, in caso di crescita del log delle transazioni, genera record di log delle transazioni.
+
+SQL Server azzera sempre il log delle transazioni e questo comportamento non può essere modificato. Tuttavia, è possibile controllare se i file di dati vengono azzerati attivando o disattivando l'inizializzazione istantanea dei file. L'attivazione dell'inizializzazione immediata dei file consente di velocizzare la crescita dei file di dati e di ridurre il tempo necessario per creare o ripristinare il database.
+
+Un piccolo rischio per la sicurezza è associato all'inizializzazione immediata dei file. Quando questa opzione è attivata, le parti non allocate del file di dati possono contenere informazioni provenienti da file del sistema operativo eliminati in precedenza. Gli amministratori di database possono esaminare tali dati.
+
+È possibile attivare l'inizializzazione immediata dei file aggiungendo l'autorizzazione SA_MANAGE_VOLUME_NAME, nota anche come "Esegui attività di manutenzione del volume" all'account di avvio di SQL Server. È possibile eseguire questa operazione nell'applicazione di gestione dei criteri di protezione locale (secpol.msc), come illustrato nella figura seguente. Aprire le proprietà per l'autorizzazione "Esegui attività di manutenzione del volume" e aggiungere l'account di avvio di SQL Server all'elenco degli utenti.
+
+image:./media/security-policy.png["Errore: Immagine grafica mancante"]
+
+Per verificare se l'autorizzazione è attivata, è possibile utilizzare il codice riportato nell'esempio seguente. Questo codice imposta due flag di traccia che obbligano SQL Server a scrivere informazioni aggiuntive nel registro degli errori, a creare un database di piccole dimensioni e a leggere il contenuto del registro.
+
+....
+DBCC TRACEON(3004,3605,-1)
+
+GO
+
+CREATE DATABASE DelMe
+
+GO
+
+EXECUTE sp_readerrorlog
+
+GO
+
+DROP DATABASE DelMe
+
+GO
+
+DBCC TRACEOFF(3004,3605,-1)
+
+GO
+....
+Quando l'inizializzazione immediata del file non è attivata, il registro degli errori di SQL Server mostra che SQL Server sta azzerando il file di dati mdf oltre a azzerare il file di registro ldf, come illustrato nell'esempio seguente. Quando l'inizializzazione immediata del file è attivata, viene visualizzato solo l'azzeramento del file di registro.
+
+image:./media/zeroing.png["Errore: Immagine grafica mancante"]
+
+L'attività di manutenzione del volume viene semplificata in SQL Server 2016 e viene fornita come opzione durante il processo di installazione. In questa figura viene visualizzata l'opzione per concedere al servizio del motore di database di SQL Server il privilegio di eseguire l'attività di manutenzione del volume.
+
+image:./media/maintenance.png["Errore: Immagine grafica mancante"]
+
+Un'altra importante opzione del database che controlla le dimensioni dei file di database è l'autohrink. Quando questa opzione è attivata, SQL Server riduce regolarmente i file di database, ne riduce le dimensioni e rilascia spazio al sistema operativo. Questa operazione richiede molte risorse ed è raramente utile perché i file di database crescono di nuovo dopo un certo periodo di tempo quando nuovi dati entrano nel sistema. Il collegamento automatico non deve mai essere attivato nel database.

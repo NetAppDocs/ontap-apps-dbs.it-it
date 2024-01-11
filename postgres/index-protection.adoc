@@ -1,0 +1,12 @@
+---
+sidebar: sidebar 
+permalink: postgres/index-protection.html 
+keywords: PostgreSQL,database,postgres 
+summary: Database PostgreSQL su ONTAP 
+---
+= Protezione dei dati
+:allow-uri-read: 
+
+
+[role="lead"]
+Protezione dell'indice

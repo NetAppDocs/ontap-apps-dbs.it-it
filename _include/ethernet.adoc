@@ -1,0 +1,57 @@
+= Impostazioni del sistema operativo host
+:allow-uri-read: 
+
+
+
+
+== Impostazioni del sistema operativo host
+
+La maggior parte della documentazione del fornitore di applicazioni include impostazioni TCP ed ethernet specifiche per garantire il funzionamento ottimale dell'applicazione. Queste stesse impostazioni sono in genere sufficienti per fornire anche prestazioni ottimali dello storage basato su IP.
+
+
+
+== Controllo di flusso Ethernet
+
+Questa tecnologia consente a un client di richiedere che un mittente interrompa temporaneamente la trasmissione dei dati. Questa operazione viene solitamente eseguita perché il ricevitore non è in grado di elaborare i dati in ingresso abbastanza rapidamente. Una volta, la richiesta che un mittente cessi la trasmissione era meno disgregativa di avere pacchetti di scarto del destinatario perché i buffer erano pieni. Questo non è più il caso degli stack TCP utilizzati oggi nei sistemi operativi. Infatti, il controllo di flusso causa più problemi di quanti ne risolva.
+
+Negli ultimi anni sono aumentati i problemi di prestazioni causati dal controllo di flusso Ethernet. Questo perché il controllo di flusso Ethernet opera al livello fisico. Se una configurazione di rete consente a qualsiasi sistema operativo host di inviare una richiesta di controllo di flusso Ethernet a un sistema di storage, il risultato è una pausa in i/o per tutti i client connessi. Poiché un numero crescente di client viene servito da un singolo storage controller, aumenta la probabilità che uno o più client inviino richieste di controllo di flusso. Il problema è stato riscontrato frequentemente presso le sedi dei clienti con un'ampia virtualizzazione del sistema operativo.
+
+Una scheda NIC su un sistema NetApp non dovrebbe ricevere richieste di controllo di flusso. Il metodo utilizzato per ottenere questo risultato varia in base al produttore dello switch di rete. Nella maggior parte dei casi, il controllo di flusso su uno switch Ethernet può essere impostato su `receive desired` oppure `receive on`, il che significa che una richiesta di controllo di flusso non viene inoltrata al controller di memorizzazione. In altri casi, la connessione di rete sul controller di storage potrebbe non consentire la disattivazione del controllo di flusso. In questi casi, i client devono essere configurati in modo da non inviare mai richieste di controllo di flusso, modificando la configurazione NIC sul server host stesso o le porte switch a cui è connesso il server host.
+
+
+TIP: *NetApp consiglia* assicurarsi che i controller di archiviazione NetApp non ricevano pacchetti di controllo di flusso Ethernet. In genere, è possibile eseguire questa operazione impostando le porte dello switch a cui è collegato il controller, ma alcuni hardware dello switch presentano dei limiti che potrebbero richiedere modifiche sul lato client.
+
+
+
+== Dimensioni MTU
+
+È stato dimostrato che l'utilizzo dei frame jumbo offre un certo miglioramento delle performance nelle reti 1Gb, riducendo l'overhead della CPU e della rete, ma i benefici non sono solitamente significativi.
+
+
+TIP: *NetApp consiglia* l'implementazione di frame jumbo quando possibile, sia per ottenere potenziali vantaggi in termini di prestazioni sia per rendere la soluzione a prova di futuro.
+
+L'utilizzo di frame jumbo in una rete 10Gb è quasi obbligatorio. Questo perché la maggior parte delle implementazioni 10Gb raggiungono un limite di pacchetti al secondo senza frame jumbo prima che raggiungano il contrassegno 10Gb. L'utilizzo di frame jumbo migliora l'efficienza dell'elaborazione TCP/IP, poiché consente a sistema operativo, server, schede di rete e sistema di storage di elaborare un numero inferiore di pacchetti, anche se di dimensioni maggiori. Il miglioramento delle prestazioni varia da scheda di rete a scheda di rete, ma è significativo.
+
+Per le implementazioni jumbo-frame, esiste la convinzione comune, ma non corretta, che tutti i dispositivi connessi debbano supportare frame jumbo e che le dimensioni MTU debbano corrispondere end-to-end Al contrario, i due endpoint di rete negoziano la dimensione del frame più elevata reciprocamente accettabile quando si stabilisce una connessione. In un ambiente tipico, uno switch di rete è impostato su una dimensione MTU di 9216, il controller NetApp è impostato su 9000 e i client sono impostati su una combinazione di 9000 e 1514. I client in grado di supportare un valore MTU di 9000 possono utilizzare frame jumbo, mentre i client in grado di supportare solo 1514 possono negoziare un valore inferiore.
+
+I problemi con questa disposizione sono rari in un ambiente completamente commutato. Tuttavia, in un ambiente con routing occorre assicurarsi che nessun router intermedio sia costretto a frammentare frame jumbo.
+
+[TIP]
+====
+*NetApp consiglia* di configurare quanto segue:
+
+* I frame jumbo sono desiderabili ma non necessari con 1Gb Ethernet (GbE).
+* I frame jumbo sono necessari per ottenere le massime prestazioni con 10GbE e velocità.
+
+
+====
+
+
+== Parametri TCP
+
+Tre impostazioni spesso non sono configurate correttamente: Timestamp TCP, riconoscimento selettivo (SACK) e ridimensionamento finestra TCP. Molti documenti obsoleti su Internet consigliano di disabilitare uno o più di questi parametri per migliorare le prestazioni. Molti anni fa, questa raccomandazione ha avuto un certo merito quando le capacità della CPU erano molto inferiori e, quando possibile, vi era un vantaggio nel ridurre il sovraccarico sull'elaborazione TCP.
+
+Tuttavia, con i sistemi operativi moderni, la disattivazione di una qualsiasi di queste funzioni TCP in genere non comporta alcun vantaggio rilevabile e, allo stesso tempo, può danneggiare le prestazioni. In ambienti di rete virtualizzati, i danni alle prestazioni sono particolarmente probabili, poiché queste funzioni sono necessarie per gestire in modo efficiente la perdita di pacchetti e le modifiche della qualità della rete.
+
+
+TIP: *NetApp consiglia* di abilitare timestamp TCP, SACCO e ridimensionamento finestra TCP sull'host, e tutti e tre questi parametri dovrebbero essere attivi per impostazione predefinita in qualsiasi sistema operativo corrente.

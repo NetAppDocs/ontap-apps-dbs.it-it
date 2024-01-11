@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-backup-tiering.html 
+keywords: tiering, fabricpool 
+summary: Tiering del backup Oracle 
+---
+= Tiering del backup Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+I backup delle applicazioni tradizionali includono prodotti come Oracle Recovery Manager, che creano backup basati su file al di fuori della posizione del database originale.
+
+ `tiering-minimum-cooling-days` policy of a few days preserves the most recent backups, and therefore the backups most likely to be required for an urgent recovery situation, on the performance tier. The data blocks of the older files are then moved to the capacity tier.
+Il `auto` il criterio è il criterio più appropriato per i dati di backup. In questo modo si garantisce un tiering rapido quando la soglia di raffreddamento è stata raggiunta, indipendentemente dal fatto che i file siano stati eliminati o continuino a esistere nel file system primario. Inoltre, l'archiviazione di tutti i file potenzialmente necessari in un'unica posizione nel file system attivo semplifica la gestione. Non c'è motivo di cercare tra gli snapshot per individuare un file che deve essere ripristinato.
+
+Il `snapshot-only` i criteri potrebbero funzionare, ma si applicano solo ai blocchi che non si trovano più nel file system attivo. Pertanto, i file presenti in una condivisione NFS o SMB devono essere eliminati prima del tiering dei dati.
+
+Questa policy risulterebbe ancora meno efficiente con la configurazione LUN, poiché l'eliminazione di un file da una LUN rimuove solo i riferimenti dei file dai metadati del file system. I blocchi effettivi sui LUN restano in posizione fino a quando non vengono sovrascritti. Questa situazione può creare un lungo ritardo tra il tempo di eliminazione di un file e il tempo in cui i blocchi vengono sovrascritti e candidati per il tiering. Lo spostamento dell' comporta alcuni vantaggi `snapshot-only` Dei blocchi nel Tier di capacità, ma, nel complesso, la gestione FabricPool dei dati di backup funziona meglio con l' `auto` policy.
+
+
+NOTE: Questo approccio aiuta gli utenti a gestire lo spazio richiesto per i backup in modo più efficiente, ma FabricPool non è una tecnologia di backup. Il tiering dei file di backup nell'archivio di oggetti semplifica la gestione perché i file sono ancora visibili nel sistema di storage originale, ma i blocchi di dati nella destinazione dell'archivio di oggetti dipendono dal sistema di storage originale. Se il volume di origine viene perso, i dati dell'archivio di oggetti non sono più utilizzabili.

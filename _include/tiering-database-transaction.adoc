@@ -1,0 +1,17 @@
+= Policy
+:allow-uri-read: 
+
+
+La maggior parte dei database relazionali opera in modalità di archiviazione dei log delle transazioni per fornire un ripristino point-in-time. Le modifiche apportate ai database vengono salvate registrando le modifiche nei registri delle transazioni e il registro delle transazioni viene conservato senza essere sovrascritto. Il risultato può essere la necessità di conservare un enorme volume di registri delle transazioni archiviati. Esempi simili esistono con molti altri flussi di lavoro delle applicazioni che generano dati che devono essere conservati, ma con molte probabilità di accesso.
+
+FabricPool risolve questi problemi offrendo una singola soluzione con tiering integrato. I file vengono memorizzati e rimangono accessibili nella loro posizione abituale, ma non occupano praticamente spazio nell'array primario.
+
+
+
+== Policy
+
+Utilizzare un `tiering-minimum-cooling-days` la policy di pochi giorni comporta la conservazione dei blocchi nei file creati di recente (che sono i file più probabilmente necessari a breve termine) nel tier di performance. I blocchi di dati dei file meno recenti vengono quindi spostati nel Tier di capacità.
+
+Il `auto` applica il tiering prompt quando viene raggiunta la soglia di raffreddamento, indipendentemente dal fatto che i log siano stati eliminati o continuino a esistere nel file system primario. Inoltre, l'archiviazione di tutti i log potenzialmente necessari in un'unica posizione nel file system attivo semplifica la gestione. Non c'è motivo di cercare tra gli snapshot per individuare un file che deve essere ripristinato.
+
+Alcune applicazioni, come Microsoft SQL Server, troncano i file di log delle transazioni durante le operazioni di backup in modo che i log non si trovino più nel file system attivo. È possibile risparmiare capacità utilizzando `snapshot-only` tiering delle policy, ma `auto` il criterio non è utile per i dati di log perché raramente dovrebbero essere raffreddati i dati di log nel file system attivo.

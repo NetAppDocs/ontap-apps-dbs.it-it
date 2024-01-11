@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: mssql/storage-efficiency.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server su ONTAP 
+---
+= Efficienza dello storage ONTAP con Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+L'efficienza dello storage è la capacità di archiviare e gestire i dati di SQL Server in modo che consumano la minor quantità di spazio di storage con effetti minimi o nulli sulle performance complessive del sistema.
+
+L'efficienza dello storage è una combinazione di RAID, provisioning (layout e utilizzo generali), mirroring e altre tecnologie di protezione dei dati. Tecnologie NetApp come le copie Snapshot, il thin provisioning e FlexClone consentono di creare vantaggi in termini di costi ottimizzando lo storage esistente nell'infrastruttura e posticipando o evitando le spese future per lo storage. Più si utilizzano queste tecnologie insieme, maggiore sarà il risparmio. Per ulteriori informazioni, vedere link:../common/ontap/thin-provisioning.html["raccomandazioni sul provisioning"]
+
+La compressione, la compaction e la deduplica dello storage sono altre opzioni di efficienza dello storage che migliorano la quantità di dati logici applicabili a una determinata quantità di storage fisico. Per ulteriori informazioni, vedere link:../common/ontap/efficiency.html["best practice di efficienza"].
+
+SQL Server dispone inoltre di funzionalità per comprimere e gestire in modo efficiente i dati. Attualmente SQL Server supporta due tipi di compressione dati: Compressione riga e compressione pagina.
+
+La compressione riga modifica il formato di memorizzazione dei dati. Ad esempio, cambia interi e decimali nel formato a lunghezza variabile invece del formato a lunghezza fissa nativo. Inoltre, le stringhe di caratteri a lunghezza fissa vengono modificate nel formato a lunghezza variabile eliminando gli spazi vuoti. La compressione della pagina implementa la compressione della riga e altre due strategie di compressione (compressione del prefisso e compressione del dizionario). Per ulteriori dettagli sulla compressione delle pagine, consultare link:https://learn.microsoft.com/en-us/sql/relational-databases/data-compression/page-compression-implementation?view=sql-server-ver16&redirectedfrom=MSDN["Implementazione della compressione pagina"^].
+
+La compressione dei dati è attualmente supportata nelle edizioni Enterprise, Developer e Evaluation di SQL Server 2008 e versioni successive. Sebbene la compressione possa essere eseguita dal database stesso, ciò si verifica raramente in un ambiente SQL Server.
+
+Di seguito sono riportati i suggerimenti per la gestione dello spazio per i file di dati di SQL Server
+
+* Utilizzo del thin provisioning negli ambienti SQL Server per migliorare l'utilizzo dello spazio e ridurre i requisiti generali di storage quando viene utilizzata la funzionalità di garanzia di spazio.
+* Utilizza l'espansione automatica per la maggior parte delle configurazioni di implementazione più comuni, perché l'amministratore dello storage deve solo monitorare l'utilizzo dello spazio nell'aggregato.
+* Si consiglia di non abilitare la deduplica su qualsiasi volume contenente file di dati di SQL Server a meno che non sia noto che il volume contiene più copie degli stessi dati, come ad esempio il ripristino del database dai backup su un singolo volume.
+
+
+
+
+== Bonifica dello spazio
+
+Il recupero di spazio può essere avviato periodicamente per recuperare spazio inutilizzato in un LUN. Con SnapCenter, puoi usare il seguente comando PowerShell per iniziare il recupero dello spazio.
+
+[listing]
+----
+Invoke-SdHostVolumeSpaceReclaim -Path drive_path
+----
+Se è necessario eseguire il recupero di spazio, questo processo deve essere eseguito durante i periodi di attività bassa, poiché inizialmente consuma cicli sull'host.

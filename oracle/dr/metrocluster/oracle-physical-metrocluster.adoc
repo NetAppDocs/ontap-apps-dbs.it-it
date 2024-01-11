@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: oracle/dr/metrocluster/oracle-physical-metrocluster.html 
+keywords: metrocluster, MCC, MCC-IP 
+summary: Architettura fisica di MetroCluster - Oracle 
+---
+= Architettura fisica di MetroCluster - Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../../../media/
+
+
+[role="lead"]
+Per comprendere il funzionamento dei database Oracle in un ambiente MetroCluster è necessario spiegare la progettazione fisica di un sistema MetroCluster.
+
+
+NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubblicato _TR-4592: Oracle su MetroCluster._
+
+
+
+== MetroCluster è disponibile in 3 diverse configurazioni
+
+* Coppie HA con connettività IP
+* Coppie HA con connettività FC
+* Controller singolo con connettività FC
+
+
+[NOTA]il termine 'connettività' si riferisce alla connessione cluster utilizzata per la replica tra siti. Non si riferisce ai protocolli host. Tutti i protocolli lato host sono supportati come di consueto in una configurazione MetroCluster indipendentemente dal tipo di connessione utilizzata per la comunicazione tra cluster.
+
+
+
+== IP MetroCluster
+
+La configurazione MetroCluster IP ha-Pair utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
+
+La maggior parte dei clienti sceglie la connettività IP perché i requisiti dell'infrastruttura sono più semplici. In passato, la connettività cross-site ad alta velocità era generalmente più semplice da fornire utilizzando gli switch FC e in fibra scura, ma oggi i circuiti IP ad alta velocità e a bassa latenza sono più prontamente disponibili.
+
+L'architettura è anche più semplice perché le uniche connessioni cross-site sono per i controller. Nei MetroClusters collegati a FC SAN, un controller scrive direttamente sulle unità del sito opposto e quindi richiede connessioni SAN, switch e bridge aggiuntivi. Al contrario, un controller in una configurazione IP scrive sulle unità opposte tramite il controller.
+
+Per ulteriori informazioni, consultare la documentazione ufficiale di ONTAP e. https://www.netapp.com/pdf.html?item=/media/13481-tr4689.pdf["Architettura e progettazione della soluzione IP di MetroCluster"^].
+
+image:mccip.png["Errore: Immagine grafica mancante"]
+
+
+
+== MetroCluster HA-Pair FC SAN-Attached
+
+La configurazione ha-Pair MetroCluster FC utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
+
+image:mcc-4-node.png["Errore: Immagine grafica mancante"]
+
+Alcune infrastrutture multisito non sono progettate per le operazioni Active-Active, ma vengono utilizzate maggiormente come sito primario e sito di disaster recovery. In questa situazione, è generalmente preferibile un'opzione ha-Pair MetroCluster per i seguenti motivi:
+
+* Anche se un cluster MetroCluster a due nodi è un sistema ha, un guasto imprevisto di un controller o una manutenzione pianificata richiedono che i servizi dati vengano online sul sito opposto. Se la connettività di rete tra i siti non supporta la larghezza di banda richiesta, le prestazioni ne risentono. L'unica opzione sarebbe anche eseguire il failover dei vari sistemi operativi host e dei servizi associati al sito alternativo. Il cluster MetroCluster ha-Pair elimina questo problema grazie alla perdita di un controller che consente di eseguire un semplice failover all'interno dello stesso sito.
+* Alcune topologie di rete non sono progettate per l'accesso tra siti, ma utilizzano sottoreti o SAN FC isolate. In questi casi, il cluster MetroCluster a due nodi non funziona più come sistema ha, perché il controller alternativo non può fornire dati ai server del sito opposto. L'opzione ha-Pair MetroCluster è necessaria per garantire ridondanza completa.
+* Se un'infrastruttura a due siti viene vista come una singola infrastruttura ad alta disponibilità, la configurazione MetroCluster a due nodi è adatta. Tuttavia, se il sistema deve funzionare per un periodo di tempo prolungato dopo il guasto del sito, è preferibile una coppia ha perché continua a fornire ha all'interno di un singolo sito.
+
+
+
+
+== MetroCluster FC SAN-attached a due nodi
+
+La configurazione MetroCluster a due nodi utilizza un solo nodo per sito. Questo design è più semplice rispetto all'opzione ha-Pair perché richiede meno componenti da configurare e gestire. Inoltre, ha ridotto le richieste di infrastruttura in termini di cablaggio e switch FC. Infine, riduce i costi.
+
+image:mcc-2-node.png["Errore: Immagine grafica mancante"]
+
+L'evidente impatto di questa progettazione è che un guasto del controller su un singolo sito implica che i dati sono disponibili dal sito opposto. Questa restrizione non è necessariamente un problema. Molte aziende hanno operazioni di data center multisito con reti estese, ad alta velocità e a bassa latenza che funzionano essenzialmente come una singola infrastruttura. In questi casi, la configurazione preferita è la versione a due nodi di MetroCluster. Diversi service provider utilizzano attualmente sistemi a due nodi con scalabilità di petabyte.
+
+
+
+== Funzionalità di resilienza di MetroCluster
+
+Non esistono single point of failure in una soluzione MetroCluster:
+
+* Ogni controller dispone di due percorsi indipendenti verso gli shelf di dischi sul sito locale.
+* Ogni controller dispone di due percorsi indipendenti verso gli shelf di dischi sul sito remoto.
+* Ciascun controller dispone di due percorsi indipendenti verso i controller sul sito opposto.
+* Nella configurazione ha-Pair, ogni controller ha due percorsi verso il partner locale.
+
+
+Riassumendo, qualsiasi componente della configurazione può essere rimosso senza compromettere la capacità di MetroCluster di fornire dati. L'unica differenza in termini di resilienza tra le due opzioni è che la versione ha-Pair è ancora un sistema storage ha generale dopo un guasto del sito.

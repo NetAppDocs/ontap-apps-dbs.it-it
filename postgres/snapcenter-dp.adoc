@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: postgres/snapcenter-dp.html 
+keywords: PostgreSQL,database,postgres 
+summary: Database PostgreSQL su ONTAP 
+---
+= Software per la data Protection
+:allow-uri-read: 
+
+
+[role="lead"]
+Il plug-in NetApp SnapCenter per i database PostgreSQL, combinato con le tecnologie Snapshot e NetApp FlexClone, offre diversi vantaggi, tra cui:
+
+* Backup e ripristino rapidi.
+* Cloni efficienti in termini di spazio.
+* La capacità di creare un sistema di disaster recovery rapido ed efficace.
+
+
+[NOTE]
+====
+Potresti preferire scegliere i partner di backup premium di NetApp come Veeam Software e CommVault nelle seguenti circostanze:
+
+* Gestire i carichi di lavoro in un ambiente eterogeneo
+* Memorizzazione dei backup su cloud o nastro per una conservazione a lungo termine
+* Supporto per un'ampia gamma di versioni e tipi di sistema operativo
+
+
+====
+Il plug-in SnapCenter per PostgreSQL è un plugin supportato dalla comunità e la configurazione e la documentazione sono disponibili nell'archivio automazione di NetApp. Tramite SnapCenter, l'utente può eseguire il backup di database, clonare e ripristinare i dati in remoto.

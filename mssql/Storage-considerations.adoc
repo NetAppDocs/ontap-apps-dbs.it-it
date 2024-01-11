@@ -1,0 +1,99 @@
+---
+sidebar: sidebar 
+permalink: mssql/Storage-considerations.html 
+keywords: MS-SQL,mssql,SQL Server, database layout 
+summary: Microsoft SQL Server su ONTAP 
+---
+= Considerazioni sullo storage per Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+La combinazione delle soluzioni storage NetApp e Microsoft SQL Server consente di creare design di storage per database di livello Enterprise in grado di soddisfare le più esigenti esigenze applicative odierne.
+
+Per ottimizzare entrambe le tecnologie, è fondamentale comprendere lo schema e le caratteristiche di i/o di SQL Server. Un layout di storage ben progettato per un database SQL Server supporta le performance di SQL Server e la gestione dell'infrastruttura SQL Server. Un buon layout dello storage permette inoltre di avere successo nell'implementazione iniziale e di far crescere l'ambiente senza problemi nel tempo, con il crescere dell'azienda.
+
+
+
+== Progettazione dello storage dei dati
+
+Per i database SQL Server che non utilizzano SnapCenter per eseguire i backup, Microsoft consiglia di posizionare i file di dati e di log su dischi separati. Per le applicazioni che aggiornano e richiedono contemporaneamente i dati, il file di log è intensivo in scrittura e il file di dati (a seconda dell'applicazione) è intensivo in lettura/scrittura. Per il recupero dei dati, il file di log non è necessario. Pertanto, le richieste di dati possono essere soddisfatte dal file di dati posto sul proprio disco.
+
+Quando si crea un nuovo database, Microsoft consiglia di specificare unità separate per i dati e i registri. Per spostare i file dopo la creazione del database, il database deve essere portato offline. Per ulteriori consigli Microsoft, vedere link:https://docs.microsoft.com/en-us/sql/relational-databases/policy-based-management/place-data-and-log-files-on-separate-drives?view=sql-server-ver15["Posizionare i file di dati e di registro su unità separate"^].
+
+
+
+== Aggregati
+
+Gli aggregati sono i container di storage primari per le configurazioni di storage NetApp e contengono uno o più gruppi RAID costituiti da dischi di dati e dischi di parità. NetApp ha eseguito diverse prove di caratterizzazione dei carichi di lavoro i/o utilizzando aggregati condivisi e dedicati con file di dati e file di log delle transazioni separati. I test dimostrano che un aggregato di grandi dimensioni con più gruppi RAID e spindle ottimizza e migliora le performance dello storage ed è più semplice da gestire per due motivi:
+
+* Un unico aggregato di grandi dimensioni rende disponibili per tutti i file le funzionalità di i/o di tutti gli spindle.
+* Un grande aggregato consente l'utilizzo più efficiente dello spazio su disco.
+
+
+Per l'high Availability (ha), posiziona la replica sincrona secondaria di SQL Server Always on Availability Group su una Storage Virtual Machine (SVM) separata nell'aggregato. Per scopi di disaster recovery, posizionare la replica asincrona in un aggregato che fa parte di un cluster di storage separato nel sito di disaster recovery, con contenuto replicato utilizzando la tecnologia NetApp SnapMirror. NetApp consiglia di disporre di almeno il 10% di spazio libero in un aggregato per ottenere performance dello storage ottimali.
+
+
+
+== Volumi
+
+I volumi NetApp FlexVol vengono creati e risiedono all'interno degli aggregati. È possibile creare diversi volumi in un singolo aggregato ed è possibile espandere, ridurre o spostare ciascun volume fra gli aggregati senza downtime per gli utenti.
+
+
+
+=== Considerazioni sulla progettazione dei volumi
+
+Prima di creare una progettazione di volumi di database, è importante comprendere in che modo il modello i/o di SQL Server e le relative caratteristiche variano in base al carico di lavoro e ai requisiti di backup e ripristino. Consulta i seguenti consigli NetApp per i volumi flessibili:
+
+* Utilizzare volumi flessibili per archiviare i file di database di SQL Server ed evitare la condivisione di volumi tra host.
+* Utilizzare i punti di montaggio NTFS invece delle lettere dell'unità per superare il limite di 26 lettere di unità in Windows. Quando si utilizzano punti di montaggio del volume, si consiglia di assegnare all'etichetta del volume lo stesso nome del punto di montaggio.
+* Se necessario, configurare un criterio di dimensionamento automatico dei volumi per evitare condizioni di spazio insufficiente. 17 Guida alle Best practice per Microsoft SQL Server con ONTAP © 2022 NetApp, Inc Tutti i diritti riservati.
+* Abilitare la riallocazione in lettura sul volume quando il profilo di i/o del database di SQL Server è costituito per lo più da letture sequenziali di grandi dimensioni, ad esempio con carichi di lavoro del sistema di supporto decisionale. La riallocazione in lettura ottimizza i blocchi per fornire performance migliori.
+* Se si installa SQL Server su una condivisione SMB, assicurarsi che Unicode sia attivato sui volumi SMB/CIFS per la creazione delle cartelle.
+* Impostare il valore di riserva delle copie Snapshot di NetApp nel volume a zero per semplificare il monitoraggio dal punto di vista operativo.
+* Disattivare le pianificazioni delle copie Snapshot™ di archiviazione e i criteri di conservazione. Utilizzare invece SnapCenter per coordinare le copie Snapshot dei volumi di dati di SQL Server.
+* Posizionamento dei database di sistema di SQL Server su un volume dedicato o VMDK.
+* Tempdb è un database di sistema utilizzato da SQL Server come area di lavoro temporanea, in particolare per operazioni DBCC CHECKDB i/o intensive. Pertanto, collocare questo database su un volume dedicato con un set separato di spindle. In ambienti di grandi dimensioni in cui il numero di volumi rappresenta una sfida, è possibile consolidare il tempdb in un numero inferiore di volumi e memorizzarlo nello stesso volume degli altri database di sistema dopo un'attenta pianificazione. La protezione dei dati per tempdb non è una priorità elevata perché questo database viene ricreato ogni volta che SQL Server viene riavviato.
+* Posizionare i file di dati utente (.mdf) su volumi separati perché si tratta di carichi di lavoro di lettura/scrittura casuali. È comune creare backup del log delle transazioni con maggiore frequenza rispetto ai backup del database. Per questo motivo, collocare i file di log delle transazioni (.ldf) in un volume separato o VMDK dai file di dati in modo che sia possibile creare pianificazioni di backup indipendenti per ciascuno di essi. Questa separazione isola inoltre l'i/o di scrittura sequenziale dei file di log dall'i/o di lettura/scrittura casuale dei file di dati e migliora significativamente le prestazioni di SQL Server.
+
+
+
+
+== LUN
+
+* Assicurarsi che i file del database utente e la directory di registro per l'archiviazione del backup del registro si trovino su volumi separati per evitare che il criterio di conservazione sovrascriva gli snapshot quando vengono utilizzati con la tecnologia SnapVault.
+* Accertarsi che i database di SQL Server risiedano in LUN separate da LUN che dispongono di file non di database, come i file relativi alla ricerca full-text.
+* L'inserimento di file secondari del database (come parte di un filegroup) in volumi separati migliora le prestazioni del database di SQL Server. Questa separazione è valida solo se il file .mdf del database non condivide il proprio LUN con altri file .mdf.
+* Se si creano LUN con DiskManager o altri strumenti, assicurarsi che la dimensione dell'unità di allocazione sia impostata su 64K per le partizioni durante la formattazione dei LUN.
+* Vedere link:https://www.netapp.com/media/10680-tr4080.pdf["Microsoft Windows e MPIO nativo nelle Best practice ONTAP per le SAN moderne"] Per applicare il supporto multipathing in Windows ai dispositivi iSCSI nelle proprietà MPIO.
+
+
+
+
+=== Directory di log
+
+La directory di registro è specificata in SQL Server per archiviare i dati di backup del registro delle transazioni a livello di host. Se si utilizza SnapCenter per eseguire il backup dei file di registro, ciascun host SQL Server utilizzato da SnapCenter deve disporre di una directory di registro host configurata per eseguire i backup dei registri. SnapCenter dispone di un repository di database, pertanto i metadati relativi alle operazioni di backup, ripristino o clonazione vengono memorizzati in un repository di database centrale.
+
+Le dimensioni della directory del registro host vengono calcolate come segue:
+Dimensione della directory del log host = ( (dimensione massima LDF DB x velocità di modifica giornaliera del log %) x (conservazione snapshot) ÷ (1 - spazio di overhead LUN %)
+La formula di dimensionamento della directory del registro host presuppone uno spazio di overhead LUN del 10%
+
+Posizionare la directory di registro su un volume o LUN dedicato. La quantità di dati nella directory del registro host dipende dalle dimensioni dei backup e dal numero di giorni in cui i backup vengono conservati. SnapCenter consente una sola directory di registro host per host SQL Server. È possibile configurare le directory del registro host in SnapCenter --> host --> Configura plug-in.
+
+[TIP]
+====
+*NetApp consiglia* quanto segue per una directory del registro host:
+
+* Assicurarsi che la directory del registro host non sia condivisa da altri tipi di dati che potrebbero danneggiare i dati dello snapshot di backup.
+* Non posizionare database utente o database di sistema su un LUN che ospita punti di montaggio.
+* Creare la directory di log dell'host sul volume FlexVol dedicato a cui SnapCenter copia i registri delle transazioni.
+* Utilizzare le procedure guidate SnapCenter per migrare i database nello storage NetApp in modo che i database vengano memorizzati in posizioni valide, consentendo operazioni di backup e ripristino SnapCenter corrette. Tenere presente che il processo di migrazione causa interruzioni e può causare la disconnessione dei database mentre è in corso la migrazione.
+* Per le istanze di cluster di failover (FCI) di SQL Server devono essere presenti le seguenti condizioni:
++
+** Se si utilizza un'istanza del cluster di failover, il LUN della directory del log host deve essere una risorsa del disco del cluster nello stesso gruppo di cluster dell'istanza di SQL Server di cui viene eseguito il backup in SnapCenter.
+** Se si utilizza un'istanza cluster di failover, i database utente devono essere collocati su LUN condivisi che sono risorse cluster di dischi fisici assegnate al gruppo di cluster associato all'istanza di SQL Server.
+
+
+
+
+====

@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_io_capacity.html 
+keywords: MySQL,MariaDB,innodb_io_capacity 
+summary: MySQL su ONTAP 
+---
+= innodb_io_capacity
+:allow-uri-read: 
+
+
+[role="lead"]
+Nel plug-in InnoDB è stato aggiunto un nuovo parametro chiamato innodb_io_Capacity da MySQL 5,7.
+
+Controlla il numero massimo di IOPS eseguiti da InnoDB (che include la velocità di scaricamento delle pagine sporche e la dimensione batch del buffer di inserimento [ibuf]). Il parametro innodb_io_Capacity imposta un limite massimo per le IOPS da parte delle attività in background di InnoDB, come il lavaggio delle pagine dal pool di buffer e l'Unione dei dati dal buffer di modifica.
+
+Impostare il parametro innodb_io_Capacity sul numero approssimativo di operazioni di i/o che il sistema può eseguire al secondo. Idealmente, mantenere l'impostazione più bassa possibile, ma non così bassa che le attività in background rallentano. Se l'impostazione è troppo alta, i dati vengono rimossi dal pool di buffer e il buffer di inserimento troppo rapidamente per la memorizzazione nella cache, per fornire un vantaggio significativo.
+
+
+TIP: *NetApp consiglia* che, se si utilizza questa impostazione su NFS, analizzi il risultato del test di IOPS (SysBench/FiO) e imposti il parametro di conseguenza. Utilizzare il valore più piccolo possibile per lo spurgo e lo spurgo per continuare a meno che non vengano visualizzate pagine modificate o sporche di quanto si desidera nel pool di buffer InnoDB.
+
+
+CAUTION: Non utilizzare valori estremi come 20.000 o più a meno che non si sia dimostrato che valori inferiori non sono sufficienti per il carico di lavoro.
+
+Il parametro InnoDB_io_Capacity regola le velocità di lavaggio e i/o correlati
+
+
+CAUTION: È possibile danneggiare seriamente le prestazioni impostando questo parametro o il parametro innodb_io_Capacity_max troppo alto e sprecando le operazioni di i/o con il lavaggio prematuro.

@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-nfs-caching.html 
+keywords: NFS 
+summary: Database di caching degli attributi NFS 
+---
+= Caching NFS con i database
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La presenza di una delle seguenti opzioni di montaggio causa la disattivazione della cache host:
+
+....
+cio, actimeo=0, noac, forcedirectio
+....
+Queste impostazioni possono avere un grave effetto negativo sulla velocità di installazione del software, l'applicazione di patch e le operazioni di backup/ripristino. In alcuni casi, in particolare con le applicazioni in cluster, queste opzioni sono necessarie come conseguenza inevitabile della necessità di garantire la coerenza della cache in tutti i nodi del cluster. In altri casi, i clienti utilizzano erroneamente questi parametri e il risultato è un inutile danno alle prestazioni.
+
+Molti clienti rimuovono temporaneamente queste opzioni di montaggio durante l'installazione o l'applicazione di patch dei file binari. Questa rimozione può essere eseguita in modo sicuro se l'utente verifica che nessun altro processo stia utilizzando attivamente la directory di destinazione durante il processo di installazione o di applicazione delle patch.

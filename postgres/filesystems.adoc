@@ -1,0 +1,32 @@
+---
+sidebar: sidebar 
+permalink: postgres/filesystems.html 
+keywords: PostgreSQL,database,postgres 
+summary: Database PostgreSQL su ONTAP 
+---
+= File system
+:allow-uri-read: 
+
+
+[role="lead"]
+PostgreSQL può essere ospitato su filesystem NFS o SAN.
+
+
+
+== NFS
+
+
+TIP: *NetApp consiglia* di utilizzare NFSv4,1 se sono necessarie funzionalità NFSv4. Sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 di NFSv4,1 che migliorano la resilienza in alcuni casi edge.
+
+Utilizzare la seguente opzione di montaggio durante il montaggio di un file system NFS:
+
+....
+nfs4 rw, hard,nointr,bg,vers=4,sync,proto=tcp,noatime,rsize=65536,wsize=65536
+....
+Per migliorare le prestazioni di NFS, vedere link:../common/storage-configuration/nfs.html#ontap-nfs-transfer-sizes["Dimensioni trasferimento NFS"].
+
+
+
+== SAN
+
+Per informazioni sulla configurazione SAN e importanti dettagli sullo striping LVM e sui conteggi LUN, vedere link:..//common/storage-configuration/fcsan.html["SAN FC"].

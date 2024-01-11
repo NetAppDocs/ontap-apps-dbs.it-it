@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: vmware/vvols/resources.html 
+keywords: tr-4400, vvols, ontap, virtual volumes, protect 
+summary:  
+---
+= Risoluzione dei problemi
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./../media/
+
+
+[role="lead"]
+Sono disponibili diverse risorse per la risoluzione dei problemi con ulteriori informazioni.
+
+
+
+== Sito di supporto NetApp
+
+Oltre a una serie di articoli della Knowledge base per i prodotti di virtualizzazione NetApp, il sito del supporto NetApp offre anche una comoda landing page per https://mysupport.netapp.com/site/products/all/details/otv/docs-tab["Strumenti ONTAP per VMware vSphere"] prodotto. Questo portale fornisce link ad articoli, download, report tecnici e discussioni sulle soluzioni VMware sulla community NetApp. È disponibile all'indirizzo:
+
+https://mysupport.netapp.com/site/products/all/details/otv/docs-tab["_Sito di supporto NetApp_"]
+
+La documentazione aggiuntiva sulla soluzione è disponibile qui:
+
+https://docs.netapp.com/us-en/netapp-solutions/virtualization/index.html["_Soluzioni NetApp per la virtualizzazione_"]
+
+
+
+== Risoluzione dei problemi del prodotto
+
+I vari componenti degli strumenti ONTAP, come il plugin vCenter, il provider VASA e l'adattatore di replica dello storage, sono tutti documentati insieme nell'archivio dei documenti NetApp. Tuttavia, ciascuno di essi dispone di una sottosezione separata della Knowledge base e può disporre di procedure specifiche per la risoluzione dei problemi. Queste soluzioni risolvono i problemi più comuni che potrebbero verificarsi con il provider VASA.
+
+
+
+=== Problemi dell'interfaccia utente del provider VASA
+
+Occasionalmente, il client Web vCenter vSphere incontra problemi con i componenti di Serenity, causando la mancata visualizzazione delle voci di menu del provider VASA per ONTAP. Consultare la sezione risoluzione dei problemi di registrazione del provider VASA nella Guida all'implementazione o nella presente Knowledge base https://kb.netapp.com/Advice_and_Troubleshooting/Data_Storage_Software/VSC_and_VASA_Provider/How_to_resolve_display_issues_with_the_vSphere_Web_Client["articolo"].
+
+
+
+=== Il provisioning del datastore di vVol non riesce
+
+Occasionalmente, i servizi vCenter potrebbero subire un timeout durante la creazione del datastore vVols. Per correggerlo, riavviare il servizio vmware-sps e rimontare il datastore vVols utilizzando i menu vCenter (Storage > New Datastore). Questo argomento viene trattato in vVols datastore provisioning fails with vCenter Server 6.5 nella Administration Guide.
+
+
+
+=== L'aggiornamento di Unified Appliance non riesce a montare ISO
+
+A causa di un bug in vCenter, l'ISO utilizzato per aggiornare Unified Appliance da una release alla successiva potrebbe non essere in grado di eseguire il montaggio. Se è possibile collegare l'ISO all'appliance in vCenter, seguire la procedura descritta in questa Knowledge base https://kb.netapp.com/Advice_and_Troubleshooting/Data_Storage_Software/VSC_and_VASA_Provider/Virtual_Storage_Console_(VSC)%3A_Upgrading_VSC_appliance_fails_%22failed_to_mount_ISO%22["articolo"] per risolvere il problema.

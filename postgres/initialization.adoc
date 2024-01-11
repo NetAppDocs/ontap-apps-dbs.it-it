@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: postgres/initialization.html 
+keywords: PostgreSQL,database,postgres 
+summary: Inizializzazione PostgreSQL 
+---
+= Inizializzazione
+:allow-uri-read: 
+
+
+[role="lead"]
+È possibile creare un nuovo cluster di database utilizzando `initdb` programma. An `initdb` script crea i file di dati, le tabelle di sistema e i database dei modelli (template0 e template1) che definiscono il cluster.
+
+Il database dei modelli rappresenta un database di stock. Contiene le definizioni per le tabelle di sistema, le viste standard, le funzioni e i tipi di dati. `pgdata` funge da argomento per il `initdb` script che specifica la posizione del cluster di database.
+
+Tutti gli oggetti di database in PostgreSQL sono gestiti internamente dai rispettivi OID. Le tabelle e gli indici sono inoltre gestiti da singoli OID. Le relazioni tra gli oggetti del database e i rispettivi OID vengono memorizzate in tabelle di cataloghi di sistema appropriate, a seconda del tipo di oggetto. Ad esempio, gli OID dei database e delle tabelle heap vengono memorizzati in `pg_database` e `pg_class, rispettivamente. È possibile determinare gli OID eseguendo query sul client PostgreSQL.
+
+Ogni database ha le proprie tabelle e i file di indice che sono limitati a 1GB. Ogni tabella ha due file associati, rispettivamente con il suffisso `_fsm` e. `_vm`. Sono indicate come mappa dello spazio libero e mappa di visibilità. Questi file memorizzano le informazioni sulla capacità di spazio libero e hanno visibilità su ogni pagina del file di tabella. Gli indici hanno solo mappe di spazio libero individuali e non hanno mappe di visibilità.
+
+Il `pg_xlog/pg_wal` la directory contiene i registri write-ahead. I registri write-ahead sono utilizzati per migliorare l'affidabilità e le performance del database. Ogni volta che si aggiorna una riga in una tabella, PostgreSQL scrive prima la modifica nel registro write-ahead e successivamente scrive le modifiche alle pagine di dati effettive su un disco. Il `pg_xlog` la directory di solito contiene diversi file, ma initdb crea solo il primo. I file aggiuntivi vengono aggiunti in base alle necessità. Ciascun file xlog è lungo 16MB MB.

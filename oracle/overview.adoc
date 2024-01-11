@@ -1,0 +1,19 @@
+---
+sidebar: sidebar 
+permalink: oracle/overview.html 
+keywords: oracle, database, ontap, TR-3633 
+summary: NetApp ONTAP è una potente piattaforma di gestione dei dati con funzionalità native che includono funzionalità di backup, ripristino e cloning istantanei, funzionalità di efficienza come compressione inline, upgrade hardware senza interruzioni e la possibilità di importare una LUN da uno storage array esterno. 
+---
+= Database Oracle su ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+ONTAP è progettato per i database Oracle. Per decenni, ONTAP è stato ottimizzato per le esigenze uniche di i/o dei database relazionali e sono state create più funzionalità di ONTAP appositamente per soddisfare le esigenze dei database Oracle e persino su richiesta della stessa Oracle Inc.
+
+
+NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblicati _TR-3633: Database Oracle su ONTAP; TR-4591: Protezione dei dati Oracle: Backup, recovery, replica; TR-4592: Oracle su MetroCluster; e TR-4534: Migrazione dei database Oracle su sistemi di storage NetApp_
+
+Oltre ai numerosi modi possibili in cui ONTAP apporta valore all'ambiente di database, esiste anche una vasta gamma di requisiti utente, incluse le dimensioni del database, i requisiti di performance e le esigenze di protezione dei dati. Le distribuzioni note di storage NetApp includono tutto, da un ambiente virtualizzato di circa 6.000 database in esecuzione su VMware ESX a un data warehouse a singola istanza, di dimensioni attuali pari a 996TB TB e in crescita. Di conseguenza, sono disponibili alcune Best practice chiare per la configurazione di un database Oracle su storage NetApp.
+
+I requisiti per l'utilizzo di un database Oracle su storage NetApp vengono risolti in due modi. In primo luogo, quando esiste una buona pratica chiara, essa verrà richiamata in modo specifico. A un livello generale, verranno spiegate molte considerazioni di progettazione che i progettisti delle soluzioni di storage Oracle devono affrontare in base ai loro specifici requisiti di business.

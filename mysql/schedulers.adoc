@@ -1,0 +1,18 @@
+---
+sidebar: sidebar 
+permalink: mysql/schedulers.html 
+keywords: MySQL,MariaDB,schedulers 
+summary: MySQL su ONTAP 
+---
+= Scheduler i/O.
+:allow-uri-read: 
+
+
+[role="lead"]
+Il kernel Linux permette un controllo di basso livello sul modo in cui l'i/o blocca i dispositivi è programmato.
+
+Le impostazioni predefinite su varie distribuzioni di Linux variano notevolmente. MySQL consiglia di utilizzare `NOOP` oppure un `deadline` Scheduler i/o con i/o asincrono nativo (AIO) su Linux. In generale, i clienti NetApp e i test interni mostrano risultati migliori con NoOps.
+
+Il motore di storage InnoDB di MySQL utilizza il sottosistema i/o asincrono (AIO nativo) su Linux per eseguire richieste di lettura e scrittura per le pagine dei file di dati. Questo comportamento è controllato da `innodb_use_native_aio` opzione di configurazione, attivata per impostazione predefinita. Con un sistema AIO nativo, il tipo di pianificatore i/o influisce maggiormente sulle prestazioni di i/O. Esegui benchmark per determinare quale scheduler i/o offrirà i risultati migliori per il tuo carico di lavoro e l'ambiente.
+
+Per istruzioni sulla configurazione dello scheduler i/o, consultare la documentazione relativa a Linux e MySQL.

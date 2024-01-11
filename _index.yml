@@ -1,0 +1,49 @@
+---
+indexpage:
+  lead: ONTAP è la base per la gestione dei dati e la protezione dei dati per molte
+    applicazioni aziendali e tecnologie di database. Le pagine seguenti contengono
+    indicazioni sulle Best practice e le procedure di implementazione per ONTAP e
+    le applicazioni e l'infrastruttura aziendali.
+  tiles:
+  - title: Microsoft SQL Server
+    links:
+    - title: Microsoft SQL Server su ONTAP
+      url: "/mssql/overview.html"
+    - title: Considerazioni sullo storage per Microsoft SQL Server
+      url: "/mssql/Storage-considerations.html"
+    - title: Protezione dei dati di Microsoft SQL Server
+      url: "/mssql/Data-protection.html"
+    - title: Disaster recovery per Microsoft SQL Server
+      url: "/mssql/SQL-disaster-recovery.html"
+  - title: Database open-source
+    links:
+    - title: MariaDB e MySQL su ONTAP
+      url: "/mysql/overview.html"
+    - title: PostgreSQL su ONTAP
+      url: "/postgres/overview.html"
+  - title: Database Oracle
+    links:
+    - title: Oracle su ONTAP
+      url: "/oracle/overview.html"
+    - title: Data Protection Oracle
+      url: "/oracle/dp/oracle-data-protection-introduction.html"
+    - title: Disaster recovery Oracle
+      url: "/oracle/dr/oracle-dr-overview.html"
+    - title: Migrazione Oracle
+      url: "/oracle/migration/oracle-migration-overview.html"
+  - title: SAP HANA
+    links:
+    - title: Soluzioni SAP
+      url: https://docs.netapp.com/us-en/netapp-solutions-sap/index.html
+    - title: SAP HANA con AFF e FC
+      url: https://docs.netapp.com/us-en/netapp-solutions-sap/bp/saphana_aff_fc_introduction.html
+    - title: SAP HANA con AFF e NFS
+      url: https://docs.netapp.com/us-en/netapp-solutions-sap/bp/saphana_aff_nfs_introduction.html
+  - title: VMware
+    links:
+    - title: VMware vSphere con ONTAP
+      url: "/vmware/vsphere/overview.html"
+    - title: Volumi virtuali (vVol) con ONTAP
+      url: "/vmware/vvols/overview.html"
+    - title: VMware Site Recovery Manager con ONTAP
+      url: "/vmware/srm/overview.html"

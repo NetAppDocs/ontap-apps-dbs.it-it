@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: vmware/links/nva-1132-design.html 
+keywords: design, HCI, computing, vmware, cloud 
+summary: 'VMware End-User Computing con NetApp HCI è un"architettura di data center pre-validata e Best-practice per l"implementazione di workload di desktop virtuali su scala aziendale.' 
+---
+= NVA-1132-DESIGN: VMware end-user computing con NetApp HCI
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./../media/
+:firstname: d
+:authorinitials: d
+:author: d
+:authors: d
+:revdate: [.lead]
+
+
+VMware End-User Computing con NetApp HCI è un'architettura di data center pre-validata e Best-practice per l'implementazione di workload di desktop virtuali su scala aziendale. Questo documento descrive la progettazione architetturale e le Best practice per l'implementazione della soluzione su scala di produzione in modo affidabile e privo di rischi.
+
+link:https://www.netapp.com/pdf.html?item=/media/7121-nva1132designpdf.pdf["NVA-1132-DESIGN: VMware end-user computing con NetApp HCI"^]

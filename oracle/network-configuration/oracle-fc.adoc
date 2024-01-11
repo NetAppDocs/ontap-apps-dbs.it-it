@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: oracle/network-configuration/oracle-fc.html 
+keywords: SAN, zoning 
+summary: Configurazione di rete FC per database Oracle 
+---
+= Configurazione FC per Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La configurazione di FC SAN per database Oracle riguarda principalmente le seguenti Best practice quotidiane SAN.
+
+Ciò include misure di pianificazione tipiche, ad esempio garantire che esista una larghezza di banda sufficiente sulla SAN tra il sistema host e il sistema di storage, verificando che tutti i percorsi SAN esistano tra tutti i dispositivi richiesti, utilizzando le impostazioni della porta FC richieste dal fornitore dello switch FC, evitando conflitti ISL, e utilizzando un adeguato monitoraggio del fabric SAN.
+
+
+
+== Suddivisione in zone
+
+Una zona FC non deve mai contenere più di un iniziatore. Una tale disposizione potrebbe sembrare funzionare inizialmente, ma la diafonia tra gli iniziatori interferisce eventualmente con le prestazioni e la stabilità.
+
+Le zone MultiTarget sono generalmente considerate sicure, anche se in rare circostanze il comportamento delle porte target FC di fornitori diversi ha causato problemi. Ad esempio, evita di includere nella stessa zona le porte di destinazione di uno storage array NetApp e non NetApp. Inoltre, l'inserimento di un sistema di storage NetApp e di un dispositivo a nastro nella stessa zona è ancora più probabile che causino problemi.

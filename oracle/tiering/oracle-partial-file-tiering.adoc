@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-partial-file-tiering.html 
+keywords: tiering, fabricpool 
+summary: Tiering parziale dei file con FabricPool 
+---
+= Tiering parziale dei file Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Poiché FabricPool opera a livello di blocchi, i file soggetti a modifiche possono essere parzialmente suddivisi in Tier nello storage a oggetti e rimanere parzialmente anche nel Tier di performance.
+
+Ciò è comune con i database. Anche i database che contengono blocchi inattivi sono candidati per il tiering FabricPool. Ad esempio, un database di gestione della catena logistica potrebbe contenere informazioni cronologiche che devono essere disponibili se necessario ma non accessibili durante le normali operazioni. La funzione FabricPool può essere utilizzata per spostare selettivamente i blocchi inattivi.
+
+Ad esempio, i file di dati in esecuzione su un volume FabricPool con un `tiering-minimum-cooling-days` il periodo di 90 giorni conserva i blocchi a cui si accede nei 90 giorni precedenti nel tier di performance. Tuttavia, qualsiasi elemento a cui non si accede per 90 giorni viene ricollocato nel Tier di capacità. In altri casi, la normale attività applicativa preserva i blocchi corretti sul livello corretto. Ad esempio, se un database viene normalmente utilizzato per elaborare regolarmente i 60 giorni precedenti di dati, è molto più basso `tiering-minimum-cooling-days` il periodo può essere impostato perché l'attività naturale dell'applicazione garantisce che i blocchi non vengano spostati prematuramente.
+
+Il `auto` i criteri devono essere utilizzati con attenzione per i database. Numerosi database prevedono attività periodiche come la fine del quarter o la reindicizzazione delle operazioni. Se il periodo di queste operazioni è superiore a. `tiering-minimum-cooling-days` possono verificarsi problemi di prestazioni. Ad esempio, se l'elaborazione a fine quarter richiede 1TB TB di dati che non vengono intatti, è possibile che tali dati siano presenti nel Tier di capacità. Le letture dal Tier di capacità sono spesso estremamente veloci e potrebbero non causare problemi di performance, ma i risultati esatti dipendono dalla configurazione dell'archivio di oggetti.
+
+
+
+== Policy
+
+Il `tiering-minimum-cooling-days` il criterio deve essere impostato su un livello sufficientemente alto da conservare i file che potrebbero essere necessari nel livello di prestazioni. Ad esempio, un database in cui potrebbero essere necessari gli ultimi 60 giorni di dati con prestazioni ottimali giustificherebbe l'impostazione di `tiering-minimum-cooling-days` periodo a 60 giorni. Risultati simili possono essere ottenuti anche in base ai modelli di accesso dei file. Ad esempio, se sono necessari gli ultimi 90 giorni di dati e l'applicazione sta accedendo a quell'arco di dati di 90 giorni, i dati resteranno sul Tier di performance. Impostazione di `tiering-minimum-cooling-days` un periodo di 2 giorni eseguirebbe il tiering dei dati non appena i dati diventano meno attivi.
+
+Il `auto` la policy è necessaria per gestire il tiering di questi blocchi perché solo l' `auto` il criterio influisce sui blocchi che si trovano nel file system attivo.
+
+
+NOTE: Qualsiasi tipo di accesso ai dati ripristina i dati della mappa termica. Pertanto, le scansioni delle tabelle complete dei database e persino le attività di backup in grado di leggere i file di origine impediscono il tiering perché necessario `tiering-minimum-cooling-days` la soglia non viene mai raggiunta.

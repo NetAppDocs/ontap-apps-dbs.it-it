@@ -1,0 +1,9 @@
+= 
+:allow-uri-read: 
+
+
+Su un sistema ONTAP, lo storage è organizzato in 4KB unità. Un blocco 8KB di un database o di un file system deve corrispondere esattamente a due blocchi 4KB. Se un errore nella configurazione LUN sposta l'allineamento di 1KB:1 in entrambe le direzioni, ogni blocco 8KB esisterebbe su tre blocchi di storage 4KB diversi invece che due. Questa disposizione causerebbe un aumento della latenza e causerebbe l'esecuzione di ulteriori i/o all'interno del sistema di storage.
+
+L'allineamento influisce anche sulle architetture LVM. Se un volume fisico all'interno di un gruppo di volumi logici viene definito sull'intero dispositivo del disco (non vengono create partizioni), il primo blocco 4KB sul LUN si allinea con il primo blocco 4KB sul sistema di storage. Questo è un allineamento corretto. I problemi si verificano con le partizioni perché spostano la posizione iniziale in cui il sistema operativo utilizza il LUN. Finché l'offset viene spostato in intere unità di 4KB, il LUN viene allineato.
+
+Negli ambienti Linux, creare gruppi di volumi logici sull'intero dispositivo di unità. Quando è necessaria una partizione, controllare l'allineamento eseguendo `fdisk –u` e verificare che l'inizio di ogni partizione sia un multiplo di otto. Ciò significa che la partizione inizia da un multiplo di otto settori a 512 byte, ovvero 4KB.

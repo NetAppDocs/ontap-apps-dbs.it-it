@@ -1,0 +1,25 @@
+---
+sidebar: sidebar 
+permalink: oracle/ontap-configuration/raid-oracle.html 
+keywords: oracle,raid,mirroring 
+summary: RAID e database Oracle 
+---
+= Requisiti RAID Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+RAID si riferisce all'utilizzo della ridondanza per proteggere i dati dalla perdita di un'unità.
+
+Occasionalmente sorgono domande riguardanti i livelli RAID nella configurazione dello storage NetApp utilizzato per i database Oracle e altre applicazioni aziendali. Molte Best practice Oracle precedenti relative alla configurazione degli array di storage contengono avvisi sull'utilizzo del mirroring RAID e/o sull'eliminazione di determinati tipi di RAID. Sebbene sollevino punti validi, questi sorgenti non si applicano a RAID 4 e alle tecnologie NetApp RAID DP e RAID-TEC utilizzate in ONTAP.
+
+RAID 4, RAID 5, RAID 6, RAID DP e RAID-TEC utilizzano tutti la parità per garantire che il guasto al disco non determini una perdita di dati. Queste opzioni RAID offrono un utilizzo dello storage migliore rispetto al mirroring, ma la maggior parte delle implementazioni RAID presenta uno svantaggio che influisce sulle operazioni di scrittura. Il completamento di un'operazione di scrittura su altre implementazioni RAID potrebbe richiedere letture di più unità per rigenerare i dati di parità, un processo comunemente chiamato penalizzazione RAID.
+
+ONTAP, tuttavia, non subisce questa penalizzazione del RAID. Ciò è dovuto all'integrazione di NetApp WAFL (Write Anywhere file Layout) con il livello RAID. Le operazioni di scrittura vengono unite nella RAM e preparate come uno stripe RAID completo, inclusa la generazione della parità. ONTAP non ha bisogno di eseguire una lettura per completare una scrittura, il che significa che ONTAP e WAFL evitare la penalizzazione RAID. Le performance per le operazioni critiche in termini di latenza, come il logging di redo, vengono mantenute e le scritture random dei file di dati non comportano penalizzazioni RAID dovute alla necessità di rigenerare la parità.
+
+Per quanto riguarda l'affidabilità statistica, anche RAID DP offre una protezione migliore rispetto al mirroring RAID. Il problema principale è la richiesta fatta sui dischi durante una ricostruzione del RAID. Con un set RAID con mirroring, il rischio di perdita di dati causata da un guasto al disco e durante la ricostruzione nel partner nel set RAID è molto maggiore del rischio di un guasto a tre dischi in un set RAID DP.

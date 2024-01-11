@@ -1,0 +1,9 @@
+= 
+:allow-uri-read: 
+
+
+La registrazione di ripristino del database/transazioni genera di solito un i/o non allineato che può causare avvisi fuorvianti riguardo ai LUN disallineati su ONTAP.
+
+La registrazione esegue una scrittura sequenziale del file di registro con scritture di dimensioni variabili. Un'operazione di scrittura del registro che non si allinea ai limiti 4KB non causa normalmente problemi di prestazioni poiché l'operazione di scrittura del registro successiva completa il blocco. Il risultato è che ONTAP è in grado di elaborare quasi tutte le scritture come blocchi da 4KB KB completi, anche se i dati in alcuni blocchi da 4KB KB sono stati scritti in due operazioni separate.
+
+Verificare l'allineamento utilizzando utilità come `sio` oppure `dd` Che possono generare i/o a dimensioni dei blocchi definite. È possibile visualizzare le statistiche di allineamento di i/o del sistema di storage con `stats` comando. Vedere link:../notes/wafl_alignment_verification.html["Verifica dell'allineamento di WAFL"] per ulteriori informazioni.

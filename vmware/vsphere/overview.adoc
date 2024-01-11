@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: vmware/vsphere/overview.html 
+keywords: introduction, unified storage, virtual volumes, storage efficiency, hybrid cloud 
+summary: 'Il software NetApp ONTAP è da quasi vent"anni una soluzione di storage leader per gli ambienti VMware vSphere e continua ad aggiungere funzionalità innovative per semplificare la gestione e ridurre i costi. Questo documento presenta la soluzione ONTAP per vSphere, incluse le informazioni più recenti sui prodotti e le Best practice, per ottimizzare l"implementazione, ridurre i rischi e semplificare la gestione.' 
+---
+= VMware vSphere con ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./../media/
+
+
+[role="lead"]
+Il software NetApp ONTAP è da quasi vent'anni una soluzione di storage leader per gli ambienti VMware vSphere e continua ad aggiungere funzionalità innovative per semplificare la gestione e ridurre i costi. Questo documento presenta la soluzione ONTAP per vSphere, incluse le informazioni più recenti sui prodotti e le Best practice, per ottimizzare l'implementazione, ridurre i rischi e semplificare la gestione.
+
+
+NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblicati _TR-4597: VMware vSphere for ONTAP_
+
+Le Best practice integrano altri documenti come guide ed elenchi di compatibilità. Sono sviluppati in base a test di laboratorio e a un'ampia esperienza sul campo da parte di tecnici e clienti NetApp. Potrebbero non essere le uniche pratiche supportate che funzionano in ogni ambiente, ma sono generalmente le soluzioni più semplici che soddisfano le esigenze della maggior parte dei clienti.
+
+Questo documento si concentra sulle funzionalità delle versioni recenti di ONTAP (9.x) in esecuzione su vSphere 7,0 o versioni successive. Vedere https://imt.netapp.com/matrix/#search["Tool di matrice di interoperabilità NetApp"^] e. https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san["Guida alla compatibilità VMware"^] per dettagli relativi a release specifiche.
+
+
+
+== Perché scegliere ONTAP per vSphere?
+
+Sono molti i motivi per cui decine di migliaia di clienti hanno scelto ONTAP come soluzione storage per vSphere, ad esempio un sistema storage unificato che supporta protocolli SAN e NAS, solide funzionalità di protezione dei dati che utilizzano snapshot efficienti in termini di spazio e molti strumenti per aiutarti a gestire i dati delle applicazioni. L'utilizzo di un sistema storage separato dall'hypervisor consente di trasferire molte funzioni e massimizzare l'investimento nei sistemi host vSphere. Questo approccio non solo garantisce che le risorse host siano incentrate sui carichi di lavoro delle applicazioni, ma evita anche effetti casuali sulle performance delle applicazioni derivanti dalle operazioni di storage.
+
+L'utilizzo di ONTAP insieme a vSphere è un'ottima combinazione che consente di ridurre le spese relative all'hardware host e al software VMware. Puoi anche proteggere i tuoi dati a un costo inferiore con performance elevate e costanti. Poiché i carichi di lavoro virtualizzati sono mobili, è possibile esplorare diversi approcci utilizzando Storage vMotion per spostare le macchine virtuali tra datastore VMFS, NFS o vVol, tutti sullo stesso sistema storage.
+
+Ecco i fattori chiave che i clienti apprezzano oggi:
+
+* *Storage unificato.* i sistemi che eseguono il software ONTAP sono unificati in diversi modi significativi. In origine, questo approccio si riferiva ai protocolli NAS e SAN e ONTAP continua a essere una piattaforma leader per SAN insieme alla sua forza originale nel NAS. Nel mondo vSphere, questo approccio potrebbe anche significare un sistema unificato per l'infrastruttura di desktop virtuale (VDI) insieme all'infrastruttura di server virtuale (VSI). I sistemi che eseguono il software ONTAP sono in genere meno costosi per VSI rispetto agli array aziendali tradizionali e dispongono tuttavia di funzionalità avanzate di efficienza dello storage per gestire VDI nello stesso sistema. ONTAP unifica inoltre una vasta gamma di supporti storage, da SSD a SATA, e può estenderli facilmente nel cloud. Non è necessario acquistare un flash array per le performance, un array SATA per gli archivi e sistemi separati per il cloud. ONTAP li lega tutti insieme.
+* *Volumi virtuali e gestione basata su policy dello storage.* NetApp è stato un partner di progettazione iniziale di VMware nello sviluppo di vVol (vSphere Virtual Volumes), che offre input architetturali e supporto precoce di vVol e API di VMware vSphere per Storage Awareness (VASA). Questo approccio non solo ha portato a VMFS una gestione granulare dello storage delle macchine virtuali, ma ha anche supportato l'automazione del provisioning dello storage tramite la gestione basata su criteri dello storage. Questo approccio consente agli architetti dello storage di progettare pool di storage con diverse funzionalità che possono essere facilmente utilizzate dagli amministratori delle macchine virtuali. ONTAP è leader nel settore dello storage in termini di scalabilità vVol, supportando centinaia di migliaia di vVol in un singolo cluster, mentre i vendor di array Enterprise e flash array più piccoli supportano solo diverse migliaia di vVol per array. NetApp sta inoltre guidando l'evoluzione della gestione granulare delle macchine virtuali con funzionalità imminenti a supporto di vVol 3.0.
+* *Efficienza dello storage.* sebbene NetApp sia stata la prima a fornire la deduplica per carichi di lavoro di produzione, questa innovazione non è stata la prima o l'ultima in quest'area. Il prodotto è partito dalle snapshot, un meccanismo di protezione dei dati efficiente in termini di spazio, senza effetti sulle performance, e dalla tecnologia FlexClone per creare istantaneamente copie in lettura/scrittura delle macchine virtuali per l'utilizzo in produzione e nel backup. NetApp ha continuato a offrire funzionalità inline, tra cui deduplica, compressione e deduplica a blocchi zero, per eliminare il maggior numero di storage dai costosi SSD. Più di recente, ONTAP ha aggiunto la possibilità di inserire file e operazioni i/o più piccole in un blocco di dischi utilizzando la compattazione. La combinazione di queste funzionalità ha consentito ai clienti di ottenere risparmi fino a 5:1 per VSI e fino a 30:1 per VDI.
+* *Cloud ibrido.* sia che venga utilizzato per il cloud privato on-premise, l'infrastruttura di cloud pubblico o un cloud ibrido che combina il meglio di entrambi, le soluzioni ONTAP ti aiutano a costruire il tuo data fabric per ottimizzare e ottimizzare la gestione dei dati. Inizia con i sistemi all-flash dalle performance elevate, quindi accoppiali con sistemi di storage su disco o cloud per la protezione dei dati e il cloud computing. Scegli tra cloud Azure, AWS, IBM o Google per ottimizzare i costi ed evitare il lock-in. Sfrutta il supporto avanzato per le tecnologie OpenStack e container in base alle esigenze. NetApp offre inoltre backup basato sul cloud (SnapMirror Cloud, Cloud Backup Service e Cloud Sync) e tool di archiviazione e tiering dello storage (FabricPool) per ONTAP per ridurre le spese operative e sfruttare l'ampia portata del cloud.
+* *E altro ancora.* sfrutta le performance estreme degli array NetApp AFF Serie A per accelerare l'infrastruttura virtualizzata e gestire i costi. Operazioni senza interruzioni, dalla manutenzione agli aggiornamenti fino alla sostituzione completa del sistema storage, utilizzando cluster ONTAP scale-out. Proteggi i dati inattivi con le funzionalità di crittografia NetApp senza costi aggiuntivi. Assicurati che le performance soddisfino i livelli di servizio di business grazie a funzionalità di qualità dei servizi. Fanno tutti parte dell'ampia gamma di funzionalità offerte da ONTAP, il software di Enterprise data management leader del settore.
+

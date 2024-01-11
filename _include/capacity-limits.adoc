@@ -1,0 +1,23 @@
+= Aggregati SSD, inclusi i sistemi AFF
+:allow-uri-read: 
+
+
+Lo spazio libero viene definito come lo spazio non utilizzato per i dati effettivi e include lo spazio non allocato dell'aggregato e lo spazio non utilizzato all'interno dei volumi costituenti. È importante prendere in considerazione anche il thin provisioning. Ad esempio, un volume potrebbe contenere un LUN da 1TB GB, di cui solo il 50% viene utilizzato dai dati reali. In un ambiente con thin provisioning, questo sembra consumare correttamente 500GB GB di spazio. Tuttavia, in un ambiente con provisioning completo, la capacità completa di 1TB TB sembra essere in uso. I 500GB GB di spazio non allocato sono nascosti. Questo spazio non è utilizzato dai dati effettivi e deve quindi essere incluso nel calcolo dello spazio libero totale.
+
+Di seguito sono riportate le raccomandazioni NetApp per i sistemi storage utilizzati per le applicazioni aziendali:
+
+
+
+== Aggregati SSD, inclusi i sistemi AFF
+
+
+TIP: *NetApp consiglia* almeno il 10% di spazio libero. Ciò comprende tutto lo spazio inutilizzato, compreso lo spazio libero all'interno dell'aggregato o di un volume ed eventuale spazio libero allocato a causa dell'utilizzo del provisioning completo, ma non utilizzato dai dati effettivi. Lo spazio logico non è importante, la domanda è quanto spazio fisico libero effettivo è disponibile per lo storage dei dati.
+
+Il consiglio di liberare il 10% dello spazio è molto conservativo. Gli aggregati SSD possono supportare i carichi di lavoro a livelli di utilizzo ancora più elevati senza influire sulle performance. Tuttavia, con l'aumento dell'utilizzo dell'aggregato, aumenta anche il rischio di esaurimento dello spazio se l'utilizzo non viene monitorato con attenzione. Inoltre, mentre si utilizza un sistema al 99% della capacità potrebbe non verificarsi un peggioramento delle performance, tuttavia si verificherebbe un sforzo di gestione che impedirebbe il riempimento completo del sistema mentre si ordina hardware aggiuntivo e potrebbe essere necessario del tempo per l'acquisto e l'installazione di dischi aggiuntivi.
+
+
+
+== Aggregati HDD, compresi gli aggregati Flash Pool
+
+
+TIP: *NetApp consiglia* almeno il 15% di spazio libero quando si utilizzano unità rotanti. Ciò comprende tutto lo spazio inutilizzato, compreso lo spazio libero all'interno dell'aggregato o di un volume ed eventuale spazio libero allocato a causa dell'utilizzo del provisioning completo, ma non utilizzato dai dati effettivi. Le prestazioni saranno influenzate dagli approcci di conversazione libera al 10%.

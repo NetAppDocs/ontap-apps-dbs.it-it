@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: vmware/vsphere/unified.html 
+keywords: introduction, unified storage, virtual volumes, storage efficiency, hybrid cloud 
+summary: 'Il software NetApp ONTAP è da quasi vent"anni una soluzione di storage leader per gli ambienti VMware vSphere e continua ad aggiungere funzionalità innovative per semplificare la gestione e ridurre i costi. Questo documento presenta la soluzione ONTAP per vSphere, incluse le informazioni più recenti sui prodotti e le Best practice, per ottimizzare l"implementazione, ridurre i rischi e semplificare la gestione.' 
+---
+= Storage unificato
+:allow-uri-read: 
+
+
+
+
+== Storage unificato
+
+[role="lead"]
+I sistemi che eseguono il software ONTAP sono unificati in diversi modi significativi.
+
+In origine, questo approccio si riferiva al supporto dei protocolli NAS e SAN su un unico sistema di storage e ONTAP continua a essere una piattaforma leader per SAN insieme alla sua forza originale nel NAS.
+
+Una macchina virtuale per lo storage (SVM) è un costrutto logico che consente l'accesso del client ai sistemi che eseguono il software ONTAP. Le SVM possono servire i dati contemporaneamente attraverso più protocolli di accesso ai dati tramite le interfacce logiche (LIF). Le SVM forniscono l'accesso ai dati a livello di file attraverso protocolli NAS, come CIFS e NFS, e l'accesso ai dati a livello di blocco attraverso protocolli SAN, come iSCSI, FC/FCoE e NVMe. Le SVM possono fornire dati ai client SAN e NAS in modo indipendente allo stesso tempo.
+
+image:vsphere_admin_unified_storage.png["Storage unificato"]
+
+Nel mondo vSphere, questo approccio potrebbe anche significare un sistema unificato per l'infrastruttura di desktop virtuale (VDI) insieme all'infrastruttura di server virtuale (VSI). I sistemi che eseguono il software ONTAP sono in genere meno costosi per VSI rispetto agli array aziendali tradizionali e dispongono tuttavia di funzionalità avanzate di efficienza dello storage per gestire VDI nello stesso sistema. ONTAP unifica inoltre una vasta gamma di supporti storage, da SSD a SATA, e può estenderli facilmente nel cloud. Non è necessario acquistare un flash array per le performance, un array SATA per gli archivi e sistemi separati per il cloud. ONTAP li lega tutti insieme.
+
+
+NOTE: Per ulteriori informazioni su SVM, storage unificato e accesso client, vedere https://docs.netapp.com/ontap-9/index.jsp?lang=en["Virtualizzazione dello storage"^] Nel centro di documentazione di ONTAP 9.

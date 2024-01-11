@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_flush_log_at_trx_commit.html 
+keywords: MySQL,MariaDB,innodb_doublewrite 
+summary: MySQL su ONTAP 
+---
+= innodb_flush_log_at_trx_commit
+:allow-uri-read: 
+
+
+[role="lead"]
+In caso di modifica dei dati, la modifica non viene immediatamente scritta nell'archivio.
+
+I dati vengono invece registrati in un buffer di registro, che è una porzione di memoria allocata da InnoDB alle modifiche del buffer registrate nel file di registro. InnoDB svuota il buffer nel file di registro quando viene eseguito il commit di una transazione, quando il buffer diventa pieno o una volta al secondo, a seconda dell'evento che si verifica per primo. La variabile di configurazione che controlla questo processo è innodb_Flush_log_at_trx_commit. Le opzioni valore includono:
+
+* Quando si imposta `innodb_flush_log_trx_at_commit=0`, InnoDB scrive i dati modificati (nel pool di buffer InnoDB) nel file di log (ib_logfile) e scarica il file di log (write to storage) ogni secondo. Tuttavia, non fa nulla quando la transazione è impegnata. Se si verifica un'interruzione dell'alimentazione o un arresto anomalo del sistema, nessuno dei dati non scaricati è recuperabile perché non vengono scritti né nel file di registro né nelle unità.
+* Quando si imposta `innodb_flush_log_trx_commit=1`, InnoDB scrive il buffer di log nel log delle transazioni e lo svuota nello storage durevole per ogni transazione. Ad esempio, per tutti i commit delle transazioni, InnoDB scrive nel registro e quindi nello storage. La lentezza dello storage influisce negativamente sulle performance, ad esempio riducendo il numero di transazioni InnoDB al secondo.
+* Quando si imposta `innodb_flush_log_trx_commit=2`, InnoDB scrive il buffer di log nel file di log ad ogni commit; tuttavia, non scrive dati nell'archivio. InnoDB scarica i dati una volta al secondo. Anche in caso di interruzione dell'alimentazione o arresto anomalo del sistema, i dati dell'opzione 2 sono disponibili nel file di registro ed è recuperabile.
+
+
+Se l'obiettivo principale è la prestazione, impostare il valore su 2. Poiché InnoDB scrive sui dischi una volta al secondo, non per ogni commit delle transazioni, le performance migliorano in modo significativo. Se si verifica un'interruzione dell'alimentazione o un arresto anomalo, i dati possono essere recuperati dal registro delle transazioni.
+
+Se l'obiettivo principale è la sicurezza dei dati, impostare il valore su 1 in modo che per ogni commit di transazione, InnoDB si scarichi sulle unità. Tuttavia, le prestazioni potrebbero risentirne.
+
+
+TIP: *NetApp recommended* impostare il valore innodb_Flush_log_trx_commit su 2 per ottenere prestazioni migliori.

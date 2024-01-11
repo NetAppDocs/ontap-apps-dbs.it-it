@@ -1,0 +1,44 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-lun-sizing.html 
+keywords: SAN, ASM, LVM 
+summary: Linee guida per il dimensionamento e il numero di LUN dei database Oracle 
+---
+= Dimensionamento e numero di LUN di Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La scelta delle dimensioni ottimali e del numero di LUN da utilizzare è un elemento critico per ottenere performance e gestibilità ottimali dei database Oracle.
+
+Un LUN è un oggetto virtualizzato in ONTAP presente in tutti i dischi dell'aggregato di hosting. Di conseguenza, le performance della LUN non sono influenzate dalle sue dimensioni, perché la LUN sfrutta al massimo il potenziale in termini di performance dell'aggregato, indipendentemente dalle dimensioni scelte.
+
+Per comodità, i clienti potrebbero desiderare di utilizzare un LUN di particolari dimensioni. Ad esempio, se un database è costruito su un gruppo di dischi LVM o Oracle ASM composto da due LUN da 1TB GB ciascuno, tale gruppo di dischi deve essere aumentato in incrementi di 1TB TB. Potrebbe essere preferibile costruire il gruppo di dischi da otto LUN da 500GB ciascuno in modo che il gruppo di dischi possa essere aumentato con incrementi più piccoli.
+
+La pratica di stabilire una dimensione LUN standard universale è scoraggiata perché ciò può complicare la gestibilità. Ad esempio, è possibile che una dimensione LUN standard di 100GB TB sia ottimale quando un database o un datastore è compreso nell'intervallo da 1TB a 2TB TB, ma un database o un datastore di 20TB GB richiederebbe 200 LUN. Ciò significa che i tempi di riavvio del server sono più lunghi, che vi sono più oggetti da gestire nelle varie interfacce utente e che prodotti come SnapCenter devono eseguire la ricerca su molti oggetti. Utilizzando un numero inferiore di LUN di dimensioni maggiori è possibile evitare questi problemi.
+
+* Il numero di LUN è più importante delle dimensioni delle LUN.
+* Le dimensioni dei LUN sono principalmente controllate dai requisiti di numero di LUN.
+* Evitare di creare più LUN del necessario.
+
+
+
+
+== Numero di LUN
+
+A differenza delle dimensioni delle LUN, il numero di LUN influisce sulle performance. Spesso le prestazioni delle applicazioni dipendono dalla capacità di eseguire i/o paralleli attraverso il livello SCSI. Di conseguenza, due LUN offrono performance migliori rispetto a una singola LUN. Utilizzare un LVM come Veritas VxVM, Linux LVM2 o Oracle ASM è il metodo più semplice per aumentare il parallelismo.
+
+I clienti di NetApp hanno in genere ottenuto il minimo beneficio dall'aumento del numero di LUN oltre i sedici, sebbene i test degli ambienti con dischi a stato solido al 100% con i/o casuali molto intensi abbiano dimostrato un ulteriore miglioramento fino a 64 LUN.
+
+[TIP]
+====
+*NetApp consiglia* quanto segue:
+
+In generale, da quattro a sedici LUN sono sufficienti per supportare le esigenze di i/o di qualsiasi carico di lavoro del database. Meno di quattro LUN potrebbero creare limiti di performance a causa delle limitazioni nelle implementazioni SCSI host.
+
+====

@@ -1,0 +1,36 @@
+---
+sidebar: sidebar 
+permalink: vmware/srm/appendix_a__troubleshooting_srm_when_using_vvols_replication.html 
+keywords: vmware, site, recovery manager, vsrm, hybrid, cloud, srm, vvols, replication 
+summary: 'Il flusso di lavoro all"interno di SRM è significativamente diverso quando si utilizza la replica vVol da quello utilizzato con SRA e datastore tradizionali.' 
+---
+= Risoluzione dei problemi di SRM quando si utilizza la replica vVol
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./../media/
+
+
+[role="lead"]
+Il flusso di lavoro all'interno di SRM è significativamente diverso quando si utilizza la replica vVol da quello utilizzato con SRA e datastore tradizionali. Ad esempio, non esiste alcun concetto di gestore di array. In quanto tale, `discoverarrays` e. `discoverdevices` i comandi non vengono mai visualizzati.
+
+Durante la risoluzione dei problemi, è utile comprendere i nuovi flussi di lavoro, elencati di seguito:
+
+. QueryReplicationPeer: Rileva gli accordi di replica tra due domini di errore.
+. QueryFaultDomain: Rileva la gerarchia di dominio di errore.
+. QueryReplicationGroup: Consente di individuare i gruppi di replica presenti nei domini di origine o di destinazione.
+. SyncReplicationGroup: Sincronizza i dati tra origine e destinazione.
+. QueryPointInTimeReplica: Consente di rilevare le repliche point-in-time di una destinazione.
+. TestFailoverReplicationGroupStart: Avvia il failover del test.
+. TestFailoverReplicationGroupStop: Termina il failover del test.
+. PromoteReplicationGroup: Promuove un gruppo attualmente in fase di test in produzione.
+. PrepareFailoverReplicationGroup: Prepara per un disaster recovery.
+. FailoverReplicationGroup: Esegue il disaster recovery.
+. ReverseReplicateGroup: Avvia la replica inversa.
+. QueryMatchingContainer: Trova i container (insieme agli host o ai gruppi di replica) che potrebbero soddisfare una richiesta di provisioning con una determinata policy.
+. QueryResourceMetadata: Rileva i metadati di tutte le risorse dal provider VASA, l'utilizzo delle risorse può essere restituito come risposta alla funzione QueryMatchingContainer.
+
+
+L'errore più comune riscontrato durante la configurazione della replica di vVol è il mancato rilevamento delle relazioni di SnapMirror. Ciò si verifica perché i volumi e le relazioni di SnapMirror vengono creati al di fuori dell'ambito di applicazione degli strumenti ONTAP. Pertanto, è consigliabile assicurarsi sempre che la relazione di SnapMirror sia completamente inizializzata e che sia stata eseguita una riscoperta negli strumenti ONTAP in entrambi i siti prima di tentare di creare un datastore vVol replicato.

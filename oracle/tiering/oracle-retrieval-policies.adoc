@@ -1,0 +1,55 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-retrieval-policies.html 
+keywords: tiering, FabricPool 
+summary: Criteri di recupero per il tiering Pracle 
+---
+= Criteri di recupero
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+I criteri di tiering controllano i blocchi di database Oracle sottoposti a tiering dal Tier di performance al Tier di capacità. I criteri di recupero controllano ciò che accade quando viene letto un blocco a cui è stato eseguito il tiering.
+
+
+
+== Predefinito
+
+Tutti i volumi FabricPool sono inizialmente impostati su `default`, il che significa che il comportamento è controllato da `cloud-retrieval-policy. `il comportamento esatto dipende dal criterio di tiering utilizzato.
+
+* `auto`– consente di recuperare solo dati letti in modo casuale
+* `snapshot-only`– consente di recuperare tutti i dati letti in modo sequenziale o casuale
+* `none`– consente di recuperare tutti i dati letti in modo sequenziale o casuale
+* `all`– non recuperare i dati dal tier di capacità
+
+
+
+
+== A lettura
+
+Impostazione `cloud-retrieval-policy` in lettura sovrascrive il comportamento predefinito, in modo che una lettura di dati a livelli determini il ritorno dei dati al livello di prestazioni.
+
+Ad esempio, un volume potrebbe essere stato leggermente utilizzato per un lungo periodo sotto il `auto` la policy di tiering e la maggior parte dei blocchi ora vengono suddivisi in livelli.
+
+Se una modifica imprevista delle esigenze aziendali richiedeva la scansione ripetuta di alcuni dati per preparare un determinato rapporto, potrebbe essere opportuno modificare `cloud-retrieval-policy` a. `on-read` per garantire che tutti i dati letti vengano restituiti al livello delle prestazioni, inclusi i dati letti in modo sequenziale e casuale. In questo modo si migliorano le prestazioni dell'i/o sequenziale rispetto al volume.
+
+
+
+== Promuovi
+
+Il comportamento della policy di promozione dipende dalla policy di tiering. Se la policy di tiering è `auto`, quindi impostare `cloud-retrieval-policy `to `promote` riporta tutti i blocchi dal tier di capacità nella successiva scansione del tiering.
+
+Se la policy di tiering è `snapshot-only`, gli unici blocchi restituiti sono i blocchi associati al file system attivo. Normalmente questo non avrebbe alcun effetto perché gli unici blocchi suddivisi in livelli sotto `snapshot-only` la policy dovrebbe essere costituita da blocchi associati esclusivamente agli snapshot. Nel file system attivo non sono presenti blocchi a livelli.
+
+Se, tuttavia, i dati di un volume sono stati ripristinati da un'operazione SnapRestore di volume o di file-clone da una snapshot, alcuni dei blocchi suddivisi in Tier perché associati solo a snapshot potrebbero ora essere richiesti dal file system attivo. Potrebbe essere opportuno modificare temporaneamente `cloud-retrieval-policy` policy to `promote` per recuperare rapidamente tutti i blocchi richiesti localmente.
+
+
+
+== Mai
+
+Non recuperare i blocchi dal Tier di capacità.

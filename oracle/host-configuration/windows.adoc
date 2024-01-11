@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: oracle/host-configuration/windows.html 
+keywords: oracle, database, ontap, windows 
+summary: Oracle su ONTAP con Microsoft Windows 
+---
+= Microsoft Windows
+:allow-uri-read: 
+
+
+[role="lead"]
+Argomenti di configurazione specifici del sistema operativo Microsoft Windows.
+
+
+
+== NFS
+
+Oracle supporta l'utilizzo di Microsoft Windows con il client NFS diretto. Questa funzionalità offre un percorso per i vantaggi di gestione di NFS, tra cui la possibilità di visualizzare i file tra più ambienti, ridimensionare dinamicamente i volumi e sfruttare un protocollo IP meno costoso. Consultare la documentazione ufficiale di Oracle per informazioni sull'installazione e la configurazione di un database in Microsoft Windows utilizzando DNFS. Non esistono Best practice speciali.
+
+
+
+== SAN
+
+Per un'efficienza di compressione ottimale, assicurarsi che il file system NTFS utilizzi un'unità di allocazione di 8K GB o superiore. L'utilizzo di un'unità di allocazione 4K, generalmente predefinita, influisce negativamente sull'efficienza della compressione.

@@ -1,0 +1,18 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_log_file_size.html 
+keywords: MySQL,MariaDB,innodb_log_file_size 
+summary: MySQL su ONTAP 
+---
+= innodb_log_file_size
+:allow-uri-read: 
+
+
+[role="lead"]
+La scelta della dimensione corretta per il file di log InnoDB è importante per le operazioni di scrittura e per avere un tempo di ripristino decente dopo un arresto anomalo del server.
+
+Poiché molte transazioni sono registrate nel file, la dimensione del file di registro è importante per le operazioni di scrittura. Quando i record vengono modificati, la modifica non viene immediatamente riscritta nello spazio di tabella. La modifica viene invece registrata alla fine del file di registro e la pagina viene contrassegnata come sporca. InnoDB utilizza il proprio registro per convertire l'i/o casuale in i/o sequenziale
+
+Quando il log è pieno, la pagina sporca viene scritta nello spazio di tabella in sequenza per liberare spazio nel file di log. Ad esempio, si supponga che un server si blocchi nel corso di una transazione e che le operazioni di scrittura vengano registrate solo nel file di registro. Prima che il server possa tornare attivo, deve passare attraverso una fase di recupero in cui vengono riprodotte le modifiche registrate nel file di registro. Maggiore è il numero di voci presenti nel file di registro, maggiore sarà il tempo necessario al server per il ripristino.
+
+In questo esempio, la dimensione del file di registro influisce sia sul tempo di ripristino che sulle prestazioni di scrittura. Quando si sceglie il numero giusto per la dimensione del file di registro, bilanciare il tempo di ripristino rispetto alle prestazioni di scrittura. In genere, qualsiasi valore compreso tra 128M e 512M è un buon valore.

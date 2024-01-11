@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-snapshot-tiering.html 
+keywords: tiering, fabricpool 
+summary: Tiering delle snapshot Oracle 
+---
+= Tiering delle snapshot Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La release iniziale di FabricPool era rivolta a un caso di utilizzo di backup. L'unico tipo di blocchi che è possibile eseguire il tiering era costituito da blocchi che non erano più associati a dati nel file system attivo. Pertanto, solo i blocchi di dati Snapshot possono essere spostati nel Tier di capacità. Questa rimane una delle opzioni di tiering più sicure quando occorre, in modo da garantire che le performance non subiscano alcun impatto.
+
+
+
+== Criteri - istantanee locali
+
+Esistono due opzioni per il tiering di blocchi di snapshot inattivi nel Tier di capacità. Innanzitutto, la `snapshot-only` la politica riguarda solo i blocchi di snapshot. Anche se il `auto` il criterio include `snapshot-only` ed esegue il tiering dei blocchi dal file system attivo. Ciò potrebbe non essere desiderabile.
+
+Il `tiering-minimum-cooling-days` valore deve essere impostato su un periodo di tempo in cui i dati che potrebbero essere necessari durante un ripristino sono disponibili sul livello di prestazioni. Ad esempio, la maggior parte degli scenari di ripristino di un database di produzione critico include un punto di ripristino in un determinato momento dei giorni precedenti. Impostazione a. `tiering-minimum-cooling-days` il valore 3 garantisce che qualsiasi ripristino del file porti a un file che offre immediatamente le massime prestazioni. Tutti i blocchi dei file attivi sono ancora presenti sullo storage veloce senza dover ripristinarli dal livello di capacità.
+
+
+
+== Criteri - istantanee replicate
+
+Di norma, uno snapshot replicato con SnapMirror o SnapVault utilizzato solo per il ripristino deve utilizzare FabricPool `all` policy. Con questa policy, i metadati vengono replicati, ma tutti i blocchi di dati vengono inviati immediatamente al Tier di capacità, ottenendo il massimo delle performance. La maggior parte dei processi di recovery implica un i/o sequenziale, che è intrinsecamente efficiente. È necessario valutare il tempo di ripristino dalla destinazione dell'archivio oggetti, ma in un'architettura ben progettata questo processo di ripristino non deve essere significativamente più lento del ripristino da dati locali.
+
+Se per il cloning è prevista anche l'utilizzo dei dati replicati, l' `auto` la politica è più appropriata, con un `tiering-minimum-cooling-days` valore che comprende i dati che si prevede vengano utilizzati regolarmente in un ambiente di clonazione. Ad esempio, il working set attivo di un database potrebbe includere dati letti o scritti nei tre giorni precedenti, ma potrebbe includere anche altri 6 mesi di dati storici. In tal caso, il `auto` La policy nella destinazione di SnapMirror rende disponibile il working set nel Tier di performance.

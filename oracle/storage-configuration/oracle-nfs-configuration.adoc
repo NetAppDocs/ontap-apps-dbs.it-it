@@ -1,0 +1,168 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-nfs-configuration.html 
+keywords: NFS 
+summary: Configurazione NFS per database Oracle 
+---
+= Configurazione NFS per database Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+NetApp offre storage NFS Enterprise da oltre 30 anni e il suo utilizzo cresce insieme alla spinta verso infrastrutture basate sul cloud grazie alla sua semplicità.
+
+Il protocollo NFS include diverse versioni con diversi requisiti. Per una descrizione completa della configurazione NFS con ONTAP, vedere link:https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice NFS su NetApp ONTAP TR-4067"^]. Le sezioni seguenti descrivono alcuni dei requisiti più critici e gli errori comuni degli utenti.
+
+
+
+== Versioni di NFS
+
+Il client NFS del sistema operativo deve essere supportato da NetApp.
+
+* NFSv3 è supportato con sistemi operativi che seguono lo standard NFSv3.
+* NFSv3 è supportato con il client Oracle DNFS.
+* NFSv4 è supportato con tutti i sistemi operativi che seguono lo standard NFSv4.
+* I sistemi NFSv4,1 e NFSv4,2 richiedono supporto specifico per il sistema operativo. Consultare link:https://imt.netapp.com/matrix/#search["NetApp IMT"^] Per i sistemi operativi supportati.
+* Il supporto di Oracle DNFS per NFSv4,1 richiede Oracle 12.2.0.2 o versione successiva.
+
+
+
+NOTE: Il link:https://imt.netapp.com/matrix/#search["Matrice di supporto di NetApp"] Per NFSv3 e NFSv4 non sono inclusi sistemi operativi specifici. Tutti i sistemi operativi che rispettano la RFC sono generalmente supportati. Quando si cerca il supporto NFSv3 o NFSv4 nel IMT online, non selezionare un sistema operativo specifico perché non verranno visualizzate corrispondenze. Tutti i sistemi operativi sono implicitamente supportati dalla policy generale.
+
+
+
+== Tabelle degli slot TCP per Linux NFSv3
+
+Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
+
+Per prestazioni ottimali e per evitare problemi di prestazioni, regolare i parametri del kernel che controllano le tabelle degli slot TCP.
+
+Eseguire `sysctl -a | grep tcp.*.slot_table` e osservare i seguenti parametri:
+
+....
+# sysctl -a | grep tcp.*.slot_table
+sunrpc.tcp_max_slot_table_entries = 128
+sunrpc.tcp_slot_table_entries = 128
+....
+Tutti i sistemi Linux dovrebbero includere `sunrpc.tcp_slot_table_entries`, ma solo alcuni includono `sunrpc.tcp_max_slot_table_entries`. Entrambi devono essere impostati su 128.
+
+|===
+| Attenzione 
+
+
+| La mancata impostazione di questi parametri può avere effetti significativi sulle prestazioni. In alcuni casi, le prestazioni sono limitate poiché il sistema operativo linux non fornisce i/o sufficienti In altri casi, le latenze i/o aumentano quando il sistema operativo linux tenta di emettere più i/o di quanto possa essere gestito. 
+|===
+
+
+== ADR e NFS
+
+Alcuni clienti hanno segnalato problemi di prestazioni derivanti da una quantità eccessiva di i/o sui dati in `ADR` posizione. Il problema generalmente non si verifica finché non si sono accumulati molti dati sulle prestazioni. Il motivo dell'eccessivo i/o è sconosciuto, ma questo problema sembra essere dovuto ai processi Oracle che eseguono ripetutamente la scansione della directory di destinazione per rilevare eventuali modifiche.
+
+Smontaggio del `noac` e/o. `actimeo=0` Le opzioni di montaggio consentono il caching del sistema operativo host e riducono i livelli di i/o dello storage.
+
+
+TIP: *NetApp consiglia* di non piazzare `ADR` dati su un file system con `noac` oppure `actimeo=0` perché è probabile che si verifichino problemi di prestazioni. Separare `ADR` dati in un punto di montaggio diverso, se necessario.
+
+
+
+== nfs-rootonly e mount-rootonly
+
+ONTAP include un'opzione NFS denominata `nfs-rootonly` Che controlla se il server accetta connessioni di traffico NFS da porte elevate. Come misura di sicurezza, solo l'utente root è autorizzato ad aprire connessioni TCP/IP utilizzando una porta di origine inferiore a 1024, poiché tali porte sono normalmente riservate all'uso del sistema operativo, non ai processi utente. Questa restrizione aiuta a garantire che il traffico NFS provenga da un client NFS del sistema operativo effettivo e non da un processo dannoso che emula un client NFS. Il client Oracle DNFS è un driver userspace, ma il processo viene eseguito come root, quindi in genere non è necessario modificare il valore di `nfs-rootonly`. I collegamenti sono costituiti da porte basse.
+
+Il `mount-rootonly` L'opzione è valida solo per NFSv3. Controlla se la chiamata di MONTAGGIO RPC può essere accettata dalle porte superiori a 1024. Quando si utilizza DNFS, il client viene nuovamente eseguito come root, in modo da poter aprire le porte al di sotto di 1024. Questo parametro non ha alcun effetto.
+
+I processi che aprono connessioni con DNFS su NFS versione 4,0 e successive non vengono eseguiti come root e quindi richiedono porte su 1024. Il `nfs-rootonly` Il parametro deve essere impostato su disabilitato affinché DNFS completi la connessione.
+
+Se `nfs-rootonly` È attivato, il risultato è un blocco durante la fase di mount che apre le connessioni DNFS. L'output di sqlplus è simile a questo:
+
+....
+SQL>startup
+ORACLE instance started.
+Total System Global Area 4294963272 bytes
+Fixed Size                  8904776 bytes
+Variable Size             822083584 bytes
+Database Buffers         3456106496 bytes
+Redo Buffers                7868416 bytes
+....
+Il parametro può essere modificato come segue:
+
+....
+Cluster01::> nfs server modify -nfs-rootonly disabled
+....
+
+NOTE: In situazioni rare, potrebbe essere necessario modificare sia nfs-rootonly che mount-rootonly in disabled. Se un server gestisce un numero estremamente elevato di connessioni TCP, è possibile che non siano disponibili porte al di sotto di 1024 e che il sistema operativo sia costretto a utilizzare porte più elevate. Questi due parametri ONTAP devono essere modificati per consentire il completamento della connessione.
+
+
+
+== Policy di esportazione NFS: Superuser e setuid
+
+Se i file binari Oracle si trovano in una condivisione NFS, la policy di esportazione deve includere autorizzazioni superser e setuid.
+
+Le esportazioni NFS condivise utilizzate per servizi file generici come le home directory dell'utente spesso fanno uso dell'utente root. Ciò significa che una richiesta da parte dell'utente root su un host che ha montato un filesystem viene rimappata come un altro utente con privilegi inferiori. In questo modo è possibile proteggere i dati impedendo a un utente root di un determinato server di accedere ai dati del server condiviso. Il bit setuid può anche essere un rischio per la protezione in un ambiente condiviso. Il bit setuid consente di eseguire un processo come un utente diverso da quello che richiama il comando. Ad esempio, uno script della shell di proprietà di root con il bit setuid viene eseguito come root. Se lo script della shell potrebbe essere modificato da altri utenti, qualsiasi utente non root potrebbe eseguire un comando come root aggiornando lo script.
+
+I file binari di Oracle includono file di proprietà di root e utilizzano il bit setuid. Se i file binari Oracle sono installati su una condivisione NFS, la policy di esportazione deve includere le autorizzazioni appropriate per superutente e setuid. Nell'esempio seguente, la regola include entrambi `allow-suid` e permessi `superuser` Accesso root per client NFS utilizzando l'autenticazione di sistema.
+
+....
+Cluster01::> export-policy rule show -vserver vserver1 -policyname orabin -fields allow-suid,superuser
+vserver   policyname ruleindex superuser allow-suid
+--------- ---------- --------- --------- ----------
+vserver1  orabin     1         sys       true
+....
+
+
+== Configurazione NFSv4/4,1
+
+Per la maggior parte delle applicazioni, la differenza tra NFSv3 e NFSv4 è minima. L'i/o delle applicazioni è di solito un i/o molto semplice e non trae alcun vantaggio significativo da alcune delle funzionalità avanzate disponibili in NFSv4. Le versioni più elevate di NFS non devono essere considerate come un "aggiornamento" dal punto di vista dello storage dei database, ma come versioni di NFS che includono funzionalità aggiuntive. Ad esempio, se è richiesta la protezione end-to-end della modalità di privacy Kerberos (krb5p), è necessario NFSv4.
+
+
+TIP: *NetApp consiglia* di utilizzare NFSv4,1 se sono necessarie funzionalità NFSv4. Sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 di NFSv4,1 che migliorano la resilienza in alcuni casi edge.
+
+Il passaggio a NFSv4 è più complicato che cambiare semplicemente le opzioni di montaggio da vers=3 a vers=4,1. Una spiegazione più completa della configurazione NFSv4 con ONTAP, incluse le istruzioni sulla configurazione del sistema operativo, vedere https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice TR-4067 NFS su NetApp ONTAP"^]. Le seguenti sezioni di questo TR spiegano alcuni dei requisiti di base per l'utilizzo di NFSv4.
+
+
+
+=== Dominio NFSv4
+
+Una spiegazione completa della configurazione NFSv4/4,1 esula dall'ambito di questo documento, ma un problema comunemente riscontrato è una mancata corrispondenza nella mappatura del dominio. Dal punto di vista di sysadmin, i file system NFS sembrano comportarsi normalmente, ma le applicazioni segnalano errori relativi ai permessi e/o setuid su determinati file. In alcuni casi, gli amministratori hanno concluso erroneamente che le autorizzazioni dei binari dell'applicazione sono state danneggiate e hanno eseguito comandi chown o chmod quando il problema effettivo era il nome di dominio.
+
+Il nome di dominio NFSv4 viene impostato sulla SVM ONTAP:
+
+....
+Cluster01::> nfs server show -fields v4-id-domain
+vserver   v4-id-domain
+--------- ------------
+vserver1  my.lab
+....
+Il nome di dominio NFSv4 sull'host è impostato in `/etc/idmap.cfg`
+
+....
+[root@host1 etc]# head /etc/idmapd.conf
+[General]
+#Verbosity = 0
+# The following should be set to the local NFSv4 domain name
+# The default is the host's DNS domain name.
+Domain = my.lab
+....
+I nomi di dominio devono corrispondere. In caso contrario, vengono visualizzati errori di mappatura simili a quelli riportati di seguito nella `/var/log/messages`:
+
+....
+Apr 12 11:43:08 host1 nfsidmap[16298]: nss_getpwnam: name 'root@my.lab' does not map into domain 'default.com'
+....
+I file binari delle applicazioni, come i file binari dei database Oracle, includono i file di proprietà di root con il bit setuid, il che significa che una mancata corrispondenza nei nomi di dominio NFSv4 causa errori nell'avvio di Oracle e un avviso sulla proprietà o sulle autorizzazioni di un file chiamato `oradism`, che si trova nella `$ORACLE_HOME/bin` directory. Dovrebbe comparire come segue:
+
+....
+[root@host1 etc]# ls -l /orabin/product/19.3.0.0/dbhome_1/bin/oradism
+-rwsr-x--- 1 root oinstall 147848 Apr 17  2019 /orabin/product/19.3.0.0/dbhome_1/bin/oradism
+....
+Se questo file viene visualizzato con proprietà di nessuno, potrebbe esserci un problema di mappatura del dominio NFSv4.
+
+....
+[root@host1 bin]# ls -l oradism
+-rwsr-x--- 1 nobody oinstall 147848 Apr 17  2019 oradism
+....
+Per risolvere questo problema, controllare `/etc/idmap.cfg` Eseguire il file in base all'impostazione del dominio id v4 in ONTAP e assicurarsi che siano coerenti. In caso contrario, apportare le modifiche necessarie, eseguire `nfsidmap -c`, e attendere un momento per la propagazione delle modifiche. La proprietà del file dovrebbe quindi essere riconosciuta correttamente come root. Se un utente aveva tentato di eseguire `chown root` Su questo file prima che la configurazione dei domini NFS sia stata corretta, potrebbe essere necessario eseguire `chown root` di nuovo.

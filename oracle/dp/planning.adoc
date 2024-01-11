@@ -1,0 +1,103 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/planning.html 
+keywords: data protection, DR, snapshots, CG 
+summary: Strategie di protezione dei dati di ONTAP 
+---
+= Pianificazione della protezione dei dati
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La corretta architettura di protezione dei dati aziendali dipende dai requisiti di business correlati a conservazione dei dati, ripristinabilità e tolleranza per le interruzioni durante i vari eventi.
+
+Ad esempio, consideriamo il numero di applicazioni, database e set di dati importanti inclusi nell'ambito della fornitura. La costruzione di una strategia di backup per un singolo set di dati che garantisca la conformità con gli SLA tipici è piuttosto semplice, perché non ci sono molti oggetti da gestire. Con l'aumento del numero di set di dati, il monitoraggio diventa più complicato e gli amministratori potrebbero essere costretti a spendere una crescente quantità di tempo nella risoluzione degli errori di backup. Quando un ambiente raggiunge il cloud e scala un service provider, è necessario un approccio completamente diverso.
+
+Anche le dimensioni del set di dati influiscono sulla strategia. Ad esempio, esistono molte opzioni per il backup e il ripristino con un database da 100GB TB perché il set di dati è così piccolo. La semplice copia dei dati dai supporti di backup con gli strumenti tradizionali in genere offre un RTO sufficiente per il recovery. Un database 100TB ha normalmente bisogno di una strategia completamente diversa, a meno che l'RTO non consenta un'interruzione di più giorni, nel qual caso una tradizionale procedura di backup e ripristino basata sulla copia potrebbe essere accettabile.
+
+Infine, vi sono alcuni fattori che esulano dal processo di backup e ripristino stesso. Ad esempio, esistono database che supportano attività di produzione critiche e che rendono il ripristino una rara eventualità che viene eseguita solo da DBA esperti? In alternativa, i database fanno parte di un grande ambiente di sviluppo in cui il ripristino è un evento frequente e gestito da un team IT generico?
+
+
+
+== Uno snapshot è un backup?
+
+Un'obiezione comunemente sollevata all'utilizzo delle snapshot come strategia di protezione dei dati è rappresentata dal fatto che i dati "reali" e i dati snapshot si trovano sugli stessi dischi. La perdita di tali unità causerebbe la perdita sia dei dati primari che del backup.
+
+Si tratta di un problema valido. Le snapshot locali vengono utilizzate per le esigenze di backup e ripristino quotidiane, e in questo senso la snapshot è un backup. Quasi il 99% di tutti gli scenari di ripristino in ambienti NetApp si affida alle snapshot per soddisfare anche i requisiti RTO più aggressivi.
+
+Gli snapshot locali non dovrebbero, tuttavia, mai essere l'unica strategia di backup, ragione per cui NetApp offre tecnologie come la replica SnapMirror per replicare in modo rapido ed efficiente le snapshot su un set indipendente di dischi. In una soluzione adeguatamente progettata con istantanee e replica snapshot, l'utilizzo del nastro può essere ridotto a icona in un archivio trimestrale o eliminato del tutto.
+
+
+
+== Backup di gruppi di coerenza
+
+Il backup di un gruppo di coerenza implica l'acquisizione dello stato di un dataset (o di più dataset) in un singolo punto atomico nel tempo. Come esempio di database, questo include tutti i componenti del database, come file di dati, file di log e altri file direttamente associati al database. Funziona con quasi tutti i prodotti di database relazionali, tra cui Oracle RDBMS, Microsoft SQL Server, SAP HANA, PostgreSQL, MySQL e MariaDB. La protezione di una configurazione VMware con un backup di gruppo di coerenza sarebbe simile: L'acquisizione di tutti gli archivi dati e potenzialmente delle LUN di avvio ESX in un singolo punto atomico nel tempo.
+
+La creazione di una snapshot di un gruppo di coerenza di questo tipo sta essenzialmente simulando un arresto anomalo, motivo per cui tali backup vengono spesso chiamati backup coerenti con i crash. Talvolta il supporto per gli scenari di ripristino è fonte di preoccupazioni, ma è importante comprendere che in genere non è necessaria alcuna procedura di ripristino. Quando l'applicazione si avvia dopo il ripristino di un backup di un gruppo di coerenza, esegue i consueti processi di recupero dei log, le repliche del journal del file system e altre attività per riprodurre qualsiasi i/o in fase di trasferimento al punto del backup. L'applicazione viene quindi avviata come di consueto.
+
+In sostanza, qualsiasi applicazione in grado di resistere a un'interruzione dell'alimentazione o a un arresto anomalo del server senza danneggiamento dei dati può essere protetta in questo modo. Ciò può essere dimostrato anche dal numero elevato di applicazioni protette con prodotti di mirroring sincrono e asincrono di numerosi vendor. Se un disastro colpisce improvvisamente il sito primario, il sito di replica contiene un'immagine coerente dell'ambiente originale al momento del disastro. Ancora una volta, non è necessaria alcuna procedura di recupero speciale.
+
+L'RPO per questo approccio è in genere limitato al punto del backup. In generale, l'RPO minimo per le snapshot a volume singolo è di un'ora. Ad esempio, 48 snapshot ogni ora e altri 30 giorni di snapshot ogni notte sono ragionevoli e non richiederebbero la conservazione di un numero eccessivo di snapshot. Un RPO inferiore a un'ora diventa più difficile da raggiungere e non è consigliato senza la prima consulenza dei servizi professionali NetApp comprendere i requisiti di ambiente, scalabilità e data Protection.
+
+L'RTO può in genere essere misurato in pochi secondi. R un'applicazione viene arrestata, i volumi vengono ripristinati e l'applicazione viene riavviata.
+
+L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un singolo gruppo di coerenza del volume, che consente di pianificare la creazione di una snapshot direttamente in ONTAP. Se un set di dati deve occupare più volumi, è necessario uno snapshot del gruppo di coerenza (cg-snapshot). È possibile configurarlo tramite System Manager o chiamate API RESTful, inoltre SnapCenter è in grado di creare un semplice snapshot del gruppo di coerenza su un elenco definito di volumi.
+
+
+
+== Architettura di replica e disaster recovery
+
+Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster, tra cui link:../metrocluster/overview.html["MetroCluster"] e. link:../smbc/overview.html["Continuità aziendale di SnapMirror"]
+
+L'RPO di DR è limitato dalla larghezza di banda della rete disponibile e dalle dimensioni totali dei dati da proteggere. Dopo la creazione del trasferimento di base iniziale, gli aggiornamenti si basano solo sui dati modificati, che in genere rappresentano una bassa percentuale dell'impatto totale dei dati, sebbene esistano delle eccezioni.
+
+Ad esempio, un database 10TB con un tasso di modifica settimanale del 10% ha una media di circa 6GB TB all'ora delle modifiche totali. Con 10Gb GB di connettività, il trasferimento di questo database richiede circa sei minuti. Il tasso di modifica varia in base alla fluttuazione del tasso di modifica del database, ma nel complesso dovrebbe essere possibile ottenere un intervallo di aggiornamento di 15 minuti e un RPO di 15 minuti. Se sono presenti 100 database di questo tipo, sono necessari 600 minuti per trasferire i dati. Pertanto, non è possibile un RPO di un'ora. Allo stesso modo, una replica di un singolo database 100TB con un tasso di modifica settimanale del 10% non può essere aggiornata in modo affidabile in un'ora.
+
+Altri fattori possono influire sulla replica, ad esempio l'overhead e le limitazioni del numero di operazioni di replica simultanee. Tuttavia, la pianificazione globale di una strategia di replica a singolo volume può basarsi sulla larghezza di banda disponibile e generalmente si ottiene un RPO di replica di un'ora. Un RPO inferiore a un'ora diventa più difficile da raggiungere e dovrebbe essere eseguito solo dopo aver consultato i servizi professionali di NetApp. In alcuni casi, è possibile effettuare 15 minuti con un'ottima connettività di rete da sito a sito. Tuttavia, nel complesso, quando è necessario un RPO inferiore a un'ora, l'architettura di riproduzione log multi-volume offre risultati migliori.
+
+L'RTO con replica di gruppo di coerenza in uno scenario di disaster recovery è eccellente, generalmente misurato in secondi dal punto di vista dello storage. L'approccio più semplice è quello di rompere il mirror e il database è pronto per essere avviato. Il tempo di avvio del database è generalmente di circa 10 secondi, ma database di grandi dimensioni con molte transazioni registrate potrebbero richiedere alcuni minuti.
+
+Il fattore più importante per determinare l'RTO non è il sistema storage, ma piuttosto l'applicazione e il sistema operativo host in cui viene eseguito. Ad esempio, i dati replicati possono essere resi disponibili in un secondo o due, ma questo rappresenta solo i dati. Deve inoltre essere presente un sistema operativo correttamente configurato con file binari delle applicazioni disponibili per l'utilizzo dei dati.
+
+In alcuni casi, i clienti hanno preparato istanze di disaster recovery in anticipo con lo storage prerilevato sui sistemi operativi. In questi casi, l'attivazione dello scenario di disaster recovery può richiedere solo la rottura di un mirror e l'avvio dell'applicazione. In altri casi, è possibile eseguire il mirroring del sistema operativo e delle applicazioni associate insieme al database come VMDK (ESX Virtual Machine Disk). In questi casi, l'RPO è determinato dall'investimento effettuato da un cliente nell'automazione per l'avvio rapido del VMDK e la possibilità di avviare le applicazioni.
+
+Il tempo di conservazione è controllato in parte dal limite dello snapshot. Ad esempio, i volumi in ONTAP hanno un limite di 1024 snapshot. In alcuni casi, i clienti hanno la replica multiplex per aumentare il limite. Ad esempio, se sono necessari 2000 giorni di backup, un'origine può essere replicata su due volumi con aggiornamenti che avvengono in giorni alternativi. Ciò richiede un aumento dello spazio iniziale necessario, ma costituisce comunque un approccio molto più efficiente rispetto a un sistema di backup tradizionale, che prevede l'esecuzione di più backup completi.
+
+
+
+=== Gruppo di coerenza del singolo volume
+
+L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un singolo gruppo di coerenza dei volumi, che consente di pianificare gli update di SnapMirror e SnapVault direttamente nel sistema storage. Non è richiesto alcun software esterno.
+
+
+
+=== Gruppo di coerenza multi-volume
+
+Quando un database deve occupare più volumi, è necessario uno snapshot del gruppo di coerenza (cg-snapshot). Come sopra menzionato, è possibile configurarlo tramite chiamate di API RESTful o di System Manager, mentre SnapCenter è in grado di creare una semplice snapshot del gruppo di coerenza in un elenco definito di volumi.
+
+È inoltre prevista un'ulteriore considerazione sull'utilizzo di snapshot coerenti e multi-volumi ai fini del disaster recovery. Quando si esegue un aggiornamento di più volumi, è possibile che si verifichi un disastro mentre è ancora in corso un trasferimento. Il risultato sarebbe un insieme di volumi che non sono coerenti l'uno con l'altro. Se ciò si verificasse, alcuni volumi devono essere ripristinati allo stato di snapshot precedente per fornire un'immagine di database coerente con il crash e pronta per l'uso.
+
+
+
+== Disaster recovery: Attivazione
+
+
+
+=== NFS
+
+Il processo di attivazione della copia di disaster recovery dipende dal tipo di storage. Con NFS, i file system possono essere premontati sul server di disaster recovery. Sono in uno stato di sola lettura e diventano lettura-scrittura quando il mirror è rotto. Ciò offre un RPO estremamente basso e il processo generale di disaster recovery è più affidabile, poiché ci sono meno parti da gestire.
+
+
+
+=== SAN
+
+L'attivazione delle configurazioni SAN in caso di disaster recovery diventa più complicata. L'opzione più semplice è in genere quella di rompere temporaneamente i mirror e montare le risorse SAN, tra cui passaggi come il rilevamento della configurazione LVM (incluse funzioni specifiche dell'applicazione come Oracle Automatic Storage Management [ASM]) e l'aggiunta di voci a /etc/fstab.
+
+Il risultato è che i percorsi dei dispositivi LUN, i nomi dei gruppi di volumi e gli altri percorsi dei dispositivi vengono resi noti al server di destinazione. Tali risorse possono quindi essere chiuse e, successivamente, i mirror possono essere ripristinati. Il risultato è un server che si trova in uno stato in grado di portare rapidamente l'applicazione online. I passaggi per attivare gruppi di volumi, montare file system o avviare database e applicazioni sono facilmente automatizzati.
+
+È necessario assicurarsi che l'ambiente di disaster recovery sia aggiornato. Ad esempio, è probabile che vengano aggiunti nuovi LUN al server di origine, il che significa che è necessario rilevare preventivamente i nuovi LUN sulla destinazione per garantire che il piano di disaster recovery funzioni come previsto.

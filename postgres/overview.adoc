@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: postgres/overview.html 
+keywords: PostgreSQL,database,postgres 
+summary: Database PostgreSQL su ONTAP 
+---
+= Database PostgreSQL su ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+PostgreSQL viene fornito con varianti che includono PostgreSQL, PostgreSQL Plus ed EDB Postgres Advanced Server (ECAS). PostgreSQL viene in genere distribuito come database back-end per applicazioni multi-Tier. È supportato da pacchetti middleware comuni (come PHP, Java, Python, Tcl/TK, ODBC, E JDBC) ed è stata storicamente una scelta popolare per i sistemi di gestione di database open-source. NetApp ONTAP è una scelta eccellente per l'esecuzione di database PostgreSQL per la sua affidabilità, prestazioni elevate ed efficienza di gestione dei dati.
+
+
+NOTE: Questa documentazione su ONTAP e il database PostgreSQL sostituisce il database _TR-4770: PostgreSQL precedentemente pubblicato sulle Best practice di ONTAP._
+
+Con la crescita esponenziale dei dati, la gestione dei dati diventa più complessa per le aziende. Questa complessità aumenta i costi di licenza, operativi, di supporto e di manutenzione. Per ridurre il TCO complessivo, considerare il passaggio da database commerciali a open-source con storage back-end affidabile e dalle performance elevate. PostgreSQL è un database open-source avanzato ampiamente utilizzato nelle aziende accademiche, commerciali e di grandi dimensioni. Viene fornito con una nuova serie di funzioni che risolvono le lacune in altri sistemi di gestione di database relazionali (RDBMS).
+
+
+NOTE: I clienti NetApp che utilizzano database PostgreSQL in ambienti fisici o virtualizzati possono trarre vantaggio dalla comprensione delle Best practice per una corretta distribuzione e gestione dei database PostgreSQL su ONTAP. Le raccomandazioni sono generiche, quindi non sono specifiche per alcuna configurazione. A seconda delle esigenze aziendali, alcuni suggerimenti potrebbero richiedere delle modifiche. Devi valutare il tuo ambiente in base alla documentazione ufficiale per PostgreSQL, hypervisor, sistema operativo e storage ONTAP.

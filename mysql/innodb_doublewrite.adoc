@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_doublewrite.html 
+keywords: MySQL,MariaDB,innodb_doublewrite 
+summary: MySQL su ONTAP 
+---
+= innodb_doublewrite
+:allow-uri-read: 
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revnumber: 
+:revdate: InnoDB stores all data twice
+:revremark: first to the double-write buffer and then to the actual data files.
+
+
+È possibile disattivare questo parametro con `--skip-innodb_doublewrite` per i benchmark o quando siete più preoccupati per le prestazioni superiori che l'integrità dei dati o possibili guasti. InnoDB utilizza una tecnica di scaricamento file chiamata double-write. Prima di scrivere le pagine nei file di dati, InnoDB le scrive in un'area contigua denominata buffer double-write. Una volta completata la scrittura e lo scarico nel buffer di doppia scrittura, InnoDB scrive le pagine nelle posizioni corrette nel file di dati. Se il sistema operativo o un processo mysqld si blocca durante la scrittura di una pagina, InnoDB può in seguito trovare una buona copia della pagina dal buffer di doppia scrittura durante il recupero del crash.
+
+
+TIP: *NetApp recommended* disabilitare il buffer double-write. La NVRAM ONTAP svolge la stessa funzione. Il doppio buffering danneggia inutilmente le prestazioni.

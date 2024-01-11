@@ -1,0 +1,18 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_buffer_pool_size.html 
+keywords: MySQL,MariaDB,innodb_buffer_pool_size 
+summary: MySQL su ONTAP 
+---
+= innodb_buffer_pool_size
+:allow-uri-read: 
+
+
+[role="lead"]
+Il pool di buffer InnoDB è la parte più importante di qualsiasi attività di ottimizzazione.
+
+InnoDB si affida in gran parte al pool di buffer per la memorizzazione nella cache degli indici e il reming dei dati, all'indice hash adattivo, al buffer insert e a molte altre strutture di dati utilizzate internamente. Il pool di buffer memorizza inoltre le modifiche ai dati in modo che le operazioni di scrittura non debbano essere eseguite immediatamente nello storage, migliorando così le prestazioni. Il pool di buffer è parte integrante di InnoDB e le sue dimensioni devono essere regolate di conseguenza. Per impostare le dimensioni del pool di buffer, tenere conto dei seguenti fattori:
+
+* Per una macchina dedicata solo InnoDB, impostare la dimensione del pool di buffer su 80% o più della RAM disponibile.
+* Se non si tratta di un server dedicato MySQL, impostare la dimensione al 50% della RAM.
+
