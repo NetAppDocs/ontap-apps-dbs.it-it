@@ -10,7 +10,7 @@ summary: Capacità e spazio libero per database e storage ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: Migrazione di Oracle mediante lo stack di storage lato host
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: Strategie di protezione dei dati di ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

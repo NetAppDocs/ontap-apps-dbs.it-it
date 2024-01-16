@@ -10,7 +10,7 @@ summary: Efficienza dello storage e dei database Oracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

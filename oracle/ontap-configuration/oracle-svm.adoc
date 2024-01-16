@@ -10,7 +10,7 @@ summary: Provisioning delle SVM per database Oracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

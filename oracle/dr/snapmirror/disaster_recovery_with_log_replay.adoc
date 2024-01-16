@@ -23,6 +23,8 @@ Supponendo che i file di dati siano incapsulati in volumi dedicati, la domanda s
 
 Il layout più semplice è illustrato nella figura seguente.
 
+image:2-volume.png["Errore: Immagine grafica mancante"]
+
 Questo è l'approccio più comune. Dal punto di vista dei DBA, potrebbe sembrare insolito colocare tutte le copie dei log di ripristino e dei log di archivio sullo stesso volume. Tuttavia, la separazione non offre molta protezione extra quando file e LUN si trovano tutti sullo stesso set di dischi sottostante.
 
 
@@ -30,6 +32,8 @@ Questo è l'approccio più comune. Dal punto di vista dei DBA, potrebbe sembrare
 == Layout a tre volumi
 
 A volte è necessaria la separazione dei log di ripristino a causa di problemi relativi alla protezione dei dati o della necessità di distribuire i/o dei log di ripristino tra i controller. In tal caso, il layout a tre volumi illustrato nella figura seguente può essere utilizzato per la replica, evitando tuttavia qualsiasi necessità di eseguire un ripristino incompleto o di fare affidamento su file di controllo di backup.
+
+image:3-volume.png["Errore: Immagine grafica mancante"]
 
 Ciò consente lo striping dei log di redo e dei file di controllo attraverso insiemi indipendenti di mandrini e controllori sulla sorgente. Tuttavia, i log di archivio e una serie di file di controllo e i log di ripristino possono ancora essere replicati in uno stato sincronizzato con i log di archivio.
 

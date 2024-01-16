@@ -10,11 +10,14 @@ summary: 'SnapCenter consente di creare policy di backup che possono essere appl
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revnumber: 
+:revdate: or entire SVMs.
 
-
-[role="lead"]
-I sistemi che eseguono il software ONTAP possono utilizzare la funzione QoS dello storage ONTAP per limitare il throughput in Mbps e/o i/o al secondo (IOPS) per diversi oggetti di storage come file, LUN, volumi o intere SVM.
 
 I limiti di throughput sono utili per controllare i carichi di lavoro sconosciuti o di test prima della distribuzione per assicurarsi che non influiscano su altri carichi di lavoro. Possono anche essere utilizzati per limitare un carico di lavoro ingombrante dopo l'identificazione. Sono supportati anche i livelli minimi di servizio basati sugli IOPS per fornire performance costanti per gli oggetti SAN in ONTAP 9.2 e per gli oggetti NAS in ONTAP 9.3.
 

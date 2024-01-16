@@ -6,14 +6,203 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Efficienza dello storage ONTAP con Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]
 L'efficienza dello storage è la capacità di archiviare e gestire i dati di SQL Server in modo che consumano la minor quantità di spazio di storage con effetti minimi o nulli sulle performance complessive del sistema.
 
-L'efficienza dello storage è una combinazione di RAID, provisioning (layout e utilizzo generali), mirroring e altre tecnologie di protezione dei dati. Tecnologie NetApp come le copie Snapshot, il thin provisioning e FlexClone consentono di creare vantaggi in termini di costi ottimizzando lo storage esistente nell'infrastruttura e posticipando o evitando le spese future per lo storage. Più si utilizzano queste tecnologie insieme, maggiore sarà il risparmio. Per ulteriori informazioni, vedere link:../common/ontap/thin-provisioning.html["raccomandazioni sul provisioning"]
+L'efficienza dello storage è una combinazione di RAID, provisioning (layout e utilizzo generali), mirroring e altre tecnologie di protezione dei dati. Tecnologie NetApp come le copie Snapshot, il thin provisioning e FlexClone consentono di creare vantaggi in termini di costi ottimizzando lo storage esistente nell'infrastruttura e posticipando o evitando le spese future per lo storage. Più si utilizzano queste tecnologie insieme, maggiore sarà il risparmio.
 
-La compressione, la compaction e la deduplica dello storage sono altre opzioni di efficienza dello storage che migliorano la quantità di dati logici applicabili a una determinata quantità di storage fisico. Per ulteriori informazioni, vedere link:../common/ontap/efficiency.html["best practice di efficienza"].
+
+
+== Thin provisioning
+
+Il thin provisioning è disponibile in molte forme e rappresenta parte integrante di molte funzionalità offerte da ONTAP a un ambiente applicativo aziendale. Il thin provisioning è inoltre strettamente correlato alle tecnologie di efficienza per lo stesso motivo: Le funzionalità di efficienza consentono di memorizzare dati più logici rispetto a quanto tecnicamente esistente nel sistema storage.
+
+Quasi tutti gli utilizzi delle snapshot implicano il thin provisioning. Ad esempio, un tipico database da 10TB TB su storage NetApp include circa 30 giorni di snapshot. Questa disposizione risulta in circa 10TB di dati visibili nel file system attivo e 300TB dedicati agli snapshot. In genere, il 310TB GB di storage totale risiede su un totale di circa 12TB - 15TB GB di spazio. Il database attivo consuma 10TB e i restanti 300TB di dati richiedono solo da 2TB a 5TB di spazio, in quanto vengono memorizzate solo le modifiche apportate ai dati originali.
+
+Anche il cloning è un esempio di thin provisioning. Un importante cliente NetApp ha creato 40 cloni di un database da 80TB TB per l'utilizzo da parte dello sviluppo. Se tutti i 40 sviluppatori che utilizzano questi cloni sovrascrivono ogni blocco in ogni file dati, sarebbero necessari oltre 3,2PB TB di storage. In pratica, il turnover è basso e il requisito di spazio collettivo è più vicino a 40TB, perché solo le modifiche sono memorizzate sui drive.
+
+
+
+== Gestione dello spazio
+
+È necessario prestare particolare attenzione al thin provisioning di un ambiente applicativo, perché la velocità di modifica dei dati può aumentare inaspettatamente. Ad esempio, il consumo di spazio dovuto agli snapshot può crescere rapidamente se le tabelle di database vengono riindicizzate o se viene applicata una patch su larga scala ai guest VMware. Un backup posizionato in modo errato può scrivere una grande quantità di dati in un tempo molto breve. Infine, può essere difficile recuperare alcune applicazioni se un file system esaurisce inaspettatamente lo spazio libero.
+
+Fortunatamente, questi rischi possono essere risolti con un'attenta configurazione di `volume-autogrow` e. `snapshot-autodelete` criteri: Come indicato dai nomi, queste opzioni consentono a un utente di creare policy in grado di liberare automaticamente lo spazio occupato dalle snapshot o di far crescere un volume per ospitare dati aggiuntivi. Sono disponibili molte opzioni e le esigenze variano in base al cliente.
+
+Vedere link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentazione per la gestione logica dello storage"] per una discussione completa di queste funzioni.
+
+
+
+== Thin provisioning LUN
+
+L'efficienza del thin provisioning delle LUN attive in un ambiente di file system può andare persa nel tempo quando i dati vengono eliminati. A meno che i dati eliminati non vengano sovrascritti con zero o lo spazio venga liberato con il recupero di spazio TRIM/UNMAP, i dati "cancellati" occupano sempre più spazi vuoti non allocati nel file system. Inoltre, in molti ambienti di database il thin provisioning delle LUN attive è limitato, in quanto i file di dati vengono inizializzati alle dimensioni massime al momento della creazione.
+
+Un'attenta pianificazione della configurazione LVM può migliorare l'efficienza e ridurre al minimo la necessità di provisioning dello storage e di ridimensionamento delle LUN. Quando si utilizza un LVM come Veritas VxVM o Oracle ASM, le LUN sottostanti vengono suddivise in estensioni che vengono utilizzate solo quando necessario. Ad esempio, se un set di dati inizia a 2TB TB ma potrebbe crescere fino a 10TB TB con il passare del tempo, è possibile inserire il set di dati in 10TB LUN con thin provisioning organizzati in un gruppo di dischi LVM. Occupa solo 2TB GB di spazio al momento della creazione e richiederebbe spazio aggiuntivo solo se le estensioni sono allocate per ospitare la crescita dei dati. Questo processo è sicuro finché lo spazio è monitorato.
+
+
+
+== Prenotazioni frazionarie
+
+Riserva frazionaria si riferisce al comportamento di un LUN in un volume rispetto all'efficienza dello spazio. Quando l'opzione `fractional-reserve` è impostato al 100%, tutti i dati nel volume possono subire un turnover del 100% con qualsiasi modello di dati senza esaurire lo spazio sul volume.
+
+Ad esempio, si consideri un database su una singola LUN da 250GB GB in un volume da 1TB GB. La creazione di uno snapshot comporterebbe immediatamente la riserva di ulteriori 250GB GB di spazio nel volume per garantire che il volume non esaurisca lo spazio per alcun motivo. L'utilizzo di riserve frazionarie comporta in genere uno spreco di risorse poiché è estremamente improbabile che ogni byte nel volume del database debba essere sovrascritto. Non c'è motivo di riservare spazio per un evento che non si verifica mai. Tuttavia, se un cliente non è in grado di monitorare il consumo di spazio in un sistema di storage e deve essere certo che lo spazio non si esaurisce mai, sarebbero necessarie prenotazioni frazionarie del 100% per utilizzare gli snapshot.
+
+
+
+== Compressione e deduplica
+
+Compressione e deduplica sono entrambe forme di thin provisioning. Ad esempio, un impatto dei dati di 50TB:1 potrebbe comprimere fino a 30TB:1, ottenendo un risparmio di 20TB:1. Affinché la compressione possa produrre vantaggi, alcuni di questi 20TB TB devono essere utilizzati per altri dati, altrimenti il sistema storage deve essere acquistato con meno di 50TB TB. In questo modo è possibile memorizzare una quantità di dati superiore rispetto a quella tecnicamente disponibile sul sistema storage. Dal punto di vista dei dati, i dati sono 50TB, anche se occupano solo 30TB sulle unità.
+
+Esiste sempre la possibilità che la compressibilità di un set di dati cambi, con conseguente aumento del consumo di spazio reale. Questo aumento dei consumi implica che la compressione deve essere gestita come con altre forme di thin provisioning in termini di monitoraggio e utilizzo `volume-autogrow` e. `snapshot-autodelete`.
+
+Compressione e deduplica sono descritte in dettaglio nella sezione link:efficiency.html
+
+
+
+=== Compressioni e prenotazioni frazionarie
+
+La compressione è una forma di thin provisioning. Le prenotazioni frazionarie influiscono sull'utilizzo della compressione, con una nota importante; lo spazio viene riservato prima della creazione dell'istantanea. Normalmente, la riserva frazionaria è importante solo se esiste uno snapshot. Se non è presente uno snapshot, la riserva frazionaria non è importante. Questo non è il caso della compressione. Se viene creata una LUN su un volume con compressione, ONTAP preserva lo spazio per ospitare uno snapshot. Questo comportamento può creare confusione durante la configurazione, ma è previsto.
+
+Ad esempio, consideriamo un volume da 10GB GB con una LUN da 5GB GB compressa a 2,5GB GB senza snapshot. Considerare questi due scenari:
+
+* Riserva frazionaria = 100 risultati in 7,5GB utilizzo
+* Riserva frazionaria = 0 risultati in 2,5GB utilizzo
+
+
+Il primo scenario include 2,5GB di consumo di spazio per i dati attuali e 5GB di spazio per rappresentare il 100% di fatturato della fonte in previsione dell'utilizzo di snapshot. Il secondo scenario non riserva spazio aggiuntivo.
+
+Sebbene questa situazione possa sembrare confusa, è improbabile che si verifichi nella pratica. La compressione implica thin provisioning e il thin provisioning in un ambiente LUN richiede prenotazioni frazionarie. È sempre possibile sovrascrivere i dati compressi con qualcosa di non comprimibile, il che significa che un volume deve essere sottoposto a thin provisioning per la compressione per consentire qualsiasi risparmio.
+
+[TIP]
+====
+*NetApp consiglia* le seguenti configurazioni riservate:
+
+* Impostare `fractional-reserve` a 0 quando è in atto il monitoraggio della capacità di base con `volume-autogrow` e. `snapshot-autodelete`.
+* Impostare `fractional-reserve` a 100 se non vi è alcuna capacità di monitoraggio o se è impossibile scaricare lo spazio in qualsiasi circostanza.
+
+
+====
+
+
+== Efficienza
+
+Le funzionalità di efficienza in termini di spazio, come compressione, compaction e deduplica, sono progettate per aumentare la quantità di dati logici applicabili a una determinata quantità di storage fisico. Il risultato è una riduzione dei costi e dell'overhead di gestione.
+
+Ad un livello elevato, la compressione è un processo matematico in cui gli schemi nei dati vengono rilevati e codificati in modo da ridurre i requisiti di spazio. La deduplica, invece, rileva i blocchi di dati effettivi e ripetuti e rimuove le copie estranee. La tecnologia di compaction consente a più blocchi logici di dati di condividere lo stesso blocco fisico sui supporti.
+
+
+
+== Compressione
+
+Prima della disponibilità dei sistemi storage all-flash, la compressione basata su array aveva un valore limitato, perché la maggior parte dei carichi di lavoro con i/o-intensive richiedeva un numero molto elevato di spindle per fornire performance accettabili. I sistemi storage contenevano invariabilmente una capacità superiore rispetto a quella richiesta come effetto collaterale dell'elevato numero di dischi. La situazione è cambiata con l'ascesa dello storage a stato solido. Non è più necessario effettuare un provisioning in eccesso significativo dei dischi solo per ottenere buone prestazioni. Lo spazio su disco di un sistema di storage può essere adattato alle effettive esigenze di capacità.
+
+L'aumento della capacità degli IOPS dei dischi a stato solido (SSD) offre quasi sempre risparmi sui costi rispetto ai dischi rotanti, ma la compressione può ottenere ulteriori risparmi aumentando la capacità effettiva dei supporti a stato solido.
+
+Esistono diversi modi per comprimere i dati. Molti database includono proprie funzionalità di compressione, sebbene raramente queste vengano osservate negli ambienti dei clienti. Il motivo è in genere la penalizzazione delle prestazioni per una *modifica* dei dati compressi, oltre ai costi di licenza spesso elevati. Infine, ci sono le conseguenze globali delle performance sulle operazioni di database. Ha poco senso pagare un costo elevato di licenza per CPU per una CPU che esegue la compressione e la decompressione dei dati piuttosto che un vero lavoro di database. Un'opzione migliore è trasferire il lavoro di compressione sul sistema storage.
+
+
+
+=== Compressione adattiva
+
+La compressione adattiva è stata testata accuratamente con carichi di lavoro Enterprise senza effetti osservati sulle performance, anche in un ambiente all-flash in cui la latenza viene misurata in microsecondi. Alcuni clienti hanno anche segnalato un aumento delle performance con l'utilizzo della compressione, perché i dati rimangono compressi nella cache, aumentando di fatto la quantità di cache disponibile in un controller.
+
+ONTAP gestisce i blocchi fisici in 4KB unità. La compressione adattiva utilizza dimensioni predefinite dei blocchi di compressione di 8KB KB, il che significa che i dati sono compressi in unità da 8KB KB. Corrisponde alle dimensioni dei blocchi di 8KB KB utilizzate più spesso dai database relazionali. Gli algoritmi di compressione diventano più efficienti con la compressione di un numero maggiore di dati come una singola unità. Una dimensione dei blocchi di compressione da 32KB KB sarebbe più efficiente in termini di spazio rispetto a un'unità dei blocchi di compressione da 8KB KB. Ciò significa che la compressione adattiva che utilizza le dimensioni predefinite dei blocchi di 8KB KB produce tassi di efficienza leggermente inferiori, ma esiste anche un vantaggio significativo nell'utilizzo di dimensioni inferiori dei blocchi di compressione. I carichi di lavoro dei database includono un'elevata attività di sovrascrittura. La sovrascrittura di un 8KB di un blocco di dati 32KB compresso richiede la lettura dell'intero 32KB di dati logici, la decompressione, l'aggiornamento della regione 8KB richiesta, la ricompressione e quindi la riscrittura dell'intero 32KB sui dischi. Si tratta di un'operazione molto costosa per un sistema storage ed è il motivo per cui alcuni storage array concorrenti basati su dimensioni dei blocchi di compressione più grandi implicano anche una significativa penalizzazione delle performance con i carichi di lavoro dei database.
+
+
+NOTE: Le dimensioni dei blocchi utilizzate dalla compressione adattiva possono essere aumentate fino a 32KB KB. Questo può migliorare l'efficienza di archiviazione e dovrebbe essere considerato per i file inattivi come i log di archiviazione e i file di backup quando una quantità sostanziale di tali dati è memorizzata nell'array. In alcune situazioni, i database attivi che utilizzano dimensioni blocco 16KB KB o 32KB KB possono anche trarre vantaggio dall'aumento delle dimensioni blocco della compressione adattiva per adeguarsi. Consulta un NetApp o un rappresentante del partner per ottenere indicazioni relative all'adeguatezza del tuo carico di lavoro.
+
+
+CAUTION: Le dimensioni dei blocchi di compressione superiori a 8KB KB non devono essere utilizzate insieme alla deduplica nelle destinazioni di backup in streaming. Il motivo è che piccole modifiche ai dati di backup influiscono sulla finestra di compressione 32KB. Se la finestra si sposta, i dati compressi risultanti differiscono per l'intero file. La deduplica si verifica dopo la compressione, il che significa che il motore di deduplica vede ogni backup compresso in modo diverso. Se è necessaria la deduplica dei backup in streaming (come Oracle RMAN), è consigliabile utilizzare solo la compressione adattiva per blocchi da 8KB KB. La compressione adattiva è preferibile, perché funziona a blocchi di dimensioni inferiori e non interrompe l'efficienza di deduplica. Per motivi simili, la compressione lato host interferisce anche con l'efficienza della deduplica.
+
+
+
+=== Efficienza di conservazione sensibile alla temperatura
+
+L'efficienza dello storage sensibile alla temperatura (TSSE) è disponibile in ONTAP 9,8 e versioni successive e si basa sulle mappe termiche di accesso ai blocchi per identificare i blocchi a cui si accede raramente e comprimerli con una maggiore efficienza.
+
+
+
+=== Allineamento delle compressioni
+
+La compressione adattiva in un ambiente di database richiede alcune considerazioni sull'allineamento dei blocchi di compressione. Ciò rappresenta solo una preoccupazione per i dati che sono soggetti a sovrascritture casuali di blocchi molto specifici. Questo approccio è simile in teoria all'allineamento complessivo del file system, dove l'inizio di un file system deve essere allineato al limite di un dispositivo 4K e la dimensione di blocco di un file system deve essere un multiplo di 4K.
+
+Ad esempio, una scrittura 8KB in un file viene compressa solo se si allinea con un limite 8KB all'interno del file system stesso. Questo punto significa che deve rientrare nel primo 8KB del file, nel secondo 8KB del file e così via. Dati come i backup RMAN o i log di archivio sono operazioni scritte in sequenza che coprono più blocchi, tutti compressi. Pertanto, non è necessario considerare l'allineamento. L'unico modello di i/o che desta preoccupazione sono le sovrascritture casuali dei file.
+
+
+
+==== NFS
+
+Utilizzando NFS, l'i/o del file è allineato, Ogni blocco di un file è allineato rispetto all'inizio del file.
+
+
+
+==== SAN
+
+Gli ambienti SAN richiedono l'allineamento dei dati a un confine di 8KB:1 per una compressione ottimale. Esistono due aspetti dell'allineamento per SAN: Il LUN e il file system. Il LUN deve essere configurato come dispositivo a disco intero (senza partizione) o con una partizione allineata a un limite di 8KB GB.
+
+
+NOTE: Vedere le sezioni sul thin provisioning per una spiegazione dell'interazione tra la compressione e la prenotazione frazionata.
+
+
+
+== Compaction dei dati
+
+La data compaction è una tecnologia introdotta in ONTAP che migliora l'efficienza di compressione. Come indicato in precedenza, la sola compressione adattiva può garantire risparmi 2:1:1 al meglio, perché è limitata alla memorizzazione di un i/o da 8KB KB in un blocco WAFL da 4KB KB. I metodi di compressione con dimensioni dei blocchi maggiori garantiscono una maggiore efficienza. Tuttavia, non sono adatte per i dati che sono soggetti a piccole sovrascritture dei blocchi. La decompressione di 32KB unità di dati, l'aggiornamento di una porzione 8KB, la ricompressione e la riscrittura sui dischi crea overhead.
+
+La data compaction opera consentendo di memorizzare più blocchi logici all'interno dei blocchi fisici. Ad esempio, un database con dati altamente comprimibili come testo o blocchi parzialmente completi può comprimere da 8KB a 1KB. Senza la compaction, quei 1KB PB di dati continuerebbero ad occupare un intero blocco da 4KB KB. Inline data compaction per memorizzare 1KB TB di dati compressi in sole 1KB:1 di spazio fisico insieme ad altri dati compressi. Non si tratta di una tecnologia di compressione, ma semplicemente di un metodo più efficiente per allocare spazio sulle unità e quindi non dovrebbe creare alcun effetto rilevabile sulle prestazioni.
+
+Il grado di risparmio ottenuto varia. I dati già compressi o crittografati non possono in genere essere ulteriormente compressi, e pertanto tali set di dati non traggono vantaggio dalla compattazione. I file di dati Oracle appena inizializzati contengono poco più dei metadati dei blocchi e compressi di zero fino a 80:1. Ciò crea una gamma estremamente ampia di possibilità.
+
+
+
+== Deduplica
+
+La deduplica consiste nella rimozione di dimensioni dei blocchi duplicate da un set di dati. Ad esempio, se lo stesso blocco 4KB esistesse in 10 file diversi, la deduplica reindirizzerebbe quel blocco 4KB in tutti i file 10 allo stesso blocco fisico da 4KB KB. Il risultato sarebbe un miglioramento di 10:1 volte in efficienza per quei dati.
+
+Dati come i LUN di avvio guest di VMware si deduplicano in genere in modo estremamente efficace poiché sono costituiti da più copie degli stessi file del sistema operativo. Sono state osservate un'efficienza pari o superiore a 100:1.
+
+Alcuni dati non contengono dati duplicati. Ad esempio, un blocco Oracle contiene un'intestazione univoca a livello globale per il database e un trailer quasi univoco. Di conseguenza, la deduplica di un database Oracle raramente offre un risparmio superiore al 1%.
+
+In pochi casi, sono stati osservati risparmi di spazio fino al 15% nei database con blocchi di dimensioni grandi e 16KB. Il 4KB iniziale di ciascun blocco contiene la testata unica a livello globale, mentre il 4KB finale contiene il rimorchio quasi unico. I blocchi interni sono candidati per la deduplica, sebbene in pratica ciò sia quasi interamente attribuito alla deduplica di dati azzerati.
+
+Molti array della concorrenza rivendicano la capacità di deduplicare i database Oracle sulla base del presupposto che un database venga copiato più volte. Anche in questo caso è possibile utilizzare la deduplica NetApp, ma ONTAP offre un'opzione migliore: La tecnologia FlexClone di NetApp. Il risultato finale è lo stesso; vengono create più copie di un database Oracle che condividono la maggior parte dei blocchi fisici sottostanti. L'utilizzo di FlexClone è molto più efficiente che impiegare il tempo per copiare i file di dati e quindi deduplicarli. In effetti, non viene effettuata alcuna duplicazione piuttosto che deduplica, poiché al primo posto non viene mai creato un duplicato.
+
+
+
+== Efficienza e thin provisioning
+
+Le funzionalità di efficienza sono forme di thin provisioning. Ad esempio, una LUN da 100GB GB che occupa un volume da 100GB GB potrebbe comprimere fino a 50GB GB. Non ci sono risparmi effettivi ancora realizzati perché il volume è ancora 100GB. Le dimensioni del volume devono essere innanzitutto ridotte in modo che lo spazio salvato possa essere utilizzato in un'altra posizione del sistema. Se successivamente le modifiche apportate al LUN da 100GB GB rendono i dati meno comprimibili, il LUN aumenta le dimensioni e il volume potrebbe riempirsi.
+
+Il thin provisioning è vivamente consigliato in quanto consente di semplificare la gestione, offrendo al contempo un sostanziale miglioramento della capacità utilizzabile con conseguenti risparmi sui costi. Il motivo è semplice: Gli ambienti Oracle spesso includono molto spazio vuoto, un elevato numero di volumi e LUN e dati comprimibili. Il thick provisioning crea la riserva di spazio sullo storage per volumi e LUN, nel caso in cui un giorno raggiungano il 100% di riempimento e contengano dati non comprimibili al 100%. È improbabile che ciò accada mai. Il thin provisioning consente di recuperare lo spazio e di utilizzarlo altrove e consente la gestione della capacità basata sul sistema storage stesso piuttosto che su molti volumi e LUN più piccoli.
+
+Alcuni clienti preferiscono utilizzare il thick provisioning, per carichi di lavoro specifici o generalmente basato su pratiche operative e di approvvigionamento consolidate.
+
+*Attenzione:* se un volume viene sottoposto a thick provisioning, è necessario fare attenzione a disattivare completamente tutte le funzioni di efficienza per quel volume, inclusa la decompressione e la rimozione della deduplica tramite `sis undo` comando. Il volume non dovrebbe essere visualizzato in `volume efficiency show` output. In tal caso, il volume è ancora parzialmente configurato per le funzioni di efficienza. Di conseguenza, la sovrascrittura garantisce un funzionamento diverso, aumentando le possibilità che le sovrascritture causino l'esaurimento inaspettato dello spazio del volume, con conseguenti errori di i/o del database.
+
+
+
+== Best practice di efficienza
+
+NetApp fornisce i seguenti consigli per ONTAP 9 e versioni successive. Per le versioni ONTAP precedenti a ONTAP 9, contattare il rappresentante NetApp di zona.
+
+
+
+=== Valori predefiniti AFF
+
+I volumi creati su ONTAP in esecuzione su un sistema AFF all-flash vengono sottoposti a thin provisioning con tutte le funzionalità di efficienza inline abilitate. Sebbene in genere i database Oracle non beneficino della deduplica e possano includere dati non comprimibili, le impostazioni predefinite sono comunque appropriate per quasi tutti i carichi di lavoro. ONTAP è progettato per elaborare in modo efficiente tutti i tipi di dati e gli schemi i/o, indipendentemente dal fatto che comportino risparmi. Le impostazioni predefinite devono essere modificate solo se le ragioni sono pienamente comprese e se vi è un vantaggio a deviare.
+
+
+
+=== Raccomandazioni generali
+
+* Se i volumi e/o le LUN non sono dotati di thin provisioning, è necessario disabilitare tutte le impostazioni di efficienza perché queste funzioni non offrono risparmi e la combinazione del thick provisioning con l'efficienza dello spazio può causare comportamenti imprevisti, inclusi errori di spazio esaurito.
+* Se i dati non sono soggetti a sovrascritture, ad esempio con i backup o i log delle transazioni dei database, puoi ottenere una maggiore efficienza abilitando TSSE con un periodo di raffreddamento ridotto.
+* Alcuni file potrebbero contenere una quantità significativa di dati non comprimibili, ad esempio quando la compressione è già abilitata a livello di applicazione dei file sono crittografati. Se uno di questi scenari è vero, considerare la possibilità di disattivare la compressione per consentire un funzionamento più efficiente su altri volumi che contengono dati comprimibili.
+* Non utilizzare sia la compressione 32KB che la deduplica con i backup del database. Vedere la sezione ""<<Compressione adattiva>>"" per i dettagli.
+
 
 SQL Server dispone inoltre di funzionalità per comprimere e gestire in modo efficiente i dati. Attualmente SQL Server supporta due tipi di compressione dati: Compressione riga e compressione pagina.
 

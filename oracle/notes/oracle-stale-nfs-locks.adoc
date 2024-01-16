@@ -10,7 +10,7 @@ summary: Oracle e stantio NFSv3 Locks
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

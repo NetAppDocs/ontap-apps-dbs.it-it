@@ -10,7 +10,7 @@ summary: Linee guida per il dimensionamento e il numero di LUN dei database Orac
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

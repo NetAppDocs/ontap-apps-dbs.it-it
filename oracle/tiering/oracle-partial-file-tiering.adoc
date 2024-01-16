@@ -10,7 +10,7 @@ summary: Tiering parziale dei file con FabricPool
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

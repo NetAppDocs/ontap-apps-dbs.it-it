@@ -10,7 +10,7 @@ summary: Criteri di recupero per il tiering Pracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

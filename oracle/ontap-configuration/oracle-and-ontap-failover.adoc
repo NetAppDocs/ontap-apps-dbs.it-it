@@ -10,7 +10,7 @@ summary: 'Le operazioni di takeover e switchover dello storage devono garantire 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

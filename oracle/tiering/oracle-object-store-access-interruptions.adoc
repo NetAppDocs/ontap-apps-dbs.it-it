@@ -10,7 +10,7 @@ summary: Accesso al database durante le interruzioni di accesso agli archivi di 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

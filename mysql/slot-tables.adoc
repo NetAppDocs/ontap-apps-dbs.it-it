@@ -11,21 +11,22 @@ summary: MySQL su ONTAP
 [role="lead"]
 Le prestazioni di NFS su Linux dipendono da un parametro chiamato `tcp_max_slot_table_entries`.
 
-Questo parametro regola il numero di operazioni NFS in sospeso consentite su un sistema operativo Linux.
+Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
 
-Il valore predefinito nella maggior parte dei kernel derivati da 2,6, che include RH5 e OL5, è 16. Tuttavia, questa impostazione predefinita spesso causa problemi di prestazioni. Il problema opposto si verifica sui kernel più recenti in cui `tcp_max_slot_table_entries` il valore predefinito è 65536 e può causare problemi di storage inondando il sistema di richieste eccessive. RHEL 7 e RHEL 8 hanno un valore predefinito di 65536. La soluzione consiste nell'impostare questo valore in modo statico. Utilizza il valore di 128 per qualsiasi sistema operativo Linux utilizzando lo storage NFS NetApp con un database MySQL. Per impostare questo valore in Red Hat Enterprise Linux, inserite la seguente voce in /etc/sysctl.conf:
+Per prestazioni ottimali e per evitare problemi di prestazioni, regolare i parametri del kernel che controllano le tabelle degli slot TCP.
 
-Impostare `tcp_max_slot_table_entries`:
-
-....
-[root@host1 ~]# echo "sunrpc.tcp_max_slot_table_entries = 128" >> /etc/sysctl.conf
-[root@host1 ~]# sysctl -p
-....
-Verificare che il valore sia impostato:
+Eseguire `sysctl -a | grep tcp.*.slot_table` e osservare i seguenti parametri:
 
 ....
-[root@host1 ~]# sysctl sunrpc.tcp_max_slot_table_entries
+# sysctl -a | grep tcp.*.slot_table
 sunrpc.tcp_max_slot_table_entries = 128
+sunrpc.tcp_slot_table_entries = 128
 ....
+Tutti i sistemi Linux dovrebbero includere `sunrpc.tcp_slot_table_entries`, ma solo alcuni includono `sunrpc.tcp_max_slot_table_entries`. Entrambi devono essere impostati su 128.
 
-NOTE: Esiste un altro parametro con nome molto simile `tcp_slot_table_entries`. Questo valore definisce il numero di slot assegnati a una sessione TCP quando viene stabilita per la prima volta. Non è necessario modificare questo valore.
+|===
+| Attenzione 
+
+
+| La mancata impostazione di questi parametri può avere effetti significativi sulle prestazioni. In alcuni casi, le prestazioni sono limitate poiché il sistema operativo linux non fornisce i/o sufficienti In altri casi, le latenze i/o aumentano quando il sistema operativo linux tenta di emettere più i/o di quanto possa essere gestito. 
+|===

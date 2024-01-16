@@ -11,7 +11,7 @@ summary: Struttura dei file MySQL
 [role="lead"]
 InnoDB funge da livello intermedio tra lo storage e il server MySQL, e memorizza i dati nelle unità.
 
-image:./media/file-structure1.png["Errore: Immagine grafica non trovata"]
+image:mysql-file-structure1.png["Errore: Immagine grafica non trovata"]
 
 I/o MySQL è suddiviso in due tipi:
 
@@ -19,7 +19,7 @@ I/o MySQL è suddiviso in due tipi:
 * I/o di file sequenziale
 
 
-image:./media/file-structure2.png["Errore: Immagine grafica non trovata"]
+image:mysql-file-structure2.png["Errore: Immagine grafica non trovata"]
 
 I file di dati vengono letti e sovrascritti in modo casuale, con conseguente aumento degli IOPS. Pertanto, si consiglia di utilizzare l'unità SSD.
 

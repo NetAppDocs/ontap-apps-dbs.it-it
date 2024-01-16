@@ -10,7 +10,7 @@ summary: Strumenti di backup di Oracle e NetApp
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

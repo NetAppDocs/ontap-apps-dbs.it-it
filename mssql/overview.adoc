@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Panoramica su Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 

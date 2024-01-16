@@ -10,6 +10,7 @@ summary: Microsoft SQL Server su ONTAP
 :author: [.lead]
 :authorinitials: [
 :authors: [.lead]
+:imagesdir: ../media/
 
 
 
@@ -27,7 +28,7 @@ In un cluster SQL Server con diverse istanze SQL Server, ciascuna istanza potreb
 
 TIP: *NetApp consiglia* di lasciare almeno 4GB o 6GB GB di RAM per il sistema operativo per evitare problemi di prestazioni.
 
-image:./media/max-server-memory.png["Errore: Immagine grafica mancante"]
+image:mssql-max-server-memory.png["Errore: Immagine grafica mancante"]
 
 
 
@@ -74,7 +75,7 @@ Quando viene eseguita una query, SQL Server tenta di allocare la quantità di me
 
 Per impostazione predefinita, l'impostazione memoria minima per query assegna > o = a 1024KB per ogni query da eseguire. È consigliabile lasciare questa impostazione al valore predefinito 0 per consentire a SQL Server di gestire dinamicamente la quantità di memoria allocata per le operazioni di creazione dell'indice. Tuttavia, se SQL Server dispone di una quantità di RAM superiore a quella necessaria per un'esecuzione efficiente, le prestazioni di alcune query possono essere migliorate se si aumenta questa impostazione. Pertanto, se sul server non viene utilizzata SQL Server, altre applicazioni o il sistema operativo è disponibile memoria, il miglioramento di questa impostazione può contribuire alle prestazioni complessive di SQL Server. Se non è disponibile memoria libera, l'aumento di questa impostazione potrebbe compromettere le prestazioni complessive.
 
-image:./media/min-memory-per-query.png["Errore: Immagine grafica mancante"]
+image:mssql-min-memory-per-query.png["Errore: Immagine grafica mancante"]
 
 
 

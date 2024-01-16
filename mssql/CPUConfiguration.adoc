@@ -6,12 +6,11 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Configurazione CPU
 :allow-uri-read: 
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revdate: Modifying server and database settings can help achieve better and more efficient database performance.
+:imagesdir: ../media/
 
+
+[role="lead"]
+La modifica delle impostazioni dei server e dei database può contribuire a migliorare e ad aumentare l'efficienza delle performance dei database.
 
 
 
@@ -29,7 +28,7 @@ Le licenze di SQL Server esistono due principali scuole di pensiero. Il primo è
 
 === Le voci del registro indicano il numero di core utilizzati dopo l'avvio di SQL Server.
 
-image:./media/hyperthreading.png["Errore: Immagine grafica mancante"]
+image:mssql-hyperthreading.png["Errore: Immagine grafica mancante"]
 
 Pertanto, per utilizzare tutte le CPU, è necessario utilizzare la licenza core per processore. Per informazioni dettagliate sulle licenze di SQL Server, vedere link:https://www.microsoft.com/en-us/sql-server/sql-server-2022-comparison["SQL Server 2022: La tua moderna piattaforma per i dati"^].
 
@@ -72,7 +71,7 @@ Il valore predefinito è 0, che consente a SQL Server di configurare automaticam
 
 Quando è necessario configurare SQL Server per utilizzare più thread di lavoro? Se la lunghezza media della coda di lavoro per ogni pianificatore è superiore a 1, si potrebbe trarre vantaggio dall'aggiunta di più thread al sistema, ma solo se il carico non è legato alla CPU o se si verificano altre attese pesanti. Se si verifica uno di questi due eventi, l'aggiunta di altri thread non aiuta perché sono in attesa di altri colli di bottiglia del sistema. Per ulteriori informazioni sui thread di lavoro max, vedere link:https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-worker-threads-server-configuration-option?view=sql-server-ver16&redirectedfrom=MSDN["Configurare l'opzione di configurazione del server numero massimo di thread di lavoro"^].
 
-image:./media/max-worker-threads.png["Errore: Immagine grafica mancante"]
+image:mssql-max-worker-threads.png["Errore: Immagine grafica mancante"]
 
 
 

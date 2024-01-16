@@ -10,7 +10,7 @@ summary: 'Il flusso di lavoro all"interno di SRM è significativamente diverso q
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

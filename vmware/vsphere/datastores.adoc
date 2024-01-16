@@ -10,12 +10,13 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revdate: == vSphere datastore and protocol features
 
-
-
-
-== Datastore vSphere e funzionalità del protocollo
 
 Per collegare VMware vSphere a datastore su un sistema con software ONTAP vengono utilizzati sette protocolli:
 

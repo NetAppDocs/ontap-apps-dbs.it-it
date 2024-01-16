@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Sicurezza del database
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -16,7 +17,7 @@ ONTAP offre numerose funzionalità per proteggere i dati su NAS e SAN.
 
 ONTAP consente di eseguire il backup di volumi flessibili su un volume SnapLock Enterprise o conformità SnapLock creando una relazione SnapMirror tra il volume FlexVol come origine e il volume SnapLock come destinazione. Le copie Snapshot di cui è stato eseguito il backup sullo storage secondario sono protette per via di modifica o eliminazione fino alla data di conservazione utilizzando la tecnologia SnapLock. Ciò si basa in una policy di SnapMirror associata a una relazione in cui è definito il numero di copie Snapshot per un particolare etichetta snapmirror conservata nel volume SnapLock di destinazione. per ripristinare la snapshot che contiene dati LUN, è possibile effettuare su un volume non SnapLock tramite l'operazione di ripristino di snapmirror. In ONTAP 9.13.1 è possibile creare una copia FlexClone specificando il tipo di SnapLock come non-snaplock. Per ulteriori informazioni su SnapLock, vedere link:https://docs.netapp.com/us-en/ontap/snaplock/["qui"].
 
-image:./media/snap_snaplock.png["Errore: Immagine grafica mancante"]
+image:mssql-snap_snaplock.png["Errore: Immagine grafica mancante"]
 
 Copie Snapshot a prova di manomissione o blocco delle copie snapshot : la copia Snapshot è un modo rapido per proteggere e ripristinare il database. Un utente malintenzionato potrebbe eliminare le copie Snapshot, che potrebbero essere state l'ultima opzione per ripristinare un database in caso di danneggiamento dei dati. L'attivazione delle copie Snapshot a prova di manomissione blocca la copia Snapshot sul sistema ONTAP primario o secondario per impedire all'amministratore del sistema rougue o all'amministratore non attendibile di eliminare gli snapshot per un periodo specificato. La funzione di copia istantanea antimanomissione è disponibile da ONTAP 9.12.1 e richiede la licenza SnapLock e l'inizializzazione del clock di conformità.
 

@@ -10,7 +10,7 @@ summary: 'Con la transizione dall"appliance virtuale legacy, gli strumenti ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

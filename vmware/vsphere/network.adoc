@@ -10,11 +10,13 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revdate: Configuring network settings when using vSphere with systems running ONTAP software is straightforward and similar to other network configuration.
 
-
-[role="lead"]
-La configurazione delle impostazioni di rete quando si utilizza vSphere con sistemi che eseguono il software ONTAP è semplice e simile ad altre configurazioni di rete.
 
 Ecco alcuni aspetti da considerare:
 

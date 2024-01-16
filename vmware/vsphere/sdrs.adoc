@@ -10,7 +10,7 @@ summary: 'SnapCenter consente di creare policy di backup che possono essere appl
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

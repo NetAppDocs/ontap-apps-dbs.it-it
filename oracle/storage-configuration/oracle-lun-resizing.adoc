@@ -10,7 +10,7 @@ summary: LUN e LVM vengono ridimensionati con database Oracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

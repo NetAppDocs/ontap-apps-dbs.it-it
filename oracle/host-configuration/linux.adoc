@@ -13,10 +13,27 @@ Argomenti di configurazione specifici del sistema operativo Linux.
 
 
 
-== Tavoli con fessure
+== Tabelle degli slot TCP per Linux NFSv3
 
-Le prestazioni di NFS su Linux dipendono da un parametro chiamato `tcp_max_slot_table_entries`. Consultare la link:../../common/storage-configuration/nfs.html["NFS"] per informazioni critiche.
+Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
 
+Per prestazioni ottimali e per evitare problemi di prestazioni, regolare i parametri del kernel che controllano le tabelle degli slot TCP.
+
+Eseguire `sysctl -a | grep tcp.*.slot_table` e osservare i seguenti parametri:
+
+....
+# sysctl -a | grep tcp.*.slot_table
+sunrpc.tcp_max_slot_table_entries = 128
+sunrpc.tcp_slot_table_entries = 128
+....
+Tutti i sistemi Linux dovrebbero includere `sunrpc.tcp_slot_table_entries`, ma solo alcuni includono `sunrpc.tcp_max_slot_table_entries`. Entrambi devono essere impostati su 128.
+
+|===
+| Attenzione 
+
+
+| La mancata impostazione di questi parametri può avere effetti significativi sulle prestazioni. In alcuni casi, le prestazioni sono limitate poiché il sistema operativo linux non fornisce i/o sufficienti In altri casi, le latenze i/o aumentano quando il sistema operativo linux tenta di emettere più i/o di quanto possa essere gestito. 
+|===
 
 
 == Opzioni di montaggio NFS Linux

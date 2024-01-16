@@ -10,7 +10,7 @@ summary: I database Oracle e NFS vengono affittati e bloccati
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Istanza condivisa Microsoft SQL Server rispetto a istanza dedicata
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]

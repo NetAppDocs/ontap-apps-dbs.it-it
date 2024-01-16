@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = File di database e filegroup di Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -19,7 +20,7 @@ Ogni database dispone di un file di dati primario che, per impostazione predefin
 
 Tutti i file di database sono raggruppati in filegroup. Un filegroup è l'unità logica, che semplifica l'amministrazione del database. Consentono la separazione tra il posizionamento degli oggetti logici e i file di database fisici. Quando si creano le tabelle degli oggetti del database, si specifica in quale filegroup devono essere posizionati senza preoccuparsi della configurazione del file di dati sottostante.
 
-image:./media/filegroups.png["Errore: Immagine grafica mancante"]
+image:mssql-filegroups.png["Errore: Immagine grafica mancante"]
 
 La possibilità di inserire più file di dati all'interno del filegroup consente di distribuire il carico su diversi dispositivi di archiviazione, migliorando le prestazioni di i/o del sistema. Al contrario, il log delle transazioni non trae vantaggio dai file multipli poiché SQL Server scrive nel log delle transazioni in modo sequenziale.
 
@@ -41,7 +42,7 @@ Un piccolo rischio per la sicurezza è associato all'inizializzazione immediata 
 
 È possibile attivare l'inizializzazione immediata dei file aggiungendo l'autorizzazione SA_MANAGE_VOLUME_NAME, nota anche come "Esegui attività di manutenzione del volume" all'account di avvio di SQL Server. È possibile eseguire questa operazione nell'applicazione di gestione dei criteri di protezione locale (secpol.msc), come illustrato nella figura seguente. Aprire le proprietà per l'autorizzazione "Esegui attività di manutenzione del volume" e aggiungere l'account di avvio di SQL Server all'elenco degli utenti.
 
-image:./media/security-policy.png["Errore: Immagine grafica mancante"]
+image:mssql-security-policy.png["Errore: Immagine grafica mancante"]
 
 Per verificare se l'autorizzazione è attivata, è possibile utilizzare il codice riportato nell'esempio seguente. Questo codice imposta due flag di traccia che obbligano SQL Server a scrivere informazioni aggiuntive nel registro degli errori, a creare un database di piccole dimensioni e a leggere il contenuto del registro.
 
@@ -68,10 +69,10 @@ GO
 ....
 Quando l'inizializzazione immediata del file non è attivata, il registro degli errori di SQL Server mostra che SQL Server sta azzerando il file di dati mdf oltre a azzerare il file di registro ldf, come illustrato nell'esempio seguente. Quando l'inizializzazione immediata del file è attivata, viene visualizzato solo l'azzeramento del file di registro.
 
-image:./media/zeroing.png["Errore: Immagine grafica mancante"]
+image:mssql-zeroing.png["Errore: Immagine grafica mancante"]
 
 L'attività di manutenzione del volume viene semplificata in SQL Server 2016 e viene fornita come opzione durante il processo di installazione. In questa figura viene visualizzata l'opzione per concedere al servizio del motore di database di SQL Server il privilegio di eseguire l'attività di manutenzione del volume.
 
-image:./media/maintenance.png["Errore: Immagine grafica mancante"]
+image:mssql-maintenance.png["Errore: Immagine grafica mancante"]
 
 Un'altra importante opzione del database che controlla le dimensioni dei file di database è l'autohrink. Quando questa opzione è attivata, SQL Server riduce regolarmente i file di database, ne riduce le dimensioni e rilascia spazio al sistema operativo. Questa operazione richiede molte risorse ed è raramente utile perché i file di database crescono di nuovo dopo un certo periodo di tempo quando nuovi dati entrano nel sistema. Il collegamento automatico non deve mai essere attivato nel database.

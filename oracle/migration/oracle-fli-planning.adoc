@@ -10,7 +10,7 @@ summary: Preparazione di ONTAP per una migrazione FLI
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

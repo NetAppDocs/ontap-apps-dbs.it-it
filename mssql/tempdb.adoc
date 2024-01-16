@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = File tempdb di Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]

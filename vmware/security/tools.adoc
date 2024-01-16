@@ -10,7 +10,7 @@ summary: Questo documento illustra la sicurezza dei prodotti per gli strumenti O
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 

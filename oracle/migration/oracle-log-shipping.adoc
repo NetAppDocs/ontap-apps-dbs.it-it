@@ -10,7 +10,7 @@ summary: Migrazione di Oracle tramite la distribuzione dei log
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

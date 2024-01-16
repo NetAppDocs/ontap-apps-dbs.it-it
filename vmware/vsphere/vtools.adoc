@@ -10,7 +10,7 @@ summary: 'ONTAP supporta tutti i principali protocolli di storage utilizzati per
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

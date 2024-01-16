@@ -10,7 +10,7 @@ summary: Il ripristino rapido del database Oracle in ONTAP da una copia Snapshot
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

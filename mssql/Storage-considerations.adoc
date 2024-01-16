@@ -6,6 +6,7 @@ summary: Microsoft SQL Server su ONTAP
 ---
 = Considerazioni sullo storage per Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]

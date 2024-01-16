@@ -10,7 +10,7 @@ summary: Scenari di errore di Oracle SM-BC
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../../media/
 
 
 [role="lead"]
