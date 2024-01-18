@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
-permalink: postgres/postgres-filesystems.html 
+permalink: postgres/postgres-san-filesystems.html 
 keywords: PostgreSQL,database,postgres 
-summary: Database PostgreSQL su ONTAP 
+summary: Database PostgreSQL con SAN su ONTAP 
 ---
-= File system
+= PostgreSQL con SAN Filesystems
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,50 +14,13 @@ summary: Database PostgreSQL su ONTAP
 
 
 [role="lead"]
-PostgreSQL può essere ospitato su filesystem NFS o SAN.
+I database PostgreSQL con SAN sono generalmente ospitati su filesystem xfs, ma altri possono essere utilizzati se supportati dal fornitore del sistema operativo
+
+Mentre un singolo LUN può generalmente supportare fino a 100K IOPS, i database io-intensive richiedono generalmente l'utilizzo di LVM con lo striping.
 
 
 
-== NFS
-
-
-TIP: *NetApp consiglia* di utilizzare NFSv4,1 se sono necessarie funzionalità NFSv4. Sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 di NFSv4,1 che migliorano la resilienza in alcuni casi edge.
-
-Utilizzare la seguente opzione di montaggio durante il montaggio di un file system NFS:
-
-....
-nfs4 rw, hard,nointr,bg,vers=4,sync,proto=tcp,noatime,rsize=65536,wsize=65536
-....
-
-
-=== Dimensioni trasferimento NFS
-
-Per impostazione predefinita, ONTAP limita le dimensioni i/o NFS a 64K.
-
-Per impostazione predefinita, ONTAP limita le dimensioni i/o NFS a 64K.
-
-L'i/o casuale con la maggior parte delle applicazioni e dei database utilizza blocchi di dimensioni molto inferiori, ben al di sotto del limite massimo di 64K KB. L'i/o a blocchi di grandi dimensioni è solitamente a parallelismo, pertanto anche il massimo di 64K Gbps non costituisce un limite all'ottenimento della massima larghezza di banda.
-
-Ci sono alcuni carichi di lavoro in cui il massimo di 64K crea un limite. In particolare, le operazioni single-threaded, come l'operazione di backup o ripristino o la scansione di un database completa della tabella, vengono eseguite più velocemente e in modo più efficiente se il database è in grado di eseguire un numero di i/o inferiore ma maggiore. Le dimensioni ottimali per la gestione i/o per ONTAP sono 256K KB.
-
-Le dimensioni massime di trasferimento per una SVM ONTAP possono essere modificate come segue:
-
-....
-Cluster01::> set advanced
-Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
-Do you want to continue? {y|n}: y
-Cluster01::*> nfs server modify -vserver vserver1 -tcp-max-xfer-size 262144
-Cluster01::*>
-....
-|===
-| Attenzione 
-
-
-| Non diminuire mai la dimensione massima di trasferimento consentita su ONTAP al di sotto del valore rsize/wsize dei file system NFS attualmente montati. In alcuni sistemi operativi, ciò può causare blocchi o addirittura danni ai dati. Ad esempio, se i client NFS sono attualmente impostati su un valore rsize/wsize di 65536, la dimensione massima di trasferimento ONTAP potrebbe essere regolata tra 65536 e 1048576 senza alcun effetto perché i client stessi sono limitati. La riduzione della dimensione massima di trasferimento inferiore a 65536 GB può danneggiare la disponibilità o i dati. 
-|===
-
-
-== SAN
+== Striping LVM
 
 Prima dell'era dei dischi flash, era stato utilizzato lo striping per superare i limiti di performance dei dischi rotanti. Ad esempio, se un sistema operativo deve eseguire un'operazione di lettura a 1MB bit, la lettura di 1MB GB di dati da un'unica unità richiederebbe un'ampia ricerca e lettura della testina dell'unità poiché il sistema 1MB viene trasferito lentamente. Se quei 1MB TB di dati sono stati suddivisi in 8 LUN, il sistema operativo potrebbe emettere otto operazioni di lettura 128K in parallelo, riducendo il tempo necessario per completare il trasferimento da 1MB GB.
 

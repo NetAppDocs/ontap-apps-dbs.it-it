@@ -602,10 +602,7 @@
   <block id="8fcd14822a5b94d212898fe3e006526e" category="paragraph">Tutti gli oggetti di database in PostgreSQL sono gestiti internamente dai rispettivi OID. Le tabelle e gli indici sono inoltre gestiti da singoli OID. Le relazioni tra gli oggetti del database e i rispettivi OID vengono memorizzate in tabelle di cataloghi di sistema appropriate, a seconda del tipo di oggetto. Ad esempio, gli OID dei database e delle tabelle heap vengono memorizzati in<block ref="d0fcebb608269edbd5d67486884ebed7" prefix=" " category="inline-code"></block> e `pg_class, rispettivamente. È possibile determinare gli OID eseguendo query sul client PostgreSQL.</block>
   <block id="d0e97e34fe92edd2facd0f7377b6340b" category="paragraph">Ogni database ha le proprie tabelle e i file di indice che sono limitati a 1GB. Ogni tabella ha due file associati, rispettivamente con il suffisso<block ref="7b9b00c45b01f7b7c6d3a3c8ba2e9275" prefix=" " category="inline-code"></block> e.<block ref="a1d869a79e2f43693a6a416fcbdc2724" prefix=" " category="inline-code"></block>. Sono indicate come mappa dello spazio libero e mappa di visibilità. Questi file memorizzano le informazioni sulla capacità di spazio libero e hanno visibilità su ogni pagina del file di tabella. Gli indici hanno solo mappe di spazio libero individuali e non hanno mappe di visibilità.</block>
   <block id="048a7ed79caf84bb5c725efc5f474911" category="paragraph">Il<block ref="c28f4f32219f5ff99fb4b116980b8549" prefix=" " category="inline-code"></block> la directory contiene i registri write-ahead. I registri write-ahead sono utilizzati per migliorare l'affidabilità e le performance del database. Ogni volta che si aggiorna una riga in una tabella, PostgreSQL scrive prima la modifica nel registro write-ahead e successivamente scrive le modifiche alle pagine di dati effettive su un disco. Il<block ref="f7223cfaa9416056a91e259e326ac5cf" prefix=" " category="inline-code"></block> la directory di solito contiene diversi file, ma initdb crea solo il primo. I file aggiuntivi vengono aggiunti in base alle necessità. Ciascun file xlog è lungo 16MB MB.</block>
-  <block id="2bd2440a8b5fed6660918b5f10f685bb" category="doc">File system</block>
-  <block id="81d00501c34ba5f161f685a99dce0d13" category="paragraph">PostgreSQL può essere ospitato su filesystem NFS o SAN.</block>
   <block id="789a6c7dd865d16eb1df122bcc5c9a3a" category="admonition">*NetApp consiglia* di utilizzare NFSv4,1 se sono necessarie funzionalità NFSv4. Sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 di NFSv4,1 che migliorano la resilienza in alcuni casi edge.</block>
-  <block id="36772d6dfc6e102eff552ffad6b98690" category="paragraph">Utilizzare la seguente opzione di montaggio durante il montaggio di un file system NFS:</block>
   <block id="8e86e0aee135afb67c6a1d3d6e0f3306" category="inline-link-macro">Dimensioni trasferimento NFS</block>
   <block id="d84b41126744795c4ee82f7b256e7234" category="inline-link-macro">SAN FC</block>
   <block id="2c8c2171fc87c96e58fb40d8714f85cf" category="doc">Architettura PostgreSQL</block>
@@ -3889,7 +3886,6 @@ Utilizzato per connessioni SOAP su https</block>
   <block id="2d2eef88dbdd0c34bde24e2632d9944f" category="sidebar">SAP HANA e AnyDB</block>
   <block id="399bd1ee587245ecac6f39beaa99886f" category="sidebar">PostgreSQL</block>
   <block id="f4f70727dc34561dfde1a3c529b6205c" category="sidebar">Impostazioni</block>
-  <block id="3dd7c32443d5846be0a8fd75cb08b70e" category="sidebar">Configurazione del filesystem</block>
   <block id="c476a4701643b158f9f5d57bcc91951d" category="sidebar">Tecnologia Snapshot</block>
   <block id="35084d885dea7b061e6894c1cf3036d9" category="sidebar">Carichi di lavoro</block>
   <block id="7d219314ccabde6609510141bb175a6c" category="sidebar">Istanza condivisa contro istanza dedicata</block>
@@ -4020,4 +4016,19 @@ Creare almeno due LIF per nodo per coppia ha. In base al carico di lavoro, potre
   <block id="ea9cdfcbfcf1906c15b6779f0f327028" category="sidebar">Configurazione del database per MySQL</block>
   <block id="308f8f580d0248ac023557cfd4b10d83" category="sidebar">Configurazione host per MySQL</block>
   <block id="830f353b3e6055499fac447b16b0c935" category="sidebar">Configurazione dello storage per MySQL</block>
+  <block id="3106f8f17f2974fe05da16fb0cc50505" category="summary">Database PostgreSQL con SAN su ONTAP</block>
+  <block id="74cacb0c34a37e2859e3b054938a344d" category="doc">PostgreSQL con SAN Filesystems</block>
+  <block id="1758f5c81d60f1a0ac8600fddc99a919" category="paragraph">I database PostgreSQL con SAN sono generalmente ospitati su filesystem xfs, ma altri possono essere utilizzati se supportati dal fornitore del sistema operativo</block>
+  <block id="d73e7b56b7baa813a32c521ca074e7c4" category="paragraph">Mentre un singolo LUN può generalmente supportare fino a 100K IOPS, i database io-intensive richiedono generalmente l'utilizzo di LVM con lo striping.</block>
+  <block id="5c24f0d1d447c2dfc01f2f2641e1d56c" category="summary">Database PostgreSQL NFS con ONTAP</block>
+  <block id="3532099588a13fbccb2af22a75936454" category="doc">PostgreSQL con i filesystem NFS</block>
+  <block id="f7cc8c4234952826818ad4d0c2050ac9" category="paragraph">I database PostgreSQL possono essere ospitati su filesystem NFSv3 o NFSv4. L'opzione migliore dipende da fattori esterni al database.</block>
+  <block id="1482c42acc1dd31ee8496c71a805e73c" category="paragraph">Per esempio, il comportamento di bloccaggio di NFSv4 può essere preferibile in certi ambienti raggruppati. (Vedere <block ref="bc3a7e667477b8b3590fa1451dcb924c" category="inline-link-macro-rx"></block> per ulteriori informazioni)</block>
+  <block id="9674525687765646f35916d0e569eda9" category="paragraph">In caso contrario, la funzionalità del database dovrebbe essere quasi identica, incluse le prestazioni. L'unico requisito è l'uso di<block ref="d64a84456adc959f56de6af685d0dadd" prefix=" " category="inline-code"></block> opzione di montaggio. Questo è necessario per garantire che i timeout software non producano errori io irreversibili.</block>
+  <block id="0c6430fad6c643c444b5d6d52b18edb4" category="paragraph">Se si sceglie NFSv4 come protocollo, NetApp consiglia di utilizzare NFSv4,1. Nel NFSv4,1 sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 che migliorano la resilienza rispetto al NFSv4,0.</block>
+  <block id="248212b04c23627e2719e106224d2eb3" category="paragraph">Utilizzare le seguenti opzioni di montaggio per i carichi di lavoro generali del database:</block>
+  <block id="6daf9da65c1180ae710d4f437b5e4edc" category="paragraph">Se si prevede un io sequenziale pesante, è possibile aumentare le dimensioni del trasferimento NFS.</block>
+  <block id="9efbdff43e91279291e95690414bec95" category="paragraph">Una volta aumentata la dimensione di trasferimento a livello ONTAP, si utilizzeranno le seguenti opzioni di montaggio:</block>
+  <block id="395201f6a339cc4cf6b345e0c259f383" category="section-title">NFSv3 tabelle slot TCP</block>
+  <block id="1f8260aa2c5a5b35bf771c26828d2096" category="paragraph">Se NFSv3 viene usato con Linux, è fondamentale impostare correttamente le tabelle degli slot TCP.</block>
 </blocks>
