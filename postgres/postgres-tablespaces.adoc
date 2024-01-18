@@ -1,0 +1,25 @@
+---
+sidebar: sidebar 
+permalink: postgres/postgres-tablespaces.html 
+keywords: PostgreSQL,database,postgres 
+summary: Tablespace PostgreSQL 
+---
+= Tablespace
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Due tablespace vengono create automaticamente al momento dell'inizializzazione del cluster di database.
+
+Il `pg_global` tablespace viene utilizzato per i cataloghi di sistema condivisi. Il `pg_default` tablespace è la tablespace predefinita dei database template1 e template0. Se la partizione o il volume su cui il cluster è stato inizializzato esaurisce lo spazio e non può essere esteso, è possibile creare uno spazio di tabella in un'altra partizione ed utilizzarlo fino a quando il sistema non può essere riconfigurato.
+
+Un indice molto utilizzato può essere collocato su un disco veloce e altamente disponibile, come un dispositivo a stato solido. Inoltre, una tabella che memorizza i dati archiviati utilizzati raramente o non critici per le prestazioni può essere archiviata su un sistema su disco meno costoso e più lento, come le unità SAS o SATA.
+
+Gli spazi di tabella fanno parte del cluster di database e non possono essere trattati come una raccolta autonoma di file di dati. Dipendono dai metadati contenuti nella directory dei dati principale e pertanto non possono essere collegati a un cluster di database diverso o sottoposti a backup individuale. Analogamente, se si perde uno spazio di tabella (a causa dell'eliminazione dei file, del guasto del disco e così via), il cluster del database potrebbe diventare illeggibile o non avviarsi. Posizionando una tablespace su un file system temporaneo come un disco RAM si rischia l'affidabilità dell'intero cluster.
+
+Una volta creato, è possibile utilizzare un tablespace da qualsiasi database se l'utente richiedente dispone di privilegi sufficienti. PostgreSQL utilizza collegamenti simbolici per semplificare l'implementazione di tablespace. PostgreSQL aggiunge una riga al `pg_tablespace` Tabella (una tavola a livello di cluster) e assegna un nuovo identificatore di oggetto (OID) a quella riga. Infine, il server utilizza l'OID per creare un collegamento simbolico tra il cluster e la directory specificata. La directory `$PGDATA/pg_tblspc` contiene collegamenti simbolici che puntano a ciascuno degli spazi di tabella non incorporati definiti nel cluster.

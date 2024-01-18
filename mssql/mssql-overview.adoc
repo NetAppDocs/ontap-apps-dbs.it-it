@@ -1,0 +1,38 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-overview.html 
+keywords: MS-SQL,mssql,SQL Server,TR-4590 
+summary: Microsoft SQL Server su ONTAP 
+---
+= Panoramica su Microsoft SQL Server
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SQL Server è la base della piattaforma dati di Microsoft, che offre prestazioni mission-critical con tecnologie in memoria e informazioni più rapide su qualsiasi dato, sia in sede che nel cloud.
+
+
+NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblicati _TR-4590: Best practice guide for Microsoft SQL Server with ONTAP_
+
+Microsoft SQL Server si basa sulle funzionalità mission-critical fornite nelle versioni precedenti offrendo prestazioni, disponibilità e gestibilità rivoluzionarie per le applicazioni mission-critical. Il sistema storage è un fattore chiave per le performance complessive di un database SQL Server. NetApp fornisce diversi prodotti per consentire al database SQL Server di offrire prestazioni di livello Enterprise fornendo strumenti di livello mondiale per la gestione dell'ambiente.
+
+
+
+== Scopo e ambito di applicazione
+
+Questa sezione descrive le Best practice e offre approfondimenti sulle considerazioni di progettazione per la distribuzione di SQL Server su sistemi di storage NetApp che eseguono il software NetApp ONTAP, con l'obiettivo di ottenere una distribuzione di storage efficace ed efficiente e una pianificazione end-to-end della protezione e della conservazione dei dati. L'ambito di questa guida si limita alle linee guida tecniche di progettazione basate sui principi di progettazione e sugli standard preferiti che NetApp consiglia per l'infrastruttura di storage durante la distribuzione di SQL Server. L'attuazione end-to-end non rientra nell'ambito della presente relazione.
+
+Le Best practice e i consigli descritti in questa guida consentono agli architetti SQL Server e agli amministratori dello storage NetApp di pianificare un ambiente SQL Server altamente disponibile e facile da gestire e di rispettare SLA rigorosi. NetApp presuppone che il lettore disponga delle seguenti conoscenze operative:
+
+* Software NetApp ONTAP
+* NetApp SnapCenter come software di backup, che include:
++
+** Plug-in SnapCenter per Microsoft Windows
+** Plug-in di SnapCenter per SQL Server
+
+
+* Architettura e amministrazione di Microsoft SQL Server
+
+
+Per informazioni sulla compatibilità della configurazione nello stack NetApp, consultare la link:http://mysupport.netapp.com/NOW/products/interoperability/["Tool di matrice di interoperabilità NetApp (IMT)"^].

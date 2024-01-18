@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-innodb_flush_method.html 
+keywords: MySQL,MariaDB,innodb_flush_method 
+summary: MySQL su ONTAP 
+---
+= innodb_flush_method
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il parametro innodb_Flush_Method specifica come InnoDB apre e svuota i file di log e di dati.
+
+
+
+== Ottimizzazioni
+
+Nell'ottimizzazione InnoDB, l'impostazione di questo parametro modifica le prestazioni del database, se applicabile.
+
+Le seguenti opzioni consentono di svuotare i file tramite InnoDB:
+
+* `fsync`. InnoDB utilizza `fsync()` chiamata di sistema per cancellare sia i file di dati che i file di registro. Questa opzione è l'impostazione predefinita.
+*  `O_DSYNC`. InnoDB utilizza `O_DSYNC` possibilità di aprire e svuotare i file di log e fsync() per svuotare i file di dati. InnoDB non utilizza `O_DSYNC` Direttamente, perché ci sono stati problemi con esso su molte varietà di UNIX.
+*  `O_DIRECT`. InnoDB utilizza `O_DIRECT` (oppure `directio()` Su Solaris) per aprire i file di dati e gli usi `fsync()` per cancellare sia i file di dati che i file di registro. Questa opzione è disponibile su alcune versioni di GNU/Linux, FreeBSD e Solaris.
+* `O_DIRECT_NO_FSYNC`. InnoDB utilizza `O_DIRECT` Durante lo spurgo dell'i/o, tuttavia, salta `fsync()` chiamata di sistema successiva. Questa opzione non è adatta per alcuni tipi di file system (ad esempio, XFS). Se non si è certi che il file system richieda un `fsync()` chiamata di sistema, ad esempio per conservare tutti i metadati dei file, utilizzare `O_DIRECT` invece.
+
+
+
+
+== Osservazione
+
+Nei test di laboratorio di NetApp, il `fsync` L'opzione predefinita è stata utilizzata su NFS e SAN ed è stata un'improvvisazione per le prestazioni eccezionale rispetto a `O_DIRECT`. Mentre si utilizza il metodo di lavaggio come `O_DIRECT` Con ONTAP, abbiamo osservato che il client scrive molte scritture a byte singolo al margine del blocco 4096 in modo seriale. Queste operazioni di scrittura hanno aumentato la latenza sulla rete e degradato le performance.

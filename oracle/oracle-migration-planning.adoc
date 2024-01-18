@@ -1,0 +1,82 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-migration-planning.html 
+keywords: migration, oracle 
+summary: Pianificazione della migrazione a Oracle 
+---
+= Pianificazione della migrazione iracale
+:allow-uri-read: 
+
+
+[role="lead"]
+La migrazione dei dati Oracle può avvenire a uno di tre livelli: Database, host o storage array.
+
+Le differenze risiedono in quale componente della soluzione globale è responsabile dello spostamento dei dati: Il database, il sistema operativo host o il sistema di archiviazione.
+
+La figura riportata di seguito mostra un esempio dei livelli di migrazione e del flusso di dati. In caso di migrazione a livello di database, i dati vengono spostati dal sistema di storage originale ai livelli di host e database nel nuovo ambiente. La migrazione a livello di host è simile, ma i dati non passano attraverso il livello di applicazione e vengono invece scritti nella nuova posizione utilizzando i processi degli host. Infine, con la migrazione a livello di storage, un array come un sistema NetApp FAS si occupa dello spostamento dei dati.
+
+image:levels.png["Errore: Immagine grafica mancante"]
+
+Una migrazione a livello di database si riferisce generalmente all'utilizzo di Oracle log shipping attraverso un database di standby per completare una migrazione a livello di Oracle. Le migrazioni a livello di host vengono eseguite utilizzando le funzionalità native della configurazione del sistema operativo host. Questa configurazione include le operazioni di copia dei file utilizzando comandi quali cp, tar e Oracle Recovery Manager (RMAN) o un gestore del volume logico (LVM) per spostare i byte sottostanti di un file system. Oracle Automatic Storage Management (ASM) è classificato come capacità a livello di host perché viene eseguito al di sotto del livello dell'applicazione di database. ASM sostituisce il normale volume manager logico su un host. Infine, i dati possono essere migrati a livello di storage array, il che significa sotto il livello del sistema operativo.
+
+
+
+== Considerazioni sulla pianificazione
+
+La scelta migliore per la migrazione dipende da una combinazione di fattori, inclusa la dimensione dell'ambiente da migrare, la necessità di evitare il downtime e lo sforzo complessivo necessario per eseguire la migrazione. Ovviamente, i database di grandi dimensioni richiedono più tempo e lavoro per la migrazione, ma la complessità di una migrazione di questo tipo è minima. I database di piccole dimensioni possono essere migrati rapidamente, ma se ne devono migrare migliaia, la portata dello sforzo può creare complicazioni. Infine, più grande è il database, più probabile è che l'IT sia business-critical, generando la necessità di ridurre al minimo i downtime mantenendo un percorso di back-out.
+
+Alcune considerazioni per la pianificazione di una strategia di migrazione sono discusse qui.
+
+
+
+== Dimensioni dei dati
+
+Le dimensioni dei database da migrare influiscono ovviamente sulla pianificazione della migrazione, sebbene le dimensioni non influiscano necessariamente sul tempo di cutover. Quando è necessario migrare una grande quantità di dati, l'aspetto più importante è la larghezza di banda. Le operazioni di copia vengono in genere eseguite con un efficiente i/o sequenziale Come stima conservativa, si presuppone un utilizzo del 50% della larghezza di banda della rete disponibile per le operazioni di copia. Ad esempio, una porta FC da 8GB GB può trasferire in teoria circa 800Mbps GB. Ipotizzando un utilizzo del 50%, è possibile copiare un database a una velocità di circa 400Mbps KB. Pertanto, un database 10TB può essere copiato in circa sette ore a questa velocità.
+
+La migrazione su distanze più lunghe in genere richiede un approccio più creativo, ad esempio il processo di distribuzione dei log illustrato nella link:oracle-migration-datafile-move.html["Spostamento file dati online"]. Le reti IP a lunga distanza raramente dispongono di larghezza di banda in qualsiasi punto vicino alle velocità LAN o SAN. In un caso, NetApp ha assistito alla migrazione a lunga distanza di un database 220TB con tassi di generazione di log di archiviazione molto elevati. L'approccio scelto per il trasferimento dei dati era la spedizione giornaliera dei nastri, perché questo metodo offriva la massima larghezza di banda possibile.
+
+
+
+== Numero di database
+
+In molti casi, il problema dello spostamento di una grande quantità di dati non è la dimensione dei dati, ma piuttosto la complessità della configurazione che supporta il database. Semplicemente sapere che 50TB database devono essere migrati non è sufficiente. Può essere un singolo database mission-critical 50TB, una raccolta di 4 database legacy 000 o un mix di dati di produzione e non. In alcuni casi, gran parte dei dati è costituita da cloni di un database di origine. Non è necessario migrare questi cloni perché possono essere facilmente ricreati, specialmente quando la nuova architettura è progettata per sfruttare i volumi FlexClone di NetApp.
+
+Per la pianificazione della migrazione, è necessario comprendere il numero dei database interessati e la priorità da assegnare. Con l'aumento del numero di database, l'opzione di migrazione preferita tende a essere più bassa e più bassa nello stack. Ad esempio, la copia di un singolo database può essere eseguita facilmente con RMAN e con una breve interruzione del servizio. Si tratta di una replica a livello di host.
+
+Se ci sono 50 database, potrebbe essere più facile evitare di impostare una nuova struttura del file system per ricevere una copia RMAN e spostare invece i dati sul posto. Questo processo può essere eseguito sfruttando la migrazione LVM basata su host per spostare i dati dalle vecchie LUN ai nuovi LUN. In tal modo, la responsabilità viene trasferita dal team di amministratori del database (DBA) al team del sistema operativo e, di conseguenza, i dati vengono migrati in modo trasparente rispetto al database. La configurazione del file system rimane invariata.
+
+Infine, se occorre migrare 500 database su 200 server, è possibile utilizzare opzioni basate sullo storage come la funzionalità FLI (ONTAP Foreign LUN Import) per eseguire una migrazione diretta delle LUN.
+
+
+
+== Requisiti di riarchitettura
+
+In genere, per sfruttare le funzionalità del nuovo storage array è necessario modificare il layout dei file del database; tuttavia, non sempre questo avviene. Ad esempio, le funzionalità degli array all-flash EF-Series sono rivolte principalmente alle performance e all'affidabilità della SAN. Nella maggior parte dei casi, i database possono essere migrati su un array EF-Series senza particolari considerazioni sul layout dei dati. Gli unici requisiti sono IOPS elevati, bassa latenza e solida affidabilità. Sebbene esistano Best practice correlate a fattori quali la configurazione RAID o Dynamic Disk Pools, i progetti EF-Series raramente richiedono modifiche significative all'architettura dello storage generale per sfruttare tali funzionalità.
+
+Al contrario, la migrazione a ONTAP richiede in genere una maggiore considerazione del layout del database per garantire che la configurazione finale fornisca il massimo valore. In sé, ONTAP offre molte funzionalità per un ambiente di database, anche senza interventi specifici sull'architettura. Soprattutto, offre la possibilità di migrare senza interruzioni al nuovo hardware quando l'hardware attuale termina la sua vita utile. In generale, la migrazione a ONTAP è l'ultima migrazione che è necessario eseguire. L'hardware successivo viene aggiornato e i dati vengono migrati senza interruzioni sui nuovi supporti.
+
+Con una certa pianificazione, ancora più benefici sono disponibili. Le considerazioni più importanti riguardano l'uso delle istantanee. Le snapshot sono la base per l'esecuzione di backup, ripristini e operazioni di cloning quasi istantanei. Come esempio della potenza delle istantanee, il più grande utilizzo noto è con un singolo database di 996TB in esecuzione su circa 250 LUN su 6 controller. È possibile eseguire il backup di questo database in 2 minuti, ripristinarlo in 2 minuti e clonarlo in 15 minuti. Tra gli altri benefici, è inclusa la capacità di spostare i dati nel cluster in risposta alle variazioni del carico di lavoro e all'applicazione di controlli di qualità del servizio (QoS) per offrire performance buone e coerenti in un ambiente multi-database.
+
+Tecnologie come controlli della QoS, trasferimento dei dati, snapshot e cloning funzionano praticamente in ogni configurazione. Tuttavia, un certo pensiero è generalmente richiesto per elevare i benefici. In alcuni casi, i layout dello storage del database possono richiedere modifiche di progettazione per massimizzare l'investimento nel nuovo storage array. Tali modifiche di progettazione possono influire sulla strategia di migrazione perché le migrazioni basate su host o su storage replicano il layout dei dati originale. Per completare la migrazione e offrire un layout dei dati ottimizzato per ONTAP potrebbero essere necessari ulteriori passaggi. Le procedure illustrate nella link:oracle-migration-procedures-overview.html["Panoramica delle procedure di migrazione Oracle"] in seguito, dimostrare alcuni metodi non solo per migrare un database, ma anche per eseguirne la migrazione nel layout finale ottimale con il minimo sforzo.
+
+
+
+== Tempo di cutover
+
+Occorre determinare il disservizio massimo consentito del servizio durante il cutover. È un errore comune presumere che l'intero processo di migrazione causi interruzioni. È possibile eseguire numerose attività prima dell'inizio di qualsiasi interruzione del servizio e completare la migrazione senza interruzioni o black-out attraverso diverse opzioni. Anche quando è inevitabile un'interruzione, è comunque necessario definire il fuori servizio massimo consentito poiché la durata del tempo di cutover varia da procedura a procedura.
+
+Ad esempio, la copia di un database 10TB richiede in genere circa sette ore. Se le esigenze aziendali rendono possibile un'interruzione di sette ore, la copia dei file è un'opzione semplice e sicura per la migrazione. Se cinque ore sono inaccettabili, un semplice log-processo di spedizione (vedere link:oracle-migration-log-shipping["Log shipping di Oracle"]) può essere impostato con il minimo sforzo per ridurre il tempo di cutover a circa 15 minuti. Durante questo periodo, un amministratore di database può completare il processo. Se 15 minuti sono inaccettabili, è possibile automatizzare il processo di cutover finale tramite script per ridurre il tempo di cutover a pochi minuti. È sempre possibile accelerare una migrazione, anche se ciò comporta costi di tempo e lavoro. Gli obiettivi del tempo di cutover devono basarsi su ciò che è accettabile per l'azienda.
+
+
+
+== Percorso di ritorno
+
+Nessuna migrazione è completamente priva di rischi. Anche se la tecnologia funziona perfettamente, c'è sempre la possibilità di errori da parte dell'utente. Il rischio associato a un percorso di migrazione scelto deve essere preso in considerazione insieme alle conseguenze di una migrazione non riuscita. Ad esempio, la capacità di migrazione trasparente dello storage online di Oracle ASM è una delle sue caratteristiche principali e questo metodo è uno dei più affidabili. Tuttavia, i dati vengono copiati irreversibilmente con questo metodo. Nel caso altamente improbabile in cui si verifichi un problema con ASM, non esiste un facile percorso di back-out. L'unica opzione è ripristinare l'ambiente originale o utilizzare ASM per riportare la migrazione ai LUN originali. Il rischio può essere minimizzato, ma non eliminato, eseguendo un backup di tipo snapshot sul sistema di storage originale, supponendo che il sistema sia in grado di eseguire tale operazione.
+
+
+
+== Prova
+
+Alcune procedure di migrazione devono essere verificate completamente prima dell'esecuzione. La necessità di migrazione e verifica del processo di cutover è una richiesta comune con i database mission-critical per i quali la migrazione deve avere successo e il downtime deve essere ridotto al minimo. Inoltre, i test di accettazione da parte dell'utente sono spesso inclusi come parte del lavoro di post-migrazione e il sistema complessivo può essere riportato in produzione solo dopo il completamento di questi test.
+
+In caso di necessità di prove, diverse funzionalità di ONTAP possono rendere il processo molto più semplice. In particolare, le istantanee possono ripristinare un ambiente di test e creare rapidamente più copie di un ambiente di database efficienti in termini di spazio.

@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-open_file_limits.html 
+keywords: MySQL,MariaDB,open_file_limits 
+summary: MySQL su ONTAP 
+---
+= open_file_limits
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il `open_file_limits` parametro determina il numero di file che il sistema operativo consente a mysqld di aprire.
+
+Il valore di questo parametro in fase di esecuzione è il valore reale consentito dal sistema e potrebbe essere diverso dal valore specificato all'avvio del server. Il valore è 0 sui sistemi in cui MySQL non può modificare il numero di file aperti. L'efficace `open_files_limit` il valore si basa sul valore specificato all'avvio del sistema (se presente) e sui valori di `max_connections` e. `table_open_cache` utilizzando queste formule:
+
+* 10 + `max_connections` + (`table_open_cache` x 2)
+* `max_connections` x 5
+* Limite del sistema operativo se positivo
+* Se il limite del sistema operativo è infinito: `open_files_limit` il valore viene specificato all'avvio; 5.000 se nessuno
+
+
+Il server tenta di ottenere il numero di descrittori di file utilizzando il massimo di questi quattro valori. Se non è possibile ottenere molti descrittori, il server tenta di ottenere il numero di descrittori consentito dal sistema.

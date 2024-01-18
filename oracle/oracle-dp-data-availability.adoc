@@ -1,0 +1,72 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dp-data-availability.html 
+keywords: data protection, availability, takeover, giveback, switchover, switchback 
+summary: Massimizzazione della disponibilità con Oracle su ONTAP 
+---
+= Disponibilità dei dati Oracle con ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+ONTAP è progettato per garantire la massima disponibilità dei database Oracle. Una descrizione completa delle funzioni di alta disponibilità di ONTAP esula dall'ambito di questo documento. Tuttavia, come per la protezione dei dati, una conoscenza di base di questa funzionalità è importante quando si progetta un'infrastruttura di database.
+
+
+
+== Coppie HA
+
+L'unità di base dell'alta disponibilità è la coppia ha. Ciascuna coppia contiene collegamenti ridondanti per supportare la replica dei dati nella NVRAM. NVRAM non è una cache di scrittura. La RAM all'interno del controller funge da cache di scrittura. Lo scopo della NVRAM è quello di memorizzare temporaneamente i dati come salvaguardia da errori di sistema imprevisti. A questo proposito, è simile a un log di ripristino del database.
+
+Sia la NVRAM che il redo log del database consentono di memorizzare i dati rapidamente, consentendo il commit delle modifiche ai dati il più rapidamente possibile. L'aggiornamento ai dati persistenti sulle unità (o file di dati) viene eseguito solo in un secondo momento durante un processo chiamato checkpoint sulle piattaforme ONTAP e sulla maggior parte dei database. Durante le normali operazioni, non vengono letti i dati della NVRAM né i log di ripristino del database.
+
+Se un controller si guasta bruscamente, è probabile che vi siano modifiche in sospeso memorizzate nella NVRAM che non sono ancora state scritte sulle unità. Il partner controller rileva il guasto, assume il controllo dei dischi e applica le modifiche richieste che sono state memorizzate nella NVRAM.
+
+
+
+== Takeover e giveback
+
+Il takeover e il giveback fanno riferimento al processo di trasferimento della responsabilità delle risorse di storage fra i nodi di una coppia ha. L'acquisizione e il giveback presentano due aspetti:
+
+* Gestione della connettività di rete che consente l'accesso alle unità
+* Gestione delle unità stesse
+
+
+Le interfacce di rete che supportano il traffico CIFS e NFS sono configurate sia con una posizione home che di failover. Un takeover include lo spostamento delle interfacce di rete nella loro abitazione temporanea su un'interfaccia fisica situata sulla stessa subnet della posizione originale. Un giveback prevede lo spostamento delle interfacce di rete nelle posizioni originali. Il comportamento esatto può essere regolato come richiesto.
+
+Le interfacce di rete che supportano i protocolli a blocchi SAN, come iSCSI e FC, non vengono ricollocate durante il takeover e lo giveback. È invece necessario eseguire il provisioning delle LUN attraverso percorsi che includano una coppia ha completa che si traduce in un percorso primario e un percorso secondario.
+
+
+NOTE: È possibile configurare anche percorsi aggiuntivi per controller aggiuntivi in modo da supportare la riallocazione dei dati tra i nodi di un cluster più grande, non facente parte del processo di ha.
+
+Il secondo aspetto del takeover e dello sconto è il trasferimento della proprietà del disco. Il processo esatto dipende da diversi fattori, tra cui il motivo del takeover/giveback e le opzioni della riga di comando emesse. L'obiettivo è quello di eseguire l'operazione nel modo più efficiente possibile. Anche se il processo complessivo potrebbe richiedere diversi minuti, il momento effettivo in cui la proprietà dell'unità viene trasferita da nodo a nodo può generalmente essere misurato in secondi.
+
+
+
+== Tempo di takeover
+
+L'i/o dell'host subisce una breve pausa in i/o durante le operazioni di takeover e giveback, senza tuttavia alcuna interruzione dell'applicazione in un ambiente configurato correttamente. L'effettivo processo di transizione in cui l'i/o subisce un ritardo viene generalmente misurato in secondi, ma l'host potrebbe richiedere tempo aggiuntivo per riconoscere la modifica nei percorsi di dati e inviare di nuovo le operazioni i/O.
+
+La natura dell'interruzione dipende dal protocollo:
+
+* Un'interfaccia di rete che supporta il traffico NFS e CIFS emette una richiesta ARP (Address Resolution Protocol) alla rete dopo la transizione a una nuova posizione fisica. Ciò fa sì che gli switch di rete aggiornino le tabelle degli indirizzi MAC (Media Access Control) e riprendano l'elaborazione i/O. Le interruzioni nel caso di takeover e giveback pianificati vengono di solito misurate in secondi e in molti casi non sono rilevabili. Alcune reti potrebbero essere più lente a riconoscere completamente la modifica del percorso di rete e alcuni sistemi operativi potrebbero mettere in coda molti i/o in un breve periodo di tempo che deve essere rieseguito. Ciò può estendere il tempo necessario per riprendere l'i/O.
+* Un'interfaccia di rete che supporta i protocolli SAN non passa a una nuova posizione. Un sistema operativo host deve modificare il percorso o i percorsi in uso. La pausa in i/o osservata dall'host dipende da diversi fattori. Dal punto di vista del sistema storage, il periodo in cui non è possibile fornire i/o è di pochi secondi. Tuttavia, sistemi operativi host diversi potrebbero richiedere tempo aggiuntivo per consentire un timeout i/o prima di riprovare. I sistemi operativi più recenti sono in grado di riconoscere un cambiamento di percorso molto più rapidamente, ma i sistemi operativi più vecchi in genere richiedono fino a 30 secondi per riconoscere un cambiamento.
+
+
+La seguente tabella illustra i tempi di takeover previsti durante i quali il sistema storage non può fornire i dati a un ambiente applicativo. Non dovrebbero esserci errori in alcun ambiente applicativo, il takeover dovrebbe invece apparire come una breve pausa nell'elaborazione io.
+
+|===
+
+
+|  | NFS | AFF | ASA 
+
+
+| Takeover pianificato | 15 sec. | 6-10 sec. | 2-3 sec. 
+
+
+| Takeover non pianificato | 30 sec. | 6-10 sec. | 2-3 sec. 
+|===

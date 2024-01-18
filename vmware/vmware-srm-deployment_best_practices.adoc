@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-srm-deployment_best_practices.html 
+keywords: vmware, site, recovery manager, vsrm, svm, layout, segmentation, smt, best, practices, deploy, ontap, tools, vvols 
+summary: 'Con ONTAP, il concetto di storage virtual machine (SVM) offre una segmentazione rigorosa in ambienti multi-tenant sicuri.' 
+---
+= Best practice per l'implementazione
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+
+
+== Layout e segmentazione SVM per SMT
+
+Con ONTAP, il concetto di storage virtual machine (SVM) offre una segmentazione rigorosa in ambienti multi-tenant sicuri. Gli utenti SVM su una SVM non possono accedere o gestire le risorse da un'altra. In questo modo, è possibile sfruttare la tecnologia ONTAP creando SVM separate per diverse business unit che gestiscono i propri flussi di lavoro SRM sullo stesso cluster per una maggiore efficienza dello storage globale.
+
+Valutare la possibilità di gestire ONTAP utilizzando account con ambito SVM e LIF di gestione SVM per non solo migliorare i controlli di sicurezza, ma anche le performance. Le performance sono intrinsecamente maggiori quando si utilizzano connessioni con ambito SVM perché l'SRA non è richiesto per elaborare tutte le risorse di un intero cluster, incluse le risorse fisiche. Al contrario, l'IT deve solo comprendere le risorse logiche astratte dalla specifica SVM.
+
+Quando si utilizzano solo i protocolli NAS (senza accesso SAN), è anche possibile sfruttare la nuova modalità NAS ottimizzata impostando il seguente parametro (si noti che il nome è tale perché SRA e VASA utilizzano gli stessi servizi di back-end nell'appliance):
+
+. Accedere al pannello di controllo all'indirizzo `\https://<IP address>:9083` E fare clic su interfaccia CLI basata su Web.
+. Eseguire il comando `vp updateconfig -key=enable.qtree.discovery -value=true`.
+. Eseguire il comando `vp updateconfig -key=enable.optimised.sra -value=true`.
+. Eseguire il comando `vp reloadconfig`.
+
+
+
+
+== Implementare gli strumenti e le considerazioni di ONTAP per i vVol
+
+Se si intende utilizzare SRM con vVol, è necessario gestire lo storage utilizzando credenziali con ambito cluster e una LIF di gestione del cluster. Questo perché il provider VASA deve comprendere l'architettura fisica sottostante per soddisfare le policy richieste per le policy di storage delle macchine virtuali. Ad esempio, se si dispone di una policy che richiede storage all-flash, il provider VASA deve essere in grado di vedere quali sistemi sono tutti flash.
+
+Un'altra Best practice per l'implementazione consiste nel non memorizzare mai l'appliance ONTAP Tools su un datastore vVols gestito dall'IT. Ciò potrebbe causare l'impossibilità di accendere il provider VASA perché non è possibile creare lo swap vVol per l'appliance perché l'appliance non è in linea.
+
+
+
+== Best practice per la gestione dei sistemi ONTAP 9
+
+Come indicato in precedenza, è possibile gestire i cluster ONTAP utilizzando credenziali cluster o SVM con ambito e LIF di gestione. Per performance ottimali, puoi prendere in considerazione l'utilizzo delle credenziali con ambito SVM ogni volta che non utilizzi vVol. Tuttavia, in questo modo, è necessario conoscere alcuni requisiti e perdere alcune funzionalità.
+
+* L'account SVM vsadmin predefinito non dispone del livello di accesso richiesto per eseguire le attività degli strumenti ONTAP. Pertanto, è necessario creare un nuovo account SVM.
+* Se si utilizza ONTAP 9,8 o versione successiva, NetApp consiglia di creare un account utente RBAC con privilegi minimi utilizzando il menu utenti di ONTAP System Manager insieme al file JSON disponibile nell'appliance ONTAP Tools all'indirizzo `\https://<IP address>:9083/vsc/config/`. Utilizzare la password di amministratore per scaricare il file JSON. Può essere utilizzato per account SVM o con ambito cluster.
++
+Se si utilizza ONTAP 9.6 o versioni precedenti, utilizzare lo strumento RBAC User Creator (RUC) disponibile in https://mysupport.netapp.com/site/tools/tool-eula/rbac["Toolchest del sito di supporto NetApp"^].
+
+* Poiché il plug-in dell'interfaccia utente di vCenter, il provider VASA e il server SRA sono tutti servizi completamente integrati, è necessario aggiungere storage all'adattatore SRM nello stesso modo in cui si aggiunge storage nell'interfaccia utente di vCenter per gli strumenti ONTAP. In caso contrario, il server SRA potrebbe non riconoscere le richieste inviate da SRM tramite l'adattatore SRA.
+* Il controllo del percorso NFS non viene eseguito quando si utilizzano credenziali con ambito SVM. Questo perché la posizione fisica è logicamente astratta dalla SVM. Tuttavia, questo non è motivo di preoccupazione, in quanto i sistemi ONTAP moderni non subiscono più alcun calo significativo delle performance quando si utilizzano percorsi indiretti.
+* Il risparmio di spazio aggregato dovuto all'efficienza dello storage potrebbe non essere segnalato.
+* Se supportati, i mirror di condivisione del carico non possono essere aggiornati.
+* La registrazione EMS potrebbe non essere eseguita sui sistemi ONTAP gestiti con credenziali SVM con ambito.
+

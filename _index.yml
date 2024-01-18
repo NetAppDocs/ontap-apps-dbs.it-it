@@ -1,5 +1,12 @@
 ---
 indexpage:
+  title: ONTAP e applicazioni aziendali
+  summary: ONTAP è la base per la gestione dei dati e la protezione dei dati per molte
+    applicazioni aziendali e tecnologie di database. Le pagine seguenti contengono
+    indicazioni sulle Best practice e le procedure di implementazione per ONTAP e
+    le applicazioni e l'infrastruttura aziendali.
+  keywords: Oracle, SAP, HANA, SAP HANA, MSSQL, SQL Server, Postgres, postgresql,
+    mysql, mariadb
   lead: ONTAP è la base per la gestione dei dati e la protezione dei dati per molte
     applicazioni aziendali e tecnologie di database. Le pagine seguenti contengono
     indicazioni sulle Best practice e le procedure di implementazione per ONTAP e
@@ -8,29 +15,29 @@ indexpage:
   - title: Microsoft SQL Server
     links:
     - title: Microsoft SQL Server su ONTAP
-      url: "/mssql/overview.html"
+      url: "/mssql/mssql-overview.html"
     - title: Considerazioni sullo storage per Microsoft SQL Server
-      url: "/mssql/Storage-considerations.html"
+      url: "/mssql/mssql-storage-considerations.html"
     - title: Protezione dei dati di Microsoft SQL Server
-      url: "/mssql/Data-protection.html"
+      url: "/mssql/mssql-data-protection.html"
     - title: Disaster recovery per Microsoft SQL Server
-      url: "/mssql/SQL-disaster-recovery.html"
+      url: "/mssql/mssql-disaster-recovery.html"
   - title: Database open-source
     links:
     - title: MariaDB e MySQL su ONTAP
-      url: "/mysql/overview.html"
+      url: "/mysql/mysql-overview.html"
     - title: PostgreSQL su ONTAP
-      url: "/postgres/overview.html"
+      url: "/postgres/postgres-overview.html"
   - title: Database Oracle
     links:
     - title: Oracle su ONTAP
-      url: "/oracle/overview.html"
+      url: "/oracle/oracle-overview.html"
     - title: Data Protection Oracle
-      url: "/oracle/dp/oracle-data-protection-introduction.html"
+      url: "/oracle/oracle-dp-overview.html"
     - title: Disaster recovery Oracle
-      url: "/oracle/dr/oracle-dr-overview.html"
+      url: "/oracle/oracle-dr-overview.html"
     - title: Migrazione Oracle
-      url: "/oracle/migration/oracle-migration-overview.html"
+      url: "/oracle/oracle-migration-overview.html"
   - title: SAP HANA
     links:
     - title: Soluzioni SAP
@@ -42,8 +49,8 @@ indexpage:
   - title: VMware
     links:
     - title: VMware vSphere con ONTAP
-      url: "/vmware/vsphere/overview.html"
+      url: "/vmware/vmware-vsphere-overview.html"
     - title: Volumi virtuali (vVol) con ONTAP
-      url: "/vmware/vvols/overview.html"
+      url: "/vmware/vmware-vvols-overview.html"
     - title: VMware Site Recovery Manager con ONTAP
-      url: "/vmware/srm/overview.html"
+      url: "/vmware/vmware-srm-overview.html"

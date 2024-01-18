@@ -1,0 +1,38 @@
+---
+permalink: oracle/oracle-app-config-filesystemio_options.html 
+sidebar: sidebar 
+keywords: oracle, database, ontap, filesystemio_options, filesystemio, async, directio 
+summary: Oracle filesystemio_options 
+---
+= filesystemio_options
+:allow-uri-read: 
+
+
+[role="lead"]
+Parametro di inizializzazione Oracle `filesystemio_options` Controlla l'utilizzo dell'i/o asincrono e diretto
+
+Contrariamente a quanto si crede, l'i/o asincrono e diretto non si escludono a vicenda. NetApp ha osservato che questo parametro è spesso configurato in modo non corretto negli ambienti dei clienti e che questa errata configurazione è direttamente responsabile di molti problemi di prestazioni.
+
+L'i/o asincrono significa che le operazioni i/o di Oracle possono essere parallelizzate. Prima della disponibilità di i/o asincrono su vari sistemi operativi, gli utenti hanno configurato numerosi processi dbwriter e modificato la configurazione del processo del server. Con l'i/o asincrono, il sistema operativo stesso esegue i/o per conto del software di database in modo altamente efficiente e parallelo. La procedura non pone i dati a rischio e le operazioni critiche, come il logging di redo di Oracle, vengono comunque eseguite in maniera sincrona.
+
+L'i/o diretto ignora la cache buffer del sistema operativo. L'i/o su un sistema UNIX scorre normalmente attraverso la cache del buffer del sistema operativo. Ciò è utile per le applicazioni che non mantengono una cache interna, ma Oracle dispone di una propria cache buffer all'interno di SGA. In quasi tutti i casi, è meglio abilitare l'i/o diretto e allocare la RAM del server all'SGA piuttosto che affidarsi alla cache del buffer del sistema operativo. Oracle SGA utilizza la memoria in modo più efficiente. Inoltre, quando l'i/o fluisce attraverso il buffer del sistema operativo, è soggetto a un'ulteriore elaborazione, che aumenta le latenze. L'aumento delle latenze è particolarmente percepibile con un elevato i/o in scrittura quando una bassa latenza è un requisito critico.
+
+Le opzioni per `filesystemio_options` sono:
+
+* *Async.* Oracle invia le richieste di i/o al sistema operativo per l'elaborazione. Questo processo consente a Oracle di eseguire altri lavori anziché attendere il completamento dell'i/o e quindi aumentare la parallelizzazione i/O.
+* *Directio.* Oracle esegue l'i/o direttamente sui file fisici piuttosto che instradare l'i/o attraverso la cache del sistema operativo host.
+* *None.* Oracle utilizza i/o sincroni e bufferizzati In questa configurazione, la scelta tra processi server condivisi e dedicati e il numero di dbwriter è più importante.
+* *Setall.* Oracle utilizza i/o sia asincrono che diretto In quasi tutti i casi, l'uso di `setall` è ottimale.
+
+
+
+NOTE: Il `filesystemio_options` Parametro non ha effetto negli ambienti DNFS e ASM. L'utilizzo di DNFS o ASM comporta automaticamente l'utilizzo dell'i/o asincrono e diretto
+
+In passato alcuni clienti hanno riscontrato problemi di i/o asincrono, in particolare con le precedenti versioni di Red Hat Enterprise Linux 4 (RHEL4). Alcuni consigli aggiornati su Internet suggeriscono comunque di evitare l'i/o asincrono a causa di informazioni non aggiornate. L'i/o asincrono è stabile su tutti i sistemi operativi correnti. Non c'è motivo di disabilitarlo, in assenza di un bug noto con il sistema operativo.
+
+Se un database utilizza l'i/o con buffer, un passaggio all'i/o diretto potrebbe anche richiedere una modifica delle dimensioni SGA. La disattivazione dell'i/o con buffer elimina i vantaggi prestazionali che la cache del sistema operativo host fornisce al database. L'aggiunta di RAM alla SGA risolve questo problema. Il risultato netto dovrebbe essere un miglioramento delle performance di i/O.
+
+Sebbene sia quasi sempre meglio utilizzare la RAM per Oracle SGA piuttosto che per il caching del buffer del sistema operativo, potrebbe essere impossibile determinare il valore migliore. Ad esempio, potrebbe essere preferibile utilizzare i/o con buffer di dimensioni SGA molto ridotte su un server di database con molte istanze Oracle attive in modo intermittente. Questa disposizione consente l'utilizzo flessibile della RAM disponibile rimanente sul sistema operativo da parte di tutte le istanze di database in esecuzione. Si tratta di una situazione molto insolita, ma è stata osservata presso alcune sedi dei clienti.
+
+
+TIP: *NetApp recommended* `filesystemio_options` a. `setall`, Ma essere consapevoli che in alcune circostanze la perdita della cache del buffer host potrebbe richiedere un aumento nella SGA di Oracle.

@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dp-nvfail.html 
+keywords: oracle, metrocluster, nvfail 
+summary: Configurazione di NVFAIL per proteggere i database Oracle 
+---
+= Oracle e NVFAIL
+:allow-uri-read: 
+
+
+[role="lead"]
+NVFAIL è una funzionalità di ONTAP che garantisce l'integrità in scenari di failover catastrofici.
+
+I database sono vulnerabili al danneggiamento durante gli eventi di failover dello storage perché mantengono grandi cache interne. Se un evento catastrofico richiede l'imposizione di un failover ONTAP o il forzamento dello switchover MetroCluster, a prescindere dallo stato di salute della configurazione complessiva, il risultato viene riconosciuto in precedenza che le modifiche potrebbero essere effettivamente scartate. Il contenuto dell'array di storage torna indietro nel tempo e lo stato della cache del database non riflette più lo stato dei dati su disco. Questa incoerenza provoca il danneggiamento dei dati.
+
+La memorizzazione nella cache può avvenire a livello di applicazione o di server. Ad esempio, una configurazione Oracle Real Application Cluster (RAC) con server attivi sia su un sito primario che su un sito remoto memorizza nella cache i dati all'interno di Oracle SGA. Un'operazione di switchover forzata che comportava la perdita di dati rischierebbe di danneggiare il database poiché i blocchi archiviati nell'SGA potrebbero non corrispondere ai blocchi su disco.
+
+Un uso meno ovvio della memorizzazione nella cache è a livello del file system del sistema operativo. I blocchi di un file system NFS montato possono essere memorizzati nella cache del sistema operativo. In alternativa, un file system in cluster basato su LUN che si trovano nel sito primario può essere montato sui server nel sito remoto e, ancora una volta, i dati possono essere memorizzati nella cache. In queste situazioni, un errore della NVRAM, un takeover forzato o uno switchover forzato possono danneggiare il file system.
+
+ONTAP protegge i database e i sistemi operativi da questo scenario con NVFAIL e le relative impostazioni.

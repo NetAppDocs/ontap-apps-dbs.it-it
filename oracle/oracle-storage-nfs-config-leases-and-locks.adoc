@@ -1,0 +1,126 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-storage-nfs-config-leases-and-locks.html 
+keywords: NFS, lease 
+summary: I database Oracle e NFS vengono affittati e bloccati 
+---
+= Locazioni e blocchi di NFS - Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NFSv3 è stateless. Ciò significa che il server NFS (ONTAP) non tiene traccia di quali file system sono montati, da chi, o quali blocchi sono realmente presenti.
+
+ONTAP dispone di alcune funzionalità che registreranno i tentativi di mount, quindi si ha un'idea di quali client possono accedere ai dati e potrebbero essere presenti blocchi di avvisi, ma non è garantito che le informazioni siano complete al 100%. Non può essere completo, perché il tracciamento dello stato del client NFS non fa parte dello standard NFSv3.
+
+
+
+== NFSv4 statefulness
+
+Al contrario, NFSv4 è stateful. Il server NFSv4 tiene traccia di quali client utilizzano i file system, quali file esistono, quali file e/o aree di file sono bloccati, ecc. Ciò significa che è necessaria una comunicazione regolare tra un server NFSv4 per mantenere aggiornati i dati di stato.
+
+Gli stati più importanti gestiti dal server NFS sono NFSv4 Locks e NFSv4 Leasing, e sono molto interconnessi. Dovete capire come ognuno funziona da se stesso e come si relazionano l'uno con l'altro.
+
+
+
+== NFSv4 serrature
+
+Con NFSv3, i blocchi sono indicativi. Un client NFS può comunque modificare o eliminare un file "bloccato". Un blocco NFSv3 non scade da solo, deve essere rimosso. Questo crea problemi. Ad esempio, se si dispone di un'applicazione in cluster che crea blocchi NFSv3 e uno dei nodi ha esito negativo, come procedere? È possibile codificare l'applicazione sui nodi sopravvissuti per rimuovere i blocchi, ma come si fa a sapere che questo è sicuro? Il nodo "guasto" potrebbe essere operativo, ma non comunica con il resto del cluster?
+
+Con NFSv4, i blocchi hanno una durata limitata. Finché il client che mantiene i blocchi continua il check-in con il server NFSv4, nessun altro client è autorizzato ad acquisire tali blocchi. Se un client non riesce a eseguire il check in con NFSv4, i blocchi vengono revocati dal server e gli altri client potranno richiedere e ottenere i blocchi.
+
+
+
+== NFSv4 leasing
+
+I blocchi NFSv4 sono associati a un lease NFSv4. Quando un client NFSv4 stabilisce una connessione con un server NFSv4, ottiene un lease. Se il client ottiene un blocco (ci sono molti tipi di blocchi) allora il blocco è associato al lease.
+
+Questo lease ha un timeout definito. Per impostazione predefinita, ONTAP imposta il valore di timeout su 30 secondi:
+
+....
+Cluster01::*> nfs server show -vserver vserver1 -fields v4-lease-seconds
+
+vserver   v4-lease-seconds
+--------- ----------------
+vserver1  30
+....
+Ciò significa che un client NFSv4 deve effettuare il check-in con il server NFSv4 ogni 30 secondi per rinnovare i propri leasing.
+
+Il leasing viene rinnovato automaticamente da qualsiasi attività, quindi se il client sta lavorando non è necessario eseguire operazioni di aggiunta. Se un'applicazione diventa silenziosa e non sta svolgendo un lavoro reale, sarà necessario eseguire una sorta di operazione keep-alive (chiamata SEQUENZA). In sostanza, è solo dire "sono ancora qui, ti prego di rinnovare i miei contratti di leasing".
+
+ *Question:* What happens if you lose network connectivity for 31 seconds?
+NFSv3 è stateless. Non si aspetta la comunicazione dai clienti. NFSv4 è stateful, e una volta trascorso il periodo di leasing, il lease scade, i blocchi vengono revocati e i file bloccati vengono resi disponibili ad altri client.
+
+Con NFSv3, è possibile spostare i cavi di rete, riavviare gli switch di rete, apportare modifiche alla configurazione e assicurarsi che non si verifichi alcun problema. Normalmente, le applicazioni aspettavano solo pazientemente che la connessione di rete funzionasse di nuovo.
+
+Con NFSv4, avete 30 secondi (a meno che non abbiate aumentato il valore di quel parametro all'interno di ONTAP) per completare il vostro lavoro. Se si supera questo limite, il tempo di leasing è scaduto. In genere si verificano arresti anomali delle applicazioni.
+
+Ad esempio, se si dispone di un database Oracle e si verifica una perdita di connettività di rete (talvolta chiamata "partizione di rete") che supera il timeout del lease, il database verrà arrestato.
+
+Di seguito viene riportato un esempio di ciò che accade nel registro degli avvisi di Oracle:
+
+....
+2022-10-11T15:52:55.206231-04:00
+Errors in file /orabin/diag/rdbms/ntap/NTAP/trace/NTAP_ckpt_25444.trc:
+ORA-00202: control file: '/redo0/NTAP/ctrl/control01.ctl'
+ORA-27072: File I/O error
+Linux-x86_64 Error: 5: Input/output error
+Additional information: 4
+Additional information: 1
+Additional information: 4294967295
+2022-10-11T15:52:59.842508-04:00
+Errors in file /orabin/diag/rdbms/ntap/NTAP/trace/NTAP_ckpt_25444.trc:
+ORA-00206: error in writing (block 3, # blocks 1) of control file
+ORA-00202: control file: '/redo1/NTAP/ctrl/control02.ctl'
+ORA-27061: waiting for async I/Os failed
+....
+Se si esaminano i syslogs, si dovrebbero vedere alcuni di questi errori:
+
+....
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+....
+I messaggi di registro sono in genere il primo segno di un problema, diverso dal blocco dell'applicazione. In genere, durante l'interruzione della rete non viene visualizzato nulla, poiché i processi e il sistema operativo stesso sono bloccati e tentano di accedere al file system NFS.
+
+Gli errori vengono visualizzati dopo che la rete è nuovamente operativa. Nell'esempio precedente, una volta ristabilita la connettività, il sistema operativo tentava di riacquisire i blocchi, ma era troppo tardi. Il leasing era scaduto e i blocchi sono stati rimossi. Ciò genera un errore che si propaga fino al livello Oracle e causa il messaggio nel registro degli avvisi. È possibile che vengano visualizzate variazioni su questi modelli a seconda della versione e della configurazione del database.
+
+Riassumendo, NFSv3 tollera l'interruzione di rete, ma NFSv4 è più sensibile e impone un periodo di leasing definito.
+
+Cosa succede se un timeout di 30 secondi non è accettabile? Cosa succede se si gestisce una rete a variazione dinamica in cui gli switch vengono riavviati o i cavi vengono ricollocati e il risultato è un'interruzione occasionale della rete? È possibile scegliere di estendere il periodo di leasing, ma se si desidera farlo richiede una spiegazione di NFSv4 periodi di tolleranza.
+
+
+
+== NFSv4 periodi di grazia
+
+Se un server NFSv3 viene riavviato, è pronto a servire i/o quasi istantaneamente. Non manteneva alcun tipo di stato sui client. Il risultato è che un'operazione di takeover della ONTAP spesso sembra quasi istantanea. Quando un controller è pronto a iniziare a servire i dati, invia un ARP alla rete che segnala la modifica della topologia. I client normalmente rilevano questo quasi istantaneamente e i dati riprendono a fluire.
+
+NFSv4, tuttavia, produrrà una breve pausa. È solo una parte di come funziona NFSv4.
+
+I server NFSv4 devono tenere traccia dei lease, dei blocchi e di chi utilizza i dati. Se un server NFS si riavvia o perde potenza per un momento o viene riavviato durante l'attività di manutenzione, il risultato è il lease/lock e le altre informazioni del client vengono perse. Il server deve individuare quale client utilizza i dati prima di riprendere le operazioni. È qui che entra in gioco il periodo di grazia.
+
+Se all'improvviso si spegne e riaccende il server NFSv4. Quando viene eseguito il backup, i client che tentano di riprendere io riceveranno una risposta che essenzialmente dice: "Ho perso le informazioni di lease/lock. Vuoi registrare nuovamente i blocchi?" Questo è l'inizio del periodo di grazia. Il valore predefinito è 45 secondi su ONTAP:
+
+....
+Cluster01::> nfs server show -vserver vserver1 -fields v4-grace-seconds
+
+vserver   v4-grace-seconds
+--------- ----------------
+vserver1  45
+....
+Il risultato è che, dopo un riavvio, un controller sospenderà io mentre tutti i client recuperano i loro lease e blocchi. Al termine del periodo di prova, il server riprenderà le operazioni io.
+
+
+
+== Timeout leasing vs periodi di grazia
+
+Il periodo di tolleranza e il periodo di leasing sono collegati. Come menzionato sopra, il timeout di lease predefinito è di 30 secondi, il che significa che NFSv4 client devono effettuare il check-in con il server almeno ogni 30 secondi o perdere i lease e, a loro volta, i blocchi. Il periodo di tolleranza esiste per consentire a un server NFS di ricostruire i dati di lease/lock e il valore predefinito è 45 secondi. ONTAP richiede che il periodo di tolleranza sia di 15 secondi più lungo del periodo di leasing. In questo modo, un ambiente client NFS progettato per rinnovare i lease almeno ogni 30 secondi avrà la possibilità di effettuare il check-in con il server dopo un riavvio. Un periodo di tolleranza di 45 secondi assicura che tutti quei clienti che si aspettano di rinnovare i loro leasing almeno ogni 30 secondi definitivamente hanno l'opportunità di farlo.
+
+Se un timeout di 30 secondi non è accettabile, è possibile scegliere di prolungare il periodo di leasing. Se si desidera aumentare il timeout del lease a 60 secondi per resistere a un'interruzione di rete di 60 secondi, sarà necessario aumentare il periodo di tolleranza ad almeno 75 secondi. ONTAP richiede che sia superiore di 15 secondi al periodo di leasing. Ciò significa che si verificheranno pause di i/o più lunghe durante il failover del controller.
+
+Normalmente questo non dovrebbe essere un problema. Gli utenti tipici aggiornano i controller ONTAP solo una o due volte all'anno e il failover non pianificato dovuto a guasti hardware è estremamente raro. Inoltre, se aveste una rete in cui un'interruzione di rete di 60 secondi fosse una possibilità preoccupante e aveste bisogno di un timeout del leasing di 60 secondi, probabilmente non vi opporreste a un raro failover del sistema storage con una pausa di 75 secondi. Hai già riconosciuto che la tua rete è in pausa per più di 60 secondi piuttosto frequentemente.

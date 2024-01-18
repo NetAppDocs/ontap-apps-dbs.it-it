@@ -1,0 +1,21 @@
+---
+permalink: oracle/oracle-app-config-mbr.html 
+sidebar: sidebar 
+keywords: oracle, database, ontap, db_file_multiblock_read_count, multiblock 
+summary: Parametro di lettura multiblocco Oracle 
+---
+= db_file_multiblock_read_count
+:allow-uri-read: 
+
+
+[role="lead"]
+Il `db_file_multiblock_read_count` Parametro controlla il numero massimo di blocchi di database Oracle che Oracle legge come singola operazione durante l'i/o sequenziale
+
+Questo parametro non influisce tuttavia sul numero di blocchi letti da Oracle durante qualsiasi e in tutte le operazioni di lettura, né sull'i/o casuale Ciò influisce solo sulle dimensioni del blocco degli i/o sequenziali.
+
+Oracle consiglia all'utente di lasciare il parametro non impostato. In questo modo, il software del database può impostare automaticamente il valore ottimale. Questo generalmente significa che questo parametro è impostato su un valore che fornisce una dimensione i/o di 1MB. Ad esempio, una lettura 1MB di 8KB blocchi richiederebbe la lettura di 128 blocchi e il valore predefinito per questo parametro sarebbe 128.
+
+La maggior parte dei problemi di prestazioni del database osservati da NetApp presso le sedi dei clienti implica un'impostazione errata per questo parametro. Ci sono motivi validi per modificare questo valore con le versioni 8 e 9 di Oracle. Di conseguenza, il parametro potrebbe essere inconsapevolmente presente in `init.ora` Perché il database è stato aggiornato in posizione a Oracle 10 e versioni successive. Un'impostazione legacy di 8 o 16, rispetto a un valore predefinito di 128, danneggia significativamente le prestazioni i/o sequenziali.
+
+
+TIP: *NetApp recommended* impostando `db_file_multiblock_read_count` il parametro non deve essere presente in `init.ora` file. NetApp non ha mai riscontrato una situazione in cui la modifica di questo parametro ha migliorato le prestazioni, ma in molti casi ha causato evidenti danni al throughput i/o sequenziale.

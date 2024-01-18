@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-sdrs.html 
+keywords: Data protection, Space reclamation, VM and datastore cloning, Storage efficiency, thin provisioning, QoS, SIOC, Storage Distributed Resource Scheduler, DRS, Active IQ Unified Manager, Encryption 
+summary: 'SnapCenter consente di creare policy di backup che possono essere applicate a più processi. Questi criteri possono definire pianificazione, conservazione, replica e altre funzionalità. Essi consentono una selezione opzionale di snapshot coerenti con le macchine virtuali, che sfrutta la capacità dell"hypervisor di mettere in pausa l"i/o prima di scattare una snapshot VMware.' 
+---
+= VMware Storage Distributed Resource Scheduler
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+VMware Storage Distributed Resource Scheduler (SDR) è una funzionalità vSphere che consente di posizionare le macchine virtuali sullo storage in base alla latenza i/o corrente e all'utilizzo dello spazio.
+
+Quindi, sposta le VM o i VMDK senza interruzioni tra gli archivi dati in un cluster di datastore (noto anche come pod), selezionando il migliore datastore in cui posizionare le VM o i VMDK nel cluster di datastore. Un cluster di datastore è un insieme di datastore simili che vengono aggregati in una singola unità di consumo dal punto di vista dell'amministratore di vSphere.
+
+Quando si utilizzano GLI SDR con i tool NetApp ONTAP per VMware vSphere, è necessario prima creare un datastore con il plug-in, utilizzare vCenter per creare il cluster del datastore e quindi aggiungervi il datastore. Una volta creato il cluster di datastore, è possibile aggiungere ulteriori datastore al cluster di datastore direttamente dalla procedura guidata di provisioning nella pagina Dettagli.
+
+Altre Best practice ONTAP per I DSP includono:
+
+* Tutti gli archivi dati del cluster devono utilizzare lo stesso tipo di storage (ad esempio SAS, SATA o SSD), tutti gli archivi dati VMFS o NFS e avere le stesse impostazioni di replica e protezione.
+* Considerare l'utilizzo DEGLI SDR in modalità predefinita (manuale). Questo approccio consente di rivedere i suggerimenti e decidere se applicarli o meno. Tenere presente i seguenti effetti delle migrazioni VMDK:
++
+** Quando GLI SDR spostano i VMDK tra datastore, qualsiasi risparmio di spazio derivante dalla clonazione o deduplica ONTAP viene perso. È possibile rieseguire la deduplica per recuperare questi risparmi.
+** Dopo che LE SDR spostano i VMDK, NetApp consiglia di ricreare gli snapshot nel datastore di origine, poiché lo spazio è altrimenti bloccato dalla VM che è stata spostata.
+** Lo spostamento di VMDK tra datastore sullo stesso aggregato ha pochi benefici e GLI SDR non hanno visibilità su altri carichi di lavoro che potrebbero condividere l'aggregato.
+
+
+

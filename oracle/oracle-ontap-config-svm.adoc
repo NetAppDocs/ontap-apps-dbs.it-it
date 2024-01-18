@@ -1,0 +1,38 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-svm.html 
+keywords: svm 
+summary: Provisioning delle SVM per database Oracle 
+---
+= Database Oracle e Storage Virtual Machine
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La gestione dello storage del database Oracle è centralizzata su una Storage Virtual Machine (SVM)
+
+Una SVM, nota come vserver nell'interfaccia a riga di comando di ONTAP, è un'unità funzionale di base dello storage ed è utile confrontare una SVM con un guest su un server VMware ESX.
+
+Quando viene installato per la prima volta, ESX non dispone di funzionalità preconfigurate, come l'hosting di un sistema operativo guest o il supporto di un'applicazione per l'utente finale. Si tratta di un container vuoto fino a quando non viene definita una macchina virtuale (VM). ONTAP è simile. Quando viene installata per la prima volta, ONTAP non dispone di funzionalità di servizio dati fino a quando non viene creata una SVM. È il linguaggio della SVM che definisce i servizi dati.
+
+Come per altri aspetti dell'architettura dello storage, le migliori opzioni per il design di SVM e interfaccia logica (LIF) dipendono in gran parte dai requisiti di scalabilità e dalle esigenze di business.
+
+
+
+== SVM
+
+Non esistono Best practice ufficiali per il provisioning di SVM per ONTAP. Il giusto approccio dipende dai requisiti di gestione e sicurezza.
+
+La maggior parte dei clienti utilizza una SVM primaria per la maggior parte delle loro esigenze quotidiane, quindi crea un piccolo numero di SVM per esigenze speciali. Ad esempio, è possibile creare:
+
+* Una SVM per un database aziendale critico gestita da un team di specialisti
+* Una SVM per un gruppo di sviluppo al quale è stato assegnato un controllo amministrativo completo in modo da poter gestire il proprio storage in maniera indipendente
+* Una SVM per i dati di business sensibili, come le risorse umane o i dati di reporting finanziario, per cui il team di amministrazione deve essere limitato
+
+
+In un ambiente multi-tenant, è possibile assegnare a ciascun tenant una SVM dedicata. Il limite per il numero di SVM e LIF per cluster, coppia ha e nodo dipende dal protocollo in uso, dal modello di nodo e dalla versione di ONTAP.  Consultare link:https://hwu.netapp.com/["NetApp Hardware Universe"^] per questi limiti.

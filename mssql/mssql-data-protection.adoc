@@ -1,0 +1,44 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-data-protection.html 
+keywords: MS-SQL,mssql,SQL Server, SnapCenter, data protection 
+summary: Data Protection di Microsoft SQL Server con ONTAP 
+---
+= Data Protection di Microsoft SQL Server con ONTAP
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Proteggere il database è fondamentale per qualsiasi organizzazione. Con l'aumento delle dimensioni e del numero dei dati dei database, il mantenimento degli obiettivi RTO (Recovery Time Objective) e RPO (Recovery Point Objective) è fondamentale.
+
+L'aspetto principale da prendere in considerazione per il backup del database è l'utilizzo della tecnologia Snapshot di NetApp. Il layout dei database e il backup coerenti con le applicazioni sono altre considerazioni fondamentali per ottenere RTO e RPO orchestrabili da NetApp SnapCenter.
+
+
+
+== SnapCenter
+
+SnapCenter è il software di protezione dei dati NetApp per le applicazioni aziendali. I database di SQL Server possono essere protetti in modo rapido e semplice utilizzando il software NetApp SnapCenter con il plug-in per SQL Server e il plug-in per Microsoft Windows.
+
+Questi prodotti consentono il backup coerente con le applicazioni, il cloning automatizzato e il ripristino di database, istanze o gruppi di disponibilità di SQL Server.
+
+
+TIP: *NetApp recommended* Using SnapCenter to create Snapshot copy.
+
+Per ulteriori informazioni sul plug-in di SQL Server per SnapCenter, vedere link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["TR-4714: Guida alle Best practice per SQL Server con NetApp SnapCenter"^].
+
+
+
+== Protezione del database mediante snapshot T-SQL
+
+In SQL Server 2022, Microsoft ha introdotto le istantanee T-SQL che offrono vantaggi integrati rispetto al metodo tradizionale che non è stato facilmente utilizzato dall'amministratore del database. Sfruttando le API REST di ONTAP, puoi chiamare comandi per creare snapshot sui volumi.
+
+Di seguito è riportato un esempio di flusso di lavoro di backup:
+
+. Blocco di un database con il comando ALTER - consente di eseguire uno snapshot coerente sullo storage sottostante. Dopo di che è possibile scongelare il database e registrare lo snapshot con il comando di BACKUP.
+. Eseguire snapshot di più database sui volumi di storage contemporaneamente con il nuovo GRUPPO DI BACKUP e i comandi DEL SERVER DI BACKUP.
+. Eseguire backup COMPLETI o backup COMPLETI COPY_ONLY. Anche questi backup sono registrati in msdb.
+. Eseguire il recovery point-in-time utilizzando i backup di log eseguiti con il normale approccio di streaming dopo il backup COMPLETO delle snapshot. Se lo si desidera, sono supportati anche i backup differenziali in streaming.
+
+
+Per ulteriori informazioni, vedere link:https://learn.microsoft.com/en-us/sql/relational-databases/databases/create-a-database-snapshot-transact-sql?view=sql-server-ver16["Documentazione Microsoft per conoscere le istantanee T-SQL"^].

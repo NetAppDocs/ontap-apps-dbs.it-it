@@ -3,32 +3,32 @@ section: mssql
 title: Microsoft SQL Server
 entries:
 - title: Panoramica
-  url: "/mssql/overview.html"
+  url: "/mssql/mssql-overview.html"
 - title: Carichi di lavoro
-  url: "/mssql/workloads.html"
-- title: Configurazione di ONTAP
-  url: "/postgres/ontap.html"
+  url: "/mssql/mssql-workloads.html"
 - title: Configurazione del database
+  pdf-filename: Configurazione del database per Microsoft SQL Server
   entries:
   - title: Istanza condivisa contro istanza dedicata
-    url: "/mssql/shared-vs-dedicated.html"
+    url: "/mssql/mssql-shared-vs-dedicated.html"
   - title: Configurazione CPU
-    url: "/mssql/CPUConfiguration.html"
+    url: "/mssql/mssql-cpu-configuration.html"
   - title: Configurazione della memoria
-    url: "/mssql/Memoryconfiguration.html"
+    url: "/mssql/mssql-memory-configuration.html"
 - title: Configurazione dello storage
+  pdf-filename: Configurazione dello storage per Microsoft SQL Server
   entries:
   - title: File di database e filegroup
-    url: "/mssql/files-and-filegroups.html"
+    url: "/mssql/mssql-files-and-filegroups.html"
   - title: File tempdb
-    url: "/mssql/tempdb.html"
+    url: "/mssql/mssql-tempdb.html"
   - title: Considerazioni sullo storage
-    url: "/mssql/Storage-considerations.html"
+    url: "/mssql/mssql-storage-considerations.html"
   - title: Efficienza dello storage
-    url: "/mssql/storage-efficiency.html"
+    url: "/mssql/mssql-storage-efficiency.html"
 - title: Protezione dei dati
-  url: "/mssql/sql-data-protection.html"
+  url: "/mssql/mssql-data-protection.html"
 - title: Disaster recovery
-  url: "/mssql/SQL-disaster-recovery.html"
+  url: "/mssql/mssql-disaster-recovery.html"
 - title: Sicurezza dei dati
-  url: "/mssql/data-security.html"
+  url: "/mssql/mssql-data-security.html"

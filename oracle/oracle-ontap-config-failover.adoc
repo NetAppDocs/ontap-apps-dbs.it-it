@@ -1,0 +1,50 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-failover.html 
+keywords: failover, switchover 
+summary: 'Le operazioni di takeover e switchover dello storage devono garantire l"integrità delle operazioni dei database Oracle. Inoltre, gli argomenti utilizzati dalle operazioni di takeover e switchover possono influire sull"integrità dei dati se utilizzati in modo errato.' 
+---
+= Failover/switchover del controller Oracle e ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le operazioni di takeover e switchover dello storage devono garantire l'integrità delle operazioni dei database Oracle. Inoltre, gli argomenti utilizzati dalle operazioni di takeover e switchover possono influire sull'integrità dei dati se utilizzati in modo errato.
+
+* In condizioni normali, le scritture in arrivo su un dato controller vengono mirrorate in modo sincrono per il partner. In un ambiente NetApp MetroCluster, le scritture vengono anche mirrorate su un controller remoto. Fino a quando non viene memorizzata in un supporto non volatile in tutte le posizioni, la scrittura non viene riconosciuta all'applicazione host.
+* Il supporto che memorizza i dati di scrittura è chiamato memoria non volatile o NVMEM. Viene anche talvolta indicata come memoria non volatile ad accesso casuale (NVRAM, nonvolatile Random Access Memory), e può essere considerata come una cache di scrittura anche se funziona come un journal. In condizioni normali, i dati provenienti da NVMEM non vengono letti; vengono utilizzati solo per proteggere i dati in caso di guasti software o hardware. Quando i dati vengono scritti sulle unità disco rigido, i dati vengono trasferiti dalla RAM nel sistema, non da NVMEM.
+* Durante un'operazione di takeover, un nodo di una coppia ha (high Availability) assume il controllo delle operazioni dal partner. Lo switchover è praticamente identico, ma si applica alle configurazioni MetroCluster in cui un nodo remoto assume le funzioni di un nodo locale.
+
+
+Durante le normali operazioni di manutenzione, un'operazione di takeover o switchover dello storage deve essere trasparente, ad eccezione di una potenziale breve pausa nelle operazioni in base al cambiamento dei percorsi di rete. Il networking può rivelarsi complesso, tuttavia, ed è facile commettere errori, pertanto NetApp consiglia vivamente di eseguire accuratamente le operazioni di takeover e switchover prima di mettere in produzione un sistema storage. In questo modo, è possibile verificare che tutti i percorsi di rete siano configurati correttamente. In un ambiente SAN, controllare attentamente l'output del comando `sanlun lun show -p` per assicurarsi che tutti i percorsi primario e secondario previsti siano disponibili.
+
+Occorre prestare attenzione quando si rilascia un'acquisizione forzata o uno switchover. Imporre una modifica alla configurazione dello storage con queste opzioni significa che lo stato del controller proprietario delle unità non viene preso in considerazione e il nodo alternativo assume forzatamente il controllo delle unità. Una forzatura non corretta di un takeover può causare la perdita o il danneggiamento dei dati. Questo perché un takeover o uno switchover forzato può scartare il contenuto di NVMEM. Una volta completato il takeover o lo switchover, la perdita dei dati potrebbe riportare i dati memorizzati nelle unità a uno stato leggermente più vecchio dal punto di vista del database.
+
+Raramente dovrebbe essere necessario un takeover forzato con una normale coppia ha. In quasi tutti gli scenari di errore, un nodo si arresta e informa il partner in modo che si verifichi un failover automatico. In alcuni casi, ad esempio in caso di guasto permanente che causa la perdita dell'interconnessione tra i nodi e la perdita di un controller, è necessario eseguire un takeover forzato. In una situazione del genere, il mirroring tra i nodi viene perso prima del guasto del controller, il che significa che il controller rimasto non avrebbe più una copia delle scritture in corso. Il takeover deve quindi essere forzato, il che significa che potenzialmente i dati vengono persi.
+
+La stessa logica si applica a uno switchover MetroCluster. In condizioni normali, lo switchover è quasi trasparente. Tuttavia, un disastro può causare una perdita di connettività tra il sito rimasto e il sito disastroso. Dal punto di vista del sito sopravvissuto, il problema potrebbe essere nient'altro che un'interruzione della connettività tra i siti, e il sito originale potrebbe ancora elaborare i dati. Se un nodo non è in grado di verificare lo stato del controller primario, è possibile solo uno switchover forzato.
+
+[TIP]
+====
+*NetApp raccomanda* adottare le seguenti precauzioni:
+
+* Prestare molta attenzione a non forzare accidentalmente un'acquisizione o uno switchover. In genere, non è necessario forzare e forzare la modifica può causare la perdita di dati.
+* Se è necessario un takeover o uno switchover forzato, assicurarsi che le applicazioni vengano arrestate, che tutti i file system vengano dismontati e che i gruppi di volumi LVM (Logical Volume Manager) siano diversi. I gruppi di dischi ASM devono essere smontati.
+* In caso di switchover MetroCluster forzato, scollegare il nodo guasto da tutte le risorse di storage rimaste. Per ulteriori informazioni, consultare la Guida alla gestione e al ripristino di emergenza di MetroCluster per la versione pertinente di ONTAP.
+
+
+====
+
+
+== MetroCluster e aggregati multipli
+
+MetroCluster è una tecnologia di replica sincrona che passa alla modalità asincrona in caso di interruzione della connettività. Questa è la richiesta più comune da parte dei clienti, perché la replica sincrona garantita significa che l'interruzione della connettività del sito porta a uno stallo completo dell'i/o del database, mettendo il database fuori servizio.
+
+Con MetroCluster, gli aggregati vengono sincronizzati rapidamente dopo il ripristino della connettività. A differenza di altre tecnologie di storage, MetroCluster non dovrebbe mai richiedere un reindirizzamento completo in seguito a un guasto del sito. È necessario spedire solo le modifiche delta.
+
+Nei set di dati estesi agli aggregati c'è solo un piccolo rischio che occorrano passaggi aggiuntivi di recovery dei dati in uno scenario di emergenza regolare. In particolare, se (a) la connettività tra siti viene interrotta, (b) la connettività viene ripristinata, (c) gli aggregati raggiungono uno stato in cui alcuni sono sincronizzati e alcuni non lo sono, quindi (d) il sito primario viene perso, il risultato è un sito sopravvissuto in cui gli aggregati non sono sincronizzati tra loro. In tal caso, parti del set di dati vengono sincronizzate tra loro e non è possibile ripristinare applicazioni, database o datastore senza un recovery. Se un set di dati si estende agli aggregati, NetApp consiglia vivamente di sfruttare i backup basati su snapshot con uno dei molti strumenti disponibili, per verificare la possibilità di recupero rapido in questo scenario insolito.

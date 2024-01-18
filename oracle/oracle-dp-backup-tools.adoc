@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dp-backup-tools.html 
+keywords: ontap, data protection 
+summary: Strumenti di backup di Oracle e NetApp 
+---
+= SnapCenter e altri strumenti
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il valore primario di ONTAP in un ambiente applicativo deriva dalle tecnologie principali di ONTAP, come ad esempio copie Snapshot istantanee, semplice replica di SnapMirror e creazione efficiente dei volumi FlexClone.
+
+In alcuni casi, una semplice configurazione di queste funzionalità chiave direttamente su ONTAP soddisfa i requisiti, ma esigenze più complesse richiedono un livello di orchestrazione.
+
+
+
+== SnapCenter
+
+SnapCenter è il prodotto di punta della protezione dei dati di NetApp. A un livello molto basso, è simile ai prodotti SnapManager in termini di modalità di esecuzione dei backup del database, ma è stato creato da zero per fornire un singolo pannello di controllo per la gestione della protezione dati sui sistemi di storage NetApp.
+
+SnapCenter include le funzioni di base come backup e ripristini basati su copie Snapshot, la replica SnapMirror e SnapVault e altre funzionalità necessarie per operare su larga scala per le grandi imprese. Queste funzionalità avanzate includono una funzionalità estesa di controllo degli accessi in base al ruolo (RBAC), API RESTful per l'integrazione con prodotti di orchestrazione di terze parti, gestione centrale senza interruzioni dei plug-in SnapCenter sugli host di database e un'interfaccia utente progettata per ambienti cloud-scale.
+
+
+
+== RIPOSO
+
+ONTAP contiene anche un ricco set di API RESTful. Questo consente a 3rd vendor di creare data Protection e altre applicazioni di gestione con una profonda integrazione con ONTAP. Inoltre, l'API RESTful è facile da utilizzare da parte dei clienti che desiderano creare i propri flussi di lavoro e utility di automazione.

@@ -1,0 +1,48 @@
+---
+sidebar: sidebar 
+permalink: postgres/postgres-db-config.html 
+keywords: PostgreSQL,database,postgres 
+summary: Database PostgreSQL su ONTAP 
+---
+= Configurazione del database
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Esistono diverse configurazioni di ottimizzazione PostgreSQL che possono migliorare le prestazioni.
+
+I parametri più comunemente utilizzati sono i seguenti:
+
+* `max_connections = <num>`: Il numero massimo di connessioni al database da avere contemporaneamente. Utilizzare questo parametro per limitare lo scambio sul disco e l'interruzione delle prestazioni. A seconda delle esigenze dell'applicazione, è anche possibile regolare questo parametro per le impostazioni del pool di connessione.
+* `shared_buffers = <num>`: Il metodo più semplice per migliorare le prestazioni del server di database. Il valore predefinito è basso per la maggior parte dei componenti hardware moderni. Durante l'implementazione viene impostato su circa il 25% della RAM disponibile sul sistema. Questa impostazione di parametro varia in base al funzionamento con determinate istanze di database; potrebbe essere necessario aumentare e diminuire i valori per prova ed errore. Tuttavia, l'impostazione di un livello elevato potrebbe degradare le prestazioni.
+* `effective_cache_size = <num>`: Questo valore indica all'ottimizzatore di PostgreSQL la quantità di memoria disponibile per la memorizzazione nella cache dei dati e aiuta a determinare se utilizzare un indice. Un valore maggiore aumenta la probabilità di utilizzare un indice. Questo parametro deve essere impostato sulla quantità di memoria allocata a. `shared_buffers` più la quantità di cache del sistema operativo disponibile. Spesso questo valore corrisponde a più del 50% della memoria di sistema totale.
+* `work_mem = <num>`: Questo parametro controlla la quantità di memoria da utilizzare nelle operazioni di ordinamento e nelle tabelle hash. Se si esegue un ordinamento pesante nell'applicazione, potrebbe essere necessario aumentare la quantità di memoria, ma prestare attenzione. Non si tratta di un parametro a livello di sistema, ma di un parametro per operazione. Se una query complessa contiene diverse operazioni di ordinamento, utilizza più unità di memoria work_mem e più backend potrebbero farlo contemporaneamente. Questa query può spesso indurre il server di database a effettuare lo swap se il valore è troppo grande. Questa opzione era precedentemente chiamata sort_mem nelle versioni precedenti di PostgreSQL.
+* `fsync = <boolean> (on or off)`: Questo parametro determina se tutte le pagine WAL devono essere sincronizzate su disco utilizzando fsync() prima che venga eseguito il commit di una transazione. Disattivandolo a volte si possono migliorare le prestazioni di scrittura e attivandolo si aumenta la protezione dal rischio di danneggiamento quando il sistema si blocca.
+* `checkpoint_timeout`: Il processo del punto di verifica elimina i dati sottoposti a commit sul disco. Ciò comporta numerose operazioni di lettura/scrittura su disco. Il valore è impostato in secondi e valori inferiori riducono il tempo di recupero da crash e valori crescenti possono ridurre il carico sulle risorse di sistema riducendo le chiamate al punto di verifica. In base alla criticità dell'applicazione, all'utilizzo, alla disponibilità del database, impostare il valore di checkpoint_timeout.
+* `commit_delay = <num>` e. `commit_siblings = <num>`: Queste opzioni vengono utilizzate insieme per migliorare le prestazioni scrivendo più transazioni che vengono effettuate contemporaneamente. Se ci sono diversi oggetti commit_siblings attivi nel momento in cui la transazione è in fase di commit, il server attende Commit_delay microsecondi per tentare di eseguire più transazioni contemporaneamente.
+* `max_worker_processes / max_parallel_workers`: Configurare il numero ottimale di lavoratori per i processi. Max_Parallel_Workers corrisponde al numero di CPU disponibili. A seconda della progettazione dell'applicazione, le query potrebbero richiedere un numero minore di lavoratori per le operazioni parallele. È meglio mantenere lo stesso valore per entrambi i parametri, ma regolare il valore dopo la verifica.
+* `random_page_cost = <num>`: Questo valore controlla il modo in cui PostgreSQL visualizza le letture del disco non sequenziali. Un valore più elevato indica che PostgreSQL è più probabile che utilizzi una scansione sequenziale invece di una scansione di indice, indicando che il server dispone di dischi veloci modificare questa impostazione dopo aver valutato altre opzioni come l'ottimizzazione basata su piano, l'aspirazione, l'indicizzazione per modificare query o schemi.
+* `effective_io_concurrency = <num>`: Questo parametro imposta il numero di operazioni di i/o su disco simultanee che PostgreSQL tenta di eseguire contemporaneamente. L'aumento di questo valore aumenta il numero di operazioni di i/o che una singola sessione PostgreSQL tenta di avviare in parallelo. L'intervallo consentito è compreso tra 1 e 1.000 o zero per disattivare l'emissione di richieste i/o asincrone. Attualmente, questa impostazione influisce solo sulle scansioni bitmap heap. I dischi a stato solido (SSD) e altro storage basato su memoria (NVMe) possono spesso elaborare molte richieste simultanee, cosicché il valore migliore può essere centinaia.
+
+
+Consultare la documentazione di PostgreSQL per un elenco completo dei parametri di configurazione di PostgreSQL.
+
+
+
+== TOAST
+
+TOAST è l'acronimo di OVERSIZED-Attribute Storage Technique. PostgreSQL utilizza una dimensione di pagina fissa (in genere 8KB) e non consente alle tuple di occupare più pagine. Pertanto, non è possibile memorizzare direttamente valori di campo grandi. Quando si tenta di memorizzare una riga che supera queste dimensioni, TOAST suddivide i dati delle colonne di grandi dimensioni in "pezzi" più piccoli e li memorizza in una tabella TOAST.
+
+I valori elevati degli attributi tostati vengono estratti (se selezionati) solo quando il set di risultati viene inviato al client. La tabella stessa è molto più piccola e può contenere più righe nella cache buffer condivisa di quanto non possa fare senza alcuna archiviazione out-of-line (TOAST).
+
+
+
+== VUOTO
+
+Nelle normali operazioni PostgreSQL, le tuple eliminate o rese obsolete da un aggiornamento non vengono fisicamente rimosse dalla tabella; rimangono presenti fino all'esecuzione di VACUUM. Pertanto, è necessario eseguire il VUOTO periodicamente, soprattutto nelle tabelle aggiornate di frequente. Lo spazio occupato deve quindi essere recuperato per essere riutilizzato da nuove righe, per evitare di esaurire lo spazio su disco. Tuttavia, non restituisce lo spazio al sistema operativo.
+
+Lo spazio libero all'interno di una pagina non è frammentato. L'ASPIRAPOLVERE riscrive l'intero blocco, comprimendo in modo efficiente le righe rimanenti e lasciando un singolo blocco contiguo di spazio libero in una pagina.
+
+Al contrario, VACUUM FULL comprime attivamente le tabelle scrivendo una versione completamente nuova del file di tabella senza spazio morto. Questa azione riduce al minimo le dimensioni della tabella, ma può richiedere molto tempo. Richiede inoltre ulteriore spazio su disco per la nuova copia della tabella fino al completamento dell'operazione. L'obiettivo del VUOTO DI routine è di evitare l'attività di VUOTO PIENO. Questo processo non solo mantiene le tabelle alla loro dimensione minima, ma mantiene anche l'utilizzo costante dello spazio su disco.

@@ -16,9 +16,6 @@ summary:
 [role="lead"]
 Le note legali forniscono l'accesso a dichiarazioni di copyright, marchi, brevetti e altro ancora.
 
-[role="lead"]
-Le note legali forniscono l'accesso a dichiarazioni di copyright, marchi, brevetti e altro ancora.
-
 
 
 == Copyright
@@ -55,7 +52,7 @@ I file di avviso forniscono informazioni sul copyright e sulle licenze di terze 
 
 
 
-=== ONTAP
+== ONTAP
 
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2885801["Avviso per ONTAP 9.13.1"^]
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2884813["Avviso per ONTAP 9.12.1"^]
@@ -75,7 +72,7 @@ link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2516795["Avviso per O
 
 
 
-=== ONTAP Mediator per MCC IP
+== ONTAP Mediator per MCC IP
 
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2870521["9.9.1 Avviso per ONTAP Mediator per MCC IP"^]
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2870521["9,8 Avviso per ONTAP Mediator per MCC IP"^]

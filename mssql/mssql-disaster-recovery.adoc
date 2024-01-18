@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-disaster-recovery.html 
+keywords: MS-SQL,mssql,SQL Server, disaster recovery, snapmirror 
+summary: Microsoft SQL Server su ONTAP 
+---
+= Disaster recovery per Microsoft SQL Server
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp fornisce vari approcci per aumentare la disponibilità dei dati in caso di guasti hardware, software o del sito.
+
+
+
+== SnapMirror di NetApp
+
+La tecnologia SnapMirror di NetApp offre una soluzione aziendale rapida e flessibile per il mirroring o la replica dei dati su LAN e WAN. La tecnologia SnapMirror trasferisce solo i blocchi di dati 4KB modificati alla destinazione dopo il trasferimento di base iniziale, riducendo in modo significativo i requisiti di larghezza di banda di rete. SnapMirror fornisce una replica asincrona a livello di volume basata su un intervallo di aggiornamento della replica configurato.
+Di seguito sono riportati alcuni consigli su SnapMirror per SQL Server:
+
+* In caso di utilizzo di CIFS, la SVM di destinazione deve appartenere allo stesso dominio Active Directory del quale fa parte la SVM di origine, in modo da non interrompere le liste per il controllo degli accessi (ACL) archiviate nei file NAS durante il ripristino in caso di disastro.
+* L'utilizzo di nomi di volumi di destinazione identici ai nomi di volumi di origine non è necessario, ma può semplificare la gestione del processo di montaggio dei volumi di destinazione nella destinazione. Se viene utilizzato CIFS, occorre rendere identico il namespace NAS di destinazione nei percorsi e nella struttura delle directory al namespace di origine.
+* Per motivi di coerenza, non pianificare l'update SnapMirror dai controller. Tuttavia, è possibile attivare l'aggiornamento SnapMirror da SnapCenter per aggiornare SnapMirror al termine del backup completo o del log.
+* Distribuire volumi che contengono dati SQL Server tra diversi nodi nel cluster per consentire a tutti i nodi del cluster di condividere l'attività di replica di SnapMirror. Questa distribuzione ottimizza l'utilizzo delle risorse dei nodi.
+
+
+Per ulteriori informazioni su SnapMirror, vedere link:https://www.netapp.com/us/media/tr-4015.pdf["TR-4015: Guida alle Best practice e alla configurazione di SnapMirror per ONTAP 9"^].

@@ -1,0 +1,48 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-file-structure.html 
+keywords: MySQL,MariaDB 
+summary: Struttura dei file MySQL 
+---
+= Struttura dei file
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+InnoDB funge da livello intermedio tra lo storage e il server MySQL, e memorizza i dati nelle unità.
+
+image:mysql-file-structure1.png["Errore: Immagine grafica non trovata"]
+
+I/o MySQL è suddiviso in due tipi:
+
+* I/o di file casuali
+* I/o di file sequenziale
+
+
+image:mysql-file-structure2.png["Errore: Immagine grafica non trovata"]
+
+I file di dati vengono letti e sovrascritti in modo casuale, con conseguente aumento degli IOPS. Pertanto, si consiglia di utilizzare l'unità SSD.
+
+I file di log di ripristino e i file di log binari sono registri transazionali. Vengono scritti in sequenza, così potrai ottenere buone performance sul disco HDD con cache in scrittura. Al momento del ripristino si verifica una lettura sequenziale, che raramente causa problemi di prestazioni, poiché le dimensioni dei file di registro sono in genere inferiori ai file di dati e le letture sequenziali sono più veloci delle letture casuali (che si verificano sui file di dati).
+
+Il buffer double-write è una caratteristica speciale di InnoDB. InnoDB prima scrive le pagine svuotate nel buffer di doppia scrittura e poi scrive le pagine nelle posizioni corrette sui file di dati. Questo processo impedisce il danneggiamento della pagina. Senza il buffer di scrittura doppia, la pagina potrebbe danneggiarsi se si verifica un'interruzione dell'alimentazione durante il processo di scrittura su unità. La scrittura nel buffer double-write è sequenziale, pertanto è altamente ottimizzato per gli HDD. Al momento del ripristino vengono eseguite letture sequenziali.
+
+Poiché la NVRAM ONTAP fornisce già la protezione in scrittura, non è necessario il doppio buffer in scrittura. MySQL ha un parametro, `skip_innodb_doublewrite`, per disattivare il buffer di doppia scrittura. Questa funzione può migliorare notevolmente le prestazioni.
+
+Il buffer insert è anche una caratteristica speciale di InnoDB. Se i blocchi di indice secondari non univoci non sono in memoria, InnoDB inserisce le voci nel buffer di inserimento per evitare operazioni di i/o casuali. Periodicamente, il buffer di inserimento viene Unito agli alberi di indice secondari nel database. Il buffer di inserimento riduce il numero di operazioni di i/o unendo le richieste di i/o allo stesso blocco; le operazioni di i/o casuali possono essere sequenziali. Anche il buffer di inserimento è altamente ottimizzato per gli HDD. Durante le normali operazioni, vengono eseguite operazioni di scrittura e lettura sequenziali.
+
+I segmenti di annullamento sono orientati all'i/o casuale. Per garantire la concorrenza multi-versione (MVCC), InnoDB deve registrare le vecchie immagini nei segmenti di annullamento. La lettura delle immagini precedenti dai segmenti di annullamento richiede letture casuali. Se si esegue una transazione lunga con letture ripetibili (come mysqldump, una singola transazione) o si esegue una query lunga, è possibile che si verifichino letture casuali. Pertanto, in questo caso è preferibile memorizzare i segmenti di annullamento negli SSD. Se si eseguono solo transazioni o query brevi, le letture casuali non costituiscono un problema.
+
+[TIP]
+====
+*NetApp consiglia* il seguente layout di progettazione dello storage a causa delle caratteristiche i/o di InnoDB.
+
+* Un unico volume per memorizzare i file di MySQL orientati ai/o casuali e sequenziali
+* Un altro volume per memorizzare i file di MySQL orientati a i/o puramente sequenziali
+
+
+Questo layout aiuta inoltre a progettare politiche e strategie di protezione dei dati.
+
+====
