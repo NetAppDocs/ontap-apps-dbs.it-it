@@ -25,9 +25,9 @@ Se si sceglie NFSv4 come protocollo, NetApp consiglia di utilizzare NFSv4,1. Nel
 Utilizzare le seguenti opzioni di montaggio per i carichi di lavoro generali del database:
 
 ....
-rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=65536,wsize=65536
+rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=65536,wsize=65536
 ....
-Se si prevede un io sequenziale pesante, è possibile aumentare le dimensioni del trasferimento NFS.
+Se si prevede un io sequenziale pesante, le dimensioni del trasferimento NFS possono essere aumentate come descritto nella sezione seguente.
 
 
 
@@ -57,7 +57,7 @@ Cluster01::*>
 Una volta aumentata la dimensione di trasferimento a livello ONTAP, si utilizzeranno le seguenti opzioni di montaggio:
 
 ....
-rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
+rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
 ....
 
 
