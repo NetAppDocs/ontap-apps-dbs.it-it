@@ -64,7 +64,7 @@ entries:
       url: "/oracle/oracle-storage-san-config-lun-alignment.html"
     - title: Numero di LUN e dimensioni LUN
       url: "/oracle/oracle-storage-san-config-lun-sizing.html"
-    - title: LUN Resizing (ridimensionamento LUN)
+    - title: Ridimensionamento LUN
       url: "/oracle/oracle-storage-san-config-lun-resizing.html"
     - title: Striping LVM
       url: "/oracle/oracle-storage-san-config-lvm-striping.html"
@@ -114,13 +114,13 @@ entries:
   entries:
   - title: Panoramica
     url: "/oracle/oracle-dp-overview.html"
-  - title: RPO, TRO e SLA
+  - title: RPO, RTO e SLA
     url: "/oracle/oracle-dp-slas.html"
   - title: Disponibilità dei dati
     url: "/oracle/oracle-dp-data-availability.html"
   - title: Integrità dei dati
     url: "/oracle/oracle-dp-data-integrity.html"
-  - title: Nozioni di base sul backup e ripristino
+  - title: Elementi di base di backup e recovery
     entries:
     - title: Snapshot
       url: "/oracle/oracle-dp-snapshots.html"

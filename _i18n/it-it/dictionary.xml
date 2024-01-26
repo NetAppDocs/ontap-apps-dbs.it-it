@@ -2523,15 +2523,6 @@ Senza cluster a livello di applicazione, le applicazioni dovranno essere avviate
   <block id="ff1d278a485c443dc5d8fc9f10f1a702" category="doc">NetApp HCI per l'infrastruttura di desktop virtuale con VMware Horizon 7: Potenzia i tuoi utenti più esperti con la grafica 3D</block>
   <block id="e3162938e0d7b1bbc74111cc5b5871c5" category="paragraph">TR-4792 fornisce indicazioni sull'utilizzo del nodo di calcolo NetApp H615C per carichi di lavoro di grafica 3D in un ambiente VMware Horizon con unità di elaborazione grafica NVIDIA (GPU) e software di virtualizzazione. Fornisce inoltre i risultati dei test preliminari di SPECviewperf 13 per H615C.</block>
   <block id="1de37c09602b46db5de57a946efe2768" category="paragraph"><block ref="1de37c09602b46db5de57a946efe2768" category="inline-link-macro-rx"></block></block>
-  <block id="5ed492cbbbf7e6d167035a7c10478daa" category="summary">VMware End-User Computing con NetApp HCI è un'architettura di data center pre-validata e Best-practice per l'implementazione di workload di desktop virtuali su scala aziendale.</block>
-  <block id="36f00397200c227ebfe56599e7bafcd5" category="doc">NVA-1129-DESIGN: Calcolo per l'utente finale VMware con GPU NetApp HCI e NVIDIA</block>
-  <block id="52940073ac3f539b3c6d9ac1e41d5f06" category="paragraph">VMware End-User Computing con NetApp HCI è un'architettura di data center pre-validata e Best-practice per l'implementazione di workload di desktop virtuali su scala aziendale. Questo documento descrive la progettazione architetturale e le Best practice per l'implementazione della soluzione su scala di produzione in modo affidabile e privo di rischi.</block>
-  <block id="8a36e2f35bf4a10959caf61f15d8df63" category="paragraph"><block ref="8a36e2f35bf4a10959caf61f15d8df63" category="inline-link-macro-rx"></block></block>
-  <block id="b4a3c2c985fcfc0d0e59c8d9c3259eb0" category="doc">NVA-1129-DEPLOY: VMware end-user computing con GPU NetApp HCI e NVIDIA</block>
-  <block id="8b3f1e47da9509d2edf2f21012c6ec7e" category="paragraph">VMware End-User Computing with NetApp HCI è un'architettura di data center pre-validata e Best-practice per l'implementazione di workload di desktop virtuali su scala aziendale. Questo documento descrive come implementare la soluzione su scala di produzione in modo affidabile e privo di rischi</block>
-  <block id="ba999af3664a8f6c5b43a92bc11de64a" category="paragraph"><block ref="ba999af3664a8f6c5b43a92bc11de64a" category="inline-link-macro-rx"></block></block>
-  <block id="85864e2699dfaceb7f8d1f85448939fe" category="doc">NVA-1132-DESIGN: VMware end-user computing con NetApp HCI</block>
-  <block id="8c40c45c2332a47a83ae257f42af2331" category="paragraph"><block ref="8c40c45c2332a47a83ae257f42af2331" category="inline-link-macro-rx"></block></block>
   <block id="93b94e62ad8cb02a1d1a7b0944a5445d" category="summary">Questo documento illustra la sicurezza dei prodotti per gli strumenti ONTAP per VMware vSphere.</block>
   <block id="57a033c33a8be6110be46b2914cc4989" category="doc">Utilizzo di vVol con ONTAP</block>
   <block id="69556d50c944e0a07ade0bea62f078a3" category="paragraph">La chiave per utilizzare vVol con ONTAP è il software del provider VASA incluso negli strumenti ONTAP per l'appliance virtuale VMware vSphere.</block>
@@ -3869,7 +3860,6 @@ Utilizzato per connessioni SOAP su https</block>
   <block id="35084d885dea7b061e6894c1cf3036d9" category="sidebar">Carichi di lavoro</block>
   <block id="7d219314ccabde6609510141bb175a6c" category="sidebar">Istanza condivisa contro istanza dedicata</block>
   <block id="d5363ae19ecaede49e2ced297df7737a" category="sidebar">Configurazione della memoria</block>
-  <block id="459f656cac9c4d74b9f3f16ebb2a76c8" category="sidebar">File di database e filegroup</block>
   <block id="500c09aa1bb9af431f2c18348e69bfd0" category="sidebar">File tempdb</block>
   <block id="6fb6843bd9a214011969c02729c7d671" category="sidebar">Considerazioni sullo storage</block>
   <block id="4c5d94eb4dc4bff93f6a96a08ab7b244" category="sidebar">Sicurezza dei dati</block>
@@ -3885,9 +3875,6 @@ Utilizzato per connessioni SOAP su https</block>
   <block id="619615da0f93507e22a6054ef2aea4f1" category="sidebar">Interfacce logiche</block>
   <block id="aca8e861c6f30fe2d42d0310a387312b" category="sidebar">Configurazione Ethernet</block>
   <block id="63a5b8bd41978e8124f9ccdfa9063e9e" category="sidebar">Configurazione FC SAN</block>
-  <block id="d63f66214ae30c5b9b10653f1e503492" category="sidebar">Allineamento delle LUN</block>
-  <block id="f6556bc360e8c25d9e29515d2d52cd66" category="sidebar">Numero di LUN e dimensioni LUN</block>
-  <block id="d552d63771786b001d365cf747f74f6a" category="sidebar">LUN Resizing (ridimensionamento LUN)</block>
   <block id="c3f378ef942f6bf228a43aaacc628fea" category="sidebar">Striping LVM</block>
   <block id="254f642527b45bc260048e30704edb39" category="sidebar">Configurazione</block>
   <block id="f3a78e25ce9f95fc3c61ccc39f32fb4d" category="sidebar">Oracle Direct NFS (DNFS)</block>
@@ -3901,10 +3888,8 @@ Utilizzato per connessioni SOAP su https</block>
   <block id="7fbd108e1fc6910c941094e95a677878" category="sidebar">File interi</block>
   <block id="eb43c2427eb06b9f561363863b4a4f0b" category="sidebar">File parziali</block>
   <block id="1afe200fa26ba361f59b603b22ad6392" category="sidebar">Selezionare file</block>
-  <block id="46880cc1d7a1624f1d6fa77e7ee02fb7" category="sidebar">RPO, TRO e SLA</block>
   <block id="448d15345bb99c834095da225c529b8a" category="sidebar">Disponibilità dei dati</block>
   <block id="5869e10a9dea6d88d61bb10040557f35" category="sidebar">Integrità dei dati</block>
-  <block id="e2ac7be9b8940191426986b2ca575aa2" category="sidebar">Nozioni di base sul backup e ripristino</block>
   <block id="7b68149402c05a52968bda6af0435c8a" category="sidebar">Backup online basati su snapshot</block>
   <block id="49ba0ee205d016d8236db9c1e8c130e5" category="sidebar">Backup ottimizzati per le snapshot di storage</block>
   <block id="2c6d98297c340e390e0783220b038545" category="sidebar">Architettura fisica</block>
@@ -4056,4 +4041,11 @@ Creare almeno due LIF per nodo per coppia ha. In base al carico di lavoro, potre
   <block id="512ee19e5020f3ee80a9e25f3f5a6468" category="paragraph">Come Best practice, eseguire sempre un test di failover ogni volta che viene apportata una modifica alla configurazione di uno storage VM protetto. In questo modo, in caso di emergenza, è possibile verificare che Site Recovery Manager sia in grado di ripristinare i servizi entro la destinazione RTO prevista.</block>
   <block id="4da3f855cd505741909cfd49d743e68e" category="paragraph">SRM consente inoltre di modificare la configurazione di rete di una macchina virtuale durante il ripristino. Questa riconfigurazione include impostazioni quali indirizzi IP, indirizzi gateway e impostazioni del server DNS. È possibile specificare diverse impostazioni di rete, che vengono applicate alle singole macchine virtuali non appena vengono recuperate, nelle impostazioni della proprietà di una macchina virtuale nel piano di ripristino.</block>
   <block id="e409450ce49f3558b068c69a77a9623a" category="paragraph">Dopo il failback, è necessario confermare con tutti gli stakeholder che i loro servizi sono stati riportati alla normalità prima di eseguire nuovamente la funzione di protezione,</block>
+  <block id="a42cf9beb4788dddb7d317e05cc08e23" category="sidebar">File di database e filegroup</block>
+  <block id="8858bb6564a2efc189c9183c495ce545" category="sidebar">Allineamento delle LUN</block>
+  <block id="02bc4ad8a694d41c8b598dfbcb12f069" category="sidebar">Numero di LUN e dimensioni LUN</block>
+  <block id="066f208a93617bd82090d42624ce63cc" category="sidebar">Ridimensionamento LUN</block>
+  <block id="9eeba6fd02cf3b6d8aee35e0ce9bf8fe" category="sidebar">Striping LVM</block>
+  <block id="183bdb28f19bee640319f68825827aea" category="sidebar">RPO, RTO e SLA</block>
+  <block id="2172b5d51273924b537842b0db78bfd4" category="sidebar">Elementi di base di backup e recovery</block>
 </blocks>
