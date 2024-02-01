@@ -2,16 +2,16 @@
 sidebar: sidebar 
 permalink: mysql/mysql-slot-tables.html 
 keywords: MySQL,MariaDB,TR-4722 
-summary: MySQL su ONTAP 
+summary: MySQL e NFSv3 slot tables 
 ---
-= Tavoli con fessure
+= MySQL e NFSv3 slot tables
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
 
 
 [role="lead"]
-Le prestazioni di NFS su Linux dipendono da un parametro chiamato `tcp_max_slot_table_entries`.
+NFSv3 le prestazioni di Linux dipendono da un parametro chiamato `tcp_max_slot_table_entries`.
 
 Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
 

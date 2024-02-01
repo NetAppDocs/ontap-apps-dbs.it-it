@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: postgres/postgres-snapcenter-dp.html 
 keywords: PostgreSQL,database,postgres 
-summary: Database PostgreSQL su ONTAP 
+summary: Software di protezione dei dati PostgreSQL 
 ---
-= Software per la data Protection
+= Software di protezione dei dati PostgreSQL
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

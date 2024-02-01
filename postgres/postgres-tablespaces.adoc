@@ -4,7 +4,7 @@ permalink: postgres/postgres-tablespaces.html
 keywords: PostgreSQL,database,postgres 
 summary: Tablespace PostgreSQL 
 ---
-= Tablespace
+= Tablespace PostgreSQL
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

@@ -4,7 +4,7 @@ permalink: oracle/oracle-notes-optimization-and-benchmarking.html
 keywords: oracle, database, ontap, performance, hammerdb, swingbench, calibrate_io, slob2, orion, slob, benchmarking, benchmark 
 summary: Test delle performance di Oracle 
 ---
-= Ottimizzazione e benchmarking delle performance di Oracle
+= Procedure di benchmarking e ottimizzazione delle performance Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -24,9 +24,9 @@ Il test accurato delle performance dello storage del database è un argomento es
 
 Inoltre, occorre prendere in considerazione attività che non riguardano i database di storage. Esiste un punto in cui l'ottimizzazione delle performance dello storage non produce vantaggi utili perché le performance dello storage non sono più un fattore limitante per le performance.
 
-La maggior parte dei clienti che utilizzano database sceglie ora gli array all-flash, il che crea alcune considerazioni aggiuntive. Ad esempio, prendi in considerazione il test delle performance su un sistema AFF8080 a due nodi:
+La maggior parte dei clienti che utilizzano database sceglie ora gli array all-flash, il che crea alcune considerazioni aggiuntive. Ad esempio, prendi in considerazione il test delle performance su un sistema AFF A900 a due nodi:
 
-* Con un rapporto di lettura/scrittura di 75/25:1, due nodi AFF8080 possono offrire oltre 300K IOPS di database casuali prima che la latenza superi anche il limite di 1ms KB. Questo ben oltre le attuali richieste di performance della maggior parte dei database è difficile prevedere il miglioramento previsto. Lo storage verrebbe ampiamente cancellato come collo di bottiglia.
+* Con un rapporto di lettura/scrittura di 80/20:1, due nodi A900 possono fornire oltre 1M IOPS di database casuali prima che la latenza attraversi anche il contrassegno 150µs. Questo ben oltre le attuali richieste di performance della maggior parte dei database è difficile prevedere il miglioramento previsto. Lo storage verrebbe ampiamente cancellato come collo di bottiglia.
 * La larghezza di banda della rete è una fonte sempre più comune di limitazioni delle prestazioni. Ad esempio, le soluzioni su disco a rotazione sono spesso dei colli di bottiglia per le performance dei database perché la latenza i/o è molto elevata. Quando un array all-flash rimuove le limitazioni di latenza, spesso la barriera passa alla rete. Si tratta di un aspetto particolarmente interessante nel caso di ambienti virtualizzati e sistemi blade in cui è difficile visualizzare la vera connettività di rete. Ciò può complicare il test delle performance se il sistema di storage stesso non può essere pienamente utilizzato a causa di limitazioni della larghezza di banda.
 * Generalmente, il confronto delle performance di un array all-flash con un array contenente dischi rotanti non è possibile a causa dell'aumento drastico della latenza degli array all-flash. I risultati dei test in genere non sono significativi.
 * Il confronto delle performance di picco degli IOPS con un array all-flash spesso non è un test utile, in quanto i database non sono limitati dall'i/o dello storage Ad esempio, si supponga che un array sia in grado di sostenere 500K IOPS casuali, mentre un altro possa sostenere 300K KB. La differenza è irrilevante nel mondo reale se un database impiega il 99% del suo tempo per l'elaborazione della CPU. I carichi di lavoro non utilizzano mai le funzionalità complete dello storage array. Al contrario, le funzionalità degli IOPS di picco potrebbero essere critiche in una piattaforma di consolidamento in cui si prevede che lo storage array venga caricato alle proprie funzionalità di picco.

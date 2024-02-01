@@ -1,17 +1,17 @@
 ---
 sidebar: sidebar 
 permalink: mysql/mysql-file-descriptors.html 
-keywords: MySQL,MariaDB,TR-4722 
-summary: MySQL su ONTAP 
+keywords: MySQL,MariaDB,file descriptors 
+summary: Descrizione dei file MySQL 
 ---
-= Descrittori di file
+= Descrittori di file MySQL
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
 
 
 [role="lead"]
-Per l'esecuzione, il server MySQL ha bisogno di descrittori di file.
+Per l'esecuzione, il server MySQL ha bisogno di descrittori di file, e i valori predefiniti non sono sufficienti.
 
 Le utilizza per aprire nuove connessioni, archiviare tabelle nella cache, creare tabelle temporanee per risolvere query complesse e accedere a quelle persistenti. Se mysqld non è in grado di aprire nuovi file quando necessario, può smettere di funzionare correttamente. Un sintomo comune di questo problema è l'errore 24, "troppi file aperti". Il numero di descrittori di file che mysqld può aprire simultaneamente è definito dal `open_files_limit` opzione impostata nel file di configurazione (`/etc/my.cnf`). Ma `open_files_limit` dipende anche dai limiti del sistema operativo. Questa dipendenza rende l'impostazione della variabile più complicata.
 

@@ -45,5 +45,3 @@ entries:
     url: "/mysql/mysql-mysql-over-nfs.html"
   - title: MySQL su SAN
     url: "/mysql/mysql-mysql-over-san.html"
-  - title: Tiering MySQL con FabricPool
-    url: "/mysql/mysql-tiering.html"
