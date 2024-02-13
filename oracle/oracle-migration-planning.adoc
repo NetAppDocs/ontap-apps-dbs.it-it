@@ -4,7 +4,7 @@ permalink: oracle/oracle-migration-planning.html
 keywords: migration, oracle 
 summary: Pianificazione della migrazione a Oracle 
 ---
-= Pianificazione della migrazione iracale
+= Pianificazione della migrazione a Oracle
 :allow-uri-read: 
 
 
