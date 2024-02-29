@@ -11,13 +11,10 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revnumber: 9.8 adds support for FlexGroup datastores in vSphere
-:revdate: along with the ONTAP tools for VMware vSphere 9.8 release.
 
+
+[role="lead"]
+ONTAP 9.8 aggiunge il supporto per gli archivi dati FlexGroup in vSphere, insieme ai tool ONTAP per VMware vSphere 9.8.
 
 FlexGroup semplifica la creazione di datastore di grandi dimensioni e crea automaticamente una serie di volumi costituenti per ottenere le massime performance da un sistema ONTAP. Utilizza FlexGroup con vSphere per un singolo datastore vSphere scalabile con la potenza di un cluster ONTAP completo.
 

@@ -13,10 +13,7 @@ summary: Questo documento illustra la sicurezza dei prodotti per gli strumenti O
 :imagesdir: ../media/
 
 
-
-
-== Attività di sviluppo sicure
-
+[role="lead"]
 L'engineering del software con i tool NetApp ONTAP per VMware vSphere utilizza le seguenti attività di sviluppo sicuro:
 
 * *Modellazione delle minacce.* lo scopo della modellazione delle minacce è quello di individuare i difetti di sicurezza in una funzionalità, un componente o un prodotto nelle prime fasi del ciclo di vita dello sviluppo software. Un modello di minaccia è una rappresentazione strutturata di tutte le informazioni che influiscono sulla sicurezza di un'applicazione. In sostanza, si tratta di una vista dell'applicazione e del suo ambiente attraverso l'obiettivo della sicurezza.

@@ -13,10 +13,7 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 :imagesdir: ../media/
 
 
-
-
-== A proposito di vVol e SPBM
-
+[role="lead"]
 NetApp è stato un primo partner di progettazione di VMware nello sviluppo di vVol (vSphere Virtual Volumes), fornendo input architetturale e supporto iniziale per vVol e API VMware vSphere per la consapevolezza dello storage (VASA). Questo approccio non solo ha portato la gestione granulare dello storage delle macchine virtuali a VMFS, ma ha anche supportato l'automazione del provisioning dello storage tramite Storage Policy Based Management (SPBM).
 
 SPBM fornisce un framework che funge da layer di astrazione tra i servizi di storage disponibili per l'ambiente di virtualizzazione e gli elementi di storage sottoposti a provisioning tramite policy. Questo approccio consente agli architetti dello storage di progettare pool di storage con diverse funzionalità che possono essere facilmente utilizzate dagli amministratori delle macchine virtuali. Gli amministratori possono quindi associare i requisiti di carico di lavoro delle macchine virtuali ai pool di storage con provisioning, consentendo un controllo granulare delle varie impostazioni a livello di macchina virtuale o disco virtuale.

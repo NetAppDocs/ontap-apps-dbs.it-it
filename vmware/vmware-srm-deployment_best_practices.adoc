@@ -13,6 +13,9 @@ summary: 'Con ONTAP, il concetto di storage virtual machine (SVM) offre una segm
 :imagesdir: ../media/
 
 
+[role="lead"]
+Nelle sezioni seguenti sono descritte le Best practice per la distribuzione di VMware e ONTAP SRM.
+
 
 
 == Layout e segmentazione SVM per SMT

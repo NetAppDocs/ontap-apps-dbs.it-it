@@ -11,13 +11,10 @@ summary: 'SnapCenter consente di creare policy di backup che possono essere appl
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revnumber: 
-:revdate: and so on.
 
+
+[role="lead"]
+La clonazione di un oggetto storage consente di creare rapidamente copie da utilizzare ulteriormente, ad esempio il provisioning di macchine virtuali aggiuntive, operazioni di backup/recovery e così via.
 
 In vSphere, è possibile clonare una macchina virtuale, un disco virtuale, un vVol o un datastore. Dopo essere stato clonato, l'oggetto può essere ulteriormente personalizzato, spesso attraverso un processo automatizzato. VSphere supporta entrambi i cloni di copia completa e i cloni collegati, in cui tiene traccia delle modifiche separatamente dall'oggetto originale.
 

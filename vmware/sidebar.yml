@@ -52,6 +52,18 @@ entries:
     url: "/vmware/vmware-srm-replication_topologies.html"
   - title: Risoluzione dei problemi di SRM quando si utilizza la replica vVol
     url: "/vmware/vmware-srm-vvol-troubleshooting.html"
+- title: VSphere Metro Storage Cluster con ONTAP
+  entries:
+  - title: Panoramica di vMSC
+    url: "/vmware/vmware_vmsc_overview.html"
+  - title: Soluzione vSphere ha
+    url: "/vmware/vmware_vmsc_solution.html"
+  - title: Progettazione vMSC
+    url: "/vmware/vmware_vmsc_design.html"
+  - title: Resilienza vMSC
+    url: "/vmware/vmware_vmsc_resiliency.html"
+  - title: Scenari vMSC con MCC
+    url: "/vmware/vmware_vmsc_scen_mcc.html"
 - title: Sicurezza dei prodotti
   entries:
   - title: Strumenti ONTAP per VMware vSphere

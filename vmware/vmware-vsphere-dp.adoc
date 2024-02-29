@@ -11,13 +11,10 @@ summary: 'SnapCenter consente di creare policy di backup che possono essere appl
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revnumber: 
-:revdate: and it is easy to manage this ability inside vCenter with the SnapCenter Plug-In for VMware vSphere.
 
+
+[role="lead"]
+Il backup delle macchine virtuali e il loro rapido ripristino sono tra i grandi punti di forza di ONTAP per vSphere ed è facile gestirla all'interno di vCenter con il plug-in SnapCenter per VMware vSphere.
 
 Utilizza le snapshot per creare copie rapide della tua macchina virtuale o del datastore senza influire sulle performance, quindi inviale a un sistema secondario utilizzando SnapMirror per la data Protection off-site a lungo termine. Questo approccio riduce al minimo lo spazio di storage e la larghezza di banda della rete memorizzando solo le informazioni modificate.
 

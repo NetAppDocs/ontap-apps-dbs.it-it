@@ -10,11 +10,10 @@ summary:
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
 
+
+[role="lead"]
+Nelle seguenti sezioni vengono illustrate le procedure e le Best practice per l'utilizzo di vVol VMware con lo storage ONTAP.
 
 
 
