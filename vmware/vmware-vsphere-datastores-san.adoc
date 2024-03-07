@@ -1,0 +1,50 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-datastores-san.html 
+keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols 
+summary: 'Questa pagina descrive le Best practice per l"implementazione di una soluzione di storage NetApp ONTAP in un ambiente VMware vSphere.' 
+---
+= SAN (FC, FCoE, NVMe/FC, iSCSI), RDM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+In vSphere, esistono tre modi per utilizzare le LUN dello storage a blocchi:
+
+* Con datastore VMFS
+* Con RDM (raw device mapping)
+* Come LUN accessibile e controllato da un iniziatore software da un sistema operativo guest VM
+
+
+VMFS è un file system in cluster dalle performance elevate che fornisce datastore che sono pool di storage condivisi. Gli archivi dati VMFS possono essere configurati con LUN a cui si accede utilizzando spazi dei nomi FC, iSCSI, FCoE o NVMe a cui si accede dal protocollo NVMe/FC. VMFS consente l'accesso simultaneo alle LUN tradizionali da parte di ogni server ESX in un cluster. La dimensione massima del LUN ONTAP è generalmente di 16 TB; pertanto, un datastore VMFS 5 di 64 TB (vedere la prima tabella di questa sezione) viene creato utilizzando quattro LUN da 16 TB (tutti i sistemi array SAN supportano la dimensione massima del LUN VMFS di 64 TB). Poiché l'architettura LUN di ONTAP non ha una profondità di coda singola ridotta, gli archivi dati VMFS in ONTAP possono scalare in maniera relativamente semplice rispetto alle architetture di array tradizionali.
+
+VSphere include il supporto integrato per più percorsi verso i dispositivi storage, definito NMP (Native Multipathing). NMP è in grado di rilevare il tipo di storage per i sistemi storage supportati e di configurare automaticamente lo stack NMP per supportare le funzionalità del sistema storage in uso.
+
+Sia NMP che NetApp ONTAP supportano l'accesso ad unità logica asimmetrico (ALUA) per negoziare percorsi ottimizzati e non ottimizzati. In ONTAP, un percorso ottimizzato per ALUA segue un percorso di dati diretto, utilizzando una porta di destinazione sul nodo che ospita il LUN a cui si accede. ALUA è attivato per impostazione predefinita sia in vSphere che in ONTAP. NMP riconosce il cluster ONTAP come ALUA e utilizza il plug-in del tipo di array di storage ALUA (`VMW_SATP_ALUA`) e seleziona il plug-in di selezione del percorso round robin (`VMW_PSP_RR`).
+
+ESXi 6 supporta fino a 256 LUN e fino a 1,024 percorsi totali verso LUN. I LUN o i percorsi che superano questi limiti non sono visti da ESXi. Supponendo il numero massimo di LUN, il limite di percorso consente quattro percorsi per LUN. In un cluster ONTAP più grande, è possibile raggiungere il limite di percorso prima del limite di LUN. Per risolvere questo limite, ONTAP supporta la mappa LUN selettiva (SLM) nella versione 8.3 e successive.
+
+SLM limita i nodi che pubblicizzano i percorsi a una determinata LUN. È una Best practice di NetApp avere almeno una LIF per nodo per SVM e utilizzare SLM per limitare i percorsi pubblicizzati al nodo che ospita la LUN e il suo partner ha. Sebbene esistano altri percorsi, essi non vengono pubblicizzati per impostazione predefinita. È possibile modificare i percorsi pubblicizzati con gli argomenti del nodo di reporting add e remove all'interno di SLM. Tenere presente che le LUN create nelle release precedenti alla 8.3 pubblicizzano tutti i percorsi e devono essere modificate solo per pubblicizzare i percorsi alla coppia ha di hosting. Per ulteriori informazioni su SLM, vedere la sezione 5.9 di http://www.netapp.com/us/media/tr-4080.pdf["TR-4080"^]. Il precedente metodo di portset può essere utilizzato anche per ridurre ulteriormente i percorsi disponibili per un LUN. I portset aiutano a ridurre il numero di percorsi visibili attraverso i quali gli iniziatori in un igroup possono vedere le LUN.
+
+* SLM è attivato per impostazione predefinita. A meno che non si utilizzino portset, non è necessaria alcuna configurazione aggiuntiva.
+* Per i LUN creati prima di Data ONTAP 8.3, applicare manualmente SLM eseguendo `lun mapping remove-reporting-nodes` Comando per rimuovere i nodi di reporting del LUN e limitare l'accesso del LUN al nodo proprietario del LUN e al partner ha.
+
+
+I protocolli a blocchi (iSCSI, FC e FCoE) accedono alle LUN utilizzando ID LUN e numeri di serie, insieme a nomi univoci. FC e FCoE utilizzano nomi in tutto il mondo (WWNN e WWPN), mentre iSCSI utilizza nomi iSCSI qualificati (IQN). Il percorso delle LUN all'interno dello storage è privo di significato per i protocolli a blocchi e non viene presentato in alcun punto del protocollo. Pertanto, un volume che contiene solo LUN non deve essere montato internamente e non è necessario un percorso di giunzione per i volumi che contengono LUN utilizzati negli archivi dati. Il sottosistema NVMe in ONTAP funziona in modo simile.
+
+Altre Best practice da prendere in considerazione:
+
+* Assicurarsi che venga creata un'interfaccia logica (LIF) per ogni SVM su ciascun nodo del cluster ONTAP per garantire la massima disponibilità e mobilità. La Best practice PER LE SAN ONTAP consiste nell'utilizzare due porte fisiche e LIF per nodo, una per ciascun fabric. ALUA viene utilizzato per analizzare i percorsi e identificare i percorsi attivi ottimizzati (diretti) rispetto ai percorsi attivi non ottimizzati. ALUA viene utilizzato per FC, FCoE e iSCSI.
+* Per le reti iSCSI, utilizzare più interfacce di rete VMkernel su diverse subnet di rete con raggruppamento NIC quando sono presenti più switch virtuali. È inoltre possibile utilizzare più NIC fisiche collegate a più switch fisici per fornire ha e un throughput maggiore. La figura seguente mostra un esempio di connettività multipath. In ONTAP, configurare un gruppo di interfacce single-mode per il failover con due o più collegamenti connessi a due o più switch oppure utilizzare LACP o un'altra tecnologia di aggregazione dei collegamenti con gruppi di interfacce multimodali per fornire ha e i vantaggi dell'aggregazione dei collegamenti.
+* Se il protocollo CHAP (Challenge-Handshake Authentication Protocol) viene utilizzato in ESXi per l'autenticazione di destinazione, deve essere configurato anche in ONTAP utilizzando la CLI (`vserver iscsi security create`) O con System Manager (modificare Initiator Security in Storage > SVM > SVM Settings > Protocols > iSCSI).
+* Utilizza i tool ONTAP per VMware vSphere per creare e gestire LUN e igroups. Il plug-in determina automaticamente le WWPN dei server e crea gli igroups appropriati. Inoltre, configura i LUN in base alle Best practice e li associa agli igroups corretti.
+* Utilizzare con cautela gli RDM poiché possono essere più difficili da gestire e utilizzano anche percorsi limitati come descritto in precedenza. I LUN ONTAP supportano entrambi https://kb.vmware.com/s/article/2009226["modalità di compatibilità fisica e virtuale"^] RDM.
+* Per ulteriori informazioni sull'utilizzo di NVMe/FC con vSphere 7.0, consulta questo articolo https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Guida alla configurazione degli host NVMe/FC di ONTAP"^] e. http://www.netapp.com/us/media/tr-4684.pdf["TR-4684"^]La figura seguente mostra la connettività multipath da un host vSphere a un LUN ONTAP.
+
+
+image:vsphere_ontap_image2.png["Errore: Immagine grafica mancante"]

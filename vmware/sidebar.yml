@@ -13,7 +13,15 @@ entries:
   - title: Gestione basata su policy di Virtual Volume e storage
     url: "/vmware/vmware-vsphere-vvols_and_spbm.html"
   - title: Datastore e protocolli
-    url: "/vmware/vmware-vsphere-datastores.html"
+    entries:
+    - title: Panoramica
+      url: "/vmware/vmware-vsphere-datastores-top.html"
+    - title: SAN
+      url: "/vmware/vmware-vsphere-datastores-san.html"
+    - title: NFS
+      url: "/vmware/vmware-vsphere-datastores-nfs.html"
+    - title: Volumi FlexGroup
+      url: "/vmware/vmware-vsphere-datastores-fg.html"
   - title: Configurazione di rete
     url: "/vmware/vmware-vsphere-network.html"
   - title: Cloning

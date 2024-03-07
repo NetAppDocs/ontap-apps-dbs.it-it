@@ -9,52 +9,63 @@ summary: Introduzione alla virtualizzazione del database
 
 
 [role="lead"]
-La virtualizzazione dei database con VMware ESX, Oracle OVM o KVM è una scelta sempre più comune per i clienti NetApp che hanno scelto la virtualizzazione anche per i database mission-critical.
+La virtualizzazione dei database con VMware, Oracle OLVM o KVM è una scelta sempre più comune per i clienti NetApp che hanno scelto la virtualizzazione anche per i database mission-critical.
 
-Esistono numerosi preconcetti sui criteri di supporto per la virtualizzazione, in particolare per i prodotti VMware. In effetti, non è raro che Oracle non supporti in alcun modo la virtualizzazione. Questa nozione non è corretta e causa la perdita di opportunità per la virtualizzazione. Oracle Doc ID 249212,1 descrive i problemi noti in un ambiente Oracle e specifica anche il supporto per RAC.
 
-A un cliente con un problema sconosciuto a Oracle potrebbe essere richiesto di riprodurre il problema su hardware fisico. Un cliente Oracle che utilizza una versione all'avanguardia di un prodotto potrebbe non voler utilizzare la virtualizzazione a causa della possibilità di individuare nuovi bug. Tuttavia, questa situazione non ha rappresentato un problema nella pratica per i clienti che utilizzano versioni di prodotti generalmente disponibili.
+
+== Supportabilità
+
+Esistono numerosi preconcetti sui criteri di supporto Oracle per la virtualizzazione, in particolare per i prodotti VMware. Non è raro che Oracle Outright non supporti la virtualizzazione. Questa nozione non è corretta e porta alla perdita di opportunità per trarre vantaggio dalla virtualizzazione. Oracle Doc ID 249212,1 illustra i requisiti effettivi e raramente viene considerato un problema da parte dei clienti.
+
+Se si verifica un problema su un server virtualizzato e il supporto di Oracle non lo conosce, al cliente potrebbe essere richiesto di riprodurre il problema sull'hardware fisico. Un cliente Oracle che utilizza una versione all'avanguardia di un prodotto potrebbe non voler utilizzare la virtualizzazione a causa di potenziali problemi di supportabilità, ma questa situazione non è stata un problema reale per i clienti che utilizzano versioni di prodotti Oracle generalmente disponibili.
 
 
 
 == Presentazione storage
 
-I clienti che stanno considerando la virtualizzazione dei propri database devono basare le proprie decisioni di storage sulle esigenze aziendali. Sebbene questa affermazione sia generalmente vera per tutte le decisioni IT, è particolarmente importante per la virtualizzazione, poiché le dimensioni e l'ambito dei progetti variano notevolmente.
+I clienti che stanno considerando la virtualizzazione dei propri database devono basare le proprie decisioni di storage sulle esigenze aziendali. Sebbene questa affermazione sia generalmente vera per tutte le decisioni IT, è particolarmente importante per i progetti di database, poiché le dimensioni e l'ambito dei requisiti variano notevolmente.
 
-Sono disponibili quattro opzioni di base per la presentazione dello storage:
+Sono disponibili tre opzioni di base per la presentazione dello storage:
 
+* LUN virtualizzate nei datastore di hypervisor
 * LUN iSCSI gestite dall'iniziatore iSCSI sulla macchina virtuale, non dall'hypervisor
-* File system NFS montati dalla macchina virtuale, non su disco della macchina virtuale (VMDK)
-* Datastore di hypervisor
+* File system NFS montati dalla macchina virtuale (non da un datastore basato su NFS)
+* Mappatura diretta dei dispositivi. Gli RDM VMware sono svantaggiati dai clienti, ma spesso i dispositivi fisici sono ancora mappati in modo simile direttamente con la virtualizzazione KVM e OLVM.
 
 
-In generale, evitare di utilizzare datastore per file Oracle. Questa raccomandazione è motivata da numerosi motivi:
 
-* *Trasparenza.* quando una VM possiede i propri file system, è più facile per un amministratore di database o un amministratore di sistema identificare l'origine dei file system per i propri dati.
-* *Performance.* i test hanno dimostrato che esiste un effetto sulle prestazioni derivante dal canale di tutti i/o attraverso un archivio dati di hypervisor.
-* *Gestibilità.* quando una VM possiede i propri file system, l'utilizzo o il mancato utilizzo di un livello di hypervisor influisce sulla gestibilità. È possibile utilizzare le stesse procedure per il provisioning, il monitoraggio, la protezione dei dati e così via nell'intero ambiente, inclusi ambienti virtualizzati e non.
-* *Stabilità e risoluzione dei problemi.* quando una VM possiede i propri file system, fornire prestazioni buone e stabili e risolvere i problemi sono molto più semplici perché l'intero stack di storage è presente sulla VM. L'unico ruolo dell'hypervisor è il trasporto di frame FC o IP. Quando un datastore è incluso in una configurazione, complica la configurazione introducendo un altro insieme di timeout, parametri, file di log e potenziali bug.
-* *Portabilità.* quando una VM è proprietaria dei suoi file system, il processo di spostamento di un ambiente Oracle diventa molto più semplice. I file system possono essere spostati facilmente tra guest virtualizzati e non.
-* *Vendor lock-in.* dopo il posizionamento dei dati in un datastore, utilizzando un hypervisor diverso o estraendo i dati dall'ambiente virtualizzato diventa del tutto molto difficile.
-* *Abilitazione snapshot.* in alcuni casi, i backup in un ambiente virtualizzato possono diventare un problema a causa della larghezza di banda relativamente limitata. Ad esempio, un trunk 10GbE a quattro porte potrebbe essere sufficiente per supportare le esigenze quotidiane di prestazioni di molti database virtualizzati. Tuttavia, tale trunk non sarebbe sufficiente per eseguire backup utilizzando RMAN o altri prodotti di backup che richiedono lo streaming di una copia di dimensioni complete dei dati.
+
+=== Performance
+
+Il metodo di presentazione dello storage a un guest virtualizzato non influisce in genere sulle prestazioni. I sistemi operativi host, i driver di rete virtualizzati e le implementazioni del datastore degli hypervisor sono tutti altamente ottimizzati e generalmente possono consumare tutta la larghezza di banda della rete FC o IP disponibile tra l'hypervisor e il sistema storage, purché vengano seguite le Best practice di base. In alcuni casi, ottenere prestazioni ottimali può essere leggermente più semplice utilizzando un approccio di presentazione dello storage rispetto a un altro, ma il risultato finale dovrebbe essere comparabile.
+
+
+
+=== Gestibilità
+
+Il fattore chiave nella scelta di come presentare lo storage a un guest virtualizzato è la manovrabilità. Non esiste un metodo giusto o sbagliato. L'approccio migliore dipende dalle esigenze operative, dalle competenze e dalle preferenze DELL'IT.
+
+I fattori da prendere in considerazione includono:
+
+* *Trasparenza.* quando una VM gestisce i propri file system, è più facile per un amministratore di database o un amministratore di sistema identificare l'origine dei file system per i propri dati. L'accesso ai file system e ai LUN non avviene in modo diverso rispetto a un server fisico.
+* *Coerenza.* quando una VM è proprietaria dei file system, l'utilizzo o il mancato utilizzo di un livello di hypervisor influisce sulla gestibilità. È possibile utilizzare le stesse procedure per il provisioning, il monitoraggio, la protezione dei dati e così via nell'intero ambiente, inclusi ambienti virtualizzati e non.
 +
-L'utilizzo di file system proprietari di VM semplifica l'utilizzo di backup e ripristini basati su Snapshot. Un file system di proprietà delle macchine virtuali alleggerisce il carico del lavoro di esecuzione dei backup nel sistema storage. Non è necessario esagerare la configurazione dell'hypervisor solo per supportare i requisiti di larghezza di banda e CPU nella finestra di backup.
+D'altra parte, in un data center altrimenti virtualizzato al 100% potrebbe essere preferibile utilizzare anche lo storage basato su datastore per l'intera impronta, sulla stessa logica sopra menzionata, la coerenza, la capacità di utilizzare le stesse procedure per il provisioning, la protezione, il montoring e la protezione dei dati.
+
+* *Stabilità e risoluzione dei problemi.* quando una VM possiede i propri file system, fornire prestazioni buone e stabili e risolvere i problemi è più semplice perché l'intero stack di storage è presente sulla VM. L'unico ruolo dell'hypervisor è il trasporto di frame FC o IP. Quando un datastore è incluso in una configurazione, complica la configurazione introducendo un altro insieme di timeout, parametri, file di log e potenziali bug.
+* *Portabilità.* quando una VM è proprietaria dei suoi file system, il processo di spostamento di un ambiente Oracle diventa molto più semplice. I file system possono essere spostati facilmente tra guest virtualizzati e non.
+* *Vendor lock-in.* una volta posizionati i dati in un datastore, diventa difficile utilizzare un hypervisor diverso o estrarre i dati dall'ambiente virtualizzato.
+* *Abilitazione snapshot.* le procedure di backup tradizionali in un ambiente virtualizzato possono diventare un problema a causa della larghezza di banda relativamente limitata. Ad esempio, un trunk 10GbE a quattro porte potrebbe essere sufficiente per supportare le esigenze quotidiane di prestazioni di molti database virtualizzati, ma tale trunk non sarebbe sufficiente per eseguire backup utilizzando RMAN o altri prodotti di backup che richiedono lo streaming di una copia di dimensioni complete dei dati. Il risultato è che un ambiente virtualizzato sempre più consolidato ha bisogno di eseguire backup tramite snapshot di storage. In questo modo si evita la necessità di sovrascrivere la configurazione dell'hypervisor solo per supportare i requisiti di larghezza di banda e CPU nella finestra di backup.
++
+L'utilizzo di file system guest facilita a volte l'utilizzo di backup e ripristini basati su snapshot, poiché gli oggetti storage che necessitano di protezione possono essere indirizzati più facilmente. Tuttavia, esiste un numero sempre maggiore di prodotti di data Protection di virtualizzazione che si integrano perfettamente con datastore e snapshot. La strategia di backup deve essere considerata attentamente prima di prendere una decisione su come presentare lo storage a un host virtualizzato.
 
 
-
-
-TIP: *NetApp consiglia* di evitare di posizionare i dati Oracle in un datastore per ottenere performance e gestibilità ottimali. Utilizzare file system di proprietà dei guest, come file system NFS o iSCSI, gestiti dal guest o con RDM.
 
 
 
 == Driver paravirtualizzati
 
 Per prestazioni ottimali, l'uso di driver di rete paravirtualizzati è fondamentale. Quando si utilizza un datastore, è necessario un driver SCSI paravirtualizzato. Un driver di dispositivo paravirtualizzato consente a un guest di integrarsi più profondamente nell'hypervisor, invece di un driver emulato in cui l'hypervisor spende più tempo CPU che imita il comportamento dell'hardware fisico.
-
-Le performance della maggior parte dei database sono limitate dallo storage. Pertanto, la latenza supplementare introdotta da un driver di rete o SCSI è particolarmente evidente. L'assistenza clienti NetApp ha riscontrato molti problemi di prestazioni risolti installando driver paravirtualizzati. Durante una proof of concept realizzata da un cliente, i database hanno mostrato prestazioni migliori con ESX rispetto alla stessa apparecchiatura hardware in esecuzione come bare metal. I test richiedevano molto i/o e la differenza di prestazioni veniva attribuita all'utilizzo dei driver di rete paravirtualizzati ESX.
-
-
-TIP: *NetApp consiglia* di utilizzare sempre driver di rete paravirtualizzati e driver SCSI.
 
 
 
@@ -63,4 +74,19 @@ TIP: *NetApp consiglia* di utilizzare sempre driver di rete paravirtualizzati e 
 L'overcommit della RAM implica la configurazione di una quantità di RAM virtualizzata su vari host superiore a quella presente sull'hardware fisico. In caso contrario, si potrebbero verificare problemi di prestazioni imprevisti. Quando si virtualizza un database, i blocchi sottostanti di Oracle SGA non devono essere sostituiti con lo storage dall'hypervisor. Ciò causa risultati di prestazioni altamente instabili.
 
 
-TIP: *NetApp consiglia* di non configurare un hypervisor in modo da consentire lo scambio dei blocchi SGA di Oracle.
+
+== Striping dei datastore
+
+Quando si utilizzano database con datastore, c'è un fattore critico da considerare in relazione allo striping delle performance.
+
+Le tecnologie dei datastore come VMFS sono in grado di estendersi su più LUN, ma non su dispositivi suddivisi in striping. I LUN sono concatenati. Il risultato finale può essere costituito da hot spot LUN. Ad esempio, un database Oracle tipico potrebbe avere un gruppo di dischi ASM di 8 LUN. È possibile eseguire il provisioning di tutte le 8 LUN virtualizzate in un datastore VMFS da 8 LUN, senza tuttavia alcuna garanzia su quali LUN risiedono i dati. La configurazione risultante potrebbe essere tutta una LUN virtualizzata da 8 GB che occupa una singola LUN nel datastore VMFS. Ciò si traduce in un collo di bottiglia per le prestazioni.
+
+Lo striping è in genere necessario. Con alcuni hypervisor, incluso KVM, è possibile creare un datastore utilizzando lo striping LVM come descritto link:oracle-storage-san-config-lvm-striping.html["qui"]. Con VMware, l'architettura appare un po' diversa. Ogni LUN virtualizzata deve essere posizionata in un datastore VMFS diverso.
+
+Ad esempio:
+
+image:vmfs-striping.png["Errore: Immagine grafica mancante"]
+
+Il driver principale di questo approccio non è ONTAP, ma è dovuto alla limitazione intrinseca del numero di operazioni che una singola VM o LUN dell'hypervisor può eseguire in parallelo. In genere, un singolo LUN ONTAP può supportare un maggior numero di IOPS rispetto a quello richiesto da un host. Il limite di prestazioni di un singolo LUN è quasi universalmente il risultato del sistema operativo host. Il risultato è che per soddisfare le esigenze di performance della maggior parte dei database sono necessarie LUN comprese tra 4 e 8 GB.
+
+Le architetture VMware devono pianificare con attenzione le proprie architetture per garantire che questo approccio non soddisfi i massimi di datastore e/o percorso LUN. Inoltre, non è necessario un set univoco di datastore VMFS per ogni database. L'esigenza principale consiste nel garantire che ogni host disponga di un set pulito di percorsi io da 4-8 GB dalle LUN virtualizzate alle LUN di backend sul sistema storage stesso. In rare occasioni, anche un numero maggiore di datatores può rivelarsi vantaggioso per richieste di performance veramente estreme, ma le LUN da 4-8 GB sono in genere sufficienti per il 95% di tutti i database. Un singolo volume ONTAP contenente 8 LUN può supportare fino a 250.000 IOPS casuali con blocchi Oracle con una tipica configurazione di sistema operativo/ONTAP/rete.
