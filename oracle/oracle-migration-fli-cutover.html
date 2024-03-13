@@ -1,0 +1,4392 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head class="at-element-marker">
+  <title>Migrazione Oracle con FLI: Cutover</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Migrazione Oracle con FLI: Cutover" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+	<meta property="og:description" content="Migrazione Oracle con FLI: Cutover" />
+  <meta property="og:image" content="https://docs.netapp.com/it-it/ontap-apps-dbs/images/logo-tophat-social.png" />
+  <meta property="og:image:alt" content="NetApp Logo" />
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="encoding" content="utf-8">
+  <meta http-equiv="nss-type" content="Product Documentation"/>
+  <meta http-equiv="nss-subtype" content="User Guide"/><meta name="description" content="Migrazione Oracle con FLI: Cutover">
+  <meta name="keywords" content=" migration, oracle, FLI"><!-- Icons -->
+  <link rel="icon" href="/it-it/ontap-apps-dbs/images/favicon.ico" type="image/x-icon">
+
+  <!-- RSS Feed --><!-- CSS Definitions: NetApp CSS should be defined after generic css -->
+
+
+  <!-- Combined CSS -->
+  <link rel="stylesheet" type="text/css" href="/it-it/ontap-apps-dbs/css/ie-netappdocs.css">
+
+  
+  <link rel="stylesheet" href="/it-it/ontap-apps-dbs/css/ie-landing-page.css" type="text/css">
+  <link rel="stylesheet" href="/it-it/ontap-apps-dbs/css/ie-tabbed-blocks.css" type="text/css">
+  <!-- Canonical url -->
+  <link rel="canonical" href="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="it" href="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="en" href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="ja" href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="ko" href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="de" href="https://docs.netapp.com/de-de/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="es" href="https://docs.netapp.com/es-es/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <link rel="alternate" hreflang="fr" href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html" />
+  <!-- Top level site integrations -->
+<script type="text/javascript" src="https://cdn.cookielaw.org/consent/72570c5c-fe30-465f-b0e0-b77f7fb4ae34/OtAutoBlock.js"></script>
+    <script type="text/javascript" src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="72570c5c-fe30-465f-b0e0-b77f7fb4ae34"></script>
+    <script type="text/javascript">function OptanonWrapper() { }</script>
+    <script type="text/plain" class="optanon-category-C0002" src="https://assets.adobedtm.com/60287eadf1ee/c284da483c83/launch-e9ff3acac59f.min.js"></script>
+    <script class="optanon-category-C0001">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.setAttributeNode(d.createAttribute('data-ot-ignore'));j.setAttribute('class','optanon-category-C0001');j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'';f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MD73T9M');</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      const MASTHEAD_OFFSET = 65;
+      const SECTIONS = $("main h2, main h3");
+      // PAGE NAV - Init
+      if (SECTIONS.length == 0) {
+        // remove if there is no elements
+        /*
+        $("#ie-right-navbar").remove();
+        $("#ie-right-navbar-collapse").remove();
+        */
+      } else {
+        $(".page-nav-title").css('display', 'block');
+        for (var i = 0; i < SECTIONS.length; i++) {
+          var sectionId = $(SECTIONS[i]).attr('id');
+          var sectionName = $(SECTIONS[i]).text();
+          var subClass = $(SECTIONS[i]).is("h3") ? ' page-nav__sublink' : '';
+          $("#page-menu").append('<li class="page-nav-item"><a href="#' + sectionId + '" class="page-nav__link' + subClass + '">' + sectionName + '</a></li>');
+        }
+      }
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- Used for Product Family Page Sidebar Visibility --><!-- Used to import Promise for IE. Required for SearchKit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script><script src='/it-it/ontap-apps-dbs/js/na-search.js'></script><script src='/it-it/ontap-apps-dbs/js/ie-clouddocs.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script>
+    /*
+      $(document).ready(function() {
+          $("#tg-sb-link").click(function() {
+              $("#tg-sb-sidebar").toggle();
+              $("#tg-sb-content").toggleClass('col-md-9');
+              $("#tg-sb-content").toggleClass('col-md-12');
+              $("#tg-sb-icon").toggleClass('fa-toggle-on');
+              $("#tg-sb-icon").toggleClass('fa-toggle-off');
+          });
+      });
+      */
+  </script>
+  <script src='/it-it/ontap-apps-dbs/js/custom-dropdown.js'></script>
+  <script src='/it-it/ontap-apps-dbs/js/FileSaver.min.js'></script>
+  <script src='/it-it/ontap-apps-dbs/js/jszip-utils.min.js'></script>
+  <script src='/it-it/ontap-apps-dbs/js/jszip.min.js'></script><script src='/it-it/ontap-apps-dbs/js/ie-pdf-ux.js'></script></head>
+
+
+  <body class role="document" data-flavor="">
+    <div class="skip-to-main">
+      <a href="#main" >Skip to main content</a>
+    </div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MD73T9M"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="page" class="">
+      <div id="ie-phone-menu" class=""></div>
+      <div id="ie-content-wrap" class="">
+        <nav id="ie-new-header">
+    <ul>
+        <li id="ie-phone-menu-button">
+            <a href="#">
+                <image id="" src="/it-it/ontap-apps-dbs/images/hamburger.svg" alt="menu" />
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.netapp.com/it">
+                <image id="ie-header-logo" src="/it-it/ontap-apps-dbs/images/netapp_logo.svg" alt="netapp" />
+            </a>
+        </li>
+        <li id="ie-header-docs">
+            <a href="https://www.netapp.com/it/support-and-training/documentation/">Documenti</a>
+        </li>
+
+        <!-- Empty container to push header left with or without lang selector -->
+        <li id="empty-container" style="margin-left: auto">
+        </li>
+        <!-- Start Language Selector --><li id="ie-language-dropdown">
+            <div id="language-dropdown" class="custom-dropdown custom-dropdown-lang">
+                <div class="custom-dropdown-select custom-dropdown-select-lang">
+                    <img src="/it-it/ontap-apps-dbs/images/language_white_24dp.svg" class="n-globe__icon" />
+                    <span class="lang-name">Italiano</span>
+                    <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu"><li>
+                        <a href="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">Italiano</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">English</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">日本語</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">한국어</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">简体中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">繁體中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/de-de/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">Deutsch</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/es-es/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">Español</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html"
+                            target="_self"><span translate="no" class="notranslate">Français</span></a>
+                    </li></ul>
+            </div>
+            </li>
+        <!-- End Language Selector -->
+
+
+        <li id="ie-allnetapp">
+            <div id="allnetapp-dropdown" class="custom-dropdown custom-dropdown-allnetapp">
+                <div class="custom-dropdown-select custom-dropdown-select-allnetapp">
+                    <img src="/it-it/ontap-apps-dbs/images/apps_white_24dp.svg" alt="" class="allnetapp-icon" />
+                    <span class="allnetapp-name">Tutto NetApp</span>
+                    <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu allnetapp-dropdown">
+                    <li>
+                        <a href="https://bluexp.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">BlueXP</span></a>
+                    </li>
+                    <li>
+                        <a href="https://mysupport.netapp.com/site/"
+                            target="_self"><span translate="no" class="notranslate">Supporto</span></a>
+                    </li>
+                    <li>
+                        <a href="https://kb.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">Knowledge Base</span></a>
+                    </li>
+                    <li>
+                        <a href="https://www.netapp.com/it/support-and-training/netapp-learning-services/"
+                            target="_self"><span translate="no" class="notranslate">Training</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+
+    </ul>
+</nav>
+
+        <main id="n-main-content" class="n-main-content">
+          <!-- Start Documentation Content -->
+<div class="ie-main">
+
+<div id="ie-new-sidebar-collapse" style="display: none">
+    <img id="sidebar-expand" class="ie-searchbox-icon" src="/it-it/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-new-sidebar">
+    <div id="ie-product-identity-lockup">
+        <div id="sidebar-collapse" class="">
+            <img src="/it-it/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+        </div>
+        <div id="ie-breadcrumb" class="">
+  <ul class="ie-breadcrumb">
+    <li class="">
+      <a href="https://docs.netapp.com">Tutti i documenti</a>
+    </li>
+    
+    
+
+    
+  </ul>
+  
+  <div class="ie-product-name" >
+    <!--<a href="/it-it/ontap-apps-dbs/">-->
+      Enterprise applications
+    <!--</a>-->
+  </div>
+</div>
+
+            
+
+        
+        
+
+<div id="ie-searchbox" class="ie-searchbox-sidebar ">
+    <img class="ie-searchbox-icon" src="/it-it/ontap-apps-dbs/images/loupe.svg" alt=""/>
+    <div id="react-search" 
+        data-search-html="/it-it/ontap-apps-dbs/search.html" 
+        data-type="widget"
+        data-placeholder="Esplora la documentazione"
+        data-no-results-found="Nessun risultato per {query}"
+        data-did-you-mean="Cerca {suggestion}."
+        data-no-results-found-did-you-mean="Nessun risultato per {query}. Intendi {suggestion}?"
+        data-results-found="{hitCount} risultati trovati"
+        data-error-message="Si è verificato un errore. Riprova."
+        data-error-reset="Reimposta ricerca"
+        data-sk-es-pf-indexes="" 
+        data-flavor="">
+    </div>
+</div>
+        
+    </div>
+    <div id="ie-new-toc"><script>
+  let sidebarAccordion = true;
+
+  /* specific css rules for Mac */
+  if(navigator.platform.match('Mac') !== null) {
+    document.body.setAttribute('class', 'OSX');
+  }
+
+</script>
+
+<div id="ie-sidebar-container">
+  <ul id="ie-sidebar-list" ><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Applicazioni aziendali"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/index.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/it-it/ontap-apps-dbs/index.html">
+        Applicazioni aziendali
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft SQL Server"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Microsoft SQL Server</div>-->
+         Microsoft SQL Server
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mssql/mssql-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Carichi di lavoro"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-workloads.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mssql/mssql-workloads.html">
+        Carichi di lavoro
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione del database per Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione del database</div>-->
+         Configurazione del database
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Istanza condivisa contro istanza dedicata"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-shared-vs-dedicated.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-shared-vs-dedicated.html">
+        Istanza condivisa contro istanza dedicata
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione CPU"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-cpu-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-cpu-configuration.html">
+        Configurazione CPU
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione della memoria"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-memory-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-memory-configuration.html">
+        Configurazione della memoria
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione dello storage per Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dello storage</div>-->
+         Configurazione dello storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="File di database e filegroup"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-files-and-filegroups.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-files-and-filegroups.html">
+        File di database e filegroup
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="File tempdb"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-tempdb.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-tempdb.html">
+        File tempdb
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Considerazioni sullo storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-storage-considerations.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-storage-considerations.html">
+        Considerazioni sullo storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficienza dello storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-storage-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mssql/mssql-storage-efficiency.html">
+        Efficienza dello storage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protezione dei dati"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-data-protection.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mssql/mssql-data-protection.html">
+        Protezione dei dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Disaster recovery"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-disaster-recovery.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mssql/mssql-disaster-recovery.html">
+        Disaster recovery
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sicurezza dei dati"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mssql/mssql-data-security.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mssql/mssql-data-security.html">
+        Sicurezza dei dati
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MySQL</div>-->
+         MySQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/mysql/mysql-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione del database per MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione del database</div>-->
+         Configurazione del database
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Struttura dei file"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-file-structure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-file-structure.html">
+        Struttura dei file
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica della configurazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-configuration.html">
+        Panoramica della configurazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_log_file_size"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_log_file_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_log_file_size.html">
+        innodb_log_file_size
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_log_at_trx_commit"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_log_at_trx_commit.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_flush_log_at_trx_commit.html">
+        innodb_flush_log_at_trx_commit
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_doublewrite"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_doublewrite.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_doublewrite.html">
+        innodb_doublewrite
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_buffer_pool_size"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_buffer_pool_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_buffer_pool_size.html">
+        innodb_buffer_pool_size
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_method"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_method.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_flush_method.html">
+        innodb_flush_method
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_io_capacity"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_io_capacity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_io_capacity.html">
+        innodb_io_capacity
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_lru_scan_depth"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-innodb_lru_scan_depth.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-innodb_lru_scan_depth.html">
+        innodb_lru_scan_depth
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="open_file_limits"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-open_file_limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-open_file_limits.html">
+        open_file_limits
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione host per MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dell'host</div>-->
+         Configurazione dell'host
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Containerizzazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-containers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-containers.html">
+        Containerizzazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tavoli con fessure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-slot-tables.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-slot-tables.html">
+        Tavoli con fessure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scheduler i/O."
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-schedulers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-schedulers.html">
+        Scheduler i/O.
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Descrittori di file"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-file-descriptors.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-file-descriptors.html">
+        Descrittori di file
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione dello storage per MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dello storage</div>-->
+         Configurazione dello storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL su NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-nfs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-mysql-over-nfs.html">
+        MySQL su NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL su SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-san.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/mysql/mysql-mysql-over-san.html">
+        MySQL su SAN
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Database Oracle"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Database Oracle</div>-->
+         Database Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/oracle/oracle-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione di ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione di ONTAP</div>-->
+         Configurazione di ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RAID"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-raid.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-raid.html">
+        RAID
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Limiti di capacità"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-capacity-limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-capacity-limits.html">
+        Limiti di capacità
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Macchine virtuali di storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-svm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-svm.html">
+        Macchine virtuali di storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Qualità del servizio (QoS)"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-qos.html">
+        Qualità del servizio (QoS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficienza"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-efficiency.html">
+        Efficienza
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Thin provisioning"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-thin-provisioning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-thin-provisioning.html">
+        Thin provisioning
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Failover e switchover"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-failover.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-ontap-config-failover.html">
+        Failover e switchover
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione del database per Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione del database</div>-->
+         Configurazione del database
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dimensioni dei blocchi di dati e ripristino"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-app-config-block-sizes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-app-config-block-sizes.html">
+        Dimensioni dei blocchi di dati e ripristino
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="db_file_multiblock_read_count"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-app-config-mbr.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-app-config-mbr.html">
+        db_file_multiblock_read_count
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="filesystemio_options"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-app-config-filesystemio_options.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-app-config-filesystemio_options.html">
+        filesystemio_options
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-app-config-rac.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-app-config-rac.html">
+        Oracle RAC
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione host per database Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dell'host</div>-->
+         Configurazione dell'host
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="AIX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-aix.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-aix.html">
+        AIX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="HP-UX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-hp-ux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-hp-ux.html">
+        HP-UX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-linux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-linux.html">
+        Linux
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux con ASMlib e AFD"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-asmlib-afd.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-asmlib-afd.html">
+        Linux con ASMlib e AFD
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft Windows"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-windows.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-windows.html">
+        Microsoft Windows
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Solaris"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-host-config-solaris.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-host-config-solaris.html">
+        Solaris
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione di rete per Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione di rete</div>-->
+         Configurazione di rete
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interfacce logiche"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-network-config-lifs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-network-config-lifs.html">
+        Interfacce logiche
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione Ethernet"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-network-config-ethernet.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-network-config-ethernet.html">
+        Configurazione Ethernet
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione FC SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-network-config-fc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-network-config-fc.html">
+        Configurazione FC SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Connessione di rete diretta"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-network-config-direct-connect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-network-config-direct-connect.html">
+        Connessione di rete diretta
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione dello storage per database Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dello storage</div>-->
+         Configurazione dello storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN FC"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAN FC</div>-->
+         SAN FC
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Allineamento delle LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-alignment.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-alignment.html">
+        Allineamento delle LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Numero di LUN e dimensioni LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-sizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-sizing.html">
+        Numero di LUN e dimensioni LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Ridimensionamento LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-resizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-resizing.html">
+        Ridimensionamento LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Striping LVM"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lvm-striping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-san-config-lvm-striping.html">
+        Striping LVM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> NFS</div>-->
+         NFS
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-nfs-config-overview.html">
+        Configurazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle Direct NFS (DNFS)"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-dnfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-nfs-config-dnfs.html">
+        Oracle Direct NFS (DNFS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Leasing e blocchi di NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-leases-and-locks.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-nfs-config-leases-and-locks.html">
+        Leasing e blocchi di NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Caching di NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-caching.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-nfs-config-caching.html">
+        Caching di NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dimensioni trasferimento NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-transfer-sizes.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-nfs-config-transfer-sizes.html">
+        Dimensioni trasferimento NFS
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle e NVFAIL"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-nvfail.html">
+        Oracle e NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilità di recupero ASM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-asmru.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-storage-san-config-asmru.html">
+        Utilità di recupero ASM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Virtualizzazione"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-virtualization-introduction.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/oracle/oracle-virtualization-introduction.html">
+        Virtualizzazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tiering"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Tiering</div>-->
+         Tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Policy di tiering"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Policy di tiering</div>-->
+         Policy di tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Invio di dati a un archivio di oggetti"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-policies.html">
+        Invio di dati a un archivio di oggetti
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Recupero dei dati dall'archivio oggetti in corso"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-retrieval-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-retrieval-policies.html">
+        Recupero dei dati dall'archivio oggetti in corso
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Strategie di tiering"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Strategie di tiering</div>-->
+         Strategie di tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="File interi"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-whole-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-whole-file.html">
+        File interi
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="File parziali"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-partial-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-partial-file.html">
+        File parziali
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Selezionare file"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-logs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-logs.html">
+        Selezionare file
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshot"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-snapshots.html">
+        Snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Backup"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-backups.html">
+        Backup
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interruzioni di accesso agli archivi di oggetti"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-tiering-object-store-access-interruptions.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-tiering-object-store-access-interruptions.html">
+        Interruzioni di accesso agli archivi di oggetti
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Data Protection Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Data Protection Oracle</div>-->
+         Data Protection Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RPO, RTO e SLA"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-slas.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-slas.html">
+        RPO, RTO e SLA
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Disponibilità dei dati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-data-availability.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-data-availability.html">
+        Disponibilità dei dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Integrità dei dati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-data-integrity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-data-integrity.html">
+        Integrità dei dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Elementi di base di backup e recovery"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Elementi di base di backup e recovery</div>-->
+         Elementi di base di backup e recovery
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshot"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-snapshots.html">
+        Snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapRestore"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-snaprestore.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-snaprestore.html">
+        SnapRestore
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Backup online basati su snapshot"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-online-backup.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-online-backup.html">
+        Backup online basati su snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Backup ottimizzati per le snapshot di storage"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-storage-snapshot-optimized-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-storage-snapshot-optimized-backups.html">
+        Backup ottimizzati per le snapshot di storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapCenter e altri strumenti"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dp-backup-tools.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dp-backup-tools.html">
+        SnapCenter e altri strumenti
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Disaster recovery Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Disaster recovery Oracle</div>-->
+         Disaster recovery Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MetroCluster"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MetroCluster</div>-->
+         MetroCluster
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architettura fisica"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-physical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-physical.html">
+        Architettura fisica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architettura logica"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-logical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-logical.html">
+        Architettura logica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SyncMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-syncmirror.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-syncmirror.html">
+        SyncMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Failover di Oracle"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-failover.html">
+        Failover di Oracle
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NVFAIL"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-nvfail.html">
+        NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si su MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-si.html">
+        Oracle si su MetroCluster
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC su MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-mcc-rac.html">
+        Oracle RAC su MetroCluster
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sincronizzazione attiva di SnapMirror"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Sincronizzazione attiva di SnapMirror</div>-->
+         Sincronizzazione attiva di SnapMirror
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architettura"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-architecture.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-smbc-architecture.html">
+        Architettura
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Failover"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-smbc-failover.html">
+        Failover
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si con SnapMirror Active Sync"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-smbc-si.html">
+        Oracle si con SnapMirror Active Sync
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC con SnapMirror Active Sync"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-smbc-rac.html">
+        Oracle RAC con SnapMirror Active Sync
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scenari di errore"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failure-scenarios.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-dr-smbc-failure-scenarios.html">
+        Scenari di errore
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Migrazione dei database Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Migrazione dei database Oracle</div>-->
+         Migrazione dei database Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Pianificazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-planning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-planning.html">
+        Pianificazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Procedure"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Procedure</div>-->
+         Procedure
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-procedures-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-procedures-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Spostamento del file dati"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-datafile-move.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-datafile-move.html">
+        Spostamento del file dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Spedizione dei log"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-log-shipping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-log-shipping.html">
+        Spedizione dei log
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Copia dei dati host"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-host-data-copy.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-host-data-copy.html">
+        Copia dei dati host
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Importazione LUN esterne"
+      data-li-level="4" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-4  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Importazione LUN esterne</div>-->
+         Importazione LUN esterne
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Pianificazione"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-planning.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-planning.html">
+        Pianificazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cutover"
+      data-li-level="5#" 
+      class="  ie-sidebar-selected    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-cutover.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html">
+        Cutover
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Completamento"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-completion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-completion.html">
+        Completamento
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conversione del protocollo"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-protocol-conversion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-protocol-conversion.html">
+        Conversione del protocollo
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Script di esempio"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-migration-sample-scripts.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-migration-sample-scripts.html">
+        Script di esempio
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Note aggiuntive"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Note aggiuntive</div>-->
+         Note aggiuntive
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Ottimizzazione delle prestazioni e benchmarking"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-notes-optimization-and-benchmarking.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-notes-optimization-and-benchmarking.html">
+        Ottimizzazione delle prestazioni e benchmarking
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Blocchi NFS obsoleti"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-notes-stale-nfs-locks.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-notes-stale-nfs-locks.html">
+        Blocchi NFS obsoleti
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verifica dell'allineamento di WAFL"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html">
+        Verifica dell'allineamento di WAFL
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="PostgreSQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> PostgreSQL</div>-->
+         PostgreSQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/postgres/postgres-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione host per PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione del database</div>-->
+         Configurazione del database
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architettura"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-architecture.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-architecture.html">
+        Architettura
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inizializzazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-initialization.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-initialization.html">
+        Inizializzazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Impostazioni"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-db-config.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-db-config.html">
+        Impostazioni
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tablespace"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-tablespaces.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-tablespaces.html">
+        Tablespace
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione dello storage per PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configurazione dello storage</div>-->
+         Configurazione dello storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-nfs-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-nfs-filesystems.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-san-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-san-filesystems.html">
+        SAN
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protezione dei dati per PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Protezione dei dati</div>-->
+         Protezione dei dati
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Data Protection nativa"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-native-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-native-dp.html">
+        Data Protection nativa
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tecnologia Snapshot"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-snapshot-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-snapshot-dp.html">
+        Tecnologia Snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Software per la data Protection"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/postgres/postgres-snapcenter-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/postgres/postgres-snapcenter-dp.html">
+        Software per la data Protection
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAP</div>-->
+         SAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP HANA e AnyDB"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="sap-solutions.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/ontap-apps-dbs/sap-solutions.html">
+        SAP HANA e AnyDB
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware</div>-->
+         VMware
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware vSphere con ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware vSphere con ONTAP</div>-->
+         VMware vSphere con ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Storage unificato"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-unified.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-unified.html">
+        Storage unificato
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tool di virtualizzazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vtools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-vtools.html">
+        Tool di virtualizzazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione basata su policy di Virtual Volume e storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vvols_and_spbm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-vvols_and_spbm.html">
+        Gestione basata su policy di Virtual Volume e storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Datastore e protocolli"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Datastore e protocolli</div>-->
+         Datastore e protocolli
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-top.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-datastores-top.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-san.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-datastores-san.html">
+        SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-nfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-datastores-nfs.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumi FlexGroup"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-fg.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-datastores-fg.html">
+        Volumi FlexGroup
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazione di rete"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-network.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-network.html">
+        Configurazione di rete
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cloning"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-cloning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-cloning.html">
+        Cloning
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protezione dei dati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-dp.html">
+        Protezione dei dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="QoS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-qos.html">
+        QoS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione basata su criteri di storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-policy-and-vvols.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-policy-and-vvols.html">
+        Gestione basata su criteri di storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware Storage Distributed Resource Scheduler"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-sdrs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-sdrs.html">
+        VMware Storage Distributed Resource Scheduler
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Impostazioni consigliate"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vsphere-settings.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vsphere-settings.html">
+        Impostazioni consigliate
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumi virtuali (vVol) con ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Volumi virtuali (vVol) con ONTAP</div>-->
+         Volumi virtuali (vVol) con ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vvols-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vvols-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilizzo di vVol con ONTAP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vvols-ontap.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vvols-ontap.html">
+        Utilizzo di vVol con ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Distribuzione dello storage vVol"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vvols-deploy.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vvols-deploy.html">
+        Distribuzione dello storage vVol
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protezione di vVol"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vvols-protect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vvols-protect.html">
+        Protezione di vVol
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Risoluzione dei problemi"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-vvols-resources.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-vvols-resources.html">
+        Risoluzione dei problemi
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware Site Recovery Manager con ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware Site Recovery Manager con ONTAP</div>-->
+         VMware Site Recovery Manager con ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-srm-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-srm-overview.html">
+        Panoramica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Best practice per l'implementazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-srm-deployment_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-srm-deployment_best_practices.html">
+        Best practice per l'implementazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Best practice operative"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-srm-operational_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-srm-operational_best_practices.html">
+        Best practice operative
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Topologie di replica"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-srm-replication_topologies.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-srm-replication_topologies.html">
+        Topologie di replica
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Risoluzione dei problemi di SRM quando si utilizza la replica vVol"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-srm-vvol-troubleshooting.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-srm-vvol-troubleshooting.html">
+        Risoluzione dei problemi di SRM quando si utilizza la replica vVol
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VSphere Metro Storage Cluster con ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VSphere Metro Storage Cluster con ONTAP</div>-->
+         VSphere Metro Storage Cluster con ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Panoramica di vMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware_vmsc_overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware_vmsc_overview.html">
+        Panoramica di vMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Soluzione vSphere ha"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware_vmsc_solution.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware_vmsc_solution.html">
+        Soluzione vSphere ha
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Progettazione vMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware_vmsc_design.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware_vmsc_design.html">
+        Progettazione vMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Resilienza vMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware_vmsc_resiliency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware_vmsc_resiliency.html">
+        Resilienza vMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scenari vMSC con MCC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware_vmsc_scen_mcc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware_vmsc_scen_mcc.html">
+        Scenari vMSC con MCC
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sicurezza dei prodotti"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Sicurezza dei prodotti</div>-->
+         Sicurezza dei prodotti
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Strumenti ONTAP per VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-security-tools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-security-tools.html">
+        Strumenti ONTAP per VMware vSphere
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Plug-in SnapCenter per VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/vmware/vmware-security-snapcenter.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/ontap-apps-dbs/vmware/vmware-security-snapcenter.html">
+        Plug-in SnapCenter per VMware vSphere
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Note legali"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/oracle/oracle-migration-fli-cutover.html" 
+      dale-entry-url="/legal-notices.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/it-it/ontap-apps-dbs/legal-notices.html">
+        Note legali
+      </a></li></ul>
+</div>
+<script>
+
+  $(".ie-sidebar-button").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    expandedLI = $('li.ie-sidebar-expand')
+
+    const li = $(this).closest("li");
+
+    const parentsLI = $(li).parents('li');
+
+    expandedLI.map(element => {
+      if (sidebarAccordion && !li.hasClass('ie-sidebar-expand') && jQuery.inArray(expandedLI[element], parentsLI) == -1) {
+        $(expandedLI[element]).toggleClass('ie-sidebar-expand');
+        $(expandedLI[element]).children("ul").animate({ height: 'toggle' }, 400, function () {
+          $(li).children("ul").toggleClass('ie-sidebar-open');
+
+        })
+      }
+
+    })
+
+    $(li).toggleClass('ie-sidebar-expand');
+    $(li).children("ul").animate({ height: 'toggle' }, 400, function () {
+      $(li).children("ul").toggleClass('ie-sidebar-open');
+    })
+  });
+
+
+  
+    $("li.ie-sidebar-selected").parents('ul').toggleClass("ie-sidebar-open");
+    $("li.ie-sidebar-selected").toggleClass("ie-sidebar-expand")
+    $("ul.ie-sidebar-open").parent().toggleClass("ie-sidebar-expand");
+    $("li.ie-sidebar-selected").children('ul').toggleClass("ie-sidebar-open")
+  
+  
+</script>
+    </div>
+</div>
+<script>
+
+    
+    let sidebarScrollTopPosition = 0;
+    $("#ie-new-toc").on("scroll", function () {
+        if (sidebarScrollTopPosition == 0) {
+            $.cookie("sidebarScroll", $("#ie-new-toc").scrollTop(), {
+                path: "/it-it/ontap-apps-dbs"
+            });
+        }
+
+        if ($("#ie-new-toc").scrollTop() > 0) {
+            $('#ie-product-identity-lockup').addClass('ie-addShadow');
+        } else {
+            $('#ie-product-identity-lockup').removeClass('ie-addShadow');
+        }
+    });
+
+    $(function () {
+        if ($.cookie("sidebarScroll")) {
+            $("#ie-new-toc").scrollTop($.cookie("sidebarScroll"));
+        }
+    });
+
+    function setSidebarBottom() {
+        const footerGap = PXinViewport($(".n-footer"));
+        document.getElementById("ie-new-sidebar").style.bottom = Math.max(0, footerGap) + "px";
+    }
+
+    window.onscroll = () => {
+        setSidebarBottom();
+    };
+
+    $("#sidebar-collapse").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        if ($.cookie("sidebarScroll")) {
+            sidebarScrollTopPosition = $.cookie("sidebarScroll");
+        }
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 350, function () {
+            $("#ie-new-sidebar-collapse").show();
+            $("#ie-new-sidebar").removeClass("open")
+            $("#ie-new-sidebar").addClass("close")
+            $("#ie-new-sidebar").removeAttr("style")
+        });
+        $(".ie-content-pane").animate({ width: (width + sidebarWidth), marginLeft: (marginLeft - sidebarWidth) }, 350, function () {
+            resizeContent()
+        })
+
+    });
+    $("#sidebar-expand").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 250, function () {
+            $('#ie-new-sidebar').css('display', 'flex');
+            $("#ie-new-sidebar-collapse").hide();
+            $("#ie-new-sidebar").removeClass("close")
+            $("#ie-new-sidebar").addClass("open")
+            setSidebarBottom();
+
+            if (sidebarScrollTopPosition != 0) {
+                $.cookie("sidebarScroll", sidebarScrollTopPosition, {
+                    path: "/it-it/ontap-apps-dbs"
+                })
+                $("#ie-new-toc").scrollTop(sidebarScrollTopPosition);
+                sidebarScrollTopPosition = 0;
+            }
+        });
+        $(".ie-content-pane").animate({ width: (width - sidebarWidth), 'marginLeft': (marginLeft + sidebarWidth) }, 250, function () {
+            resizeContent()
+        })
+    });
+    function resizeContent() {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        const rightNavbarVisible =  $("#ie-right-navbar").css('display') && $("#ie-right-navbar").css('display') != 'none';
+        const sidebarVisible = $("#ie-new-sidebar").css('display') != 'none';
+        const rightNavbarWidth = $("#ie-right-navbar").width();
+        const rightNavbarCollapseWidth = $("#ie-right-navbar-collapse").width();
+        const rightNavbarCollapseVisible = $("#ie-right-navbar-collapse").css('display') && $("#ie-right-navbar-collapse").css('display') != 'none';
+        
+        if (rightNavbarVisible && sidebarVisible) {
+            $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarWidth}px)`)
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+        } else if (sidebarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarCollapseWidth}px)`)
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar").width()}px)`)
+            }
+
+        } else if (rightNavbarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            $(".ie-content-pane").width(`calc(100% - ${rightNavbarWidth}px)`)
+        } else {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${rightNavbarCollapseWidth}px)`);
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar-collapse").width()}px) `);
+            }
+            
+        }
+    }
+    $(window).on("resize load", function () {
+        setSidebarBottom();
+        resizeContent()
+    });
+
+
+</script>
+
+<div class="ie-content-pane ie-component-detail-content ie-component-detail-content--show-code">
+    <!-- Begin of page container --><article class="page-content" id="main">
+      <!-- include utility.html -->
+      <div class="ie-info-disclaimer">
+    <span>
+      <div class="ie-info-disclaimer-container">
+        <div class="ie-info-disclaimer-icon">
+          <img src="/it-it/ontap-apps-dbs/images/notification-icons.svg" class="luci-icon" alt="" />
+        </div>
+        <div class="ie-info-disclaimer-content">
+          <span> La versione in lingua italiana fornita proviene da una traduzione automatica. Per eventuali incoerenze, fare riferimento alla versione in lingua inglese. </span>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    </span>
+  </div><div class="ie-component-detail-heading-wrap">
+  <h1 class="ie-component-detail-heading">Migrazione Oracle con FLI: Cutover</h1>
+</div>
+
+<div id="ie-byline">
+  
+<div class="page-details">
+    
+        
+            <time datetime="2024-03-13 14:14:58 +0000">03/13/2024</time>
+        
+    
+    
+        <span>Collaboratori
+        </span>
+    
+    
+</div>
+<div class="page-controls">
+    <div id="contribute-dropdown" class="custom-dropdown custom-dropdown-contrib" >
+        <div class="custom-dropdown-select custom-dropdown-select-contrib">
+        <span class="contrib-name"><img src="/it-it/ontap-apps-dbs/images/discuss-sm.svg" alt="" class="github-icon" />Suggerisci modifiche</span>
+        <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown invisible" />
+        <img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup" />
+        </div>
+        <ul class="custom-dropdown-menu suggested-changes-dropdown"><li>
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs.it-it/issues/new?template=new-from-page.yml&page-url=https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html&page-title=Migrazione Oracle con FLI: Cutover" class="page-nav-contribute-link" role="button">Richiedi modifiche alla documentazione</a>
+            </li><li> 
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs/blob/main/oracle/oracle-migration-fli-cutover.adoc" class="page-nav-contribute-link" role="button">Modifica questa pagina</a>
+            </li><li><a target="_blank" href="https://docs.netapp.com/us-en/contribute/" class="page-nav-contribute-link"  >Scopri come collaborare</a></li>
+        </ul>
+    </div>
+    <div id="pdf-control-container">
+        <div class="n-pdf-header">
+            <a id="toggleButtonPdf" class="n-pdf-button" type="button">
+                <img class="adobe-icon" src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>PDF<img src="/it-it/ontap-apps-dbs/images/dropdown-arrow.svg" class="custom-icon" alt="" />
+            </a>
+        </div>
+        <div class="n-pdf-body-container">
+            <ul id="toggleContainerPdf" class="n-pdf-body" style="display:none;"><li class="pdf-ux-container">
+                    
+                    
+                    
+                    <a target="_blank" class="pdf-download-link" href="/it-it/ontap-apps-dbs/pdfs/fullsite-sidebar/ONTAP_e_applicazioni_aziendali.pdf" >
+                    <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>PDF del sito di questa documentazione</a>
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Microsoft SQL Server
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_del_database_per_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione del database
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_dello_storage_per_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dello storage
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/MySQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MySQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_del_database_per_MySQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione del database
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_host_per_MySQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dell'host
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_dello_storage_per_MySQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dello storage
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Database_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Database Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_di_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione di ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_del_database_per_Oracle_Database.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione del database
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_host_per_database_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dell'host
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_di_rete_per_Oracle_Database.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione di rete
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_dello_storage_per_database_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dello storage
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/SAN_FC.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAN FC
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/NFS.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            NFS
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Tiering.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Tiering
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Policy_di_tiering.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Policy di tiering
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Strategie_di_tiering.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Strategie di tiering
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Data_Protection_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Data Protection Oracle
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Elementi_di_base_di_backup_e_recovery.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Elementi di base di backup e recovery
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Disaster_recovery_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Disaster recovery Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/MetroCluster.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MetroCluster
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Sincronizzazione_attiva_di_SnapMirror.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Sincronizzazione attiva di SnapMirror
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Migrazione_dei_database_Oracle.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Migrazione dei database Oracle
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Procedure.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Procedure
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Importazione_LUN_esterne.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Importazione LUN esterne
+          </a>
+          
+
+
+    <ul class="subfolders" id="pdf-remove" style="display:none;"><li class="active"></li></ul>
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Note_aggiuntive.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Note aggiuntive
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/PostgreSQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            PostgreSQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_host_per_PostgreSQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione del database
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Configurazione_dello_storage_per_PostgreSQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurazione dello storage
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Protezione_dei_dati_per_PostgreSQL.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Protezione dei dati
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/SAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAP
+          </a>
+          
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/VMware.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/VMware_vSphere_con_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware vSphere con ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Datastore_e_protocolli.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Datastore e protocolli
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Volumi_virtuali__vVol__con_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Volumi virtuali (vVol) con ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/VMware_Site_Recovery_Manager_con_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware Site Recovery Manager con ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/VSphere_Metro_Storage_Cluster_con_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VSphere Metro Storage Cluster con ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/ontap-apps-dbs/pdfs/sidebar/Sicurezza_dei_prodotti.pdf" 
+            
+          >
+            <img src="/it-it/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Sicurezza dei prodotti
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+</li></ul>
+            <div class="zip-pdf-link-container" style="display: none;">   
+                <a href="#" id="zipPdf">
+                <img src="/it-it/ontap-apps-dbs/images/pdf-zip.png" alt="" width="16" height="16"/>
+                <pre>Raccolta di documenti PDF separati<span class="zip-size"></span></pre>
+                </a><div id="zip-link-popup" class="hide">
+    <div class="inner-modal">
+        <div class="downloading-progress">
+            <div class="spinner"></div>
+            <h1>Creating your file...</h1>
+            <div>This may take a few minutes. Thanks for your patience.</div>
+            <button class="cancel-download-btn" type="button">Cancel</button>
+        </div>
+        <div class="download-complete hide">
+            <div class="done-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+            </div>
+            <div>Your file is ready</div>
+            <button class="cancel-download-btn" type="button">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".cancel-download-btn").click(function(){
+        $("#zip-link-popup").addClass("hide");
+        $("#zip-link-popup .downloading-progress").removeClass("hide");
+        $("#zip-link-popup .download-complete").addClass("hide");
+    });
+</script></div>
+        </div>
+    </div>        
+<script>
+$("#toggleContainerPdf li.active:last-child").parents('ul.subfolders').toggle('display');
+$("#toggleButtonPdf").on('click', function(e){ 
+    e.stopPropagation();
+    $("#toggleContainerPdf").toggle('display');
+    $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+});
+
+//hide is by clicking outside pdfcontainer
+$(document).on('click', function (e) {
+    if ($('#toggleContainerPdf').is(':visible') && !$('.n-pdf-body-container').is(e.target) && !$('.n-pdf-body-container').has(e.target).length)  {
+        
+        $("#toggleContainerPdf").toggle('display');
+        $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+        $("#toggleButtonPdf").removeClass("active");
+    }
+});
+</script>
+<script>
+    function getPdfLocation() {
+        const pdfLocation = window.scrollX + document.querySelector('#pdf-control-container').getBoundingClientRect().left
+        if (pdfLocation < 450) {
+            $(".n-pdf-body-container").addClass("block")
+        } else {
+            $(".n-pdf-body-container").removeClass("block")
+        }
+    
+    }
+    $( window ).on( "resize", function() {
+        getPdfLocation()
+} );
+</script>
+<script>
+    const pdfButtonWidth =  $(".n-pdf-header").width();
+    const pdfMenuWidth = $(".n-pdf-body-container").width();
+    $(".n-pdf-body-container").css('margin-left', `calc(${pdfButtonWidth - pdfMenuWidth}px)`);
+</script>
+</div>
+
+    
+
+</div>
+
+
+
+
+<div class="content-to-index">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>Una parte delle interruzioni durante l'importazione di LUN esterne è inevitabile a causa della necessità di modificare la configurazione di rete FC. Tuttavia, l'interruzione non deve durare più a lungo del tempo necessario per riavviare l'ambiente di database e aggiornare lo zoning FC per passare dalla connettività FC dell'host al ONTAP.</p>
+</div>
+<div class="paragraph">
+<p>Questo processo può essere riassunto come segue:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Quiete di tutta l'attività LUN sui LUN esterni.</p>
+</li>
+<li>
+<p>Reindirizzare le connessioni FC dell'host al nuovo sistema ONTAP.</p>
+</li>
+<li>
+<p>Attivare il processo di importazione.</p>
+</li>
+<li>
+<p>Rilevare nuovamente i LUN.</p>
+</li>
+<li>
+<p>Riavviare il database.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Non è necessario attendere il completamento del processo di migrazione. Non appena inizia la migrazione di un determinato LUN, questo è disponibile su ONTAP e può fornire dati durante il processo di copia dei dati. Tutte le letture vengono passate alla LUN esterna e tutte le scritture vengono scritte in modo sincrono su entrambi gli array. L'operazione di copia è molto veloce e l'overhead del reindirizzamento del traffico FC è minimo, per cui qualsiasi impatto sulle performance deve essere transitorio e minimo. In caso di problemi, è possibile ritardare il riavvio dell'ambiente fino al completamento del processo di migrazione e all'eliminazione delle relazioni di importazione.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chiudere-il-database">Chiudere il database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Il primo passo per chiudere l'ambiente in questo esempio è arrestare il database.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[oracle@host1 bin]$ . oraenv
+ORACLE_SID = [oracle] ? FLIDB
+The Oracle base remains unchanged with value /orabin
+[oracle@host1 bin]$ sqlplus / as sysdba
+SQL*Plus: Release 12.1.0.2.0
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Automatic Storage Management, OLAP, Advanced Analytics
+and Real Application Testing options
+SQL&gt; shutdown immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chiudere-i-servizi-di-rete">Chiudere i servizi di rete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Uno dei file system basati su SAN oggetto della migrazione include anche i servizi Oracle ASM. La disattivazione dei LUN sottostanti richiede lo smontaggio dei file system, il che a sua volta significa l'arresto di tutti i processi con file aperti su questo file system.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[oracle@host1 bin]$ ./crsctl stop has -f
+CRS-2791: Starting shutdown of Oracle High Availability Services-managed resources on 'host1'
+CRS-2673: Attempting to stop 'ora.evmd' on 'host1'
+CRS-2673: Attempting to stop 'ora.DATA.dg' on 'host1'
+CRS-2673: Attempting to stop 'ora.LISTENER.lsnr' on 'host1'
+CRS-2677: Stop of 'ora.DATA.dg' on 'host1' succeeded
+CRS-2673: Attempting to stop 'ora.asm' on 'host1'
+CRS-2677: Stop of 'ora.LISTENER.lsnr' on 'host1' succeeded
+CRS-2677: Stop of 'ora.evmd' on 'host1' succeeded
+CRS-2677: Stop of 'ora.asm' on 'host1' succeeded
+CRS-2673: Attempting to stop 'ora.cssd' on 'host1'
+CRS-2677: Stop of 'ora.cssd' on 'host1' succeeded
+CRS-2793: Shutdown of Oracle High Availability Services-managed resources on 'host1' has completed
+CRS-4133: Oracle High Availability Services has been stopped.
+[oracle@host1 bin]$</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="smontare-i-file-system">Smontare i file system</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Se tutti i processi vengono arrestati, l'operazione umount ha esito positivo. Se l'autorizzazione viene negata, è necessario che sul file system sia presente un processo con blocco. Il <code>fuser</code> command può aiutare a identificare questi processi.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 ~]# umount /orabin
+[root@host1 ~]# umount /backups</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="disattivare-i-gruppi-di-volumi">Disattivare i gruppi di volumi</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Una volta smontati tutti i file system di un dato gruppo di volumi, è possibile disattivare il gruppo di volumi.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 ~]# vgchange --activate n sanvg
+  0 logical volume(s) in volume group "sanvg" now active
+[root@host1 ~]#</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="modifiche-alla-rete-fc">Modifiche alla rete FC</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>È ora possibile aggiornare le zone FC per rimuovere tutti gli accessi dall'host all'array esterno e stabilire l'accesso a ONTAP.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="avviare-il-processo-di-importazione">Avviare il processo di importazione</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Per avviare i processi di importazione LUN, eseguire <code>lun import start</code> comando.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Cluster01::lun import*&gt; lun import start -vserver vserver1 -path /vol/new_asm/LUN0
+Cluster01::lun import*&gt; lun import start -vserver vserver1 -path /vol/new_asm/LUN1
+...
+Cluster01::lun import*&gt; lun import start -vserver vserver1 -path /vol/new_lvm/LUN8
+Cluster01::lun import*&gt; lun import start -vserver vserver1 -path /vol/new_lvm/LUN9
+Cluster01::lun import*&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="monitorare-lavanzamento-dellimportazione">Monitorare l'avanzamento dell'importazione</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>L'operazione di importazione può essere monitorata con <code>lun import show</code> comando. Come illustrato di seguito, è in corso l'importazione di tutte le LUN da 20 GB, il che significa che i dati sono ora accessibili tramite ONTAP, anche se l'operazione di copia dei dati continua a proseguire.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Cluster01::lun import*&gt; lun import show -fields path,percent-complete
+vserver   foreign-disk path              percent-complete
+--------- ------------ ----------------- ----------------
+vserver1  800DT$HuVWB/ /vol/new_asm/LUN4 5
+vserver1  800DT$HuVWBW /vol/new_asm/LUN0 5
+vserver1  800DT$HuVWBX /vol/new_asm/LUN1 6
+vserver1  800DT$HuVWBY /vol/new_asm/LUN2 6
+vserver1  800DT$HuVWBZ /vol/new_asm/LUN3 5
+vserver1  800DT$HuVWBa /vol/new_asm/LUN5 4
+vserver1  800DT$HuVWBb /vol/new_asm/LUN6 4
+vserver1  800DT$HuVWBc /vol/new_asm/LUN7 4
+vserver1  800DT$HuVWBd /vol/new_asm/LUN8 4
+vserver1  800DT$HuVWBe /vol/new_asm/LUN9 4
+vserver1  800DT$HuVWBf /vol/new_lvm/LUN0 5
+vserver1  800DT$HuVWBg /vol/new_lvm/LUN1 4
+vserver1  800DT$HuVWBh /vol/new_lvm/LUN2 4
+vserver1  800DT$HuVWBi /vol/new_lvm/LUN3 3
+vserver1  800DT$HuVWBj /vol/new_lvm/LUN4 3
+vserver1  800DT$HuVWBk /vol/new_lvm/LUN5 3
+vserver1  800DT$HuVWBl /vol/new_lvm/LUN6 4
+vserver1  800DT$HuVWBm /vol/new_lvm/LUN7 3
+vserver1  800DT$HuVWBn /vol/new_lvm/LUN8 2
+vserver1  800DT$HuVWBo /vol/new_lvm/LUN9 2
+20 entries were displayed.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Se è necessario un processo non in linea, ritardare il riscoperta o il riavvio dei servizi fino al <code>lun import show</code> il comando indica che tutta la migrazione è stata eseguita correttamente e completata. È quindi possibile completare il processo di migrazione come descritto in <a href="../migration/migration_options.html#foreign-lun-import-fli">"Importazione di LUN esterne - completamento"</a>.</p>
+</div>
+<div class="paragraph">
+<p>Se hai bisogno di una migrazione online, procedi con il rilevamento dei LUN nella nuova sede e attiva i servizi.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="eseguire-la-scansione-delle-modifiche-al-dispositivo-scsi">Eseguire la scansione delle modifiche al dispositivo SCSI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Nella maggior parte dei casi, l'opzione più semplice per ritrovare nuove LUN è riavviare l'host. In questo modo, si rimuovono automaticamente i vecchi dispositivi obsoleti, si rilevano correttamente tutti i nuovi LUN e si creano dispositivi associati come i dispositivi multipathing. L'esempio qui mostra una procedura completamente online a scopo dimostrativo.</p>
+</div>
+<div class="paragraph">
+<p>Attenzione: Prima di riavviare un host, assicurarsi che tutte le voci in <code>/etc/fstab</code> Il riferimento alle risorse SAN migrate verrà commentato. Se questa operazione non viene eseguita e si verificano problemi con l'accesso LUN, il sistema operativo potrebbe non avviarsi. Questa situazione non danneggia i dati. Tuttavia, può essere molto scomodo avviare in modalità rescue o in una modalità simile e correggere <code>/etc/fstab</code> In modo che il sistema operativo possa essere avviato per consentire la risoluzione dei problemi.</p>
+</div>
+<div class="paragraph">
+<p>I LUN della versione di Linux utilizzata in questo esempio possono essere rianalizzati con <code>rescan-scsi-bus.sh</code> comando. Se il comando viene eseguito correttamente, nell'output viene visualizzato ogni percorso LUN. L'output può essere difficile da interpretare, ma, se la configurazione di zoning e igroup era corretta, molti LUN dovrebbero apparire che includono un <code>NETAPP</code> stringa fornitore.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# rescan-scsi-bus.sh
+Scanning SCSI subsystem for new devices
+Scanning host 0 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+ Scanning for device 0 2 0 0 ...
+OLD: Host: scsi0 Channel: 02 Id: 00 Lun: 00
+      Vendor: LSI      Model: RAID SAS 6G 0/1  Rev: 2.13
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+Scanning host 1 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+ Scanning for device 1 0 0 0 ...
+OLD: Host: scsi1 Channel: 00 Id: 00 Lun: 00
+      Vendor: Optiarc  Model: DVD RW AD-7760H  Rev: 1.41
+      Type:   CD-ROM                           ANSI SCSI revision: 05
+Scanning host 2 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+Scanning host 3 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+Scanning host 4 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+Scanning host 5 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+Scanning host 6 for  SCSI target IDs  0 1 2 3 4 5 6 7, all LUNs
+Scanning host 7 for  all SCSI target IDs, all LUNs
+ Scanning for device 7 0 0 10 ...
+OLD: Host: scsi7 Channel: 00 Id: 00 Lun: 10
+      Vendor: NETAPP   Model: LUN C-Mode       Rev: 8300
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+ Scanning for device 7 0 0 11 ...
+OLD: Host: scsi7 Channel: 00 Id: 00 Lun: 11
+      Vendor: NETAPP   Model: LUN C-Mode       Rev: 8300
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+ Scanning for device 7 0 0 12 ...
+...
+OLD: Host: scsi9 Channel: 00 Id: 01 Lun: 18
+      Vendor: NETAPP   Model: LUN C-Mode       Rev: 8300
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+ Scanning for device 9 0 1 19 ...
+OLD: Host: scsi9 Channel: 00 Id: 01 Lun: 19
+      Vendor: NETAPP   Model: LUN C-Mode       Rev: 8300
+      Type:   Direct-Access                    ANSI SCSI revision: 05
+0 new or changed device(s) found.
+0 remapped or resized device(s) found.
+0 device(s) removed.</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="verificare-la-presenza-di-dispositivi-multipercorso">Verificare la presenza di dispositivi multipercorso</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Il processo di rilevamento LUN attiva anche la ricreazione dei dispositivi multipath, ma è noto che il driver multipathing Linux presenta problemi occasionali. L'output di <code>multipath - ll</code> dovrebbe essere controllato per verificare che l'output sia come previsto. Per esempio, l'uscita seguente mostra dispositivi multipercorso associati a A. <code>NETAPP</code> stringa fornitore. Ciascun dispositivo dispone di quattro percorsi, di cui due con priorità 50 e due con priorità 10. Anche se l'output esatto può variare con diverse versioni di Linux, questo risultato sembra come previsto.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/ontap-apps-dbs/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+Fare riferimento alla documentazione delle utilità host per la versione di Linux utilizzata per verificare che <code>/etc/multipath.conf</code> le impostazioni sono corrette.
+</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# multipath -ll
+3600a098038303558735d493762504b36 dm-5 NETAPP  ,LUN C-Mode
+size=10G features='4 queue_if_no_path pg_init_retries 50 retain_attached_hw_handle' hwhandler='1 alua' wp=rw
+|-+- policy='service-time 0' prio=50 status=active
+| |- 7:0:1:4  sdat 66:208 active ready running
+| `- 9:0:1:4  sdbn 68:16  active ready running
+`-+- policy='service-time 0' prio=10 status=enabled
+  |- 7:0:0:4  sdf  8:80   active ready running
+  `- 9:0:0:4  sdz  65:144 active ready running
+3600a098038303558735d493762504b2d dm-10 NETAPP  ,LUN C-Mode
+size=10G features='4 queue_if_no_path pg_init_retries 50 retain_attached_hw_handle' hwhandler='1 alua' wp=rw
+|-+- policy='service-time 0' prio=50 status=active
+| |- 7:0:1:8  sdax 67:16  active ready running
+| `- 9:0:1:8  sdbr 68:80  active ready running
+`-+- policy='service-time 0' prio=10 status=enabled
+  |- 7:0:0:8  sdj  8:144  active ready running
+  `- 9:0:0:8  sdad 65:208 active ready running
+...
+3600a098038303558735d493762504b37 dm-8 NETAPP  ,LUN C-Mode
+size=10G features='4 queue_if_no_path pg_init_retries 50 retain_attached_hw_handle' hwhandler='1 alua' wp=rw
+|-+- policy='service-time 0' prio=50 status=active
+| |- 7:0:1:5  sdau 66:224 active ready running
+| `- 9:0:1:5  sdbo 68:32  active ready running
+`-+- policy='service-time 0' prio=10 status=enabled
+  |- 7:0:0:5  sdg  8:96   active ready running
+  `- 9:0:0:5  sdaa 65:160 active ready running
+3600a098038303558735d493762504b4b dm-22 NETAPP  ,LUN C-Mode
+size=10G features='4 queue_if_no_path pg_init_retries 50 retain_attached_hw_handle' hwhandler='1 alua' wp=rw
+|-+- policy='service-time 0' prio=50 status=active
+| |- 7:0:1:19 sdbi 67:192 active ready running
+| `- 9:0:1:19 sdcc 69:0   active ready running
+`-+- policy='service-time 0' prio=10 status=enabled
+  |- 7:0:0:19 sdu  65:64  active ready running
+  `- 9:0:0:19 sdao 66:128 active ready running</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="riattivare-il-gruppo-di-volumi-lvm">Riattivare il gruppo di volumi LVM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Se i LUN LVM sono stati rilevati correttamente, l' <code>vgchange --activate y</code> il comando dovrebbe riuscire. Questo è un buon esempio del valore di un volume manager logico. Una modifica del WWN di una LUN o anche di un numero di serie non è importante perché i metadati del gruppo di volumi vengono scritti sul LUN stesso.</p>
+</div>
+<div class="paragraph">
+<p>Il sistema operativo ha eseguito la scansione dei LUN e ha rilevato una piccola quantità di dati scritti sul LUN che lo identifica come volume fisico appartenente a. <code>sanvg volumegroup</code>. Successivamente, ha costruito tutti i dispositivi necessari. È sufficiente riattivare il gruppo di volumi.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# vgchange --activate y sanvg
+  Found duplicate PV fpCzdLTuKfy2xDZjai1NliJh3TjLUBiT: using /dev/mapper/3600a098038303558735d493762504b46 not /dev/sdp
+  Using duplicate PV /dev/mapper/3600a098038303558735d493762504b46 from subsystem DM, ignoring /dev/sdp
+  2 logical volume(s) in volume group "sanvg" now active</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="rimontare-i-file-system">Rimontare i file system</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dopo la riattivazione del gruppo di volumi, i file system possono essere montati con tutti i dati originali intatti. Come indicato in precedenza, i file system sono completamente operativi anche se la replica dei dati è ancora attiva nel gruppo back.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# mount /orabin
+[root@host1 /]# mount /backups
+[root@host1 /]# df -k
+Filesystem                       1K-blocks      Used Available Use% Mounted on
+/dev/mapper/rhel-root             52403200   8837100  43566100  17% /
+devtmpfs                          65882776         0  65882776   0% /dev
+tmpfs                              6291456        84   6291372   1% /dev/shm
+tmpfs                             65898668      9884  65888784   1% /run
+tmpfs                             65898668         0  65898668   0% /sys/fs/cgroup
+/dev/sda1                           505580    224828    280752  45% /boot
+fas8060-nfs-public:/install      199229440 119368256  79861184  60% /install
+fas8040-nfs-routable:/snapomatic   9961472     30528   9930944   1% /snapomatic
+tmpfs                             13179736        16  13179720   1% /run/user/42
+tmpfs                             13179736         0  13179736   0% /run/user/0
+/dev/mapper/sanvg-lvorabin        20961280  12357456   8603824  59% /orabin
+/dev/mapper/sanvg-lvbackups       73364480  62947536  10416944  86% /backups</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="ripetere-la-scansione-per-i-dispositivi-asm">Ripetere la scansione per i dispositivi ASM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I dispositivi ASMlib dovrebbero essere stati riselezionati al momento della nuova scansione dei dispositivi SCSI. La riscoperta può essere verificata online riavviando ASMlib e quindi eseguendo la scansione dei dischi.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/ontap-apps-dbs/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+Questa fase è pertinente solo alle configurazioni ASM in cui viene utilizzato ASMlib.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Attenzione: Se non viene utilizzato ASMlib, il <code>/dev/mapper</code> i dispositivi dovrebbero essere stati ricreati automaticamente. Tuttavia, le autorizzazioni potrebbero non essere corrette. È necessario impostare autorizzazioni speciali sui dispositivi sottostanti per ASM in assenza di ASMlib. Questa operazione viene solitamente eseguita tramite voci speciali in entrambi <code>/etc/multipath.conf</code> oppure <code>udev</code> o eventualmente in entrambi i set di regole. È possibile che questi file debbano essere aggiornati per riflettere le modifiche apportate all'ambiente in termini di numeri WWN o di serie per assicurarsi che i dispositivi ASM dispongano ancora delle autorizzazioni corrette.</p>
+</div>
+<div class="paragraph">
+<p>In questo esempio, il riavvio di ASMlib e la scansione dei dischi mostrano gli stessi 10 LUN ASM dell'ambiente originale.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# oracleasm exit
+Unmounting ASMlib driver filesystem: /dev/oracleasm
+Unloading module "oracleasm": oracleasm
+[root@host1 /]# oracleasm init
+Loading module "oracleasm": oracleasm
+Configuring "oracleasm" to use device physical block size
+Mounting ASMlib driver filesystem: /dev/oracleasm
+[root@host1 /]# oracleasm scandisks
+Reloading disk partitions: done
+Cleaning any stale ASM disks...
+Scanning system for ASM disks...
+Instantiating disk "ASM0"
+Instantiating disk "ASM1"
+Instantiating disk "ASM2"
+Instantiating disk "ASM3"
+Instantiating disk "ASM4"
+Instantiating disk "ASM5"
+Instantiating disk "ASM6"
+Instantiating disk "ASM7"
+Instantiating disk "ASM8"
+Instantiating disk "ASM9"</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="riavviare-i-servizi-di-rete">Riavviare i servizi di rete</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ora che i dispositivi LVM e ASM sono online e disponibili, è possibile riavviare i servizi grid.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 /]# cd /orabin/product/12.1.0/grid/bin
+[root@host1 bin]# ./crsctl start has</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="riavviare-il-database">Riavviare il database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dopo aver riavviato i servizi di griglia, è possibile avviare il database. Potrebbe essere necessario attendere alcuni minuti affinché i servizi ASM diventino completamente disponibili prima di provare ad avviare il database.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host1 bin]# su - oracle
+[oracle@host1 ~]$ . oraenv
+ORACLE_SID = [oracle] ? FLIDB
+The Oracle base has been set to /orabin
+[oracle@host1 ~]$ sqlplus / as sysdba
+SQL*Plus: Release 12.1.0.2.0
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+Connected to an idle instance.
+SQL&gt; startup
+ORACLE instance started.
+Total System Global Area 3221225472 bytes
+Fixed Size                  4502416 bytes
+Variable Size            1207962736 bytes
+Database Buffers         1996488704 bytes
+Redo Buffers               12271616 bytes
+Database mounted.
+Database opened.
+SQL&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+    </article>
+    <!-- Page Container -->
+  </div>
+
+  
+  <!-- Start Page Toolbar -->
+<div id="ie-right-navbar-collapse" class="close">
+  <img id="navbar-expand" class="ie-searchbox-icon" src="/it-it/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-right-navbar" class="open">
+  <div id="right-navbar-collapse">
+    <img src="/it-it/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+  </div>
+  <div class="page-nav-container">
+    <nav class="page-nav-fixed">
+      <div class="page-nav-title">In questa pagina</div>
+      <div class="page-nav-links">
+        <ul class="page-nav-inner" id="page-menu"></ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<script>
+  resizeContent();
+  function setRightBarHeight() {
+    var h = 0;
+
+    // header 1
+    h += PXinViewport($('.n-footer'));
+    h += PXinViewport($('#ie-new-header'));
+
+    if ($('#ie-right-navbar').length) {
+      $('#ie-right-navbar').css({ height: `calc(100vh - ${h}px)` });
+    }
+    if ($('.page-nav-links').length) {
+      h += 98;
+      $('.page-nav-links').css({ height: `calc(100vh - ${h}px)` });
+    }
+  }
+
+  $(document).ready(function () {
+    // PAGE NAV - Click
+    const MASTHEAD_OFFSET = 65;
+    const SECTIONS = $("main h2, main h3");
+    let calculateActiveSection = false;
+    setTimeout(() => {
+      calculateActiveSection = true;
+    }, 100)
+
+    $(".page-nav__link").click(function (event) {
+      calculateActiveSection = false;
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      var target = $(event.target);
+      target.addClass('page-nav__link--active');
+      location.hash = event.target.hash;
+      setTimeout(() => {
+        calculateActiveSection = true;
+      }, 100)
+
+    });
+
+    // PAGE NAV - Scroll
+    $(window).on('resize scroll', function () {
+      if (calculateActiveSection) {
+        var activeSection = getActiveSection(SECTIONS, MASTHEAD_OFFSET);
+        if (activeSection) {
+          var activeHref = $(activeSection).attr('id');
+          $(".page-nav__link").removeClass('page-nav__link--active');
+          $("#page-menu a[href=#" + activeHref + "]").addClass('page-nav__link--active');
+          if (location.hash != "#" + activeHref) {
+            if (history.replaceState) {
+              history.replaceState(null, null, "#" + activeHref);
+            }
+          }
+        }
+      }
+    });
+
+    $(".n-pdf-button").click(function () {
+      $(this).toggleClass("active");
+    });
+
+    $.fn.isVisibleAndInViewport = function () {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      return elementBottom > viewportTop && elementTop < viewportBottom && $(this).is(":visible");
+    };
+
+
+    $(window).on('resize scroll', function () {
+      setRightBarHeight();
+    });
+
+    $(window).trigger('resize');
+
+
+  });
+
+  $("#right-navbar-collapse").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 350, function () {
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+    });
+    $(".ie-content-pane").animate({ width: (width + rightNavbarWidth) }, 350, function () {
+      resizeContent()
+      setSidebarBottom();
+    })
+
+  });
+  $("#navbar-expand").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 250, function () {
+      $("#ie-right-navbar-collapse").removeClass("open")
+      $("#ie-right-navbar-collapse").addClass("close")
+      $("#ie-right-navbar").removeClass("close")
+      $("#ie-right-navbar").addClass("open")
+      setRightBarHeight();
+      setSidebarBottom();
+    });
+    $(".ie-content-pane").animate({ width: (width - rightNavbarWidth) }, 250, function () {
+      resizeContent()
+    })
+  });
+
+  function navbarResize() {
+    const rightNavbarResized = $("#ie-right-navbar-collapse").hasClass('resized');
+    if (window.innerWidth < 1024) {
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+      $("#ie-right-navbar").removeAttr("style")
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar-collapse").addClass("resized")
+    } else {
+      if (rightNavbarResized) {
+        $('#ie-right-navbar').removeClass('close');
+        $('#ie-right-navbar').addClass('open');
+        $("#ie-right-navbar-collapse").removeClass("resized")
+        $("#ie-right-navbar-collapse").removeClass("open")
+        $("#ie-right-navbar-collapse").addClass("close")
+      }
+    }
+    resizeContent()
+  }
+  navbarResize();
+  $(window).on('resize load', function () {
+    navbarResize()
+  });
+
+  function getActiveSection(sections, offset) {
+    var scrollPosition = $(window).scrollTop() + offset + 5;
+    var activeSection;
+    for (var i = 0; i < sections.length; i++) {
+      var el = $(sections[i]);
+      var activePosition = el.offset().top;
+      if (activePosition > scrollPosition) {
+        break;
+      }
+
+      activeSection = sections[i];
+    }
+
+    return activeSection;
+  }
+
+  $("a[href*=#]:not([href=#])").click(function () {
+    setTimeout(() => {
+      $(window).trigger('scroll');
+    }, 105)
+  })
+
+  const hashOnLoad = location.href.split("#")[1];
+  setTimeout(function () {
+    if (hashOnLoad) {
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      $("#page-menu a[href=#" + hashOnLoad + "]").addClass('page-nav__link--active');
+    }
+  }, 100)
+
+</script>
+
+
+  <div style="clear: both"></div><!-- Main needs to have height --></div>
+
+        </main>
+
+        <footer class="n-footer">
+  <div class="n-footer__bottom">
+    <div class="n-container">
+        <div class="n-footer__left">
+          <li class="n-footer__copyright-link">
+                    <a href="https://www.netapp.com/company/legal/copyright/">© 2024 NetApp, Inc.</a>
+          </li>
+        </div>
+        <div class="n-footer__center">
+          <ul class="n-footer__copyright-list">
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/terms-of-use/">Condizioni per l'utilizzo</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/privacy-policy/">Direttiva sulla privacy</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/cookie-policy/">Direttiva sui cookie</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a class="ot-sdk-show-settings">Impostazioni cookie</a>
+            </li>
+          </ul>
+       </div>
+        <div class="n-footer__right">
+              <li class="n-footer__copyright-link">
+                <a target="_self" href="javascript:netapp_mailto()">Invia feedback su questa pagina</a>
+              </li>
+        </div>
+     </div>
+  </div>
+</footer>
+
+      </div><!-- Elasticsearch JS -->
+      <script type="text/javascript" src='/it-it/ontap-apps-dbs/js/bundle.js'></script>
+
+      <!-- Syntax Highlighting -->
+      <script type="text/javascript" src='/it-it/ontap-apps-dbs/js/prism.js'></script>
+      <script type="text/javascript" src='/it-it/ontap-apps-dbs/js/prism-curl.js'></script>
+    </div>
+    <script>
+      document.body.offsetWidth=1903;
+      cookieLaw = {}
+      cookieLaw.euCountry = "US";
+      cookieLaw.invoke = function(){return false;}
+    </script>
+    <script src='/it-it/ontap-apps-dbs/js/ie-tabbed-blocks.js'></script>
+    <script src='/it-it/ontap-apps-dbs/js/ie-sidebar.js'></script>
+  </body>
+
+</html>
