@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-tiering-snapshots.html 
 keywords: tiering, fabricpool 
-summary: Tiering delle snapshot Oracle 
+summary: Tiering delle snapshot di Oracle e FabricPool 
 ---
-= Tiering delle snapshot Oracle
+= Oracle con tiering delle snapshot FabricPool
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

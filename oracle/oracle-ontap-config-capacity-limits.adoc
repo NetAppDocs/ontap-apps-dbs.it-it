@@ -4,7 +4,7 @@ permalink: oracle/oracle-ontap-config-capacity-limits.html
 keywords: capacity 
 summary: Capacità e spazio libero per database e storage ONTAP 
 ---
-= Gestione della capacità di Oracle e dello storage
+= Gestione della capacità dello storage e dei database Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

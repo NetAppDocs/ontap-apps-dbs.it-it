@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-mcc-syncmirror.html 
 keywords: metrocluster, syncmirror 
-summary: Oracle e SyncMirror 
+summary: Database Oracle con SyncMirror 
 ---
-= SyncMirror - Oracle
+= Database Oracle con SyncMirror
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

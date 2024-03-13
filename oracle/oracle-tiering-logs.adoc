@@ -4,7 +4,7 @@ permalink: oracle/oracle-tiering-logs.html
 keywords: tiering, fabricpool 
 summary: Tiering del log di archivio Oracle 
 ---
-= Tiering dei log Oracle
+= Tiering del log di archivio dei database Oracle
 :allow-uri-read: 
 :nofooter: 
 :icons: font

@@ -9,7 +9,7 @@ summary: Panoramica sulla data Protection di Oracle
 
 
 [role="lead"]
-I dati più mission-critical sono presenti nei database.
+NetApp sa che i dati più mission-critical sono presenti nei database.
 
 Un'azienda non può operare senza accesso ai propri dati, e a volte i dati definiscono l'azienda. Questi dati devono essere protetti; tuttavia, la protezione dei dati non è solo garanzia di un backup utilizzabile, ma consiste nell'eseguire i backup in modo rapido e affidabile, oltre a memorizzarli in modo sicuro.
 

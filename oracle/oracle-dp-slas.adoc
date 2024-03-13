@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dp-slas.html 
 keywords: SLA, data protection, RPO, RTO 
-summary: SLA di data Protection Oracle 
+summary: SLA di protezione dei dati dei database Oracle 
 ---
-= Recovery time objective, recovery point objective e service level agreement
+= RTO, RPO e pianificazione SLA dei database Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: SLA di data Protection Oracle
 
 
 [role="lead"]
-Una strategia di protezione dei dati deve essere definita dai requisiti di business.
+ONTAP ti consente di personalizzare facilmente una strategia di protezione dei dati dei database di Oracle in base ai tuoi requisiti di business.
 
 Questi requisiti includono fattori quali la velocità del recovery, la perdita massima consentita di dati e le esigenze di conservazione del backup. Il piano di protezione dei dati deve anche tenere in considerazione i vari requisiti normativi per la conservazione e il ripristino dei dati. Infine, è necessario considerare diversi scenari di ripristino dei dati, che vanno dal recupero tipico e prevedibile derivante da errori di utenti o applicazioni fino a scenari di ripristino di emergenza che includono la perdita completa di un sito.
 

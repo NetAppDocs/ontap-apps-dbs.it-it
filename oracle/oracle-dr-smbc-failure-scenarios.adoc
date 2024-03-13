@@ -1,10 +1,10 @@
 ---
 permalink: oracle/oracle-dr-smbc-failure-scenarios.html 
 sidebar: sidebar 
-keywords: SM-BC, smbc, failover 
-summary: Scenari di errore di Oracle SM-BC 
+keywords: SnapMirror active sync, smbc, failover 
+summary: Scenari di errori di sincronizzazione attivi per i database Oracle e SnapMirror 
 ---
-= Scenari di guasti di Oracle SM-BC
+= Scenari di errori di sincronizzazione attiva per i database Oracle e SnapMirror
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: Scenari di errore di Oracle SM-BC
 
 
 [role="lead"]
-Esistono diversi scenari di guasti a SnapMirror Business Continuity (SM-BC), ciascuno con risultati differenti.
+Esistono vari scenari di guasti di SnapMirror Active Sync (SM-AS), ciascuno con risultati diversi.
 
 [cols="1,1"]
 |===
@@ -43,7 +43,7 @@ Quando il sito è in linea, viene eseguita una risincronizzazione automatica.
 | Perdita di dischi | L'io continua per un massimo di tre guasti consecutivi al disco. Questo fa parte di RAID-TEC. 
 
 
-| Perdita dell'intero sito in un'implementazione tipica | I server sul sito in errore non saranno più disponibili. Le applicazioni che supportano il clustering possono essere configurate per l'esecuzione in entrambi i siti e la continuità delle operazioni sul sito alternativo, anche se la maggior parte di tali applicazioni richiede un tiebreaker a 3rd siti, come SM-BC richiede il mediatore.
+| Perdita dell'intero sito in un'implementazione tipica | I server sul sito in errore non saranno più disponibili. Le applicazioni che supportano il clustering possono essere configurate per l'esecuzione in entrambi i siti e la continuità delle operazioni sul sito alternativo, anche se la maggior parte di tali applicazioni richiede un tiebreaker a 3rd siti, in modo simile a quanto SM-AS richiede il mediatore.
 
 Senza cluster a livello di applicazione, le applicazioni dovranno essere avviate nel sito rimasto. Ciò influisce sulla disponibilità, ma viene mantenuto RPO=0. Non si perderebbero dati. 
 |===

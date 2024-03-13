@@ -23,7 +23,7 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 +
 ** Poiché non esiste alcuna conversione automatica del datastore tra NFSv3 e NFSv4.1, creare un nuovo datastore NFSv4.1 e utilizzare Storage vMotion per migrare le macchine virtuali nel nuovo datastore.
 ** Fare riferimento alle note della tabella di interoperabilità NFS v4.1 nella https://mysupport.netapp.com/matrix/["Tool NetApp Interoperability Matrix"^] Per i livelli di patch ESXi specifici richiesti per il supporto.
-** VMware supporta nconnect con NFSv3 a partire da vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili https://docs.netapp.com/us-en/netapp-solutions_nconnect/virtualization/vmware-vsphere8-nfsv3-nconnect.html["Funzione NFSv3 nConnect con NetApp e VMware"]
+** VMware supporta nconnect con NFSv3 a partire da vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili link:vmware-vsphere-network.html#nfs["qui"].
 
 
 * Le policy di esportazione NFS vengono utilizzate per controllare l'accesso da parte degli host vSphere. È possibile utilizzare un criterio con più volumi (datastore). Con NFSv3, ESXi utilizza lo stile di sicurezza sys (UNIX) e richiede l'opzione di montaggio root per eseguire le macchine virtuali. In ONTAP, questa opzione viene definita superutente e, quando viene utilizzata l'opzione superutente, non è necessario specificare l'ID utente anonimo. Tenere presente che le regole dei criteri di esportazione con valori diversi per `-anon` e. `-allow-suid` Può causare problemi di rilevamento SVM con gli strumenti ONTAP. Ecco un esempio di politica:

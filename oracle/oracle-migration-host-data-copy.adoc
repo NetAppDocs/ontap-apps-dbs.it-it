@@ -4,7 +4,7 @@ permalink: oracle/oracle-migration-host-data-copy.html
 keywords: migration, oracle, data copy, lvm, rebalance, asm 
 summary: Migrazione di Oracle mediante lo stack di storage lato host 
 ---
-= Copia dei dati host Oracle
+= Copia dei dati host del database Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

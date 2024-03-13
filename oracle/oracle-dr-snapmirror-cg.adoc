@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-snapmirror-cg.html 
 keywords: oracle, data protection, DR, CG 
-summary: Replica di gruppo di coerenza per i database Oracle 
+summary: Disaster recovery di database Oracle e gruppo di coerenza 
 ---
-= Disaster recovery di gruppo di coerenza
+= Disaster recovery di database Oracle e gruppo di coerenza
 :allow-uri-read: 
 
 

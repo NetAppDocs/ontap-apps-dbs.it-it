@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dp-planning.html 
 keywords: data protection, DR, snapshots, CG 
-summary: Strategie di protezione dei dati di ONTAP 
+summary: Pianificazione della protezione dei dati per i database Oracle 
 ---
-= Pianificazione della protezione dei dati
+= Pianificazione della protezione dei dati per i database Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: Strategie di protezione dei dati di ONTAP
 
 
 [role="lead"]
-La corretta architettura di protezione dei dati aziendali dipende dai requisiti di business correlati a conservazione dei dati, ripristinabilità e tolleranza per le interruzioni durante i vari eventi.
+La corretta architettura di protezione dei dati del database Oracle dipende dai requisiti di business relativi alla conservazione dei dati, alla ripristinabilità e alla tolleranza per le interruzioni durante i vari eventi.
 
 Ad esempio, consideriamo il numero di applicazioni, database e set di dati importanti inclusi nell'ambito della fornitura. La costruzione di una strategia di backup per un singolo set di dati che garantisca la conformità con gli SLA tipici è piuttosto semplice, perché non ci sono molti oggetti da gestire. Con l'aumento del numero di set di dati, il monitoraggio diventa più complicato e gli amministratori potrebbero essere costretti a spendere una crescente quantità di tempo nella risoluzione degli errori di backup. Quando un ambiente raggiunge il cloud e scala un service provider, è necessario un approccio completamente diverso.
 
@@ -52,7 +52,7 @@ L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un s
 
 == Architettura di replica e disaster recovery
 
-Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster, tra cui link:../metrocluster/overview.html["MetroCluster"] e. link:../smbc/overview.html["Continuità aziendale di SnapMirror"]
+Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster, tra cui link:../metrocluster/overview.html["MetroCluster"] e. link:../smbc/overview.html["Sincronizzazione attiva di SnapMirror"]
 
 L'RPO di DR è limitato dalla larghezza di banda della rete disponibile e dalle dimensioni totali dei dati da proteggere. Dopo la creazione del trasferimento di base iniziale, gli aggiornamenti si basano solo sui dati modificati, che in genere rappresentano una bassa percentuale dell'impatto totale dei dati, sebbene esistano delle eccezioni.
 

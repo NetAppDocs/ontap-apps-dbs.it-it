@@ -10,7 +10,7 @@ entries:
     url: "/oracle/oracle-ontap-config-raid.html"
   - title: Limiti di capacità
     url: "/oracle/oracle-ontap-config-capacity-limits.html"
-  - title: Macchine virtuali per lo storage
+  - title: Macchine virtuali di storage
     url: "/oracle/oracle-ontap-config-svm.html"
   - title: Qualità del servizio (QoS)
     url: "/oracle/oracle-ontap-config-qos.html"
@@ -150,19 +150,19 @@ entries:
       url: "/oracle/oracle-dr-mcc-failover.html"
     - title: NVFAIL
       url: "/oracle/oracle-dr-mcc-nvfail.html"
-    - title: Istanza singola su MetroCluster
+    - title: Oracle si su MetroCluster
       url: "/oracle/oracle-dr-mcc-si.html"
     - title: Oracle RAC su MetroCluster
       url: "/oracle/oracle-dr-mcc-rac.html"
-  - title: Continuità aziendale di SnapMirror
+  - title: Sincronizzazione attiva di SnapMirror
     entries:
     - title: Architettura
       url: "/oracle/oracle-dr-smbc-architecture.html"
     - title: Failover
       url: "/oracle/oracle-dr-smbc-failover.html"
-    - title: Istanza singola su SM-BC
+    - title: Oracle si con SnapMirror Active Sync
       url: "/oracle/oracle-dr-smbc-si.html"
-    - title: Oracle RAC su SM-BC
+    - title: Oracle RAC con SnapMirror Active Sync
       url: "/oracle/oracle-dr-smbc-rac.html"
     - title: Scenari di errore
       url: "/oracle/oracle-dr-smbc-failure-scenarios.html"

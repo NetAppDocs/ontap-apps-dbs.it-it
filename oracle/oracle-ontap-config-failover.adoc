@@ -4,7 +4,7 @@ permalink: oracle/oracle-ontap-config-failover.html
 keywords: failover, switchover 
 summary: 'Le operazioni di takeover e switchover dello storage devono garantire l"integrità delle operazioni dei database Oracle. Inoltre, gli argomenti utilizzati dalle operazioni di takeover e switchover possono influire sull"integrità dei dati se utilizzati in modo errato.' 
 ---
-= Failover/switchover del controller Oracle e ONTAP
+= Failover/switchover dei database Oracle e del controller ONTAP
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

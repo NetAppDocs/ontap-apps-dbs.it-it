@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-tiering-retrieval-policies.html 
 keywords: tiering, FabricPool 
-summary: Criteri di recupero per il tiering Pracle 
+summary: Database Oracle e criteri di recupero FabricPool 
 ---
-= Criteri di recupero
+= Database Oracle e criteri di recupero FabricPool
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

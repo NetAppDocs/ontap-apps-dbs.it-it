@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-migration-planning.html 
 keywords: migration, oracle 
-summary: Pianificazione della migrazione a Oracle 
+summary: Pianificazione della migrazione dei database Oracle 
 ---
-= Pianificazione della migrazione a Oracle
+= Pianificazione della migrazione dei database Oracle
 :allow-uri-read: 
 
 

@@ -1,0 +1,49 @@
+= Funzionamento normale
+:allow-uri-read: 
+
+
+SnapMirror Active Sync supporta due tipi di operazioni di failover dello storage: Pianificate e meno, che funzionano in modi leggermente diversi. Un failover pianificato viene avviato manualmente dall'amministratore per uno switchover rapido verso un sito remoto, mentre il failover non pianificato viene avviato automaticamente dal mediatore del terzo sito. Lo scopo principale di un failover pianificato è quello di eseguire patch e aggiornamenti incrementali, eseguire test di disaster recovery o adottare una politica formale di commutazione delle operazioni tra i siti nel corso dell'anno per dimostrare la piena funzionalità di sincronizzazione attiva.
+
+I diagrammi mostrano cosa accade durante le normali operazioni di failover e failback. Per maggiore facilità di illustrazione, sono raffigurati un LUN replicato. In una configurazione di sincronizzazione attiva di SnapMirror effettiva, la replica si basa sui volumi, dove ogni volume contiene una o più LUN, ma per semplificarne la visione, il livello del volume è stato rimosso.
+
+
+
+== Funzionamento normale
+
+Durante il normale funzionamento, è possibile accedere a un LUN dalla replica locale o remota. La linea rossa indica il percorso ottimizzato come pubblicizzato da ALUA, e il risultato dovrebbe essere che io è preferenzialmente inviato lungo questo percorso.
+
+La linea verde è un percorso attivo, ma richiede una maggiore latenza, perché i/o su quel percorso devono essere passati attraverso il percorso di sincronizzazione attivo di SnapMirror. La latenza aggiuntiva dipende dalla velocità dell'interconnessione tra i siti utilizzati per la sincronizzazione attiva di SnapMirror.
+
+image:smas-failover-1.png["Errore: Immagine grafica mancante"]
+
+
+
+== Guasto
+
+Se la copia del mirror attivo non è più disponibile, a causa di un failover pianificato o non pianificato, ovviamente non sarà più utilizzabile. Tuttavia, il sistema remoto possiede una replica sincrona e i percorsi SAN verso il sito remoto esistono già. Il sistema remoto è in grado di gestire i/o per quel LUN.
+
+image:smas-failover-2.png["Errore: Immagine grafica mancante"]
+
+
+
+== Failover
+
+Il failover fa sì che la copia remota diventi la copia attiva. I percorsi vengono modificati da Active a Active/Optimized e l'io continua a essere gestito senza perdita di dati.
+
+image:smas-failover-3.png["Errore: Immagine grafica mancante"]
+
+
+
+== Riparare
+
+Una volta che il sistema di origine è tornato in servizio, SnapMirror Active Sync può risincronizzare la replica, ma eseguendo l'altra direzione. Attualmente la configurazione è essenzialmente la stessa del punto di partenza, con la sola eccezione che i siti mirror attivi sono stati invertiti.
+
+image:smas-failover-4.png["Errore: Immagine grafica mancante"]
+
+
+
+== Failback
+
+Se lo si desidera, un amministratore può eseguire un failback e riportare la copia attiva delle LUN nei controller originali.
+
+image:smas-failover-1.png["Errore: Immagine grafica mancante"]

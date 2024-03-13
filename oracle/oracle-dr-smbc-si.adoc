@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-smbc-si.html 
 keywords: TR-4899, oracle, smbc, sm-bc 
-summary: Oracle - istanza singola su ONTAP con SM-BC 
+summary: Database Oracle a singola istanza con sincronizzazione attiva SnapMirror 
 ---
-= Oracle a singola istanza con SM-BC
+= Database Oracle a singola istanza con sincronizzazione attiva SnapMirror
 :allow-uri-read: 
 
 
@@ -13,6 +13,6 @@ Il diagramma seguente mostra un semplice modello di distribuzione in cui sono pr
 
 Oracle è configurato solo sul primario. Questo modello risolve il failover dello storage perfetto in caso di disastri sul lato dello storage, senza perdita di dati e senza downtime applicativi. Questo modello, tuttavia, non fornirebbe un'elevata disponibilità dell'ambiente di database durante un errore del sito. Questo tipo di architettura è utile per i clienti che cercano una soluzione senza perdita di dati con alta disponibilità dei servizi di storage, ma accettano che una perdita totale del cluster di database richieda lavoro manuale.
 
-image:smbc-si.png["Errore: Immagine grafica mancante"]
+image:smas-si.png["Errore: Immagine grafica mancante"]
 
 Questo approccio consente inoltre di risparmiare sui costi di licenza Oracle. La preconfigurazione dei nodi di database Oracle nel sito remoto richiede la licenza di tutti i core in base alla maggior parte dei contratti di licenza Oracle. Se il ritardo causato dal tempo richiesto per installare un server di database Oracle e montare la copia di dati rimanente è accettabile, questa progettazione può essere molto conveniente.
