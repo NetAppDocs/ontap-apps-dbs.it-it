@@ -1,0 +1,37 @@
+---
+section: Hyper-V
+title: Hyper-V.
+entries:
+- title: Linee guida per l'implementazione e Best practice per lo storage
+  entries:
+  - title: Panoramica
+    url: "/microsoft/win_overview.html"
+  - title: Storage NetApp e ambiente Windows Server
+    url: "/microsoft/win_environment.html"
+  - title: Provisioning negli ambienti SAN
+    url: "/microsoft/win_san.html"
+  - title: Provisioning negli ambienti SMB
+    url: "/microsoft/win_smb.html"
+  - title: Infrastruttura storage Hyper-V su NetApp
+    url: "/microsoft/win_hyperv_infra.html"
+  - title: Efficienza dello storage
+    url: "/microsoft/win_efficiency.html"
+  - title: Sicurezza
+    url: "/microsoft/win_security.html"
+  - title: Distribuire Nano Server
+    url: "/microsoft/win_deploy_nano.html"
+  - title: Distribuire il cluster Hyper-V.
+    url: "/microsoft/win_deploy_hyperv.html"
+  - title: Distribuire Hyper-V Live Migration in un ambiente in cluster
+    url: "/microsoft/win_deploy_hyperv_lmce.html"
+  - title: Implementazione di Hyper-V Live Migration all'esterno di un ambiente in
+      cluster
+    url: "/microsoft/win_deploy_hyperv_lmoce.html"
+  - title: Distribuire Hyper-V Storage Live Migration
+    url: "/microsoft/win_deploy_hyperv_slm.html"
+  - title: Distribuire la replica Hyper-V all'esterno di un ambiente in cluster
+    url: "/microsoft/win_deploy_hyperv_replica_oce.html"
+  - title: Distribuire la replica Hyper-V in un ambiente in cluster
+    url: "/microsoft/win_deploy_hyperv_replica_ce.html"
+  - title: Dove trovare ulteriori informazioni
+    url: "/microsoft/win_additional_information.html"

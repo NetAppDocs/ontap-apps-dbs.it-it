@@ -1,0 +1,70 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: 'La presente appendice descrive l"implementazione di un cluster Hyper-V ad alta disponibilità sullo storage NetApp.' 
+---
+= Distribuire il cluster Hyper-V.
+:allow-uri-read: 
+
+
+[role="lead"]
+La presente appendice descrive l'implementazione di un cluster Hyper-V.
+
+
+
+== Prerequisiti
+
+* Almeno due server Hyper-V sono connessi tra loro.
+* Su ciascun server Hyper-V è configurato almeno uno switch virtuale.
+* La funzione cluster di failover è abilitata su ogni server Hyper-V.
+* Le condivisioni SMB o i CSV vengono utilizzati come storage condiviso per memorizzare macchine virtuali e relativi dischi per il clustering Hyper-V.
+* Lo storage non deve essere condiviso tra cluster diversi. È necessaria una sola condivisione CSV/CIFS per cluster.
+* Se la condivisione SMB viene utilizzata come storage condiviso, è necessario configurare le autorizzazioni sulla condivisione SMB in modo da consentire l'accesso agli account computer di tutti i server Hyper-V nel cluster.
+
+
+
+
+== Implementazione
+
+. Accedere a uno dei server Windows Hyper-V come membro del gruppo di amministratori.
+. Avviare Server Manager**.**
+. Nella sezione Strumenti, fare clic su failover Cluster Manager.
+. Fare clic sul menu Create Cluster from Actions (Crea cluster da azioni).
+. Fornire dettagli sul server Hyper-V che fa parte di questo cluster.
+. Convalidare la configurazione del cluster. Selezionare Sì quando viene richiesta la convalida della configurazione del cluster e selezionare i test necessari per verificare se i server Hyper-V superano i prerequisiti per far parte del cluster.
+. Una volta completata la convalida, viene avviata la procedura guidata Crea cluster. Nella procedura guidata, specificare il nome del cluster e l'indirizzo IP del cluster per il nuovo cluster. Viene quindi creato un nuovo cluster di failover per il server Hyper-V.
+. Fare clic sul nuovo cluster creato in failover Cluster Manager e gestirlo.
+. Definire lo storage condiviso da utilizzare per il cluster. Può trattarsi di una condivisione SMB o di un CSV.
+. L'utilizzo di una condivisione SMB come storage condiviso non richiede passaggi particolari.
++
+** Configurazione di una CIFS share su uno storage controller NetApp. A tale scopo, vedere la sezione "link:win_smb.html["Provisioning negli ambienti SMB"]".
+
+
+. Per utilizzare un file CSV come archivio condiviso, attenersi alla seguente procedura:
++
+.. Configurare le LUN su uno storage controller NetApp. A tale scopo, vedere la sezione "Provisioning in ambienti SAN".
+.. Assicurarsi che tutti i server Hyper-V nel cluster di failover siano in grado di vedere i LUN NetApp. A tale scopo, per tutti i server Hyper-V che fanno parte del cluster di failover, assicurarsi che i relativi iniziatori siano aggiunti al gruppo iniziatore sullo storage NetApp. Verificare inoltre che i LUN siano stati rilevati e che MPIO sia attivato.
+.. Su uno qualsiasi dei server Hyper-V nel cluster, completare i seguenti passaggi:
++
+... Portare il LUN online, inizializzare il disco, creare un nuovo volume semplice e formattarlo utilizzando NTFS o refs.
+... In failover Cluster Manager, espandere il cluster, espandere Storage, fare clic con il pulsante destro del mouse su dischi, quindi fare clic su Add Disks (Aggiungi dischi). In questo modo si apre la procedura guidata Aggiungi dischi a un cluster che mostra il LUN come disco. Fare clic su OK per aggiungere il LUN come disco.
+... Ora il LUN è denominato Clustered Disk e viene indicato come Available Storage in Disks (Storage disponibile in dischi).
+
+
+.. Fare clic con il pulsante destro del mouse su LUN (disco in cluster) e scegliere Aggiungi a volumi condivisi cluster. Ora il LUN viene visualizzato come CSV.
+.. Il CSV è simultaneamente visibile e accessibile da tutti i server Hyper-V del cluster di failover nella sua posizione locale C:\ClusterStorage\.
+
+
+. Creare una macchina virtuale altamente disponibile:
++
+.. In failover Cluster Manager, selezionare ed espandere il cluster creato in precedenza.
+.. Fare clic su ruoli, quindi su macchine virtuali in azioni. Fare clic su Nuova macchina virtuale.
+.. Selezionare il nodo dal cluster in cui deve risiedere la VM.
+.. Nella procedura guidata per la creazione della macchina virtuale, fornire lo storage condiviso (SMB share o CSV) come percorso di archiviazione della macchina virtuale e dei relativi dischi.
+.. Utilizzare Hyper-V Manager per impostare lo storage condiviso (SMB share o CSV) come percorso predefinito per l'archiviazione della VM e dei relativi dischi per un server Hyper-V.
+
+
+. Verifica del failover pianificato. Sposta le macchine virtuali su un altro nodo utilizzando migrazione live, migrazione rapida o migrazione dello storage (spostamento). Rivedere la sezione "link:\win_deploy_hyperv_lmce.html["Migrazione live in un ambiente cluster"]" per ulteriori dettagli.
+. Verifica del failover non pianificato. Arrestare il servizio cluster sul server proprietario della VM.
+

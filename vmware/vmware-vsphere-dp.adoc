@@ -24,7 +24,7 @@ Questi plug-in offrono funzionalità estese per proteggere i database in ambient
 
 La figura seguente mostra un esempio di implementazione di SnapCenter.
 
-image:vsphere_ontap_image4.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image4.png["Implementazione SnapCenter"]
 
 Per funzionalità avanzate di disaster recovery, è consigliabile utilizzare NetApp SRA per ONTAP con VMware Site Recovery Manager. Oltre al supporto per la replica di datastore in un sito di DR, consente anche test senza interruzioni nell'ambiente di DR mediante il cloning dei datastore replicati. Anche il ripristino da un disastro e la riconprotezione della produzione dopo la risoluzione dell'interruzione sono semplificabili grazie all'automazione integrata in SRA.
 

@@ -14,7 +14,7 @@ summary: Questo documento illustra la sicurezza dei prodotti per gli strumenti O
 
 
 [role="lead"]
-L'engineering del software con i tool NetApp ONTAP per VMware vSphere utilizza le seguenti attività di sviluppo sicuro:
+La progettazione software con strumenti ONTAP per VMware vSphere si avvale delle seguenti attività di sviluppo sicure:
 
 * *Modellazione delle minacce.* lo scopo della modellazione delle minacce è quello di individuare i difetti di sicurezza in una funzionalità, un componente o un prodotto nelle prime fasi del ciclo di vita dello sviluppo software. Un modello di minaccia è una rappresentazione strutturata di tutte le informazioni che influiscono sulla sicurezza di un'applicazione. In sostanza, si tratta di una vista dell'applicazione e del suo ambiente attraverso l'obiettivo della sicurezza.
 * *Dynamic Application Security Testing (DAST).* questa tecnologia è progettata per rilevare le condizioni vulnerabili delle applicazioni in esecuzione. DAST testa le interfacce HTTP e HTML esposte delle applicazioni web-enable.
@@ -27,7 +27,7 @@ L'engineering del software con i tool NetApp ONTAP per VMware vSphere utilizza l
 
 == Funzionalità di sicurezza del prodotto
 
-I tool NetApp ONTAP per VMware vSphere includono le seguenti funzionalità di sicurezza in ogni versione.
+I tool ONTAP per VMware vSphere includono le seguenti funzionalità di sicurezza in ciascuna release.
 
 * *Login banner.* SSH è disattivato per impostazione predefinita e consente l'accesso una sola volta, se abilitato dalla console della macchina virtuale. Il seguente banner di accesso viene visualizzato dopo che l'utente ha inserito un nome utente nel prompt di accesso:
 +

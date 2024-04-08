@@ -1,0 +1,35 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_lmce.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: Questa appendice descrive la distribuzione della migrazione live in un ambiente in cluster. 
+---
+= Implementa la migrazione live di Hyper-V in un ambiente in cluster
+:allow-uri-read: 
+
+
+[role="lead"]
+Questa appendice descrive la distribuzione della migrazione live in un ambiente in cluster.
+
+
+
+== Prerequisiti
+
+Per distribuire la migrazione in tempo reale, è necessario che i server Hyper-V siano configurati in un cluster di failover con storage condiviso. Rivedere la sezione link:win_deploy_hyperv.html["Clustering di Hyper-V."] per ulteriori dettagli.
+
+
+
+== Implementazione
+
+Per utilizzare la migrazione live in un ambiente in cluster, attenersi alla seguente procedura:
+
+. In failover Cluster Manager, selezionare ed espandere il cluster. Se il cluster non è visibile, fare clic su failover Cluster Manager, fare clic su Connetti al cluster e fornire il nome del cluster.
+. Fare clic su ruoli, che elenca tutte le VM disponibili in un cluster.
+. Fare clic con il pulsante destro del mouse sulla macchina virtuale e fare clic su Sposta. In questo modo, sono disponibili tre opzioni:
++
+** *Migrazione live.* è possibile selezionare un nodo manualmente o consentire al cluster di selezionare il nodo migliore. Durante la migrazione live, il cluster copia la memoria utilizzata dalla macchina virtuale dal nodo corrente a un altro nodo. Pertanto, quando la macchina virtuale viene migrata su un altro nodo, la memoria e le informazioni di stato necessarie alla macchina virtuale sono già disponibili per la macchina virtuale. Questo metodo di migrazione è quasi istantaneo, ma è possibile eseguire la migrazione in tempo reale di una sola macchina virtuale alla volta.
+** *Migrazione rapida.* è possibile selezionare un nodo manualmente o consentire al cluster di selezionare il nodo migliore. Durante una migrazione rapida, il cluster copia la memoria utilizzata da una macchina virtuale in un disco nello storage. Pertanto, quando la macchina virtuale viene migrata su un altro nodo, le informazioni di memoria e di stato necessarie alla macchina virtuale possono essere lette rapidamente dal disco dall'altro nodo. Con una migrazione rapida, è possibile migrare più macchine virtuali contemporaneamente.
+** *Migrazione dell'archiviazione di macchine virtuali.* questo metodo utilizza la procedura guidata Sposta archivio di macchine virtuali. Questa procedura guidata consente di selezionare il disco della macchina virtuale e altri file da spostare in un'altra posizione, ad esempio una condivisione CSV o SMB.
+
+
+

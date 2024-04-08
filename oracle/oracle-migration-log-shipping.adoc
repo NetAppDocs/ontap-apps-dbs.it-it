@@ -36,7 +36,7 @@ Il primo passo consiste nel creare un backup del database. In particolare, quest
 
 === Ambiente
 
-In questo esempio, il database di origine si trova su un sistema ONTAP. Il metodo più semplice per creare un backup di un database consiste nell'utilizzare una copia Snapshot. Il database viene messo in modalità di backup a caldo per alcuni secondi mentre un `snapshot create` l'operazione viene eseguita sul volume che ospita i file di dati.
+In questo esempio, il database di origine si trova su un sistema ONTAP. Il metodo più semplice per creare un backup di un database consiste nell'utilizzare uno snapshot. Il database viene messo in modalità di backup a caldo per alcuni secondi mentre un `snapshot create` l'operazione viene eseguita sul volume che ospita i file di dati.
 
 ....
 SQL> alter database begin backup;
@@ -50,7 +50,7 @@ Cluster01::*>
 SQL> alter database end backup;
 Database altered.
 ....
-Il risultato è una copia Snapshot su disco chiamata `hotbackup` che contiene un'immagine dei file di dati in modalità di backup a caldo. Se combinati con i log di archivio appropriati per rendere i file di dati coerenti, i dati in questa copia Snapshot possono essere utilizzati come base per un ripristino o un clone. In questo caso, viene replicato sul nuovo server.
+Il risultato è un'istantanea sul disco chiamata `hotbackup` che contiene un'immagine dei file di dati in modalità di backup a caldo. Se combinati con i log di archivio appropriati per rendere i file di dati coerenti, i dati di questa snapshot possono essere utilizzati come base di un ripristino o di un clone. In questo caso, viene replicato sul nuovo server.
 
 
 
@@ -58,7 +58,7 @@ Il risultato è una copia Snapshot su disco chiamata `hotbackup` che contiene un
 
 Ora il backup deve essere ripristinato nel nuovo ambiente. Questa operazione può essere eseguita in vari modi, tra cui Oracle RMAN, ripristino da un'applicazione di backup come NetBackup o semplice operazione di copia dei file di dati inseriti in modalità hot backup.
 
-In questo esempio, SnapMirror viene utilizzato per replicare in una nuova posizione la copia Snapshot chiamata hot backup.
+In questo esempio, SnapMirror viene utilizzato per replicare l'hot backup dello snapshot in una nuova posizione.
 
 . Creare un nuovo volume per ricevere i dati dello snapshot. Inizializzare il mirroring da `jfsc1_oradata` a. `vol_oradata`.
 +

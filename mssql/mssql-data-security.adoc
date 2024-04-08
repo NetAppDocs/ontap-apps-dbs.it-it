@@ -1,16 +1,16 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-data-security.html 
-keywords: MS-SQL,mssql,SQL Server, securing databases, security 
-summary: Microsoft SQL Server su ONTAP 
+keywords: MSSQL,SQL Server, securing databases on ONTAP, snaplock, multiadmin verification, backup, tamperproof snapshots 
+summary: Protezione di Microsoft SQL Server su ONTAP 
 ---
-= Sicurezza del database
+= Protezione di Microsoft SQL Server su ONTAP
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-La protezione di un ambiente di database è un impegno multidimensionale che va oltre la gestione del database stesso. NetApp offre diverse funzioni esclusive progettate per proteggere gli aspetti dello storage dell'infrastruttura di database.
+La protezione di un ambiente di database SQL Server è un'operazione multidimensionale che va oltre la gestione del database stesso. ONTAP offre diverse funzioni esclusive progettate per proteggere gli aspetti dello storage dell'infrastruttura di database.
 
 
 

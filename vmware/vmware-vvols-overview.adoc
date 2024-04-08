@@ -2,19 +2,19 @@
 sidebar: sidebar 
 permalink: vmware/vmware-vvols-overview.html 
 keywords: tr-4400, vvols, ontap, virtual volumes 
-summary:  
+summary: 'Questa è una panoramica dei volumi virtuali di VMware vSphere (vVol) con ONTAP' 
 ---
 = Panoramica
 :allow-uri-read: 
 
 
 [role="lead"]
-Il software NetApp ONTAP è una soluzione storage leader per gli ambienti VMware vSphere da oltre vent'anni e continua ad aggiungere funzionalità innovative per semplificare la gestione riducendo i costi.
+ONTAP è stata una soluzione storage leader per gli ambienti VMware vSphere da oltre vent'anni e continua ad aggiungere funzionalità innovative per semplificare la gestione e ridurre i costi.
 
 Questo documento tratta le funzionalità di ONTAP per i volumi virtuali VMware vSphere (vVol), incluse le informazioni più recenti sui prodotti e i casi di utilizzo, oltre a Best practice e altre informazioni per semplificare l'implementazione e ridurre gli errori.
 
 
-NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblicati _TR-4400: Volumi virtuali VMware vSphere (vVol) con NetApp ONTAP_
+NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblicati _TR-4400: Volumi virtuali VMware vSphere (vVol) con ONTAP_
 
 Le Best practice integrano altri documenti come guide ed elenchi di compatibilità. Sono sviluppati in base a test di laboratorio e a un'ampia esperienza sul campo da parte di tecnici e clienti NetApp. Potrebbero non essere le uniche pratiche che funzionano o sono supportate, ma sono generalmente le soluzioni più semplici che soddisfano le esigenze della maggior parte dei clienti.
 
@@ -109,19 +109,19 @@ image::vvols-image4.png[Conformità alle policy di storage delle macchine virtua
 
 == Supporto vVol NetApp
 
-NetApp ONTAP ha supportato la specifica VASA dalla sua release iniziale nel 2012. Sebbene altri sistemi storage NetApp possano supportare VASA, questo documento si concentra sulle versioni attualmente supportate di ONTAP 9.
+ONTAP ha supportato la specifica VASA dalla sua versione iniziale nel 2012. Sebbene altri sistemi storage NetApp possano supportare VASA, questo documento si concentra sulle versioni attualmente supportate di ONTAP 9.
 
 
 
-=== NetApp ONTAP
+=== ONTAP
 
-Oltre a ONTAP 9 su sistemi AFF, ASA e FAS, NetApp supporta i workload VMware su ONTAP Select, Amazon FSX per NetApp ONTAP con VMware Cloud su AWS, Azure NetApp Files con Azure VMware, Cloud Volumes Service con Google Cloud VMware Engine e NetApp Private Storage in Equinix, tuttavia, le funzionalità specifiche possono variare in base al provider di servizi e alla connettività di rete disponibile. È inoltre disponibile l'accesso dai guest vSphere ai dati memorizzati in tali configurazioni e a Cloud Volumes ONTAP.
+Oltre a ONTAP 9 su sistemi AFF, ASA e FAS, NetApp supporta i carichi di lavoro VMware su ONTAP Select, Amazon FSX per NetApp con VMware Cloud su AWS, la soluzione Azure NetApp Files con Azure VMware, Cloud Volumes Service con Google Cloud VMware Engine e NetApp Private Storage in Equinix, tuttavia, le funzionalità specifiche possono variare in base al provider di servizi e alla connettività di rete disponibile. È inoltre disponibile l'accesso dai guest vSphere ai dati memorizzati in tali configurazioni e a Cloud Volumes ONTAP.
 
 Al momento della pubblicazione, gli ambienti hyperscaler sono limitati solo agli archivi dati NFS v3 tradizionali, pertanto i vVol sono disponibili solo con sistemi ONTAP on-premise o con sistemi connessi al cloud che offrono la funzionalità completa di sistemi on-premise come quelli ospitati da partner e provider di servizi NetApp in tutto il mondo.
 
 _Per ulteriori informazioni su ONTAP, vedere https://docs.netapp.com/us-en/ontap-family/["Documentazione del prodotto ONTAP"^]_
 
-_Per ulteriori informazioni sulle Best practice di ONTAP e VMware vSphere, vedere https://docs.netapp.com/us-en/netapp-solutions/virtualization/vsphere_ontap_ontap_for_vsphere.html["TR-4597"^]_
+_Per ulteriori informazioni sulle Best practice di ONTAP e VMware vSphere, vedere link:vmware-vsphere-overview.html["TR-4597"^]_
 
 
 

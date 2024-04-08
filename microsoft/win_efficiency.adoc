@@ -1,0 +1,63 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_efficiency.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: 'L"efficienza dello storage ONTAP con Microsoft Hyper-V.' 
+---
+= Efficienza dello storage
+:allow-uri-read: 
+
+
+[role="lead"]
+ONTAP offre un'efficienza dello storage leader del settore per ambienti virtualizzati, incluso Microsoft Hyper-V. NetApp offre anche programmi di garanzia di efficienza dello storage.
+
+
+
+== Deduplica NetApp
+
+La deduplica NetApp rimuove i blocchi duplicati a livello di volume di storage, archiviando una sola copia fisica, indipendentemente dal numero di copie logiche presenti. La deduplica si fa quindi illusione nel fatto che esistano numerose copie di quel blocco. La deduplica rimuove automaticamente i blocchi di dati duplicati su un livello di blocco di 4KB KB in un intero volume. Questo processo recupera lo storage per ottenere spazio e potenziali risparmi sulle performance, riducendo il numero di scritture fisiche su disco. La deduplica può garantire un risparmio di spazio superiore al 70% negli ambienti Hyper-V.
+
+
+
+== Thin provisioning
+
+Il thin provisioning è un modo efficiente per il provisioning dello storage perché lo storage non è preallocato in anticipo. In altre parole, quando un volume o LUN viene creato utilizzando il thin provisioning, lo spazio nel sistema di storage non viene utilizzato. Lo spazio rimane inutilizzato fino a quando i dati non vengono scritti sul LUN o sul volume e viene utilizzato solo lo spazio necessario per memorizzare i dati. NetApp consiglia di attivare il thin provisioning sul volume e di disattivare la prenotazione LUN.
+
+
+
+== Qualità del servizio
+
+La qualità del servizio di storage di Clustered ONTAP consente di raggruppare gli oggetti di storage e di impostare limiti di throughput per il gruppo. È possibile utilizzare la qualità del servizio di storage per limitare il throughput ai carichi di lavoro e monitorare le performance del carico di lavoro. Grazie a questa possibilità, gli amministratori dello storage possono separare i workload in base all'organizzazione, all'applicazione, alla business unit o agli ambienti di produzione o sviluppo.
+
+Negli ambienti aziendali, la qualità del servizio di storage aiuta a ottenere quanto segue:
+
+* Impedisce che i carichi di lavoro degli utenti influiscano l'uno sull'altro.
+* Protegge le applicazioni critiche con tempi di risposta specifici che è necessario soddisfare in ambienti IT-as-a-service (ITaaS).
+* Impedisce che i tenant si influenzino l'uno con l'altro.
+* Evita il peggioramento delle performance con l'aggiunta di ogni nuovo tenant.
+
+
+La qualità del servizio consente di limitare il quantitativo di i/o inviato a una SVM, a un volume flessibile, a una LUN o a un file. L'i/o può essere limitato dal numero di operazioni o dal throughput raw.
+
+La figura seguente illustra l'SVM con una propria policy QoS che applica un limite di throughput massimo.
+
+image:win_image13.png["Storage virtual machine con la propria policy di qualità del servizio, larghezza=319, altezza=341"]
+
+Per configurare una SVM con la propria policy QoS e monitorare il gruppo di policy, esegui i seguenti comandi sul tuo cluster ONTAP:
+
+....
+# create a new policy group pg1 with a maximum throughput of 5,000 IOPS
+cluster::> qos policy-group create pg1 -vserver vs1 -max-throughput 5000iops
+....
+....
+# create a new policy group pg2 without a maximum throughput
+cluster::> qos policy-group create pg2 -vserver vs2
+....
+....
+# monitor policy group performance
+cluster::> qos statistics performance show
+....
+....
+# monitor workload performance
+cluster::> qos statistics workload performance show
+....

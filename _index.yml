@@ -6,12 +6,16 @@ indexpage:
     indicazioni sulle Best practice e le procedure di implementazione per ONTAP e
     le applicazioni e l'infrastruttura aziendali.
   keywords: VMware, vSphere, Oracle, SAP, HANA, SAP HANA, MSSQL, SQL Server, Postgres,
-    postgresql, mysql, mariadb
+    postgresql, mysql, mariadb, Hyper-V
   lead: ONTAP è la base per la gestione dei dati e la protezione dei dati per molte
     applicazioni aziendali e tecnologie di database. Le pagine seguenti contengono
     indicazioni sulle Best practice e le procedure di implementazione per ONTAP e
     le applicazioni e l'infrastruttura aziendali.
   tiles:
+  - title: Microsoft Hyper-V.
+    links:
+    - title: Linee guida per l'installazione e Best practice per lo storage
+      url: "/microsoft/win_overview.html"
   - title: Microsoft SQL Server
     links:
     - title: Microsoft SQL Server su ONTAP

@@ -31,7 +31,7 @@ ONTAP Tools per VMware vSphere è un insieme di strumenti per l'utilizzo dello s
 
 La figura seguente mostra gli strumenti ONTAP per vSphere.
 
-image:vsphere_ontap_image1.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image1.png["Tool ONTAP per vSphere"]
 
 
 

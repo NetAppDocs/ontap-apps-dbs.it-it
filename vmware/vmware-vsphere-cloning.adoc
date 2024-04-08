@@ -22,7 +22,7 @@ I cloni collegati sono ideali per risparmiare spazio, ma aumentano la quantità 
 
 La seguente figura illustra la clonazione ONTAP.
 
-image:vsphere_ontap_image5.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image5.png["Cloning ONTAP"]
 
 La clonazione può essere scaricata su sistemi che eseguono il software ONTAP attraverso diversi meccanismi, in genere a livello di VM, vVol o datastore. Questi includono quanto segue:
 

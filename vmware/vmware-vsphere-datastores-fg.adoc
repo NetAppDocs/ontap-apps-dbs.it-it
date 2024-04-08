@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-datastores-fg.html 
-keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols 
-summary: 'Questa pagina descrive le Best practice per l"implementazione di una soluzione di storage NetApp ONTAP in un ambiente VMware vSphere.' 
+keywords: vSphere, datastore, NFS, nconnect, FlexGroup, session trunking 
+summary: 'In questa pagina sono descritte le Best practice per l"implementazione dei volumi ONTAP FlexGroup in un ambiente VMware vSphere.' 
 ---
 = Volumi FlexGroup
 :hardbreaks:
@@ -14,9 +14,23 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 
 
 [role="lead"]
-ONTAP 9,8 aggiunge il supporto per datastore di volumi FlexGroup in vSphere, oltre al supporto dei tool ONTAP per VMware vSphere e del plug-in SnapCenter per VMware vSphere. FlexGroup semplifica la creazione di datastore di grandi dimensioni e crea automaticamente una serie di volumi costituenti per ottenere le massime performance da un sistema ONTAP. Utilizza FlexGroup con vSphere se desideri un singolo datastore vSphere scalabile con la potenza di un cluster ONTAP completo o se disponi di carichi di lavoro di cloning molto grandi che possono sfruttare il nuovo meccanismo di cloning di FlexGroup.
+Utilizza volumi ONTAP e FlexGroup con VMware vSphere per datastore semplici e scalabili che sfruttano tutta la potenza di un intero cluster ONTAP.
 
-Oltre ai test di sistema estesi con carichi di lavoro vSphere, ONTAP 9.8 aggiunge anche un nuovo meccanismo di offload delle copie per gli archivi dati FlexGroup. Questo utilizza un motore di copia aggiornato che utilizza i primi cloni per popolare una cache locale in ogni volume costituente. La cache locale viene quindi utilizzata per creare rapidamente istanze dei cloni delle macchine virtuali on-demand.
+ONTAP 9,8, insieme ai tool ONTAP per VMware vSphere 9,8 e al plug-in SnapCenter per VMware 4,4, ha aggiunto il supporto per i datastore basati su volumi FlexGroup in vSphere. I volumi FlexGroup semplificano la creazione di datastore di grandi dimensioni e creano automaticamente i volumi costituenti distribuiti necessari nel cluster ONTAP, per ottenere le massime performance da un sistema ONTAP.
+
+Scopri di più su FlexGroup Volumes in link:../nas-containers.html["Report tecnici sui volumi FlexCache e FlexGroup"].
+
+Utilizza i volumi FlexGroup con vSphere se desideri un singolo datastore vSphere scalabile con la potenza di un cluster ONTAP completo o se disponi di carichi di lavoro di cloning molto grandi che possono sfruttare il nuovo meccanismo di cloning di FlexGroup.
+
+
+
+== Offload delle copie
+
+Oltre agli estesi test di sistema con i carichi di lavoro vSphere, ONTAP 9,8 ha aggiunto un nuovo meccanismo di offload delle copie per i datastore FlexGroup. Questo nuovo sistema utilizza un motore di copia migliorato per replicare i file tra i componenti in background consentendo l'accesso sia all'origine che alla destinazione. La cache locale viene quindi utilizzata per creare rapidamente istanze dei cloni delle macchine virtuali on-demand.
+
+Per attivare l'offload delle copie ottimizzato per FlexGroup, fare riferimento alla sezione https://kb.netapp.com/onprem/ontap/dm/VAAI/How_to_Configure_ONTAP_FlexGroups_to_allow_VAAI_copy_offload["Come configurare ONTAP FlexGroup per consentire l'offload delle copie VAAI"]
+
+Potresti accorgerti che se utilizzi il cloning VAAI, ma non quello per mantenere calda la cache, i cloni potrebbero non essere più veloci di una copia basata su host. In questo caso, è possibile regolare il timeout della cache per soddisfare meglio le proprie esigenze.
 
 Considerare il seguente scenario:
 
@@ -26,23 +40,36 @@ Considerare il seguente scenario:
 
 In questo scenario, i primi 8 cloni da completare saranno copie complete, non cloni di file locali. Qualsiasi clonazione aggiuntiva di tale macchina virtuale prima della scadenza del timeout di 160 secondi utilizzerà il motore di clonazione file all'interno di ciascun componente in modo round-robin per creare copie quasi immediate distribuite uniformemente tra i volumi costituenti.
 
-Ogni nuovo processo di clonazione che un volume riceve ripristina il timeout. Se un volume costituente nel FlexGroup di esempio non riceve una richiesta di clone prima del timeout, la cache di quella particolare VM verrà cancellata e il volume dovrà essere popolato di nuovo. Inoltre, se l'origine del clone originale cambia (ad esempio, è stato aggiornato il modello), la cache locale di ciascun componente verrà invalidata per evitare conflitti. La cache è regolabile e può essere impostata in base alle esigenze dell'ambiente.
-
-In ambienti in cui non è possibile sfruttare al meglio la cache FlexGroup, ma è comunque necessario un rapido cloning cross-volume, prendere in considerazione l'utilizzo di vVol. Il cloning tra volumi con vVol è molto più rapido rispetto ai datastore tradizionali, senza fare affidamento su una cache.
+Ogni nuovo processo di clonazione che un volume riceve ripristina il timeout. Se un volume costituente nel FlexGroup di esempio non riceve una richiesta di clone prima del timeout, la cache di quella particolare VM verrà cancellata e il volume dovrà essere popolato di nuovo. Inoltre, se l'origine del clone originale cambia (ad esempio, è stato aggiornato il modello), la cache locale di ciascun componente verrà invalidata per evitare conflitti. Come indicato in precedenza, la cache può essere regolata in base alle esigenze dell'ambiente.
 
 Per ulteriori informazioni sull'utilizzo di FlexGroup con VAAI, fare riferimento a questo articolo della KB: https://kb.netapp.com/?title=onprem%2Fontap%2Fdm%2FVAAI%2FVAAI%3A_How_does_caching_work_with_FlexGroups%253F["VAAI: Come funziona il caching con i volumi FlexGroup?"^]
 
-ONTAP 9,8 aggiunge inoltre nuove metriche di performance basate su file (IOPS, throughput e latenza) per i file di volumi FlexGroup. Queste metriche possono essere visualizzate nei tool ONTAP per la dashboard e i report delle macchine virtuali di VMware vSphere. Il plug-in ONTAP Tools per VMware vSphere consente inoltre di impostare le regole di qualità del servizio (QoS) utilizzando una combinazione di IOPS massimo e/o minimo. Questi possono essere impostati su tutte le macchine virtuali in un datastore o singolarmente per macchine virtuali specifiche.
+In ambienti in cui non è possibile sfruttare al meglio la cache FlexGroup, ma è comunque necessario un rapido cloning cross-volume, prendere in considerazione l'utilizzo di vVol. Il cloning tra volumi con vVol è molto più rapido rispetto ai datastore tradizionali, senza fare affidamento su una cache.
 
-Ecco alcune Best practice aggiuntive sviluppate da NetApp:
 
-* Utilizzare le impostazioni predefinite per il provisioning dei volumi FlexGroup. Mentre i tool ONTAP per VMware vSphere sono consigliati perché creano e montano il FlexGroup all'interno di vSphere, è possibile utilizzare Gestione di sistema ONTAP o la riga di comando per esigenze speciali. Anche in questo caso, utilizzare le impostazioni predefinite, ad esempio il numero di membri costituenti per nodo, poiché questo è ciò che è stato più accuratamente testato con vSphere. Detto questo, le impostazioni non predefinite, come la modifica del numero o del posizionamento dei componenti, sono ancora pienamente supportate.
-* Durante il dimensionamento di un datastore basato su FlexGroup, ricorda che FlexGroup è composto da diversi volumi FlexVol più piccoli che creano un namespace più grande. Pertanto, quando si utilizza un FlexGroup con otto componenti, assicurarsi di dimensionare il datastore in modo che sia almeno 8x volte superiore alle dimensioni della macchina virtuale più grande. Ad esempio, se nell'ambiente si dispone di una macchina virtuale da 6 TB, dimensionare il datastore FlexGroup non inferiore a 48 TB.
-* Consentire a FlexGroup di gestire lo spazio del datastore. Il dimensionamento automatico e il dimensionamento elastico sono stati testati con datastore vSphere. Nel caso in cui il datastore si avvicini alla capacità massima, utilizzare i tool ONTAP per VMware vSphere o un altro tool per ridimensionare il volume FlexGroup. FlexGroup mantiene la capacità e gli inode bilanciati tra i componenti, assegnando la priorità ai file all'interno di una cartella (VM) sullo stesso costituente, se la capacità lo consente.
-* VMware e NetApp attualmente supportano il trunking di sessione NFSv4,1 a partire da ONTAP 9.14.1. Per informazioni dettagliate sulle versioni specifiche, fare riferimento alle note della matrice di interoperabilità NFS 4,1 di NetApp. NFSv3 non supporta percorsi fisici multipli a un volume ma supporta nconnect beginning in vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili link:vmware-vsphere-network.html#nfs["qui"]. Per FlexGroup con ONTAP 9,8, si consiglia di lasciare che gli strumenti ONTAP per VMware vSphere creino FlexGroup, ma poi è necessario smontarlo e rimontarlo utilizzando il DNS round robin per distribuire il carico nel cluster. Gli strumenti ONTAP usano una sola LIF per il montaggio di datastore. Dopo aver rimontato il datastore, è possibile utilizzare strumenti ONTAP per monitorarlo e gestirlo.
-* Il supporto del datastore FlexGroup vSphere è stato testato fino a 1500 macchine virtuali con la release 9.8.
-* Utilizzare il plug-in NFS per VMware VAAI per l'offload delle copie. Si noti che mentre il cloning è migliorato all'interno di un datastore FlexGroup, come menzionato in precedenza, ONTAP non offre significativi vantaggi in termini di performance rispetto alla copia dell'host ESXi quando si copiano le macchine virtuali tra volumi FlexVol e/o FlexGroup. Prendi in considerazione, pertanto, i workload di cloning al momento di decidere di utilizzare VAAI o FlexGroup. La modifica del numero di volumi costituenti è un modo per ottimizzare il cloning basato su FlexGroup. Come per l'ottimizzazione del timeout della cache.
-* Utilizza gli strumenti ONTAP per VMware vSphere 9.8 per monitorare le performance delle macchine virtuali FlexGroup utilizzando metriche ONTAP (report dashboard e macchine virtuali) e per gestire la qualità del servizio su singole macchine virtuali. Queste metriche non sono attualmente disponibili tramite i comandi o le API ONTAP.
-* QoS (IOPS max/min) può essere impostato su singole macchine virtuali o su tutte le macchine virtuali in un datastore in quel momento. L'impostazione della QoS su tutte le macchine virtuali sostituisce le impostazioni separate per ogni macchina virtuale. Le impostazioni non si estendono alle macchine virtuali nuove o migrate in futuro; impostare la QoS sulle nuove macchine virtuali o riapplicare la QoS a tutte le macchine virtuali nel datastore. Né le policy di FlexGroup QoS seguono la macchina virtuale se viene migrata su un altro datastore. Questo contrasta con i vVol, che possono mantenere le proprie impostazioni di policy QoS se migrano in un altro datastore.
-* Il plug-in SnapCenter per VMware vSphere versione 4,4 e successive supporta il backup e recovery delle macchine virtuali in un datastore FlexGroup nel sistema storage primario. SCV 4,6 aggiunge il supporto di SnapMirror per datastore basati su FlexGroup.
+
+== Impostazioni QoS
+
+È supportata la configurazione della qualità del servizio a livello di FlexGroup utilizzando ONTAP System Manager o la shell del cluster, ma non fornisce consapevolezza delle macchine virtuali o integrazione di vCenter.
+
+La qualità del servizio (IOPS max/min) può essere impostata su singole macchine virtuali o su tutte le macchine virtuali di un datastore in quel momento nell'interfaccia utente di vCenter o tramite API REST utilizzando i tool ONTAP. L'impostazione della QoS su tutte le macchine virtuali sostituisce le impostazioni separate per ogni macchina virtuale. Le impostazioni non si estendono alle macchine virtuali nuove o migrate in futuro; impostare la QoS sulle nuove macchine virtuali o riapplicare la QoS a tutte le macchine virtuali nel datastore.
+
+Si noti che VMware vSphere considera tutti i/o di un datastore NFS come una singola coda per host e la limitazione della QoS su una VM può influire sulle performance per altre VM nello stesso datastore. Questo contrasta con i vVol, che possono mantenere le proprie impostazioni di policy di QoS se migrano in un altro datastore e non influiscono sull'io di altre macchine virtuali quando rallentano.
+
+
+
+== Metriche
+
+ONTAP 9,8 ha inoltre aggiunto nuove metriche di performance basate su file (IOPS, throughput e latenza) per i file FlexGroup, che possono essere visualizzate nei tool ONTAP per la dashboard e i report delle macchine virtuali di VMware vSphere. Il plug-in ONTAP Tools per VMware vSphere consente inoltre di impostare le regole di qualità del servizio (QoS) utilizzando una combinazione di IOPS massimo e/o minimo. Questi possono essere impostati su tutte le macchine virtuali in un datastore o singolarmente per macchine virtuali specifiche.
+
+
+
+== Best practice
+
+* Utilizza i tool ONTAP per creare datastore FlexGroup, per assicurarti che FlexGroup venga creato in modo ottimale e che le policy di esportazione siano configurate in modo da corrispondere al tuo ambiente vSphere. Tuttavia, dopo aver creato il volume FlexGroup con i tool ONTAP, tutti i nodi del cluster vSphere utilizzano un singolo indirizzo IP per montare il datastore. Ciò potrebbe causare un collo di bottiglia sulla porta di rete. Per evitare questo problema, smontare il datastore, quindi rimontarlo utilizzando la procedura guidata standard del datastore vSphere utilizzando un nome DNS round-robin che offre bilanciamento del carico tra le LIF della SVM. Dopo il rimontaggio, gli strumenti ONTAP saranno nuovamente in grado di gestire il datastore. Se gli strumenti ONTAP non sono disponibili, utilizzare i valori predefiniti di FlexGroup e creare il criterio di esportazione seguendo le linee guida riportate in link:vmware-vsphere-datastores-nfs.html["Datastore e protocolli: NFS"].
+* Quando si ridimensiona un datastore FlexGroup, tenere presente che FlexGroup è costituito da più volumi FlexVol più piccoli che creano uno spazio dei nomi più grande. Pertanto, dimensionare il datastore in modo che sia almeno 8x MB (si suppongano i 8 componenti predefiniti) delle dimensioni del file VMDK più il 10-20% di spazio inutilizzato, per garantire flessibilità nel ribilanciamento. Ad esempio, se nell'ambiente è presente un VMDK di 6TB GB, dimensionare il datastore FlexGroup non inferiore a 52,8TB GB (6x8+10%).
+* VMware e NetApp supportano il trunking di sessione NFSv4,1 a partire da ONTAP 9.14.1. Per informazioni dettagliate sulle versioni specifiche, fare riferimento alle note della matrice di interoperabilità NFS 4,1 di NetApp. NFSv3 non supporta percorsi fisici multipli a un volume ma supporta nconnect beginning in vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili sul sito link:https://docs.netapp.com/us-en/netapp-solutions/virtualization/vmware-vsphere8-nfsv3-nconnect.html["Funzione NFSv3 nConnect con NetApp e VMware"].
+* Utilizzare il plug-in NFS per VMware VAAI per l'offload delle copie. Si noti che mentre il cloning è migliorato all'interno di un datastore FlexGroup, come menzionato in precedenza, ONTAP non offre significativi vantaggi in termini di performance rispetto alla copia dell'host ESXi quando si copiano le macchine virtuali tra volumi FlexVol e/o FlexGroup. Prendi in considerazione, pertanto, i workload di cloning al momento di decidere di utilizzare VAAI o FlexGroup. La modifica del numero di volumi costituenti è un modo per ottimizzare il cloning basato su FlexGroup. Come per l'ottimizzazione del timeout della cache menzionato in precedenza.
+* Utilizza i tool ONTAP per VMware vSphere 9,8 o versione successiva per monitorare le performance delle macchine virtuali FlexGroup utilizzando le metriche ONTAP (dashboard e report VM) e per gestire la QoS sulle singole macchine virtuali. Queste metriche non sono attualmente disponibili tramite i comandi o le API ONTAP.
+* Il plug-in SnapCenter per VMware vSphere versione 4,4 e successive supporta il backup e recovery delle macchine virtuali in un datastore FlexGroup nel sistema storage primario. SCV 4,6 aggiunge il supporto di SnapMirror per datastore basati su FlexGroup. L'utilizzo di snapshot e replica basate su array è il modo più efficiente per proteggere i dati.
 

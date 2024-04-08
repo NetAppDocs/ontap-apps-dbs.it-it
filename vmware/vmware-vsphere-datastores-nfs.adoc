@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-datastores-nfs.html 
-keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols 
-summary: 'Questa pagina descrive le Best practice per l"implementazione di una soluzione di storage NetApp ONTAP in un ambiente VMware vSphere.' 
+keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols, NFSv3, NFSv4.1 
+summary: 'In questa pagina sono descritte le Best practice per l"implementazione di VMware vSphere con ONTAP e datastore connessi a NFS.' 
 ---
 = NFS
 :hardbreaks:
@@ -14,7 +14,7 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 
 
 [role="lead"]
-VSphere consente ai clienti di utilizzare array NFS di livello Enterprise per fornire l'accesso simultaneo agli archivi dati a tutti i nodi di un cluster ESXi. Come indicato nella sezione datastore, l'utilizzo di NFS con vSphere offre alcuni vantaggi in termini di facilità d'uso e visibilità dell'efficienza dello storage.
+NetApp ONTAP è, tra l'altro, un array NAS scale-out di livello Enterprise. ONTAP consente a VMware vSphere di accedere contemporaneamente agli archivi dati connessi a NFS da numerosi host ESXi, superando di gran lunga i limiti imposti ai file system VMFS. L'utilizzo di NFS con vSphere offre alcuni benefici in termini di facilità di utilizzo e di visibilità dell'efficienza dello storage, come menzionato nella link:vmware-vsphere-datastores-top.html["datastore"] sezione.
 
 Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Best practice:
 
@@ -22,8 +22,8 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 * VMware supporta NFSv3 da VMware Infrastructure 3. VSphere 6.0 ha aggiunto il supporto per NFSv4.1, che abilita alcune funzionalità avanzate come la sicurezza Kerberos. Dove NFSv3 utilizza il blocco lato client, NFSv4.1 utilizza il blocco lato server. Anche se un volume ONTAP può essere esportato attraverso entrambi i protocolli, ESXi può essere montato solo attraverso un protocollo. Questo montaggio di protocollo singolo non impedisce ad altri host ESXi di montare lo stesso datastore attraverso una versione diversa. Assicurarsi di specificare la versione del protocollo da utilizzare durante il montaggio in modo che tutti gli host utilizzino la stessa versione e, di conseguenza, lo stesso stile di blocco. Non mischiare versioni NFS tra gli host. Se possibile, utilizzare i profili host per verificare la conformità.
 +
 ** Poiché non esiste alcuna conversione automatica del datastore tra NFSv3 e NFSv4.1, creare un nuovo datastore NFSv4.1 e utilizzare Storage vMotion per migrare le macchine virtuali nel nuovo datastore.
-** Fare riferimento alle note della tabella di interoperabilità NFS v4.1 nella https://mysupport.netapp.com/matrix/["Tool NetApp Interoperability Matrix"^] Per i livelli di patch ESXi specifici richiesti per il supporto.
-** VMware supporta nconnect con NFSv3 a partire da vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili link:vmware-vsphere-network.html#nfs["qui"].
+** Fare riferimento alle note della tabella di interoperabilità NFS v4.1 nella link:https://mysupport.netapp.com/matrix/["Tool NetApp Interoperability Matrix"^] Per i livelli di patch ESXi specifici richiesti per il supporto.
+** VMware supporta nconnect con NFSv3 a partire da vSphere 8.0U2. Ulteriori informazioni su nconnect sono disponibili sul sito link:https://docs.netapp.com/us-en/netapp-solutions/virtualization/vmware-vsphere8-nfsv3-nconnect.html["Funzione NFSv3 nConnect con NetApp e VMware"]
 
 
 * Le policy di esportazione NFS vengono utilizzate per controllare l'accesso da parte degli host vSphere. È possibile utilizzare un criterio con più volumi (datastore). Con NFSv3, ESXi utilizza lo stile di sicurezza sys (UNIX) e richiede l'opzione di montaggio root per eseguire le macchine virtuali. In ONTAP, questa opzione viene definita superutente e, quando viene utilizzata l'opzione superutente, non è necessario specificare l'ID utente anonimo. Tenere presente che le regole dei criteri di esportazione con valori diversi per `-anon` e. `-allow-suid` Può causare problemi di rilevamento SVM con gli strumenti ONTAP. Ecco un esempio di politica:

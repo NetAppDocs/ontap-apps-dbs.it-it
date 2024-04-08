@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-datastores-san.html 
 keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols 
-summary: 'Questa pagina descrive le Best practice per l"implementazione di una soluzione di storage NetApp ONTAP in un ambiente VMware vSphere.' 
+summary: 'In questa pagina sono descritte le Best practice per l"implementazione di una soluzione di storage ONTAP in un ambiente VMware vSphere.' 
 ---
 = SAN (FC, FCoE, NVMe/FC, iSCSI), RDM
 :hardbreaks:
@@ -14,6 +14,8 @@ summary: 'Questa pagina descrive le Best practice per l"implementazione di una s
 
 
 [role="lead"]
+NetApp ONTAP offre storage a blocchi di livello Enterprise per VMware vSphere utilizzando iSCSI, Fibre Channel Protocol (FCP o FC in breve) e NVMe over Fabrics (NVMe-of). Di seguito sono riportate le Best practice per l'implementazione dei protocolli a blocchi per lo storage delle macchine virtuali con vSphere e ONTAP.
+
 In vSphere, esistono tre modi per utilizzare le LUN dello storage a blocchi:
 
 * Con datastore VMFS
@@ -25,7 +27,7 @@ VMFS è un file system in cluster dalle performance elevate che fornisce datasto
 
 VSphere include il supporto integrato per più percorsi verso i dispositivi storage, definito NMP (Native Multipathing). NMP è in grado di rilevare il tipo di storage per i sistemi storage supportati e di configurare automaticamente lo stack NMP per supportare le funzionalità del sistema storage in uso.
 
-Sia NMP che NetApp ONTAP supportano l'accesso ad unità logica asimmetrico (ALUA) per negoziare percorsi ottimizzati e non ottimizzati. In ONTAP, un percorso ottimizzato per ALUA segue un percorso di dati diretto, utilizzando una porta di destinazione sul nodo che ospita il LUN a cui si accede. ALUA è attivato per impostazione predefinita sia in vSphere che in ONTAP. NMP riconosce il cluster ONTAP come ALUA e utilizza il plug-in del tipo di array di storage ALUA (`VMW_SATP_ALUA`) e seleziona il plug-in di selezione del percorso round robin (`VMW_PSP_RR`).
+Sia NMP che ONTAP supportano l'ALUA (Asymmetric Logical Unit Access) per negoziare percorsi ottimizzati e non ottimizzati. In ONTAP, un percorso ottimizzato per ALUA segue un percorso di dati diretto, utilizzando una porta di destinazione sul nodo che ospita il LUN a cui si accede. ALUA è attivato per impostazione predefinita sia in vSphere che in ONTAP. NMP riconosce il cluster ONTAP come ALUA e utilizza il plug-in del tipo di array di storage ALUA (`VMW_SATP_ALUA`) e seleziona il plug-in di selezione del percorso round robin (`VMW_PSP_RR`).
 
 ESXi 6 supporta fino a 256 LUN e fino a 1,024 percorsi totali verso LUN. I LUN o i percorsi che superano questi limiti non sono visti da ESXi. Supponendo il numero massimo di LUN, il limite di percorso consente quattro percorsi per LUN. In un cluster ONTAP più grande, è possibile raggiungere il limite di percorso prima del limite di LUN. Per risolvere questo limite, ONTAP supporta la mappa LUN selettiva (SLM) nella versione 8.3 e successive.
 
@@ -47,4 +49,4 @@ Altre Best practice da prendere in considerazione:
 * Per ulteriori informazioni sull'utilizzo di NVMe/FC con vSphere 7.0, consulta questo articolo https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Guida alla configurazione degli host NVMe/FC di ONTAP"^] e. http://www.netapp.com/us/media/tr-4684.pdf["TR-4684"^]La figura seguente mostra la connettività multipath da un host vSphere a un LUN ONTAP.
 
 
-image:vsphere_ontap_image2.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image2.png["connettività multipath"]

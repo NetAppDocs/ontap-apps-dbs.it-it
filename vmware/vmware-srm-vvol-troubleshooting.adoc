@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-srm-vvol-troubleshooting.html 
 keywords: vmware, site, recovery manager, vsrm, hybrid, cloud, srm, vvols, replication 
-summary: 'Il flusso di lavoro all"interno di SRM è significativamente diverso quando si utilizza la replica vVol da quello utilizzato con SRA e datastore tradizionali.' 
+summary: La replica vVol con VASA offre funzionalità uniche rispetto a SRA e ai datastore tradizionali. 
 ---
 = Risoluzione dei problemi di SRM quando si utilizza la replica vVol
 :hardbreaks:

@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-srm-replication_topologies.html 
 keywords: vmware, site, recovery manager, vsrm, replication, technologies, snapmirror layouts, array manager, snapvault, qtress, fc, iscsi, supported 
-summary: In ONTAP 9, i componenti fisici di un cluster sono visibili agli amministratori del cluster, ma non sono direttamente visibili alle applicazioni e agli host che utilizzano il cluster. 
+summary: Topologie di replica con ONTAP con SnapMirror e VMware SRM. 
 ---
 = Topologie di replica
 :hardbreaks:
@@ -36,13 +36,13 @@ Una singola macchina virtuale non è in grado di gestire i dati (VMDK) o RDM) su
 
 Le seguenti figure mostrano gli scenari di layout delle relazioni SnapMirror supportati da SRM e SRA. Ogni macchina virtuale nei volumi replicati possiede i dati su un solo array SRM (SVM) in ogni sito.
 
-image:vsrm-ontap9_image7.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image7.png["Layout della relazione di SnapMirror"]
 
-image:vsrm-ontap9_image8.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image8.png["Layout della relazione di SnapMirror"]
 
-image:vsrm-ontap9_image9.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image9.png["Layout della relazione di SnapMirror"]
 
-image:vsrm-ontap9_image10.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image10.png["Layout della relazione di SnapMirror"]
 
 
 
@@ -50,7 +50,7 @@ image:vsrm-ontap9_image10.png["Errore: Immagine grafica mancante"]
 
 Quando si utilizza la replica basata su array (ABR) in SRM, i gruppi di protezione vengono isolati in una singola coppia di array, come illustrato nella seguente schermata. In questo scenario, `SVM1` e. `SVM2` sono in coppia con `SVM3` e. `SVM4` presso il sito di recovery. Tuttavia, è possibile selezionare solo una delle due coppie di array quando si crea un gruppo di protezione.
 
-image:vsrm-ontap9_image11.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image11.png["coppie di array"]
 
 
 
@@ -58,13 +58,13 @@ image:vsrm-ontap9_image11.png["Errore: Immagine grafica mancante"]
 
 Le configurazioni non supportate dispongono di dati (VMDK o RDM) su più SVM di proprietà di una singola macchina virtuale. Negli esempi illustrati nelle seguenti figure, `VM1` Impossibile configurare la protezione con SRM perché `VM1` Dispone di dati su due SVM.
 
-image:vsrm-ontap9_image12.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image12.png["Configurazioni non supportate"]
 
-image:vsrm-ontap9_image13.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image13.png["Configurazioni non supportate"]
 
 Qualsiasi relazione di replica in cui un singolo volume NetApp viene replicato da una SVM di origine a più destinazioni nella stessa SVM o in SVM differenti viene definita fan-out di SnapMirror. Fan-out non supportato con SRM. Nell'esempio illustrato nella figura seguente, `VM1` Impossibile configurare la protezione in SRM perché viene replicata con SnapMirror in due posizioni diverse.
 
-image:vsrm-ontap9_image14.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image14.png["Configurazioni non supportate"]
 
 
 
@@ -72,7 +72,7 @@ image:vsrm-ontap9_image14.png["Errore: Immagine grafica mancante"]
 
 SRM non supporta la sovrapposizione delle relazioni SnapMirror, in cui un volume di origine viene replicato in un volume di destinazione e tale volume di destinazione viene replicato anche con SnapMirror in un altro volume di destinazione. Nello scenario illustrato nella figura seguente, SRM non può essere utilizzato per il failover tra siti.
 
-image:vsrm-ontap9_image15.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image15.png["Cascata di relazioni di SnapMirror"]
 
 
 
@@ -103,11 +103,11 @@ In un ambiente VMware, ogni datastore dispone di un UUID (Universal Unique Ident
 
 La figura seguente mostra una configurazione a cascata da SnapMirror a SnapVault. Se la destinazione SnapVault si trova nel sito di DR o in un sito terzo che non è interessato da un'interruzione nel sito primario, l'ambiente può essere riconfigurato per consentire ai backup di continuare dopo il failover.
 
-image:vsrm-ontap9_image16.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image16.png["SnapMirror a cascata SnapVault"]
 
 La seguente figura illustra la configurazione dopo l'utilizzo di SRM per eseguire il reverse della replica di SnapMirror nel sito primario. L'ambiente è stato anche riconfigurato in modo che i backup di SnapVault si verifichino da quella che ora è l'origine di SnapMirror. Questa configurazione è una configurazione fan-out di SnapMirror SnapVault.
 
-image:vsrm-ontap9_image17.png["Errore: Immagine grafica mancante"]
+image:vsrm-ontap9_image17.png["Inverso di SnapMirror a SnapVault"]
 
 Dopo che SRM esegue il failback e una seconda inversione delle relazioni SnapMirror, i dati di produzione vengono ripristinati nel sito primario. Questi dati sono ora protetti nello stesso modo in cui erano prima del failover al sito di DR, tramite i backup SnapMirror e SnapVault.
 

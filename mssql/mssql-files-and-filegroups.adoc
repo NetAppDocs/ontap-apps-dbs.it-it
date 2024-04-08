@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-files-and-filegroups.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server su ONTAP 
+keywords: MSSQL,SQL Server, backup, recovery, database file management 
+summary: Posizionamento dei file del database Microsoft SQL Server 
 ---
 = File di database e filegroup di Microsoft SQL Server
 :allow-uri-read: 
@@ -10,7 +10,7 @@ summary: Microsoft SQL Server su ONTAP
 
 
 [role="lead"]
-Un database SQL Server è un insieme di oggetti che consente di memorizzare e manipolare i dati.
+Il corretto posizionamento dei file del database SQL Server su ONTAP è fondamentale durante la fase di distribuzione iniziale. Ciò garantisce prestazioni ottimali, gestione dello spazio, tempi di backup e ripristino che possono essere configurati in base alle esigenze aziendali.
 
 In teoria, SQL Server (a 64 bit) supporta 32.767 database per istanza e 524.272TB di dimensioni del database, sebbene l'installazione tipica abbia in genere diversi database. Tuttavia, il numero di database che SQL Server è in grado di gestire dipende dal carico e dall'hardware. Non è insolito vedere le istanze di SQL Server che ospitano decine, centinaia o persino migliaia di database di piccole dimensioni.
 
@@ -34,7 +34,7 @@ TIP: *NetApp recommended* evitare l'utilizzo del filegroup primario per oggetti 
 
 TIP: *NetApp consiglia* che tutti i file nel singolo filegroup abbiano le stesse dimensioni iniziali e parametri di crescita automatica, con la dimensione di crescita definita in megabyte piuttosto che in percentuali. Questo aiuta l'algoritmo di riempimento proporzionale a bilanciare uniformemente le attività di scrittura nei file di dati.
 
-Ogni volta che SQL Server espande i file, riempie di zero lo spazio appena allocato nei file. Questo processo blocca tutte le sessioni che devono scrivere nel file corrispondente o, in caso di crescita del log delle transazioni, genera record di log delle transazioni.
+Ogni volta che SQL Server espande i file, riempie di zero lo spazio appena allocato. Questo processo blocca tutte le sessioni che devono scrivere nel file corrispondente o, in caso di crescita del log delle transazioni, genera record di log delle transazioni.
 
 SQL Server azzera sempre il log delle transazioni e questo comportamento non può essere modificato. Tuttavia, è possibile controllare se i file di dati vengono azzerati attivando o disattivando l'inizializzazione istantanea dei file. L'attivazione dell'inizializzazione immediata dei file consente di velocizzare la crescita dei file di dati e di ridurre il tempo necessario per creare o ripristinare il database.
 
@@ -48,23 +48,14 @@ Per verificare se l'autorizzazione è attivata, è possibile utilizzare il codic
 
 ....
 DBCC TRACEON(3004,3605,-1)
-
 GO
-
 CREATE DATABASE DelMe
-
 GO
-
 EXECUTE sp_readerrorlog
-
 GO
-
 DROP DATABASE DelMe
-
 GO
-
 DBCC TRACEOFF(3004,3605,-1)
-
 GO
 ....
 Quando l'inizializzazione immediata del file non è attivata, il registro degli errori di SQL Server mostra che SQL Server sta azzerando il file di dati mdf oltre a azzerare il file di registro ldf, come illustrato nell'esempio seguente. Quando l'inizializzazione immediata del file è attivata, viene visualizzato solo l'azzeramento del file di registro.

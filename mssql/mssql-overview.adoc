@@ -1,31 +1,23 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-overview.html 
-keywords: MS-SQL,mssql,SQL Server,TR-4590 
+keywords: MSSQL,SQL Server,TR-4590, SnapCenter, ONTAP 
 summary: Microsoft SQL Server su ONTAP 
 ---
-= Panoramica su Microsoft SQL Server
+= Microsoft SQL Server su ONTAP
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-SQL Server è la base della piattaforma dati di Microsoft, che offre prestazioni mission-critical con tecnologie in memoria e informazioni più rapide su qualsiasi dato, sia in sede che nel cloud.
+ONTAP offre una soluzione per la sicurezza e le prestazioni di livello aziendale per i database Microsoft SQL Server e allo stesso tempo fornisce strumenti di prim'ordine per la gestione dell'ambiente.
 
 
 NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubblicato _TR-4590: Best practice guide for Microsoft SQL Server with ONTAP_
 
-Microsoft SQL Server si basa sulle funzionalità mission-critical fornite nelle versioni precedenti offrendo prestazioni, disponibilità e gestibilità rivoluzionarie per le applicazioni mission-critical. Il sistema storage è un fattore chiave per le performance complessive di un database SQL Server. NetApp fornisce diversi prodotti per consentire al database SQL Server di offrire prestazioni di livello Enterprise fornendo strumenti di livello mondiale per la gestione dell'ambiente.
+NetApp presuppone che il lettore disponga delle seguenti conoscenze operative:
 
-
-
-== Scopo e ambito di applicazione
-
-Questa sezione descrive le Best practice e offre approfondimenti sulle considerazioni di progettazione per la distribuzione di SQL Server su sistemi di storage NetApp che eseguono il software NetApp ONTAP, con l'obiettivo di ottenere una distribuzione di storage efficace ed efficiente e una pianificazione end-to-end della protezione e della conservazione dei dati. L'ambito di questa guida si limita alle linee guida tecniche di progettazione basate sui principi di progettazione e sugli standard preferiti che NetApp consiglia per l'infrastruttura di storage durante la distribuzione di SQL Server. L'attuazione end-to-end non rientra nell'ambito della presente relazione.
-
-Le Best practice e i consigli descritti in questa guida consentono agli architetti SQL Server e agli amministratori dello storage NetApp di pianificare un ambiente SQL Server altamente disponibile e facile da gestire e di rispettare SLA rigorosi. NetApp presuppone che il lettore disponga delle seguenti conoscenze operative:
-
-* Software NetApp ONTAP
+* Software ONTAP
 * NetApp SnapCenter come software di backup, che include:
 +
 ** Plug-in SnapCenter per Microsoft Windows
@@ -35,4 +27,16 @@ Le Best practice e i consigli descritti in questa guida consentono agli architet
 * Architettura e amministrazione di Microsoft SQL Server
 
 
-Per informazioni sulla compatibilità della configurazione nello stack NetApp, consultare la link:http://mysupport.netapp.com/NOW/products/interoperability/["Tool di matrice di interoperabilità NetApp (IMT)"^].
+L'ambito di questa sezione sulle Best practice è limitato alla progettazione tecnica, basata su principi di progettazione e standard preferenziali che NetApp consiglia per l'infrastruttura di storage. L'implementazione end-to-end non rientra nell'ambito.
+
+Per informazioni sulla compatibilità della configurazione con i prodotti NetApp, consultare la link:https://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità NetApp (IMT)"^].
+
+
+
+== Workload di Microsoft SQL Server
+
+Prima di distribuire SQL Server, è necessario comprendere i requisiti del carico di lavoro del database delle applicazioni supportate dalle istanze di SQL Server. Ogni applicazione ha requisiti differenti in termini di capacità, performance e disponibilità, per cui ogni database dovrebbe essere progettato per supportare al meglio tali requisiti. Molte organizzazioni classificano i database in più Tier di gestione, utilizzando i requisiti delle applicazioni per definire gli SLA. I carichi di lavoro di SQL Server possono essere descritti come segue:
+
+* I database OLTP sono spesso anche i database più critici di un'organizzazione. In genere, questi database supportano le applicazioni rivolte ai clienti e sono considerati essenziali per le operazioni chiave dell'azienda. I database OLTP mission-critical e le applicazioni che questi supportano spesso hanno SLA che richiedono elevati livelli di performance e sono sensibili al peggioramento delle performance e alla disponibilità. Potrebbero anche essere candidati per cluster di failover sempre attivi o gruppi di disponibilità sempre attivi. La combinazione di i/o di questi tipi di database è in genere caratterizzata da un tasso di random Read compreso tra il 75% e il 90% e un tasso di scrittura compreso tra il 25% e il 10%.
+* I database DSS (Decision Support System) possono anche essere definiti data warehouse. Questi database sono mission-critical in molte organizzazioni che si affidano alle analytics per il loro business. Questi database sono sensibili all'utilizzo della CPU e alle operazioni di lettura dal disco quando vengono eseguite query. In molte organizzazioni, i database DSS sono i più critici durante la fine di mese, trimestre e anno Questo carico di lavoro solitamente presenta una combinazione di i/o di lettura al 100%.
+

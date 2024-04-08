@@ -1,0 +1,32 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_slm.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: Come configurare la migrazione live dello storage Hyper-V. 
+---
+= Distribuire Hyper-V Storage Live Migration
+:allow-uri-read: 
+
+
+[role="lead"]
+Scoprite come configurare la migrazione live dello storage Hyper-V.
+
+
+
+== Prerequisiti
+
+* È necessario disporre di un server Hyper-V standalone con storage indipendente (DAS o LUN) o storage SMB (locale o condiviso tra altri server Hyper-V).
+* Il server Hyper-V deve essere configurato per la migrazione live. Esaminare la sezione relativa alla distribuzione in link:win_deploy_hyperv_replica_oce.html["Live Migration al di fuori di un ambiente cluster"].
+
+
+
+
+== Implementazione
+
+. Aprire Hyper-V Manager.
+. Fare clic con il pulsante destro del mouse su una macchina virtuale, quindi fare clic su Sposta.
+. Selezionare Sposta memoria della macchina virtuale.
+. Selezionare le opzioni per spostare la memoria in base alle proprie preferenze.
+. Fornire la nuova posizione per gli elementi della VM.
+. Rivedere il riepilogo e fare clic su OK per spostare la memoria della VM.
+

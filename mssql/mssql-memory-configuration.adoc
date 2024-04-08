@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-memory-configuration.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server su ONTAP 
+keywords: MSSQL,SQL Server, memory 
+summary: Configurazione della memoria di Microsoft SQL Server 
 ---
 = Configurazione della memoria di Microsoft SQL Server
 :allow-uri-read: 
@@ -10,7 +10,7 @@ summary: Microsoft SQL Server su ONTAP
 
 
 [role="lead"]
-Nelle sezioni seguenti vengono illustrate alcune delle impostazioni di configurazione della memoria critica.
+Nella sezione seguente viene illustrata la configurazione delle impostazioni della memoria di SQL Server per ottimizzare le prestazioni del database.
 
 
 
@@ -37,17 +37,11 @@ L'utilizzo di SQL Server Management Studio per regolare la memoria minima o mass
 
 ....
 EXECUTE sp_configure 'show advanced options', 1
-
 GO
-
 EXECUTE sp_configure 'min server memory (MB)', 2048
-
 GO
-
 EXEC sp_configure 'max server memory (MB)', 120832
-
 GO
-
 RECONFIGURE WITH OVERRIDE
 ....
 
@@ -70,9 +64,9 @@ Controlla la quantità massima di RAM inizialmente allocata per la creazione deg
 
 == Memoria minima per query
 
-Quando viene eseguita una query, SQL Server tenta di allocare la quantità di memoria ottimale per un'esecuzione efficiente.
+Quando viene eseguita una query, SQL Server tenta di allocare la quantità ottimale di memoria per un'esecuzione efficiente.
 
-Per impostazione predefinita, l'impostazione memoria minima per query assegna > o = a 1024KB per ogni query da eseguire. È consigliabile lasciare questa impostazione al valore predefinito 0 per consentire a SQL Server di gestire dinamicamente la quantità di memoria allocata per le operazioni di creazione dell'indice. Tuttavia, se SQL Server dispone di una quantità di RAM superiore a quella necessaria per un'esecuzione efficiente, le prestazioni di alcune query possono essere migliorate se si aumenta questa impostazione. Pertanto, se sul server non viene utilizzata SQL Server, altre applicazioni o il sistema operativo è disponibile memoria, il miglioramento di questa impostazione può contribuire alle prestazioni complessive di SQL Server. Se non è disponibile memoria libera, l'aumento di questa impostazione potrebbe compromettere le prestazioni complessive.
+Per impostazione predefinita, l'impostazione memoria minima per query assegna >= a 1024KB per ogni query da eseguire. È consigliabile lasciare questa impostazione al valore predefinito 0 per consentire a SQL Server di gestire dinamicamente la quantità di memoria allocata per le operazioni di creazione dell'indice. Tuttavia, se SQL Server dispone di una quantità di RAM superiore a quella necessaria per un'esecuzione efficiente, le prestazioni di alcune query possono essere migliorate se si aumenta questa impostazione. Pertanto, se sul server non viene utilizzata SQL Server, altre applicazioni o il sistema operativo è disponibile memoria, il miglioramento di questa impostazione può contribuire alle prestazioni complessive di SQL Server. Se non è disponibile memoria libera, l'aumento di questa impostazione potrebbe compromettere le prestazioni complessive.
 
 image:mssql-min-memory-per-query.png["Errore: Immagine grafica mancante"]
 
@@ -108,14 +102,9 @@ Nell'esempio seguente viene illustrato un comando T-SQL per impostare un'estensi
 
 ....
 USE master
-
 GO
-
 ALTER SERVER CONFIGURATION
-
 SET BUFFER POOL EXTENSION ON
-
   (FILENAME = ‘P:\BUFFER POOL EXTENSION\SQLServerCache.BUFFER POOL EXTENSION', SIZE = 32 GB);
-
 GO
 ....

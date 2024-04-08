@@ -24,13 +24,13 @@ SCP supporta la qualità del servizio minima e/o massima per i vVol di dati di u
 
 La figura seguente mostra i tool ONTAP per il dashboard di VMware vSphere 9.8 vVol.
 
-image:vsphere_ontap_image7.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image7.png["Tool ONTAP per la dashboard VMware vSphere 9,8 vVol"]
 
 Una volta definito il profilo di capacità dello storage, è possibile utilizzarlo per eseguire il provisioning delle macchine virtuali utilizzando la policy di storage che ne identifica i requisiti. La mappatura tra il criterio di storage delle macchine virtuali e il profilo di capacità dello storage del datastore consente a vCenter di visualizzare un elenco di datastore compatibili per la selezione. Questo approccio è noto come gestione basata su criteri di storage.
 
 VASA offre la tecnologia per eseguire query sullo storage e restituire un set di funzionalità di storage a vCenter. I vendor provider VASA forniscono la traduzione tra le API e i costrutti del sistema storage e le API VMware comprese da vCenter. Il provider VASA di NetApp per ONTAP viene offerto come parte dei tool ONTAP per macchina virtuale dell'appliance VMware vSphere, mentre il plug-in vCenter fornisce l'interfaccia per il provisioning e la gestione dei datastore vVol, nonché la capacità di definire profili di funzionalità dello storage (SCP).
 
-ONTAP supporta gli archivi dati VMFS e NFS vVol. L'utilizzo di vVol con datastore SAN offre alcuni dei vantaggi di NFS, come la granularità a livello di macchine virtuali. Di seguito sono riportate alcune Best practice da prendere in considerazione e ulteriori informazioni sono disponibili in http://www.netapp.com/us/media/tr-4400.pdf["TR-4400"^]:
+ONTAP supporta gli archivi dati VMFS e NFS vVol. L'utilizzo di vVol con datastore SAN offre alcuni dei vantaggi di NFS, come la granularità a livello di macchine virtuali. Di seguito sono riportate alcune Best practice da prendere in considerazione e ulteriori informazioni sono disponibili in link:vmware-vvols-overview.html["TR-4400"^]:
 
 * Un datastore vVol può essere costituito da più volumi FlexVol su più nodi del cluster. L'approccio più semplice è un singolo datastore, anche quando i volumi hanno funzionalità diverse. SPBM garantisce l'utilizzo di un volume compatibile per la macchina virtuale. Tuttavia, tutti i volumi devono far parte di una singola SVM ONTAP e devono essere accessibili utilizzando un singolo protocollo. È sufficiente una LIF per nodo per ogni protocollo. Evitare di utilizzare più release di ONTAP all'interno di un singolo datastore vVol, poiché le funzionalità dello storage potrebbero variare tra le varie release.
 * Utilizza i tool ONTAP per il plug-in VMware vSphere per creare e gestire datastore vVol. Oltre a gestire il datastore e il relativo profilo, crea automaticamente un endpoint del protocollo per accedere ai vVol, se necessario. Se si utilizzano LUN, tenere presente che i LUN PES vengono mappati utilizzando LUN ID 300 e superiori. Verificare che l'impostazione di sistema avanzata dell'host ESXi sia corretta `Disk.MaxLUN` Consente un numero di ID LUN superiore a 300 (il valore predefinito è 1,024). Eseguire questa operazione selezionando l'host ESXi in vCenter, quindi la scheda Configura e trova `Disk.MaxLUN` Nell'elenco delle Advanced System Settings (Impostazioni di sistema avanzate).
@@ -40,4 +40,4 @@ ONTAP supporta gli archivi dati VMFS e NFS vVol. L'utilizzo di vVol con datastor
 
 La figura seguente mostra i componenti di vVol.
 
-image:vsphere_ontap_image8.png["Errore: Immagine grafica mancante"]
+image:vsphere_ontap_image8.png["Componenti vVol"]

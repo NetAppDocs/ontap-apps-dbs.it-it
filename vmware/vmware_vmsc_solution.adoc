@@ -129,7 +129,7 @@ Utilizzando le regole di affinità degli host delle macchine virtuali in VMware 
 
 Di seguito è riportato un esempio di gruppi di host VM e regole di affinità.
 
-image::../media/vmsc_2_2.png[Diagramma di un server di computer Descrizione generata automaticamente,528,369]
+image::../media/vmsc_2_2.png[Gruppi di host VM e regole di affinità,528,369]
 
 
 

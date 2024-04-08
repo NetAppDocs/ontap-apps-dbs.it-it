@@ -14,7 +14,7 @@ summary: 'Con ONTAP, il concetto di storage virtual machine (SVM) offre una segm
 
 
 [role="lead"]
-Nelle sezioni seguenti sono descritte le Best practice per la distribuzione di VMware e ONTAP SRM.
+Nelle sezioni seguenti vengono illustrate le Best practice per la distribuzione con ONTAP e VMware SRM.
 
 
 

@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-settings.html 
-keywords:  
-summary:  
+keywords: VMware,vSphere,ESXi,settings,NFS,iSCSI,FC,FCP 
+summary: Questo documento categorizza ed enumera le impostazioni di storage e di rete consigliate. 
 ---
 = Host ESXi consigliato e altre impostazioni ONTAP
 :hardbreaks:
@@ -14,7 +14,11 @@ summary:
 
 
 [role="lead"]
-NetApp ha sviluppato un set di impostazioni di multipathing host ESXi e timeout HBA per un comportamento corretto con ONTAP in base ai test NetApp. Questi sono facilmente impostabili utilizzando i tool ONTAP per VMware vSphere. Dalla dashboard Riepilogo, fare clic su Modifica impostazioni nel portlet sistemi host o fare clic con il pulsante destro del mouse sull'host in vCenter, quindi selezionare ONTAP Tools > Set Recommended Values (Strumenti di configurazione > Imposta valori consigliati). Di seguito sono riportate le impostazioni host attualmente consigliate per la versione 9.8.
+NetApp ha sviluppato una serie di impostazioni ottimali per l'host ESXi sia per protocolli NFS sia per protocolli a blocchi. Sono inoltre fornite indicazioni specifiche per le impostazioni di multipathing e timeout HBA per un corretto comportamento con ONTAP in base ai test interni di NetApp e VMware.
+
+Questi valori possono essere impostati facilmente utilizzando gli strumenti ONTAP per VMware vSphere: Dal dashboard Riepilogo, fare clic su Modifica impostazioni nel portlet sistemi host o fare clic con il pulsante destro del mouse sull'host in vCenter, quindi accedere a Strumenti ONTAP > Imposta valori consigliati.
+
+Di seguito sono riportate le impostazioni dell'host attualmente consigliate per le versioni 9,8-9,13.
 
 |===
 
@@ -48,7 +52,7 @@ Impostare su 1024 MB per 6.5U3, 6.7U3 e 7.0 o versioni successive. | Sì
 
 
 | NFS.MaxVolumes | VSphere 6,0 o versioni successive, impostare su 256
-Tutte le altre configurazioni NFS, impostate su 64. | No 
+Tutte le altre configurazioni NFS sono impostate su 64. | No 
 
 
 | NFS41.MaxVolumes | VSphere 6,0 o versioni successive, impostare su 256. | No 
@@ -152,7 +156,7 @@ Gli strumenti ONTAP specificano anche alcune impostazioni predefinite durante la
 Sebbene non sia attualmente configurato dagli strumenti ONTAP disponibili, NetApp suggerisce le seguenti opzioni di configurazione:
 
 * In ambienti dalle performance elevate o quando si testano le performance con un singolo datastore LUN, si consiglia di modificare l'impostazione del bilanciamento del carico del criterio di selezione del percorso (PSP) round-robin (VMW_PSP_RR) dall'impostazione IOPS predefinita di 1000 a un valore di 1. Consulta la Knowledge base di VMware https://kb.vmware.com/s/article/2069356["2069356"^] per ulteriori informazioni.
-* In vSphere 6.7 Update 1, VMware ha introdotto un nuovo meccanismo di bilanciamento del carico di latenza per la PSP Round Robin. La nuova opzione prende in considerazione la larghezza di banda i/o e la latenza del percorso quando si seleziona il percorso ottimale per i/O. Potrebbe essere utile utilizzarlo in ambienti con connettività di percorso non equivalente, ad esempio nei casi in cui vi sono più salti di rete su un percorso rispetto a un altro, o quando si utilizza un sistema NetApp All SAN Array. Vedere https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-in e policy per la selezione del percorso"^] per ulteriori informazioni.
+* In vSphere 6.7 Update 1, VMware ha introdotto un nuovo meccanismo di bilanciamento del carico di latenza per la PSP Round Robin. La nuova opzione prende in considerazione la larghezza di banda i/o e la latenza del percorso quando si seleziona il percorso ottimale per i/O. Potresti trarre vantaggio dall'utilizzo in ambienti con una connettività di percorso non equivalente, ad esempio casi in cui sono presenti più hop di rete su un percorso piuttosto che su un altro, o quando utilizzi un sistema NetApp All SAN Array. Vedere https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-in e policy per la selezione del percorso"^] per ulteriori informazioni.
 
 
 

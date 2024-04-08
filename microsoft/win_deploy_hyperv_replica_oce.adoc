@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_replica_oce.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: 'In questa appendice viene descritta la distribuzione di replica Hyper-V all"esterno di un ambiente in cluster.' 
+---
+= Implementare la replica Hyper-V all'esterno di un ambiente cluster
+:allow-uri-read: 
+
+
+[role="lead"]
+In questa appendice viene descritta la distribuzione di replica Hyper-V all'esterno di un ambiente in cluster.
+
+
+
+== Prerequisiti
+
+* Sono necessari server Hyper-V standalone ubicati in posizioni geografiche identiche o separate che servono come server primari e di replica.
+* Se si utilizzano siti separati, è necessario configurare il firewall di ciascun sito per consentire la comunicazione tra i server primario e di replica.
+* Il server di replica deve disporre di spazio sufficiente per archiviare i carichi di lavoro replicati.
+
+
+
+
+== Implementazione
+
+. Configurare il server di replica.
++
+.. Affinché le regole del firewall in entrata consentano il traffico di replica in entrata, eseguire il seguente cmdlet PowerShell:
++
+ Enable-Netfirewallrule -displayname "Hyper-V Replica HTTP Listener (TCP-In)"
+.. Aprire Hyper-V Manager dalla sezione Strumenti di Server Manager.
+.. Fare clic su Impostazioni Hyper-V da azioni.
+.. Fare clic su Replication Configuration (Configurazione replica) e selezionare Enable this computer as a Replica Server (Abilita questo computer come server di replica).
+.. Nella sezione Authentication and Ports (autenticazione e porte), selezionare il metodo e la porta di autenticazione.
+.. Nella sezione autorizzazione e archiviazione, specificare la posizione in cui archiviare le VM e i file replicati.
+
+
+. Abilitare la replica VM per le VM sul server primario. La replica delle macchine virtuali è abilitata in base alle macchine virtuali e non per l'intero server Hyper-V.
++
+.. In Hyper-V Manager, fare clic con il pulsante destro del mouse su una macchina virtuale e fare clic su Enable Replication (Abilita replica) per aprire la procedura guidata Enable Replication (Abilita replica).
+.. Fornire il nome del server di replica in cui la VM deve essere replicata.
+.. Fornire il tipo di autenticazione e la porta del server di replica configurata per ricevere il traffico di replica sul server di replica.
+.. Selezionare i VHD da replicare.
+.. Scegliere la frequenza (durata) in cui le modifiche vengono inviate al server di replica.
+.. Configurare i punti di ripristino per specificare il numero di punti di ripristino da mantenere sul server di replica.
+.. Scegliere Initial Replication Method (metodo di replica iniziale) per specificare il metodo di trasferimento della copia iniziale dei dati VM al server di replica.
+.. Rivedere il riepilogo e fare clic su fine.
+.. Questo processo crea una replica VM sul server di replica.
+
+
+
+
+
+
+== Replica
+
+. Eseguire un failover di test per assicurarsi che la VM di replica funzioni correttamente sul server di replica. Il test crea una VM temporanea sul server di replica.
++
+.. Accedere al server di replica.
+.. In Hyper-V Manager, fare clic con il pulsante destro del mouse su una macchina virtuale di replica, fare clic su Replication (Replica) e su Test failover (Test failover).
+.. Scegliere il punto di ripristino da utilizzare.
+.. Questo processo crea una macchina virtuale con lo stesso nome aggiunto a -Test.
+.. Verificare la VM per accertarsi che tutto funzioni correttamente.
+.. Dopo il failover, la macchina virtuale di prova della replica viene eliminata se si seleziona Stop Test failover.
+
+
+. Eseguire un failover pianificato per replicare le ultime modifiche sulla macchina virtuale primaria nella macchina virtuale di replica.
++
+.. Accedere al server primario.
+.. Disattivare la macchina virtuale da sottoporre a failover.
+.. In Hyper-V Manager, fare clic con il pulsante destro del mouse sulla macchina virtuale disattivata, fare clic su Replica, quindi su failover pianificato.
+.. Fare clic su failover per trasferire le ultime modifiche VM al server di replica.
+
+
+. Eseguire un failover non pianificato in caso di guasto principale della VM.
++
+.. Accedere al server di replica.
+.. In Hyper-V Manager, fare clic con il pulsante destro del mouse su una VM di replica, fare clic su Replication (Replica) e su failover.
+.. Scegliere il punto di ripristino da utilizzare.
+.. Fare clic su failover per eseguire il failover della VM.
+
+
+

@@ -47,23 +47,23 @@ Per configurare un cluster ha, completare i seguenti passaggi:
 . Fare clic con il pulsante destro del mouse sull'oggetto del data center e selezionare nuovo cluster. In base alle nozioni di base, assicurarsi di aver abilitato vSphere DRS e vSphere ha. Completare la procedura guidata.
 
 
-image::../media/vmsc_3_1.png[Schermata della descrizione di un computer generata automaticamente,624,302]
+image::../media/vmsc_3_1.png[Nuovo cluster,624,302]
 
 . Selezionare il cluster e accedere alla scheda di configurazione. Selezionare vSphere ha e fare clic su Modifica.
 . In monitoraggio host, selezionare l'opzione attiva monitoraggio host.
 
 
-image::../media/vmsc_3_2.png[Schermata della descrizione di un computer generata automaticamente,624,475]
+image::../media/vmsc_3_2.png[Attivare l'opzione monitoraggio host,624,475]
 
 . Nella scheda guasti e risposte, in monitoraggio VM, selezionare l'opzione solo monitoraggio VM o monitoraggio VM e applicazione.
 
 
-image::../media/vmsc_3_3.png[Schermata della descrizione di un computer generata automaticamente,624,480]
+image::../media/vmsc_3_3.png[Monitoraggio VM,624,480]
 
 . In controllo ammissione, impostare l'opzione di controllo ammissione ha su Cluster Resource Reserve; utilizzare 50% CPU/MEM.
 
 
-image::../media/vmsc_3_4.png[Schermata della descrizione di un computer generata automaticamente,624,479]
+image::../media/vmsc_3_4.png[Controllo ammissione,624,479]
 
 . Fare clic su "OK".
 . Selezionare DRS e fare clic su MODIFICA.
@@ -236,22 +236,22 @@ Per configurare un cluster di datastore per ciascun sito, attenersi alla seguent
 * NetApp consiglia di configurare i DRS dello storage in modalità manuale, in modo che l'amministratore possa decidere e controllare quando è necessario eseguire le migrazioni.
 
 
-image::../media/vmsc_3_9.png[Primo piano di una descrizione di testo generata automaticamente,528,94]
+image::../media/vmsc_3_9.png[DRS dello storage,528,94]
 
 . Verificare che la casella di controllo Enable i/o Metric for SDRS Recommendations (Abilita metriche i/o per raccomandazioni SDRS) sia selezionata; le impostazioni metriche possono essere lasciate con i valori predefiniti.
 
 
-image::../media/vmsc_3_10.png[Schermata della descrizione di un computer generata automaticamente,624,241]
+image::../media/vmsc_3_10.png[Raccomandazioni SDR,624,241]
 
 . Selezionare il cluster ha e fare clic su Next.
 
 
-image::../media/vmsc_3_11.png[Schermata della descrizione di un computer generata automaticamente,624,149]
+image::../media/vmsc_3_11.png[Cluster HA,624,149]
 
 . Selezionare gli archivi dati appartenenti al sito A e fare clic su Avanti.
 
 
-image::../media/vmsc_3_12.png[Schermata della descrizione di un computer generata automaticamente,624,134]
+image::../media/vmsc_3_12.png[datastore,624,134]
 
 . Rivedere le opzioni e fare clic su fine.
 . Ripetere questa procedura per creare il cluster di datastore del sito B e verificare che siano selezionati solo i datastore del sito B.

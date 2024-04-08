@@ -16,7 +16,7 @@ summary: Configurazione NFS per database Oracle
 [role="lead"]
 NetApp offre storage NFS Enterprise da oltre 30 anni e il suo utilizzo cresce insieme alla spinta verso infrastrutture basate sul cloud grazie alla sua semplicità.
 
-Il protocollo NFS include diverse versioni con diversi requisiti. Per una descrizione completa della configurazione NFS con ONTAP, vedere link:https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice NFS su NetApp ONTAP TR-4067"^]. Le sezioni seguenti descrivono alcuni dei requisiti più critici e gli errori comuni degli utenti.
+Il protocollo NFS include diverse versioni con diversi requisiti. Per una descrizione completa della configurazione NFS con ONTAP, vedere link:https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice NFS su ONTAP TR-4067"^]. Le sezioni seguenti descrivono alcuni dei requisiti più critici e gli errori comuni degli utenti.
 
 
 
@@ -122,7 +122,7 @@ Per la maggior parte delle applicazioni, la differenza tra NFSv3 e NFSv4 è mini
 
 TIP: *NetApp consiglia* di utilizzare NFSv4,1 se sono necessarie funzionalità NFSv4. Sono stati apportati alcuni miglioramenti funzionali al protocollo NFSv4 di NFSv4,1 che migliorano la resilienza in alcuni casi edge.
 
-Il passaggio a NFSv4 è più complicato che cambiare semplicemente le opzioni di montaggio da vers=3 a vers=4,1. Una spiegazione più completa della configurazione NFSv4 con ONTAP, incluse le istruzioni sulla configurazione del sistema operativo, vedere https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice TR-4067 NFS su NetApp ONTAP"^]. Le seguenti sezioni di questo TR spiegano alcuni dei requisiti di base per l'utilizzo di NFSv4.
+Il passaggio a NFSv4 è più complicato che cambiare semplicemente le opzioni di montaggio da vers=3 a vers=4,1. Una spiegazione più completa della configurazione NFSv4 con ONTAP, incluse le istruzioni sulla configurazione del sistema operativo, vedere https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Best practice TR-4067 NFS su ONTAP"^]. Le seguenti sezioni di questo TR spiegano alcuni dei requisiti di base per l'utilizzo di NFSv4.
 
 
 
