@@ -16,7 +16,7 @@ summary: Configurazione di rete FC per database Oracle
 [role="lead"]
 La configurazione di FC SAN per database Oracle riguarda principalmente le seguenti Best practice quotidiane SAN.
 
-Ciò include misure di pianificazione tipiche, ad esempio garantire che esista una larghezza di banda sufficiente sulla SAN tra il sistema host e il sistema di storage, verificando che tutti i percorsi SAN esistano tra tutti i dispositivi richiesti, utilizzando le impostazioni della porta FC richieste dal fornitore dello switch FC, evitando conflitti ISL, e utilizzando un adeguato monitoraggio del fabric SAN.
+Sono incluse misure di pianificazione tipiche, quali la garanzia della presenza di una larghezza di banda sufficiente sulla SAN tra l'host e il sistema di storage, la verifica della presenza di tutti i percorsi SAN tra i dispositivi richiesti, l'utilizzo delle impostazioni della porta FC richieste dal fornitore dello switch FC, evitando conflitti ISL, e utilizzando un adeguato monitoraggio del fabric SAN.
 
 
 

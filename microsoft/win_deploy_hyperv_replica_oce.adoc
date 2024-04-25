@@ -4,8 +4,13 @@ permalink: microsoft/win_deploy_hyperv_replica_oce.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: 'In questa appendice viene descritta la distribuzione di replica Hyper-V all"esterno di un ambiente in cluster.' 
 ---
-= Implementare la replica Hyper-V all'esterno di un ambiente cluster
+= Implementazione di replica Hyper-V all'esterno di un ambiente in cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

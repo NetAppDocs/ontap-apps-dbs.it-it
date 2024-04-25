@@ -26,7 +26,7 @@ In pratica, funziona in modo simile a una versione granulare di MetroCluster, co
 
 == Accesso al percorso
 
-Con SnapMirror attivo sincronizza i dispositivi di storage in modo che possano ospitare i sistemi operativi sia dall'array di storage primario che da quello remoto. I percorsi vengono gestiti tramite l'ALUA (Asymmetric Logical Unit Access), un protocollo standard di settore per l'identificazione dei percorsi ottimizzati tra un sistema storage e un host.
+Con SnapMirror Active Sync, i dispositivi di storage sono visibili per l'hosting dei sistemi operativi dagli array di storage primari e remoti. I percorsi vengono gestiti tramite l'ALUA (Asymmetric Logical Unit Access), un protocollo standard di settore per l'identificazione dei percorsi ottimizzati tra un sistema storage e un host.
 
 Il percorso del dispositivo più breve per accedere all'i/o è considerato percorsi attivi/ottimizzati e il resto dei percorsi è considerato percorsi attivi/non ottimizzati.
 

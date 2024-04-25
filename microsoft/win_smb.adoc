@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Storage NAS ONTAP per Hyper-V utilizzando SMB3 
 ---
 = Provisioning negli ambienti SMB
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -23,7 +28,7 @@ Al momento della creazione di una SVM con il protocollo CIFS, viene eseguito un 
 
 
 
-== Provisioning della condivisione SMB su Windows Server
+== Provisioning delle condivisioni SMB su Windows Server
 
 
 
@@ -98,7 +103,7 @@ Per rilevare la condivisione CIFS creata in precedenza con Windows Server, atten
 
 
 
-=== Best Practice
+=== Best practice
 
 * Per confermare l'assenza di downtime quando un volume viene spostato da un nodo a un altro o in caso di guasto a un nodo, NetApp consiglia di attivare l'opzione di disponibilità continua nella condivisione file.
 * Nel provisioning delle macchine virtuali per un ambiente Hyper-V-over-SMB, NetApp consiglia di abilitare l'offload delle copie nel sistema storage. In questo modo si riduce il tempo di provisioning delle VM.
@@ -123,7 +128,7 @@ Per rilevare la condivisione CIFS creata in precedenza con Windows Server, atten
 
 
 
-== Provisioning della condivisione SMB su Nano Server
+== Provisioning delle condivisioni SMB su Nano Server
 
 Nano Server non richiede software client aggiuntivo per accedere ai dati della condivisione CIFS su un controller di storage NetApp.
 

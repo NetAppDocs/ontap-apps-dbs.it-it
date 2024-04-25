@@ -56,7 +56,7 @@ Per ulteriori informazioni sul controllo dell'accesso amministrativo, fare clic 
 
 == Autenticazione a più fattori
 
-ONTAP e alcuni altri prodotti NetApp supportano ora l'autenticazione a più fattori utilizzando una vasta gamma di metodi. Il risultato è un nome utente/password compromesso da solo non è un thread di sicurezza senza i dati del secondo fattore, come un FOB o un'applicazione per smartphone.
+ONTAP e alcuni altri prodotti NetApp supportano ora l'autenticazione a più fattori (MFA) utilizzando una vasta gamma di metodi. Il risultato è un nome utente/password compromesso da solo non è un thread di sicurezza senza i dati del secondo fattore, come un FOB o un'applicazione per smartphone.
 
 Per ulteriori informazioni, fare clic su link:https://docs.netapp.com/us-en/ontap/authentication/mfa-overview.html["qui."]
 
@@ -70,7 +70,7 @@ Per ulteriori informazioni, avviare il sistema https://docs.netapp.com/us-en/ont
 
 
 
-== Verifica multi-admin
+== Verifica multi-admin (MAV)
 
 L'autenticazione a più "fattori" può essere ulteriormente eseguita richiedendo l'approvazione di determinate attività da parte di due amministratori diversi, ciascuno con le proprie credenziali. Ciò include la modifica delle autorizzazioni di accesso, l'esecuzione dei comandi diagnostici e l'eliminazione dei dati.
 

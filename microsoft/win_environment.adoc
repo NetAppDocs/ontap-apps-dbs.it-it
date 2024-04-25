@@ -4,8 +4,13 @@ permalink: microsoft/win_environment.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: 'Ulteriori informazioni sullo storage NetApp e sull"ambiente server Windows' 
 ---
-= Ambiente storage NetApp e server Windows
+= Storage NetApp e ambiente Windows Server
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -46,7 +51,7 @@ image:win_image2.png["ONTAP Storage Virtual Machine, larghezza=572, altezza=443"
 
 
 
-== Provisioning dello storage NetApp per server Windows
+== Provisioning dello storage NetApp per Windows Server
 
 È possibile eseguire il provisioning dello storage su Windows Server in ambienti SAN e NAS. In un ambiente SAN, lo storage viene fornito come dischi dalle LUN sul volume NetApp come storage a blocchi. In un ambiente NAS, lo storage viene fornito come condivisioni CIFS/SMB sui volumi NetApp come file storage. I dischi e le condivisioni possono essere applicati in Windows Server nel modo seguente:
 
@@ -94,7 +99,7 @@ Il NetApp PowerShell Toolkit (PSTK) è un modulo PowerShell che offre automazion
 
 
 
-== Best practice delle reti
+== Best practice per il networking
 
 Le reti Ethernet possono essere ampiamente segregate nei seguenti gruppi:
 
@@ -108,7 +113,7 @@ Le reti Ethernet possono essere ampiamente segregate nei seguenti gruppi:
 
 
 
-=== Best Practice
+=== Best practice
 
 * NetApp consiglia di disporre di porte fisiche dedicate per ciascuna delle funzionalità precedenti per l'isolamento e le prestazioni della rete.
 * Per ciascuno dei precedenti requisiti di rete (ad eccezione dei requisiti di storage), è possibile aggregare più porte di rete fisiche per distribuire il carico o fornire la tolleranza agli errori.

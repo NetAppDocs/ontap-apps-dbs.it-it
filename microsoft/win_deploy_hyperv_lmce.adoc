@@ -4,8 +4,13 @@ permalink: microsoft/win_deploy_hyperv_lmce.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: Questa appendice descrive la distribuzione della migrazione live in un ambiente in cluster. 
 ---
-= Implementa la migrazione live di Hyper-V in un ambiente in cluster
+= Distribuire Hyper-V Live Migration in un ambiente in cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

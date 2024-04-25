@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Questa appendice descrive come utilizzare la migrazione live di Hyper-V al di fuori di un ambiente in cluster 
 ---
 = Implementazione di Hyper-V Live Migration all'esterno di un ambiente in cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

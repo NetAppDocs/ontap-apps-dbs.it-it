@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Panoramica della virtualizzazione Microsoft Windows e Hyper-V con ONTAP 
 ---
 = Panoramica
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -38,7 +43,7 @@ Insieme, Windows Server e ONTAP sono in grado di operare in ambienti di grandi d
 
 
 
-== Destinatari previsti
+== Pubblico previsto
 
 Il presente documento è destinato agli architetti di sistema e di storage che progettano soluzioni di storage NetApp per server Windows.
 

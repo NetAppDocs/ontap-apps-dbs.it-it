@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Infrastruttura di storage Hyper-V con ONTAP 
 ---
 = Infrastruttura storage Hyper-V su NetApp
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -25,7 +30,7 @@ image:win_image5.png["Infrastruttura storage Hyper-V su NetApp, larghezza=624, a
 
 
 
-== Storage Hyper-V sulla CIFS share di NetApp
+== Storage Hyper-V su NetApp CIFS
 
 Prima di iniziare i passaggi elencati in questa sezione, rivedere la sezione "link:win_smb.html["Provisioning negli ambienti SMB"]." Per configurare lo storage Hyper-V sulla CIFS share di NetApp, attenersi alla seguente procedura:
 
@@ -44,7 +49,7 @@ A sua volta, ciascuna macchina virtuale di Hyper-V può essere fornita con i LUN
 
 
 
-=== Best Practice
+=== Best practice
 
 * Quando una macchina virtuale e i relativi dati vengono memorizzati nello storage NetApp, NetApp consiglia di eseguire la deduplica NetApp a livello di volume a intervalli regolari. Questa pratica consente notevoli risparmi di spazio quando macchine virtuali identiche vengono ospitate in una condivisione CSV o SMB. La deduplica viene eseguita sullo storage controller e non influisce sul sistema host e sulle performance delle macchine virtuali.
 * Quando si utilizzano LUN iSCSI per Hyper-V, accertarsi di abilitare `iSCSI Service (TCP-In) for Inbound` e. `iSCSI Service (TCP-Out) for Outbound` Nelle impostazioni del firewall sull'host Hyper-V. In questo modo, si consente il passaggio del traffico iSCSI da e verso l'host Hyper-V e il controller NetApp.
@@ -125,7 +130,7 @@ Per informazioni su ODX, vedere https://docs.netapp.com/us-en/ontap/smb-admin/im
 
 
 
-== Clustering Hyper-V: Elevata disponibilità e scalabilità per le macchine virtuali
+== Clustering Hyper-V: Alta disponibilità e scalabilità per le macchine virtuali
 
 I cluster di failover offrono disponibilità e scalabilità elevate per i server Hyper-V. Un cluster di failover è un gruppo di server Hyper-V indipendenti che lavorano insieme per aumentare la disponibilità e la scalabilità delle VM.
 
@@ -141,7 +146,7 @@ image:win_image6.png["Cluster di failover Hyper-V e NetApp, larghezza=624, altez
 
 
 
-=== Best Practice
+=== Best practice
 
 * NetApp consiglia di disattivare la comunicazione del cluster sulla rete iSCSI per impedire il flusso di comunicazioni interne del cluster e del traffico CSV sulla stessa rete.
 * NetApp consiglia di disporre di percorsi di rete ridondanti (switch multipli) per garantire resilienza e qualità del servizio.
@@ -169,7 +174,7 @@ A volte è necessario, durante il ciclo di vita delle macchine virtuali, spostar
 
 
 
-=== Migrazione live in un ambiente cluster
+=== Live Migration in un ambiente in cluster
 
 È possibile spostare perfettamente le macchine virtuali tra i nodi di un cluster. La migrazione delle macchine virtuali è istantanea perché tutti i nodi del cluster condividono lo stesso storage e hanno accesso alla macchina virtuale e al relativo disco. La figura seguente illustra la migrazione live in un ambiente in cluster.
 
@@ -191,7 +196,7 @@ Per informazioni sulla distribuzione della migrazione live in un ambiente in clu
 
 
 
-=== Migrazione live al di fuori di un ambiente in cluster
+=== Live Migration all'esterno di un ambiente in cluster
 
 Puoi eseguire la migrazione live di una macchina virtuale tra due server Hyper-V indipendenti e non in cluster. Questo processo può utilizzare la migrazione in tempo reale senza elementi condivisi o condivisi.
 
