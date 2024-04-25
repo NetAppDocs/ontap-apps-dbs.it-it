@@ -15,7 +15,7 @@ Scopri come distribuire e configurare la replica di Hyper-V con il cluster di fa
 
 == Prerequisiti
 
-* Devi avere cluster Hyper-V ubicati nella stessa area geografica o in posizioni separate che fungono da cluster primari e di replica. Rivedere la sezione "link:\l["Clustering di Hyper-V."]" per ulteriori dettagli.
+* Devi avere cluster Hyper-V ubicati nella stessa area geografica o in posizioni separate che fungono da cluster primari e di replica. Revisione link:win_deploy_hyperv.html["Distribuire il cluster Hyper-V."] per ulteriori dettagli.
 * Se si utilizzano siti separati, è necessario configurare il firewall in ciascun sito per consentire la comunicazione tra i cluster primario e di replica.
 * Il cluster di replica deve disporre di spazio sufficiente per archiviare i workload replicati.
 

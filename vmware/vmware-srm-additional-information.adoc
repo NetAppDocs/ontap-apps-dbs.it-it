@@ -17,17 +17,17 @@ summary: Per ulteriori informazioni sulle informazioni descritte in questo docum
 Per ulteriori informazioni sulle informazioni descritte in questo documento, consultare i seguenti documenti e/o siti Web:
 
 * TR-4597: VMware vSphere per ONTAP
-link:vmware-vsphere-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-overview.html"^]
+link:vmware-vsphere-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-overview.html"]
 * TR-4400: Volumi virtuali VMware vSphere con ONTAP
-link:vmware-vvols-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vvols-overview.html"^]
+link:vmware-vvols-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vvols-overview.html"]
 * Guida alle Best practice per la configurazione di SnapMirror TR-4015 per ONTAP 9
-https://www.netapp.com/media/17229-tr4015.pdf?v=127202175503P[]
+link:https://www.netapp.com/media/17229-tr4015.pdf?v=127202175503P["https://www.netapp.com/media/17229-tr4015.pdf?v=127202175503P"]
 * Creatore utente RBAC per ONTAP
-https://mysupport.netapp.com/site/tools/tool-eula/rbac["https://mysupport.netapp.com/site/tools/tool-eula/rbac"^]
+link:https://mysupport.netapp.com/site/tools/tool-eula/rbac["https://mysupport.netapp.com/site/tools/tool-eula/rbac"]
 * Strumenti ONTAP per le risorse VMware vSphere
-https://mysupport.netapp.com/site/products/all/details/otv/docsandkb-tab["https://mysupport.netapp.com/site/products/all/details/otv/docsandkb-tab"^]
+link:https://mysupport.netapp.com/site/products/all/details/otv/docsandkb-tab["https://mysupport.netapp.com/site/products/all/details/otv/docsandkb-tab"]
 * Documentazione di VMware Site Recovery Manager
-https://docs.vmware.com/en/Site-Recovery-Manager/index.html["https://docs.vmware.com/en/Site-Recovery-Manager/index.html"^]
+link:https://docs.vmware.com/en/Site-Recovery-Manager/index.html["https://docs.vmware.com/en/Site-Recovery-Manager/index.html"]
 
 
-Fare riferimento a. http://mysupport.netapp.com/matrix["Tool di matrice di interoperabilità (IMT)"^] Sul sito del supporto NetApp per verificare che le versioni esatte dei prodotti e delle funzionalità descritte in questo documento siano supportate per il tuo ambiente specifico. NetApp IMT definisce i componenti e le versioni dei prodotti che possono essere utilizzati per costruire configurazioni supportate da NetApp. I risultati specifici dipendono dall'installazione di ciascun cliente in conformità alle specifiche pubblicate.
+Fare riferimento a. link:http://mysupport.netapp.com/matrix["Tool di matrice di interoperabilità (IMT)"] Sul sito del supporto NetApp per verificare che le versioni esatte dei prodotti e delle funzionalità descritte in questo documento siano supportate per il tuo ambiente specifico. NetApp IMT definisce i componenti e le versioni dei prodotti che possono essere utilizzati per costruire configurazioni supportate da NetApp. I risultati specifici dipendono dall'installazione di ciascun cliente in conformità alle specifiche pubblicate.

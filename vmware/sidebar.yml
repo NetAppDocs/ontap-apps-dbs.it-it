@@ -50,7 +50,7 @@ entries:
     url: "/vmware/vmware-vvols-resources.html"
 - title: VMware Site Recovery Manager con ONTAP
   entries:
-  - title: Panoramica
+  - title: Panoramica di SRM con ONTAP
     url: "/vmware/vmware-srm-overview.html"
   - title: Best practice per l'implementazione
     url: "/vmware/vmware-srm-deployment_best_practices.html"
@@ -60,6 +60,8 @@ entries:
     url: "/vmware/vmware-srm-replication_topologies.html"
   - title: Risoluzione dei problemi di SRM quando si utilizza la replica vVol
     url: "/vmware/vmware-srm-vvol-troubleshooting.html"
+  - title: Informazioni aggiuntive per SRM
+    url: "/vmware/vmware-srm-additional-information.html"
 - title: VSphere Metro Storage Cluster con ONTAP
   entries:
   - title: Panoramica di vMSC
