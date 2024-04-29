@@ -5,7 +5,12 @@ keywords: WP-7355, security, snapcenter, treat modeling, dast, vulnerability sca
 summary: Questo documento descrive gli aspetti di sicurezza del plug-in SnapCenter per VMware. 
 ---
 = Plug-in di SnapCenter per VMware vSphere
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]

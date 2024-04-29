@@ -49,7 +49,7 @@ Attualmente, VMware SRM è l'unica soluzione di disaster recovery e automazione 
 
 === Replica di vVol con SRM
 
-image:vvols-image17.png["Replica di vVol con SRM,300"]
+image:vvols-image17.png["Replica di vVol con SRM"]
 
 
 
@@ -91,7 +91,7 @@ Il plug-in SnapCenter per VMware vSphere viene implementato come appliance stand
 
 === Architettura SnapCenter
 
-image:vvols-image18.png["Architettura SnapCenter,300"]
+image:snapcenter_arch.png["Architettura SnapCenter"]
 
 Poiché gli altri plug-in di SnapCenter non supportano ancora i vVol al momento di questa scrittura, in questo documento ci concentreremo sul modello di distribuzione standalone.
 
@@ -155,7 +155,7 @@ Le seguenti Best practice possono aiutarti a ottenere il massimo dalla tua imple
 
 === Opzioni di notifica del gruppo di risorse
 
-image:vvols-image19.png["Opzioni di notifica del gruppo di risorse,300"]
+image:vvols-image19.png["Opzioni di notifica del gruppo di risorse"]
 
 
 

@@ -5,7 +5,12 @@ keywords: design, HCI, computing, vmware, cloud, graphics, virtualization
 summary: 'TR-4792 fornisce indicazioni per l"utilizzo di NetApp HCI 615C per carichi di lavoro di grafica 3D in un ambiente VMware Horizon con unità di elaborazione grafica NVIDIA (GPU) e software di virtualizzazione.' 
 ---
 = NetApp HCI per l'infrastruttura di desktop virtuale con VMware Horizon 7: Potenzia i tuoi utenti più esperti con la grafica 3D
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]

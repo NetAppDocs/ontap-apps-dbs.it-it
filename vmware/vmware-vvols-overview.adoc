@@ -6,6 +6,10 @@ summary: 'Questa è una panoramica dei volumi virtuali di VMware vSphere (vVol) 
 ---
 = Panoramica
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]
