@@ -1,0 +1,63 @@
+= Volumi
+:allow-uri-read: 
+
+
+
+
+== Volumi
+
+Un punto comune di confusione tra i clienti che non conoscono ONTAP è l'utilizzo di FlexVol, comunemente denominati semplicemente "volumi".
+
+Un volume non è un LUN. Questi termini vengono utilizzati in maniera anonima con molti prodotti di altri vendor, inclusi i cloud provider. ONTAP Volumes sono semplicemente container di gestione. Non forniscono dati da soli, né occupano spazio. Sono container per file o LUN e esistono per migliorare e semplificare la gestibilità, in particolare su larga scala.
+
+
+
+== Volumi e LUN
+
+I LUN correlati sono normalmente collocati in una stessa posizione in un singolo volume. Ad esempio, un database che richiede 10 LUN solitamente conterrà tutte le 10 LUN dello stesso volume.
+
+[CAUTION]
+====
+* L'utilizzo di un rapporto di 1:1:1 tra LUN e volumi, vale a dire un LUN per volume, non è * una Best practice formale.
+* I volumi dovrebbero invece essere visti come container per i carichi di lavoro o i set di dati. È possibile che sia presente un singolo LUN per volume o che ve ne siano molti. La risposta giusta dipende dai requisiti di gestibilità.
+* La dispersione dei LUN in un numero non necessario di volumi può causare overhead e problemi di pianificazione aggiuntivi per operazioni quali operazioni di snapshot, un numero eccessivo di oggetti visualizzati nell'interfaccia utente e il raggiungimento dei limiti di volume della piattaforma prima del raggiungimento del limite LUN.
+
+
+====
+
+
+== Volumi, LUN e snapshot
+
+I criteri e le pianificazioni degli Snapshot vengono posizionati sul volume, non sul LUN. Un set di dati composto da 10 LUN richiederebbe una singola policy di snapshot quando le LUN sono collocate contemporaneamente nello stesso volume.
+
+Inoltre, la co-localizzazione di tutti i LUN correlati per un dato dataset in un singolo volume consente di eseguire operazioni di snapshot atomiche. Ad esempio, un database di 10 LUN o un ambiente applicativo basato su VMware composto da 10 diversi sistemi operativi possono essere protetti come un singolo oggetto coerente se le LUN sottostanti vengono tutte collocate in un singolo volume. Se vengono posizionati su volumi diversi, gli snapshot possono essere o meno sincronizzati al 100%, anche se pianificati allo stesso tempo.
+
+In alcuni casi, potrebbe essere necessario suddividere una serie di LUN correlata in due volumi diversi a causa dei requisiti di recovery. Ad esempio, un database potrebbe avere quattro LUN per i file di dati e due LUN per i log. In questo caso, un volume di file dati con 4 LUN e un volume di registro con 2 LUN potrebbe essere l'opzione migliore. Il motivo è la possibilità di recupero indipendente. Ad esempio, è possibile ripristinare in maniera selettiva il volume di file dati a uno stato precedente, vale a dire che le quattro LUN vengono riportate allo stato della snapshot, senza influire sul volume di log con i dati critici.
+
+
+
+== Volumi, LUN e SnapMirror
+
+Le policy e le operazioni di SnapMirror, come le operazioni di Snapshot, vengono eseguite sul volume, non sul LUN.
+
+La co-localizzazione dei LUN correlati in un singolo volume consente di creare una singola relazione di SnapMirror e di aggiornare tutti i dati contenuti con un singolo update. Come per gli snapshot, l'aggiornamento sarà anche un'operazione atomica. La destinazione SnapMirror avrà una replica point-in-time singola delle LUN di origine. Se le LUN sono state distribuite su più volumi, le repliche possono essere o meno coerenti l'una con l'altra.
+
+
+
+== Volumi, LUN e QoS
+
+Mentre la qualità del servizio può essere applicata in modo selettivo alle singole LUN, in genere è più semplice impostarla a livello di volume. Ad esempio, tutte le LUN utilizzate dai guest di un determinato server ESX possono essere collocate su un singolo volume e successivamente può essere applicata una policy di QoS adattiva di ONTAP. In questo modo si ottiene un limite di IOPS per TB autoscalabile valido per tutte le LUN.
+
+Analogamente, se un database richiedeva 100K IOPS e occupava 10 LUN, sarebbe più semplice impostare un singolo limite di 100K IOPS su un singolo volume piuttosto che impostare 10 limiti individuali di 10K IOPS, uno per ogni LUN.
+
+
+
+== Layout a più volumi
+
+Vi sono alcuni casi in cui la distribuzione delle LUN su più volumi può essere vantaggiosa. Il motivo principale è lo striping dei controller. Ad esempio, un sistema storage ha potrebbe ospitare un singolo database in cui è richiesto il potenziale completo di elaborazione e caching di ogni controller. In questo caso, una progettazione tipica sarebbe quella di collocare metà dei LUN in un singolo volume sul controller 1, e l'altra metà dei LUN in un singolo volume sul controller 2.
+
+Analogamente, lo striping dei controller potrebbe essere utilizzato per il bilanciamento del carico. Un sistema ha che ospitava 100 database da 10 LUN ciascuno potrebbe essere progettato dove ogni database riceve un volume da 5 LUN su ciascuno dei due controller. Il risultato è garantito il caricamento simmetrico di ogni controller quando vengono forniti database aggiuntivi.
+
+Tuttavia, nessuno di questi esempi riguarda un rapporto volume-LUN di 1:1:1. L'obiettivo resta quello di ottimizzare la gestibilità mediante la co-localizzazione dei LUN correlati in volumi.
+
+Un esempio se un rapporto da 1:1 LUN a volume è sensato è la containerizzazione, laddove ogni LUN potrebbe rappresentare davvero un singolo carico di lavoro e deve essere gestita singolarmente. In questi casi, un rapporto 1:1:1 può essere ottimale.

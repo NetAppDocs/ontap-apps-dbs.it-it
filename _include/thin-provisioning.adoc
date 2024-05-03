@@ -20,14 +20,6 @@ Vedere link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentazio
 
 
 
-== Thin provisioning LUN
-
-L'efficienza del thin provisioning delle LUN attive in un ambiente di file system può andare persa nel tempo quando i dati vengono eliminati. A meno che i dati eliminati non vengano sovrascritti con zero o lo spazio venga liberato con il recupero di spazio TRIM/UNMAP, i dati "cancellati" occupano sempre più spazi vuoti non allocati nel file system. Inoltre, in molti ambienti di database il thin provisioning delle LUN attive è limitato, in quanto i file di dati vengono inizializzati alle dimensioni massime al momento della creazione.
-
-Un'attenta pianificazione della configurazione LVM può migliorare l'efficienza e ridurre al minimo la necessità di provisioning dello storage e di ridimensionamento delle LUN. Quando si utilizza un LVM come Veritas VxVM o Oracle ASM, le LUN sottostanti vengono suddivise in estensioni che vengono utilizzate solo quando necessario. Ad esempio, se un set di dati inizia a 2TB TB ma potrebbe crescere fino a 10TB TB con il passare del tempo, è possibile inserire il set di dati in 10TB LUN con thin provisioning organizzati in un gruppo di dischi LVM. Occupa solo 2TB GB di spazio al momento della creazione e richiederebbe spazio aggiuntivo solo se le estensioni sono allocate per ospitare la crescita dei dati. Questo processo è sicuro finché lo spazio è monitorato.
-
-
-
 == Prenotazioni frazionarie
 
 Riserva frazionaria si riferisce al comportamento di un LUN in un volume rispetto all'efficienza dello spazio. Quando l'opzione `fractional-reserve` è impostato al 100%, tutti i dati nel volume possono subire un turnover del 100% con qualsiasi modello di dati senza esaurire lo spazio sul volume.
