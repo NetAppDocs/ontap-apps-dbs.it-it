@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-otv-hardening-access.html 
+keywords: VMware, Data protection, security, ONTAP tools, Hardening, ONTAP Tools 
+summary: Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere, punti di accesso utente. 
+---
+= Tool ONTAP per access point VMware vSphere (utenti)
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+L'installazione di ONTAP Tools per VMware vSphere consente di creare e utilizzare tre tipi di utenti:
+
+. System User (utente di sistema): L'account utente root
+. Utente dell'applicazione: Gli account utente amministratore, utente principale e utente di database
+. Support user: L'account utente diag
+
+
+
+
+== 1. Utente di sistema
+
+L'utente System(root) viene creato dall'installazione degli strumenti ONTAP sul sistema operativo sottostante (Debian).
+
+* Un utente di sistema predefinito "root" viene creato su Debian tramite l'installazione degli strumenti ONTAP. L'impostazione predefinita è disattivata e può essere attivata ad hoc tramite la console 'Maint'.
+
+
+
+
+== 2. Utente dell'applicazione
+
+L'utente dell'applicazione viene denominato come utente locale negli strumenti di ONTAP. Si tratta di utenti creati nell'applicazione ONTAP Tools. Nella tabella seguente sono elencati i tipi di utenti dell'applicazione:
+
+[cols="22%,78%"]
+|===
+| *Utente* | *Descrizione* 
+
+
+| Administrator User (utente amministratore) | Viene creato durante l'installazione degli strumenti di ONTAP e l'utente fornisce le credenziali durante la distribuzione degli strumenti di ONTAP. Gli utenti hanno la possibilità di modificare la 'password' nella console 'Mainta'. La password scadrà tra 90 giorni e gli utenti saranno tenuti a cambiarla. 
+
+
+| Utente manutenzione | Viene creato durante l'installazione degli strumenti di ONTAP e l'utente fornisce le credenziali durante la distribuzione degli strumenti di ONTAP. Gli utenti hanno la possibilità di modificare la 'password' nella console 'Mainta'. Si tratta di un utente addetto alla manutenzione che viene creato per eseguire le operazioni della console di manutenzione. 
+
+
+| Utente database | Viene creato durante l'installazione degli strumenti di ONTAP e l'utente fornisce le credenziali durante la distribuzione degli strumenti di ONTAP. Gli utenti hanno la possibilità di modificare la 'password' nella console 'Mainta'. La password scadrà tra 90 giorni e gli utenti saranno tenuti a cambiarla. 
+|===
+
+
+== 3. Utente di assistenza (utente diag)
+
+Durante l'installazione di ONTAP Tools, viene creato un utente di supporto. Questo utente può essere utilizzato per accedere agli strumenti ONTAP in caso di problemi o interruzioni del server e per raccogliere i registri. Per impostazione predefinita, questo utente è disattivato, ma può essere attivato su base adhoc tramite la console 'Maint'. È importante notare che l'utente verrà disattivato automaticamente dopo un determinato periodo di tempo.

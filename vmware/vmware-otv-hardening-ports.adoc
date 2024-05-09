@@ -1,0 +1,79 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-otv-hardening-ports.html 
+keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
+summary: Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere. 
+---
+= Porte e protocolli
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Di seguito sono elencate le porte e i protocolli necessari per consentire la comunicazione tra gli strumenti ONTAP per il server VMware vSphere e altre entità come i sistemi di storage gestito, i server e altri componenti.
+
+
+
+== Porte in entrata e in uscita richieste per OTV
+
+Tenere presente la tabella riportata di seguito che elenca le porte in entrata e in uscita necessarie per il corretto funzionamento degli strumenti ONTAP. È importante assicurarsi che solo le porte menzionate nella tabella siano aperte per i collegamenti da macchine remote, mentre tutte le altre porte devono essere bloccate per i collegamenti da macchine remote. In questo modo si garantisce la sicurezza e la sicurezza del sistema.
+
+La seguente tabella descrive i dettagli della porta aperta.
+
+[cols="18%,21%,61%"]
+|===
+| *Porta TCP v4/V6 #* | *Direzione* | *Funzione* 
+
+
+| 8143 | in entrata | Connessioni HTTPS per API REST 
+
+
+| 8043 | in entrata | Connessioni HTTPS 
+
+
+| 9060 | in entrata | Connessioni HTTPS +
+Utilizzato per connessioni SOAP su HTTPS +
+Questa porta deve essere aperta per consentire a un client di connettersi al server API degli strumenti ONTAP. 
+
+
+| 22 | in entrata | SSH (Disattivato per impostazione predefinita) 
+
+
+| 9080 | in entrata | Connessioni HTTPS - VP e SRA - connessioni interne solo da loopback 
+
+
+| 9083 | in entrata | Connessioni HTTPS - VP e SRA +
+Utilizzato per le connessioni SOAP su HTTPS 
+
+
+| 1162 | in entrata | Pacchetti di trap SNMP VP 
+
+
+| 8443 | in entrata | Plugin remoto 
+
+
+| 1527 | solo interno | Porta del database Derby, solo tra questo computer e se stesso, connessioni esterne non accettate — solo connessioni interne 
+
+
+| 8150 | solo interno | Il servizio integrità registro viene eseguito sulla porta 
+
+
+| 443 | bidirezionale | Utilizzato per le connessioni ai cluster ONTAP 
+|===
+
+
+== Controllo dell'accesso remoto al database Derby
+
+Gli amministratori possono accedere al database derby con i seguenti comandi. È possibile accedervi tramite la VM locale degli strumenti ONTAP e un server remoto con i seguenti passaggi:
+
+....
+java -classpath "/opt/netapp/vpserver/lib/*" org.apache.derby.tools.ij;
+connect 'jdbc:derby://<OTV-IP>:1527//opt/netapp/vpserver/vvoldb;user=<user>;password=<password>';
+....
+*[.underline]#esempio:#*
+
+image:vmware-otv-hardening-ports.png["Derby, larghezza=468, altezza=136"]
