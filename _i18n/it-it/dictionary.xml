@@ -5175,9 +5175,6 @@ Utilizzato per le connessioni SOAP su HTTPS</block>
   <block id="90ab4fc7a1c530bceac36bda71efbc5f" category="paragraph">Per impostazione predefinita, il servizio per NTP è ntpd. Si tratta di un servizio legacy che in alcuni casi non funziona bene per le macchine virtuali.</block>
   <block id="6801ecdb823d018c7370042d27b5ee2c" category="section-title">*Debian*</block>
   <block id="dc3bb5166d38d2aec53765aca7c0d24c" category="paragraph">Su Debian, l'utente può accedere al file /etc/ntp.conf per i dettagli del server ntp.</block>
-  <block id="3698338a95ad1801e25ed154adaf1a70" category="summary">Guida alla protezione avanzata per gli strumenti ONTAP per VMware vSphere, panoramica e introduzione.</block>
-  <block id="47d29daaa26fbfa9c9a069d4cd023ac1" category="doc">Guida alla protezione avanzata per gli strumenti ONTAP per VMware vSphere</block>
-  <block id="fe0e23a929284a636c245a362ada6472" category="paragraph">La guida alla protezione avanzata per gli strumenti ONTAP per VMware vSphere fornisce una serie completa di istruzioni per la configurazione delle impostazioni più sicure.</block>
   <block id="fec65f0c33739368ce5845fadb6cb880" category="paragraph">Queste guide si applicano sia alle applicazioni che al sistema operativo guest dell'appliance stessa.</block>
   <block id="5aaf8fc9424d7872cf500fb7adcb3b97" category="summary">Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere, configurazione dei criteri password.</block>
   <block id="ca80b83fb98de16af35b38476df589c3" category="doc">Criteri password</block>
@@ -5210,4 +5207,7 @@ Utilizzato per le connessioni SOAP su HTTPS</block>
   <block id="cb197b06aa92a742d01e256d58d3e34b" category="sidebar">Attacco DOS</block>
   <block id="d870a4bd29f74339732a958574d2c4eb" category="sidebar">Configurazione NTP</block>
   <block id="339ce1d4220ba7045e3a35ef35279ad3" category="sidebar">Criteri password</block>
+  <block id="08fe6a0b481c7eba55985eb19ee19e1e" category="summary">Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere, panoramica e introduzione.</block>
+  <block id="baecfb438214487bb004e49d325c66bf" category="doc">Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere</block>
+  <block id="8d1618af2c6a6379783e2978ba4a551c" category="paragraph">La Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere fornisce una serie completa di istruzioni per la configurazione delle impostazioni più sicure.</block>
 </blocks>
