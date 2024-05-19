@@ -4,7 +4,7 @@ permalink: microsoft/win_deploy_hyperv_slm.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: Come configurare la migrazione live dello storage Hyper-V. 
 ---
-= Implementa Live Migration dello storage Hyper-V.
+= Distribuire Hyper-V Storage Live Migration
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

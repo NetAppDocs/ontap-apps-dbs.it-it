@@ -30,6 +30,12 @@ entries:
     url: "/vmware/vmware-vsphere-dp.html"
   - title: QoS
     url: "/vmware/vmware-vsphere-qos.html"
+  - title: Migrazione e backup del cloud
+    url: "/vmware/vmware-vsphere-cloud_migration_backup.html"
+  - title: Crittografia per i dati vSphere
+    url: "/vmware/vmware-vsphere-encryption.html"
+  - title: Active IQ Unified Manager
+    url: "/vmware/vmware-vsphere-aiqum.html"
   - title: Gestione basata su criteri di storage
     url: "/vmware/vmware-vsphere-policy-and-vvols.html"
   - title: VMware Storage Distributed Resource Scheduler

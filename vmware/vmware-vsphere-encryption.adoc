@@ -1,0 +1,36 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-encryption.html 
+keywords: Data protection, Space reclamation, VM and datastore cloning, Storage efficiency, thin provisioning, QoS, SIOC, Storage Distributed Resource Scheduler, DRS, Active IQ Unified Manager, Encryption 
+summary: 'C"è un"crescente domanda di crittografia dei dati a riposo, che si estende oltre i dati tradizionali a tutti i tipi di dati memorizzati.' 
+---
+= Crittografia per i dati vSphere
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Oggi, la necessità di proteggere i dati inattivi è in aumento grazie alla crittografia. Sebbene l'attenzione iniziale fosse concentrata sulle informazioni finanziarie e sanitarie, c'è sempre più interesse a proteggere tutte le informazioni, che siano archiviate in file, database o altri tipi di dati.
+
+I sistemi che eseguono il software ONTAP semplificano la protezione dei dati con la crittografia a riposo. NetApp Storage Encryption (NSE) utilizza dischi con crittografia automatica e ONTAP per proteggere i dati SAN e NAS. NetApp offre inoltre NetApp Volume Encryption e NetApp aggregate Encryption come approccio semplice e basato su software per crittografare i volumi su qualsiasi disco. Questa crittografia software non richiede unità disco speciali o gestori di chiavi esterne ed è disponibile per i clienti ONTAP senza costi aggiuntivi. È possibile eseguire l'upgrade e iniziare a utilizzarlo senza alcuna interruzione per i client o le applicazioni e sono validati in base allo standard FIPS 140-2 livello 1, incluso il gestore delle chiavi integrato.
+
+Esistono diversi approcci per la protezione dei dati delle applicazioni virtualizzate in esecuzione su VMware vSphere. Un approccio consiste nel proteggere i dati con il software all'interno della macchina virtuale a livello di sistema operativo guest. Gli hypervisor più recenti, come vSphere 6.5, ora supportano la crittografia a livello di VM come alternativa. Tuttavia, la crittografia del software NetApp è semplice e offre i seguenti vantaggi:
+
+* *Nessun effetto sulla CPU del server virtuale.* alcuni ambienti di server virtuali richiedono ogni ciclo di CPU disponibile per le proprie applicazioni, tuttavia i test hanno dimostrato che sono necessarie fino a 5 risorse di CPU con crittografia a livello di hypervisor. Anche se il software di crittografia supporta il set di istruzioni AES-NI di Intel per l'offload del carico di lavoro di crittografia (come fa la crittografia del software NetApp), questo approccio potrebbe non essere fattibile a causa del requisito di nuove CPU che non sono compatibili con i server meno recenti.
+* *Onboard Key Manager incluso.* la crittografia software NetApp include un gestore delle chiavi integrato senza costi aggiuntivi, il che rende semplice iniziare senza server di gestione delle chiavi ad alta disponibilità complessi da acquistare e utilizzare.
+* *Nessun effetto sull'efficienza dello storage.* le tecniche di efficienza dello storage, come deduplica e compressione, sono ampiamente utilizzate oggi e sono fondamentali per utilizzare i supporti su disco flash in modo conveniente. Tuttavia, i dati crittografati non possono in genere essere deduplicati o compressi. La crittografia dello storage e dell'hardware NetApp opera a un livello inferiore e consente l'utilizzo completo delle funzionalità di efficienza dello storage NetApp leader del settore, a differenza di altri approcci.
+* *Crittografia granulare semplice del datastore.* con NetApp Volume Encryption, ogni volume ottiene la propria chiave AES a 256 bit. Se è necessario modificarlo, è possibile farlo con un singolo comando. Questo approccio è ideale se hai più tenant o hai bisogno di dimostrare una crittografia indipendente per diversi reparti o applicazioni. Questa crittografia viene gestita a livello di datastore, il che è molto più semplice della gestione di singole macchine virtuali.
+
+
+Iniziare a utilizzare la crittografia del software è semplice. Una volta installata la licenza, è sufficiente configurare il gestore delle chiavi integrato specificando una passphrase e quindi creare un nuovo volume o spostare un volume lato storage per abilitare la crittografia. NetApp sta lavorando per aggiungere un supporto più integrato per le funzionalità di crittografia nelle versioni future dei suoi strumenti VMware.
+
+Per un'analisi approfondita di altri argomenti relativi alla sicurezza, fare riferimento alle seguenti risorse.
+
+* link:https://docs.netapp.com/us-en/ontap-technical-reports/security.html["Report tecnici sulla sicurezza"]
+* link:https://docs.netapp.com/us-en/ontap-technical-reports/security-hardening-guides.html["Guide per la protezione avanzata"]
+* link:https://docs.netapp.com/us-en/ontap/security-encryption/index.html["Documentazione del prodotto di sicurezza e crittografia dei dati ONTAP"]
+
