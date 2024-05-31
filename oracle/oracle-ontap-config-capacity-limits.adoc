@@ -34,4 +34,4 @@ Il consiglio di liberare il 10% dello spazio è molto conservativo. Gli aggregat
 == Aggregati HDD, compresi gli aggregati Flash Pool
 
 
-TIP: *NetApp consiglia* almeno il 15% di spazio libero quando si utilizzano unità rotanti. Ciò comprende tutto lo spazio inutilizzato, compreso lo spazio libero all'interno dell'aggregato o di un volume ed eventuale spazio libero allocato a causa dell'utilizzo del provisioning completo, ma non utilizzato dai dati effettivi. Le prestazioni saranno influenzate dagli approcci di conversazione libera al 10%.
+TIP: *NetApp consiglia* almeno il 15% di spazio libero quando si utilizzano unità rotanti. Ciò comprende tutto lo spazio inutilizzato, compreso lo spazio libero all'interno dell'aggregato o di un volume ed eventuale spazio libero allocato a causa dell'utilizzo del provisioning completo, ma non utilizzato dai dati effettivi. Le prestazioni saranno influenzate dall'avvicinarsi del 10% dello spazio libero.

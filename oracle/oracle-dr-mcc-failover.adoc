@@ -14,6 +14,8 @@ summary: Failover del database Oracle con MetroCluster
 
 
 [role="lead"]
-MetroCluster è una funzionalità di ONTAP in grado di proteggere i database Oracle con RPO=0 mirroring sincrono tra i siti, per poi scalare in verticale e supportare centinaia di database su un singolo sistema MetroCluster. È anche semplice da usare. L'utilizzo di MetroCluster non aggiunge o modifica necessariamente i migliori percorsi per la gestione di applicazioni e database aziendali.
+MetroCluster è una funzionalità di ONTAP in grado di proteggere i database Oracle con RPO=0 mirroring sincrono tra i siti, per poi scalare in verticale e supportare centinaia di database su un singolo sistema MetroCluster.
+
+È anche semplice da usare. L'utilizzo di MetroCluster non aggiunge o modifica necessariamente i migliori percorsi per la gestione di applicazioni e database aziendali.
 
 Le normali Best practice vengono comunque applicate e se le tue esigenze richiedono solo RPO=0:1 di data Protection, allora MetroCluster ne soddisfa l'esigenza. Tuttavia, la maggior parte dei clienti utilizza MetroCluster non solo per la protezione dei dati con RPO=0, ma anche per migliorare l'RTO in scenari di disastro, oltre a fornire un failover trasparente come parte delle attività di manutenzione del sito.

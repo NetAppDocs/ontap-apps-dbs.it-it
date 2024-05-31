@@ -142,14 +142,14 @@ entries:
     url: "/oracle/oracle-dr-overview.html"
   - title: MetroCluster
     entries:
+    - title: Failover di Oracle con MetroCluster
+      url: "/oracle/oracle-dr-mcc-failover.html"
     - title: Architettura fisica
       url: "/oracle/oracle-dr-mcc-physical.html"
     - title: Architettura logica
       url: "/oracle/oracle-dr-mcc-logical.html"
     - title: SyncMirror
       url: "/oracle/oracle-dr-mcc-syncmirror.html"
-    - title: Failover di Oracle
-      url: "/oracle/oracle-dr-mcc-failover.html"
     - title: NVFAIL
       url: "/oracle/oracle-dr-mcc-nvfail.html"
     - title: Oracle si su MetroCluster
