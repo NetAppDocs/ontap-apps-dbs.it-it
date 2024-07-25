@@ -143,7 +143,7 @@ Come descritto nella sezione 1,2, la gestione basata su criteri consente di eseg
 * *Provisioning più intelligente.* le funzionalità del sistema di storage possono essere esposte attraverso le API VASA, consentendo ai flussi di lavoro di provisioning di sfruttare funzionalità avanzate senza che l'amministratore delle macchine virtuali debba comprendere come gestire il sistema di storage.
 * *Provisioning più rapido.* diverse funzionalità di storage possono essere supportate in un singolo datastore e selezionate automaticamente in base alla policy della macchina virtuale.
 * *Evitare errori.* le policy di storage e macchine virtuali vengono sviluppate in anticipo e applicate in base alle necessità senza dover personalizzare lo storage ogni volta che viene eseguito il provisioning di una macchina virtuale. Gli allarmi di compliance vengono generati quando le funzionalità dello storage si scostano dalle policy definite. Come accennato in precedenza, gli SCP rendono il provisioning iniziale prevedibile e ripetibile, mentre basare le policy di storage delle macchine virtuali sugli SCP garantisce un posizionamento preciso.
-* *Migliore gestione della capacità.* i tool VASA e ONTAP consentono di visualizzare la capacità dello storage fino al livello di aggregato induviale, se necessario, e di fornire più livelli di avviso nel caso in cui la capacità inizi a diminuire.
+* *Migliore gestione della capacità.* Gli strumenti VASA e ONTAP consentono di vedere la capacità dello storage fino al singolo livello di aggregato, se necessario, e fornire più livelli di avviso in caso di esaurimento della capacità.
 
 
 
