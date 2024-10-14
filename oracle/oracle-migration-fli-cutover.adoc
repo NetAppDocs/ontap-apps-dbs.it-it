@@ -146,7 +146,7 @@ vserver1  800DT$HuVWBn /vol/new_lvm/LUN8 2
 vserver1  800DT$HuVWBo /vol/new_lvm/LUN9 2
 20 entries were displayed.
 ....
-Se è necessario un processo non in linea, ritardare il riscoperta o il riavvio dei servizi fino al `lun import show` il comando indica che tutta la migrazione è stata eseguita correttamente e completata. È quindi possibile completare il processo di migrazione come descritto in link:../migration/migration_options.html#foreign-lun-import-fli["Importazione di LUN esterne - completamento"].
+Se è necessario un processo offline, ritardare il riscoperta o il riavvio dei servizi finché il comando non `lun import show` indica che la migrazione è stata completata correttamente. È quindi possibile completare il processo di migrazione come descritto in link:oracle-migration-fli-completion.html["Importazione di LUN esterne - completamento"].
 
 Se hai bisogno di una migrazione online, procedi con il rilevamento dei LUN nella nuova sede e attiva i servizi.
 

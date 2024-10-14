@@ -10,7 +10,7 @@ summary: Questa appendice descrive la distribuzione della migrazione live in un 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

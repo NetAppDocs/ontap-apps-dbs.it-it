@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-mcc-sql.html 
+keywords: MSSQL,SQL Server, MetroCluster 
+summary: Microsoft SQL Server con NetApp MetroCluster 
+---
+= Microsoft SQL Server con MetroCluster
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Un'opzione per la protezione dei database di SQL Server con RPO pari a zero è MetroCluster. MetroCluster è una semplice tecnologia di replica RPO=0 dalle performance elevate che consente di replicare un'intera infrastruttura tra i siti in modo semplice.
+
+SQL Server è in grado di scalare fino a migliaia di database su un unico sistema MetroCluster. Potrebbero esistere istanze standalone di SQL Server o istanze cluster di failover, MetroCluster System non aggiunge o modifica necessariamente le Best practice per la gestione di un database.
+
+Una spiegazione completa di MetroCluster esula dall'ambito di questo documento, ma i principi sono semplici. MetroCluster può offrire una soluzione di replica con RPO=0 e failover rapido. Ciò che costruite su questa base dipende dalle vostre esigenze.
+
+Ad esempio, una procedura di DR rapida di base dopo una perdita improvvisa del sito potrebbe utilizzare la seguente procedura di base:
+
+* Forzare uno switchover MetroCluster
+* Rilevamento di LUN FC/iSCSI (solo SAN)
+* Montare i file system
+* Avviare SQL Services
+
+
+Il requisito principale di questo approccio è rappresentato da un sistema operativo in esecuzione sul sito remoto. Deve essere preconfigurato con l'installazione di SQL Server e deve essere aggiornato con una versione di build equivalente. È inoltre possibile eseguire il mirroring dei database di sistema di SQL Server nel sito remoto e montarli se viene dichiarata un'emergenza.
+
+Se i volumi, i file system e il datastore che ospitano database virtualizzati non vengono utilizzati nel sito di disaster recovery prima dello switchover, non è necessario impostare i `dr-force- nvfail` volumi associati.

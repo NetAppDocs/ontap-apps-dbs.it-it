@@ -17,26 +17,27 @@ NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubbli
 
 NetApp presuppone che il lettore disponga delle seguenti conoscenze operative:
 
-* Software ONTAP
+* ONTAP
+* Architettura e amministrazione di Microsoft SQL Server
+* Software di backup SnapCenter, inclusi i seguenti componenti:
 * NetApp SnapCenter come software di backup, che include:
 +
 ** Plug-in SnapCenter per Microsoft Windows
 ** Plug-in di SnapCenter per SQL Server
 
 
-* Architettura e amministrazione di Microsoft SQL Server
 
 
-L'ambito di questa sezione sulle Best practice è limitato alla progettazione tecnica, basata su principi di progettazione e standard preferenziali che NetApp consiglia per l'infrastruttura di storage. L'implementazione end-to-end non rientra nell'ambito.
+L'ambito di questa sezione sulle Best practice è limitato alla progettazione tecnica, basata su principi e standard preferenziali che NetApp consiglia per l'infrastruttura di storage. L'implementazione end-to-end non rientra nell'ambito di applicazione.
 
-Per informazioni sulla compatibilità della configurazione con i prodotti NetApp, consultare la link:https://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità NetApp (IMT)"^].
+Per informazioni sulla compatibilità tra i prodotti NetApp, vedere link:https://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità NetApp (IMT)"^].
 
 
 
 == Workload di Microsoft SQL Server
 
-Prima di distribuire SQL Server, è necessario comprendere i requisiti del carico di lavoro del database delle applicazioni supportate dalle istanze di SQL Server. Ogni applicazione ha requisiti differenti in termini di capacità, performance e disponibilità, per cui ogni database dovrebbe essere progettato per supportare al meglio tali requisiti. Molte organizzazioni classificano i database in più Tier di gestione, utilizzando i requisiti delle applicazioni per definire gli SLA. I carichi di lavoro di SQL Server possono essere descritti come segue:
+Prima di distribuire SQL Server, è necessario comprendere i requisiti dei carichi di lavoro delle applicazioni supportate dalle istanze dei database di SQL Server. Ogni applicazione ha requisiti differenti in termini di capacità, performance e disponibilità, per cui ogni database dovrebbe essere progettato per supportare al meglio tali requisiti. Molte organizzazioni classificano i database in più Tier di gestione, utilizzando i requisiti delle applicazioni per definire gli SLA. I carichi di lavoro di SQL Server sono spesso classificati come descritto di seguito:
 
-* I database OLTP sono spesso anche i database più critici di un'organizzazione. In genere, questi database supportano le applicazioni rivolte ai clienti e sono considerati essenziali per le operazioni chiave dell'azienda. I database OLTP mission-critical e le applicazioni che questi supportano spesso hanno SLA che richiedono elevati livelli di performance e sono sensibili al peggioramento delle performance e alla disponibilità. Potrebbero anche essere candidati per cluster di failover sempre attivi o gruppi di disponibilità sempre attivi. La combinazione di i/o di questi tipi di database è in genere caratterizzata da un tasso di random Read compreso tra il 75% e il 90% e un tasso di scrittura compreso tra il 25% e il 10%.
-* I database DSS (Decision Support System) possono anche essere definiti data warehouse. Questi database sono mission-critical in molte organizzazioni che si affidano alle analytics per il loro business. Questi database sono sensibili all'utilizzo della CPU e alle operazioni di lettura dal disco quando vengono eseguite query. In molte organizzazioni, i database DSS sono i più critici durante la fine di mese, trimestre e anno Questo carico di lavoro solitamente presenta una combinazione di i/o di lettura al 100%.
+* OLTP, che è spesso i database più critici di un'organizzazione. In genere, questi database supportano le applicazioni rivolte ai clienti e sono considerati essenziali per le operazioni chiave dell'azienda. I database OLTP mission-critical e le applicazioni che questi supportano spesso hanno SLA che richiedono performance elevate, sono sensibili al peggioramento delle performance e richiedono la massima disponibilità. Potrebbero anche essere candidati per cluster di failover sempre attivi o gruppi di disponibilità sempre attivi. La combinazione di i/o di questi tipi di database è in genere caratterizzata da una percentuale compresa tra il 75% e il 90% di random Read e tra il 25% e il 10% di scrittura.
+* Database DSS (Decision Support System), talvolta denominati data warehouse. Questi database sono mission-critical per molte organizzazioni che si affidano alle analytics per il loro business. Questi database sono sensibili all'utilizzo della CPU e alle operazioni di lettura dal disco quando vengono eseguite query. In molte organizzazioni, i database DSS sono i più critici durante la fine di mese, trimestre e anno Questo carico di lavoro ha in genere una combinazione di i/o di lettura quasi del 100% e il throughput io è spesso più importante degli IOPS.
 

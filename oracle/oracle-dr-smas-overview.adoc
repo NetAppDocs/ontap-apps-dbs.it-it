@@ -1,0 +1,35 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-overview.html 
+keywords: Oracle,SM-as,active sync 
+summary: Sincronizzazione attiva di Oracle e SnapMirror 
+---
+= Sincronizzazione attiva di Oracle e SnapMirror
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapMirror Active Sync ti consente di creare ambienti di database Oracle a disponibilità ultra elevata in cui le LUN sono disponibili da due cluster di storage diversi.
+
+Con la sincronizzazione attiva di SnapMirror, non vi è alcuna copia "primaria" e "secondaria" dei dati. Ogni cluster può fornire i/o in lettura dalla propria copia locale dei dati e ciascun cluster replicherà una scrittura al partner. Il risultato è un comportamento io simmetrico.
+
+Tra le altre opzioni, questo consente di eseguire Oracle RAC come cluster esteso con istanze operative su entrambi i siti. In alternativa, è possibile creare cluster di database attivi-passivi RPO=0 in cui è possibile spostare i database a singola istanza tra i siti durante un'interruzione del sito e questo processo può essere automatizzato tramite prodotti come Pacemaker o VMware ha. La base di queste opzioni è la replica sincrona gestita dalla sincronizzazione attiva di SnapMirror.
+
+
+
+== Replica sincrona
+
+Durante il funzionamento normale, la sincronizzazione attiva di SnapMirror fornisce sempre RPO=0 replica sincrona, con un'eccezione. Se i dati non possono essere replicati, ONTAP rilascerà il requisito di replicare i dati e riprendere la distribuzione io su un sito mentre le LUN dell'altro sito vengono portate offline.
+
+
+
+== Hardware per lo storage
+
+A differenza di altre soluzioni di disaster recovery per lo storage, SnapMirror Active Sync offre una flessibilità asimmetrica della piattaforma. Non è necessario che l'hardware di ciascun sito sia identico. Questa funzionalità consente di dimensionare correttamente l'hardware utilizzato per supportare la sincronizzazione attiva di SnapMirror. Il sistema di storage remoto può essere identico al sito primario se deve supportare un carico di lavoro di produzione completo, ma se un disastro determina una riduzione dell'i/o, rispetto a un sistema più piccolo nel sito remoto potrebbe risultare più conveniente.
+
+
+
+== Mediatore ONTAP
+
+ONTAP Mediator è un'applicazione software che viene scaricata dal supporto NetApp e che viene in genere distribuita su una piccola macchina virtuale. Il ONTAP Mediator non è un Tiebreaker quando viene utilizzato con la sincronizzazione attiva di SnapMirror. È un canale di comunicazione alternativo per i due cluster che partecipano alla replica sincrona attiva SnapMirror. Le operazioni automatizzate sono gestite da ONTAP in base alle risposte ricevute dal partner tramite connessioni dirette e tramite il mediatore.

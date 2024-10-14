@@ -10,7 +10,7 @@ summary: 'In questa appendice viene descritta la distribuzione di replica Hyper-
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-6node.html 
+keywords: epic,cache,iris 
+summary: Architettura EPIC a sei nodi 
+---
+= Architettura EPIC a sei nodi
+:allow-uri-read: 
+
+
+[role="lead"]
+I clienti potrebbero voler iniziare con un design a sei nodi oppure scalare in orizzontale in maniera perfetta da quattro a sei nodi in base alla crescita della domanda. Con lo scale-out è possibile spostare senza interruzioni i carichi di lavoro tra i nodi e ribilanciare nell'intero cluster.
+
+Questa architettura offre il miglior bilanciamento di performance e capacità nel cluster. Produzione di EPIC, Epic Report ed Epic Test vengono eseguiti tutti sulla prima coppia ha. La seconda coppia ha è utilizzata per Clarity, Hyperspace, VMware, NAS1 e i restanti workload Epic. Il disaster recovery corrisponde all'architettura a quattro nodi descritta nella sezione precedente.
+
+
+
+== Architettura a sei nodi
+
+image:epic-6node.png["Architettura EPIC a 6 nodi"]
+
+
+
+== Posizionamento dei carichi di lavoro a sei nodi
+
+image:epic-6node-design.png["Posizionamento EPIC a 6 nodi"]

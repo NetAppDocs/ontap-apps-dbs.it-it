@@ -1,0 +1,86 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-arch-rac.html 
+keywords: oracle, active sync, extended rac, RAC 
+summary: Oracle Extended RAC con sincronizzazione attiva SnapMirror 
+---
+= Oracle Extended RAC con sincronizzazione attiva SnapMirror
+:allow-uri-read: 
+
+
+[role="lead"]
+Molti clienti ottimizzano il proprio RTO estendendo un cluster Oracle RAC tra i vari siti, ottenendo una configurazione completamente Active-Active. La progettazione complessiva diventa più complicata perché deve includere la gestione del quorum di Oracle RAC.
+
+Il cluster RAC esteso tradizionale si basava sul mirroring ASM per garantire la protezione dei dati. Questo approccio funziona, ma richiede anche molti passaggi di configurazione manuale e impone un overhead all'infrastruttura di rete. Al contrario, consentendo alla sincronizzazione attiva di SnapMirror di assumersi la responsabilità della replica dei dati, la soluzione risulta notevolmente semplificata. Operazioni quali sincronizzazione, risincronizzazione dopo interruzioni, failover e gestione del quorum sono più semplici, inoltre la SAN non deve essere distribuita tra i siti, semplificando la progettazione e la gestione della SAN.
+
+
+
+== Replica
+
+La chiave per comprendere le funzionalità RAC nella sincronizzazione attiva di SnapMirror è la visualizzazione dello storage come singolo set di LUN che si trovano sullo storage con mirroring. Ad esempio:
+
+image:smas-oracle-logical.png["Accesso logico Oracle"]
+
+Nessuna copia primaria o copia speculare. A livello logico, esiste una sola copia di ogni LUN e tale LUN è disponibile nei percorsi SAN che si trovano su due sistemi di storage differenti. Dal punto di vista dell'host, non ci sono failover dello storage e modifiche del percorso. Diversi eventi di errore potrebbero causare la perdita di determinati percorsi verso la LUN, mentre gli altri percorsi rimangono online. La sincronizzazione attiva di SnapMirror garantisce la disponibilità degli stessi dati su tutti i percorsi operativi.
+
+
+
+== Configurazione dello storage
+
+In questa configurazione di esempio, i dischi ASM sono configurati come in qualsiasi configurazione RAC a sito singolo sullo storage Enterprise. Poiché il sistema di storage garantisce la protezione dei dati, viene utilizzata la ridondanza esterna ASM.
+
+
+
+== Accesso uniforme e non privo di informazioni
+
+La considerazione più importante con Oracle RAC sulla sincronizzazione attiva di SnapMirror è se utilizzare un accesso uniforme o non uniforme.
+
+Un accesso uniforme significa che ogni host può vedere i percorsi su entrambi i cluster. Accesso non uniforme significa che gli host possono vedere solo i percorsi verso il cluster locale.
+
+Nessuna delle due opzioni è specificamente consigliata o scoraggiata. Alcuni clienti dispongono prontamente di fibra ottica spenta per la connessione ai siti, altri non dispongono di tale connettività oppure la loro infrastruttura SAN non supporta un ISL a lunga distanza.
+
+
+
+== Accesso non uniforme
+
+L'accesso non uniforme è più semplice da configurare dal punto di vista della SAN.
+
+image:smas-oracle-rac-nonuniform.png["Accesso non uniforme a Oracle RAC"]
+
+L'aspetto negativo principale link:oracle-dr-smas-nonuniform.html["accesso non uniforme"]dell'approccio è rappresentato dalla perdita della connettività ONTAP sito-sito o dalla perdita di un sistema di storage che causa la perdita delle istanze di database in un singolo sito. Questo ovviamente non è desiderabile, ma potrebbe essere un rischio accettabile in cambio di una configurazione SAN più semplice.
+
+
+
+== Accesso uniforme
+
+Un accesso uniforme richiede l'estensione della SAN tra i siti. Il vantaggio principale consiste nel fatto che la perdita di un sistema di storage non provocherà la perdita di un'istanza del database. Al contrario, si otterrebbe una modifica multipathing in cui i percorsi sono attualmente in uso.
+
+Esistono diversi modi per configurare l'accesso non uniforme.
+
+
+NOTE: Nei diagrammi di seguito sono presenti anche percorsi attivi ma non ottimizzati che sarebbero utilizzati durante semplici guasti del controller, ma tali percorsi non sono mostrati nell'interesse di semplificare i diagrammi.
+
+
+
+=== AFF con impostazioni di prossimità
+
+In presenza di una latenza significativa tra i siti, è possibile configurare i sistemi AFF con le impostazioni di prossimità dell'host. In questo modo, ciascun sistema storage può conoscere gli host locali e remoti e assegnare in maniera appropriata le priorità del percorso.
+
+image:smas-oracle-rac-uniform-prox.png["RAC con accesso uniforme"]
+
+Durante il normale funzionamento, ogni istanza Oracle utilizzerebbe preferenzialmente i percorsi locali attivi/ottimizzati. Il risultato è che tutte le letture saranno gestite dalla copia locale dei blocchi. In questo modo, si ottiene la minore latenza possibile. L'io in scrittura viene analogamente inviato ai percorsi al controller locale. L'io deve ancora essere replicato prima di essere riconosciuto e quindi sarebbe comunque soggetto alla latenza aggiuntiva che attraversa la rete site-to-site, ma ciò non può essere evitato in una soluzione di replica sincrona.
+
+
+
+=== ASA / AFF senza impostazioni di prossimità
+
+In assenza di una latenza significativa tra i siti, è possibile configurare i sistemi AFF senza le impostazioni di prossimità dell'host oppure utilizzare ASA.
+
+image:smas-oracle-rac-uniform.png["RAC con accesso uniforme"]
+
+Ciascun host sarà in grado di utilizzare tutti i percorsi operativi su entrambi i sistemi storage. Questo consente di migliorare potenzialmente le prestazioni consentendo a ciascun host di sfruttare il potenziale in termini di prestazioni di due cluster, non di uno solo.
+
+Con ASA, non solo tutti i percorsi verso entrambi i cluster sono considerati attivi e ottimizzati, ma anche i percorsi sui partner controller sarebbero attivi. Ne risulterebbero percorsi SAN all-Active sull'intero cluster, in qualsiasi momento.
+
+
+NOTE: I sistemi ASA possono anche essere utilizzati in una configurazione di accesso non uniforme. Poiché non esistono percorsi tra siti, non vi sarebbe alcun impatto sulle performance risultanti dall'io che attraversa l'ISL.

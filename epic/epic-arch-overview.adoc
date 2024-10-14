@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-overview.html 
+keywords: epic,cache,iris 
+summary: Architettura epica 
+---
+= Architettura epica
+:allow-uri-read: 
+
+
+[role="lead"]
+Questa sezione descrive l'ambiente software Epic e i componenti chiave che richiedono lo storage. Fornisce importanti considerazioni per guidare la progettazione dello storage.
+
+EPIC, che ha sede a Verona, Wisconsin, produce software per gruppi medici, ospedali e organizzazioni sanitarie integrate di medie e grandi dimensioni. I clienti includono anche ospedali comunitari, strutture accademiche, organizzazioni per bambini, fornitori di reti di sicurezza e sistemi multi-ospedalieri. Il software integrato di livello epico comprende funzioni cliniche, di accesso e di guadagno e si estende a casa.
+
+Non rientra nello scopo di questo documento descrivere l'ampia gamma di funzioni supportate dal software Epic. Dal punto di vista del sistema storage, tuttavia, tutto il software Epic condivide un singolo database incentrato sul paziente per ogni implementazione. EPIC sta passando dal database InterSystems Caché al nuovo database InterSystems Iris. Poiché i requisiti di storage sono gli stessi per Caché e Iris, nel resto del documento faremo riferimento al database come Iris. Iris è disponibile per i sistemi operativi AIX e Linux.
+
+
+
+== IRIS intersistemi
+
+InterSystems Iris è il database utilizzato dall'applicazione Epic. In questo database, il server dati è il punto di accesso per i dati memorizzati in modo permanente. Il server applicazioni gestisce le query del database ed esegue le richieste di dati al server dati. Per la maggior parte degli ambienti software Epic, l'utilizzo dell'architettura SMP (Symmetric Multiprocessor) in un unico server di database è sufficiente per soddisfare le richieste di database delle applicazioni Epic. Nelle distribuzioni di grandi dimensioni, è possibile supportare un modello distribuito utilizzando il protocollo ECP (Enterprise Caché Protocol) di InterSystems.
+
+L'utilizzo di hardware in cluster abilitato per il failover consente a un server dati in standby di accedere allo stesso storage del server dati primario. Consente inoltre al server dati di standby di assumersi le responsabilità di elaborazione durante un guasto hardware.
+
+Inoltre, fornisce tecnologie in grado di soddisfare i requisiti di replica dei dati, disaster recovery e alta disponibilità (ha). La tecnologia di replica di InterSystems viene utilizzata per replicare un database Iris in modo sincrono o asincrono da un server dati primario a uno o più server dati secondari. NetApp SnapMirror viene utilizzato per replicare lo storage WebBLOB o per il backup e il disaster recovery.
+
+Il database Iris aggiornato presenta numerosi vantaggi:
+
+* Maggiore scalabilità e possibilità per le organizzazioni più grandi con diverse istanze Epic di consolidarsi in un'unica istanza più ampia.
+* Un periodo di validità delle licenze in cui i clienti possono ora passare da AIX a Red Hat Enterprise Linux (RHEL) senza dover pagare una nuova licenza per la piattaforma.
+
+
+
+
+== Utilizzo dello storage e dei server del database Caché
+
+* *Produzione* negli ambienti software Epic viene implementato un singolo database incentrato sul paziente. Nei requisiti hardware di Epic, il server fisico che ospita il server primario dei dati IRIS di lettura/scrittura è chiamato server di database di produzione. Questo server richiede uno storage all-flash dalle performance elevate per i file appartenenti all'istanza del database primario. Per l'alta disponibilità, Epic supporta l'utilizzo di un server di database di failover che ha accesso agli stessi file. Iris utilizza Epic Mirror per la replica nel report di sola lettura, il disaster recovery e il supporto delle copie di sola lettura. Ogni tipo di server di database può essere impostato sulla modalità di lettura/scrittura per motivi di continuità aziendale.
+* *Report* Un server di database mirror per la creazione di report fornisce l'accesso in sola lettura ai dati di produzione. Ospita un server di dati Iris configurato come mirror di backup del server di dati Iris di produzione. Il server del database di reporting ha gli stessi requisiti di capacità di archiviazione del server del database di produzione. Reporting delle performance di scrittura è lo stesso della produzione, ma le caratteristiche del carico di lavoro in lettura sono diverse e dimensionate in modo diverso.
+* *Supporta la sola lettura* questo server database è opzionale e non è mostrato nella figura seguente. È inoltre possibile implementare un server database mirror per supportare Epic supporta funzionalità di sola lettura, in cui viene fornito l'accesso a una copia di produzione in modalità di sola lettura. Questo tipo di server di database può essere impostato sulla modalità di lettura/scrittura per motivi di continuità aziendale.
+* *Disaster Recovery* per soddisfare gli obiettivi di business continuity e disaster recovery, un server di database mirror per il disaster recovery viene comunemente installato in un sito geograficamente separato dai server di database mirror per la produzione e/o la creazione di rapporti. Un server di database mirror per il disaster recovery ospita anche un server di dati Iris configurato come mirror di backup del server di dati Iris di produzione. Se il sito di produzione non è più disponibile per un lungo periodo di tempo, è possibile configurare questo server di database mirror per fungere da istanza di lettura/scrittura speculare (SRW). Il server del database mirror di backup ha gli stessi requisiti di archiviazione dei file del server del database di produzione. Al contrario, lo storage del database del mirroring del backup è dimensionato allo stesso modo dello storage di produzione, dal punto di vista delle prestazioni per la business continuity.
+
+
+image:epic-iris-odb.png["EPIC IRIS ODB"]
+
+* *Test* le organizzazioni sanitarie spesso distribuiscono ambienti di sviluppo, test e staging. Anche i server di dati IRIS aggiuntivi per questi ambienti richiedono uno storage che può essere gestito dallo stesso sistema di storage. EPIC ha requisiti e vincoli specifici per fornire storage aggiuntivo da un sistema storage condiviso. Questi requisiti specifici sono affrontati genericamente dalle Best practice contenute in questo documento.
+
+
+Oltre ai server di dati ODB Iris, gli ambienti software Epic includono in genere altri componenti, come quelli seguenti e come mostrato nella figura seguente:
+
+* Un server di database Oracle o Microsoft SQL Server come back-end degli strumenti di reporting aziendale di Epic Clarity
+
+
+
+NOTE: Clarity viene utilizzato per generare rapporti sui dati estratti giornalmente dal database Iris di reporting.
+
+* Server WebBLOB (SMB)
+* Server database multifunzione
+* Macchine virtuali polivalenti (VM)
+* Spazio ipertestuale per accesso client
+
+
+image:epic-databases.png["Database EPIC"]
+
+I requisiti di storage di tutti questi workload, pool, protocolli NAS e SAN multipli possono essere consolidati e ospitati da un singolo cluster ONTAP. Questo consolidamento consente alle organizzazioni del settore sanitario di disporre di una singola strategia di gestione dei dati per tutti i workload Epic e non Epic.
+
+
+
+== Carichi di lavoro del database operativi
+
+Ogni server di database Epic esegue l'i/o sui seguenti tipi di file:
+
+* File di database
+* File journal
+* File dell'applicazione
+
+
+Il carico di lavoro di un singolo server di database dipende dal suo ruolo nell'ambiente software Epic. Ad esempio, i file di database di produzione sono in genere interessati ai carichi di lavoro più impegnativi, costituiti al 100% da richieste i/o casuali. Il carico di lavoro di qualsiasi database mirror è generalmente meno impegnativo e presenta meno richieste di lettura. I carichi di lavoro dei file di giornale sono principalmente sequenziali.
+
+EPIC mantiene un modello di carico di lavoro per il benchmark delle performance dello storage e i carichi di lavoro del cliente. Per ulteriori informazioni sul modello di workload Epic, sui risultati dei benchmark e sulle linee guida sull'utilizzo dei tool di dimensionamento NetApp per dimensionare correttamente lo storage per gli ambienti Epic, consulta https://fieldportal.netapp.com/content/192412?assetComponentId=192510["TR-3930i: Linee guida per il dimensionamento degli NetApp per Epic"^] (è richiesto l'accesso NetApp).
+
+EPIC offre inoltre a ciascun cliente una guida alla configurazione dell'hardware customizzata che contiene le proiezioni di i/o e i requisiti della capacità dello storage. I requisiti di storage finali possono includere ambienti di sviluppo, test e/o staging, nonché tutti gli altri carichi di lavoro secondari che potrebbero essere consolidati. I clienti possono utilizzare la guida alla configurazione hardware per comunicare a NetApp i requisiti totali di storage. Questa guida contiene tutti i dati necessari per dimensionare un'implementazione Epic.
+
+Durante la fase di implementazione, Epic mette a disposizione una Database Storage Layout Guide, che fornisce dettagli più granulari a livello di LUN, da utilizzare per una progettazione dello storage avanzata. Tenere presente che la Guida al layout dello storage del database è una soluzione di archiviazione generica e non specifica per NetApp. Utilizza questa guida per determinare il miglior layout di storage su NetApp.

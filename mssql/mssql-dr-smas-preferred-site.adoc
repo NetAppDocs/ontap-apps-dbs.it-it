@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-smas-preferred-site.html 
+keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
+summary: Microsoft SQL Server e SM, come sito preferito 
+---
+= Microsoft SQL Server e SM, come sito preferito
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il comportamento di sincronizzazione attiva di SnapMirror è simmetrico, con una eccezione importante: Configurazione del sito preferita.
+
+La sincronizzazione attiva di SnapMirror considererà un sito la "fonte" e l'altro la "destinazione". Ciò implica una relazione di replica unidirezionale, ma ciò non si applica al comportamento io. La replica è bidirezionale e simmetrica, mentre i tempi di risposta io sono identici su entrambi i lati del mirror.
+
+La `source` designazione è controlla il sito preferito. In caso di perdita del link di replica, i percorsi delle LUN nella copia di origine continueranno a fornire i dati mentre i percorsi delle LUN nella copia di destinazione non saranno disponibili finché la replica non viene ristabilita e SnapMirror ritorna allo stato sincrono. I percorsi riprenderanno a fornire i dati.
+
+La configurazione di origine/destinazione può essere visualizzata tramite SystemManager:
+
+image:smas-source-systemmanager.png["SM screenshot di SM-as source"]
+
+O all'interfaccia CLI:
+
+....
+Cluster2::> snapmirror show -destination-path jfs_as2:/cg/jfsAA
+
+                            Source Path: jfs_as1:/cg/jfsAA
+                       Destination Path: jfs_as2:/cg/jfsAA
+                      Relationship Type: XDP
+                Relationship Group Type: consistencygroup
+                    SnapMirror Schedule: -
+                 SnapMirror Policy Type: automated-failover-duplex
+                      SnapMirror Policy: AutomatedFailOverDuplex
+                            Tries Limit: -
+                      Throttle (KB/sec): -
+                           Mirror State: Snapmirrored
+                    Relationship Status: InSync
+....
+La chiave è che source è l'SVM su cluster1. Come menzionato sopra, i termini "origine" e "destinazione" non descrivono il flusso di dati replicati. Entrambi i siti possono elaborare una scrittura e replicarla nel sito opposto. In effetti, entrambi i cluster sono origini e destinazioni. L'effetto della designazione di un cluster come origine controlla semplicemente quale cluster sopravvive come sistema di storage in lettura e scrittura in caso di perdita del link di replica.

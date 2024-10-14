@@ -10,7 +10,7 @@ summary: Protezione dei database Microsoft SQL Server su ONTAP con comandi SnapC
 
 
 [role="lead"]
-La pianificazione del backup del database si basa sui requisiti aziendali. Combinando la tecnologia Snapshot NetApp di ONTAP e sfruttando le API di Microsoft SQL Server, è possibile eseguire rapidamente un backup coerente con le applicazioni indipendentemente dalle dimensioni dei database dell'utente. Per requisiti di gestione dei dati più avanzati o scale-out, NetApp offre SnapCenter.
+Le strategie di backup dei database devono basarsi su requisiti aziendali identificati, non su capacità teoriche. Combinando la tecnologia Snapshot di ONTAP e sfruttando le API di Microsoft SQL Server, è possibile eseguire rapidamente un backup coerente delle applicazioni indipendentemente dalle dimensioni dei database utente. Per requisiti di gestione dei dati più avanzati o scale-out, NetApp offre SnapCenter.
 
 
 
@@ -22,7 +22,7 @@ L'istanza di SQL Server può essere un'installazione autonoma, un'istanza cluste
 
 
 TIP: *NetApp recommended* Using SnapCenter to create Snapshot copy. Anche il metodo T-SQL descritto di seguito funziona, ma SnapCenter offre un'automazione completa sul processo di backup, ripristino e cloning. Esegue inoltre il rilevamento per garantire che vengano creati gli snapshot corretti. Non è necessaria alcuna pre-configurazione.
-...
+
 SQL Server richiede inoltre un coordinamento tra il sistema operativo e lo storage per garantire che i dati corretti siano presenti negli snapshot al momento della creazione. Nella maggior parte dei casi, l'unico metodo sicuro per eseguire questa operazione è SnapCenter o T-SQL. Gli snapshot creati senza questo coordinamento aggiuntivo potrebbero non essere recuperabili in modo affidabile.
 
 Per ulteriori informazioni sul plug-in di SQL Server per SnapCenter, vedere link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["TR-4714: Guida alle Best practice per SQL Server con NetApp SnapCenter"^].

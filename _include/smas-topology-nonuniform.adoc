@@ -1,0 +1,15 @@
+= 
+:allow-uri-read: 
+
+
+image:smas-nonuniform.png["Rete non uniforme con sincronizzazione attiva SnapMirror"]
+
+Il vantaggio principale di questo approccio è la semplicità DELLE SAN, eliminando l'esigenza di stretching di una SAN via rete. Alcuni clienti non dispongono di connettività a latenza sufficientemente bassa tra i siti o non dispongono dell'infrastruttura per il tunnel del traffico FC SAN su una rete intersito.
+
+Lo svantaggio legato all'accesso non uniforme è che alcuni scenari di errore, inclusa la perdita del collegamento di replica, provocheranno la perdita dell'accesso allo storage da parte di alcuni host. In caso di interruzione della connettività dello storage locale, le applicazioni eseguite come istanze singole, come ad esempio i database non in cluster, eseguiti in maniera intrinseca solo su un singolo host in uno qualsiasi dei supporti di montaggio, si guasterebbero. I dati sarebbero comunque protetti, ma il server di database non avrebbe più accesso. Dovrebbe essere riavviato su un sito remoto, preferibilmente tramite un processo automatizzato. Ad esempio, VMware ha è in grado di rilevare una situazione di tutti i percorsi verso l'esterno su un server e di riavviare una macchina virtuale su un altro server in cui sono disponibili i percorsi.
+
+Al contrario, un'applicazione in cluster come Oracle RAC può offrire un servizio disponibile contemporaneamente in due siti diversi. Perdere un sito non significa perdere il servizio dell'applicazione nel suo complesso. Le istanze sono ancora disponibili e in esecuzione nel sito sopravvissuto.
+
+In molti casi, l'overhead della latenza aggiuntivo di un'applicazione che accede allo storage attraverso un collegamento da sito a sito sarebbe inaccettabile. Ciò significa che la migliore disponibilità di una rete uniforme è minima, poiché la perdita di storage su un sito comporterebbe comunque la necessità di arrestare i servizi sul sito in cui si è verificato l'errore.
+
+Esistono percorsi ridondanti attraverso il cluster locale non mostrati in questi diagrammi per semplicità. I sistemi di storage ONTAP sono ad alta disponibilità, pertanto un guasto a un controller non dovrebbe causare guasti nel sito. Ciò dovrebbe comportare solo una modifica dei percorsi locali utilizzati nel sito interessato.

@@ -1,0 +1,58 @@
+---
+section: epic
+title: EPIC
+entries:
+- title: Panoramica
+  url: "/epic/epic-overview.html"
+- title: EPIC su ONTAP
+  entries:
+  - title: Panoramica
+    url: "/epic/epic-ontap-overview.html"
+  - title: Disponibilità
+    url: "/epic/epic-ontap-availability.html"
+  - title: Consolidamento
+    url: "/epic/epic-ontap-consolidation.html"
+  - title: Efficienza
+    url: "/epic/epic-ontap-efficiency.html"
+  - title: Performance
+    url: "/epic/epic-ontap-performance.html"
+  - title: Scalabilità
+    url: "/epic/epic-ontap-scalability.html"
+  - title: Snapshot e cloning
+    url: "/epic/epic-ontap-snapshots.html"
+  - title: Sicurezza
+    url: "/epic/epic-ontap-security.html"
+- title: Architettura e design epici
+  entries:
+  - title: Panoramica
+    url: "/epic/epic-arch-overview.html"
+  - title: Dimensionamento
+    url: "/epic/epic-arch-sizing.html"
+  - title: Requisiti di storage
+    url: "/epic/epic-arch-storage.html"
+  - title: Architettura a quattro nodi
+    url: "/epic/epic-arch-4node.html"
+  - title: Architettura a sei nodi
+    url: "/epic/epic-arch-6node.html"
+  - title: Architettura a otto nodi
+    url: "/epic/epic-arch-8node.html"
+- title: Configurazione e Best practice
+  entries:
+  - title: Utility host
+    url: "/epic/epic-config-huk.html"
+  - title: Configurazione del LUN e del volume
+    url: "/epic/epic-config-lunvol.html"
+  - title: Servizi di file
+    url: "/epic/epic-config-files.html"
+  - title: Performance
+    url: "/epic/epic-config-performance.html"
+  - title: Protocolli
+    url: "/epic/epic-config-protocols.html"
+  - title: Efficienza dello storage
+    url: "/epic/epic-config-efficiency.html"
+  - title: Gruppi di coerenza
+    url: "/epic/epic-config-cgs.html"
+  - title: Dimensionamento dello storage
+    url: "/epic/epic-config-sizing.html"
+- title: Dove trovare ulteriori informazioni
+  url: "/epic/epic-additional-info.html"

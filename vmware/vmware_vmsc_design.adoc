@@ -38,7 +38,8 @@ Esiste una certa differenza nella gestione di una configurazione vMSC con sincro
 
 La creazione di un cluster vSphere ha è un processo in più fasi documentato all'indirizzo https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-esxi-management/GUID-F7818000-26E3-4E2A-93D2-FCDCE7114508.html["Come creare e configurare i cluster nel client vSphere su docs.vmware.com"]. In poche parole, devi prima creare un cluster vuoto, quindi, utilizzando vCenter, devi aggiungere host e specificare l'ha vSphere del cluster e le altre impostazioni.
 
-*Nota:* nulla di quanto contenuto nel presente documento sostituisce https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices["Procedure consigliate per VMware vSphere Metro Storage Cluster"]
+
+NOTE: Nulla di quanto contenuto nel presente documento sostituisce https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices["Procedure consigliate per VMware vSphere Metro Storage Cluster"]
 
 Per configurare un cluster ha, completare i seguenti passaggi:
 
@@ -155,7 +156,10 @@ In questa sezione vengono creati gruppi DRS per VM e host per ciascun sito/clust
 * NetApp consiglia vivamente la specifica *deve essere eseguita sugli host nel gruppo* piuttosto che sulla specifica *deve essere eseguita sugli host nel gruppo*. In caso di guasto dell'host del sito A, è necessario riavviare le macchine virtuali del sito A sugli host del sito B attraverso vSphere ha, ma quest'ultima specifica non consente all'ha di riavviare le macchine virtuali sul sito B perché è una regola rigida. La specifica precedente è una regola debole e viene violata in caso di ha, abilitando in tal modo la disponibilità anziché le prestazioni.
 
 
-*Nota:* è possibile creare un allarme basato su eventi che viene attivato quando una macchina virtuale viola una regola di affinità VM-host. Nel client vSphere, aggiungere un nuovo allarme per la macchina virtuale e selezionare "VM viola la regola di affinità VM-host" come trigger dell'evento. Per ulteriori informazioni sulla creazione e la modifica degli allarmi, fare riferimento a. http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf["Monitoraggio e performance di vSphere"] documentazione.
+*[NOTA]
+
+* È possibile creare un allarme basato su eventi che viene attivato quando una macchina virtuale viola una regola di affinità VM-host. Nel client vSphere, aggiungere un nuovo allarme per la macchina virtuale e selezionare "VM viola la regola di affinità VM-host" come trigger dell'evento. Per ulteriori informazioni sulla creazione e la modifica degli allarmi, consultare http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf["Monitoraggio e performance di vSphere"] la documentazione.
+
 
 
 

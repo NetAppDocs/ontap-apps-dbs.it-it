@@ -1,0 +1,75 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-overview.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Failover Active Sync di Oracle e SnapMirror 
+---
+= Failover Active Sync di Oracle e SnapMirror
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La pianificazione di un'architettura completa dell'applicazione SnapMirror Active Sync richiede la comprensione del modo in cui SM-AS risponderà in vari scenari di failover pianificati e non pianificati.
+
+Per gli esempi seguenti, si supponga che il sito A sia configurato come sito preferito.
+
+
+
+== Interruzione della connettività di replica
+
+Se la replica SM-AS viene interrotta, non è possibile completare la scrittura io perché sarebbe impossibile per un cluster replicare le modifiche al sito opposto.
+
+
+
+=== Sito A (sito preferito)
+
+Il risultato dell'errore del collegamento di replica sul sito preferito sarà una pausa di circa 15 secondi nell'elaborazione io in scrittura, poiché ONTAP ritenta le operazioni di scrittura replicate prima di determinare che il collegamento di replica è veramente irraggiungibile. Trascorsi i 15 secondi, il sistema del sito A riprende l'elaborazione io in lettura e scrittura. I percorsi SAN non vengono modificati e i LUN rimangono online.
+
+
+
+== Sito B
+
+Poiché il sito B non è il sito preferito di sincronizzazione attiva SnapMirror, i relativi percorsi LUN non saranno più disponibili dopo circa 15 secondi.
+
+
+
+== Errore del sistema di storage
+
+Il risultato di un errore del sistema di storage è quasi identico al risultato della perdita del collegamento di replica. Il sito sopravvissuto dovrebbe subire una pausa io di circa 15 secondi. Trascorso questo periodo di 15 secondi, io riprenderà sul sito come di consueto.
+
+
+
+== Perdita del mediatore
+
+Il servizio di mediazione non controlla direttamente le operazioni di storage. Funziona come un percorso di controllo alternativo tra cluster. Esiste principalmente per automatizzare il failover senza il rischio di uno scenario split-brain. Durante l'utilizzo normale, ogni cluster replica le modifiche al partner e pertanto ogni cluster può verificare che il cluster partner sia online e fornisca i dati. Se il collegamento di replica non è riuscito, la replica viene interrotta.
+
+Il motivo per cui è necessario un mediatore per il failover automatizzato sicuro è perché altrimenti sarebbe impossibile per un cluster di storage determinare se la perdita di comunicazione bidirezionale fosse il risultato di un'interruzione della rete o di un errore effettivo dello storage.
+
+Il mediatore fornisce un percorso alternativo per ciascun cluster per verificare lo stato di salute del partner. Gli scenari sono i seguenti:
+
+* Se un cluster può contattare direttamente il partner, i servizi di replica sono operativi. Non è richiesta alcuna azione.
+* Se un sito preferito non può contattare direttamente il proprio partner o tramite il mediatore, presuppone che il partner sia effettivamente non disponibile oppure è stato isolato e ha portato i percorsi LUN offline. Il sito preferito procede quindi al rilascio dello stato RPO=0 e continua l'elaborazione dell'io in lettura e in scrittura.
+* Se un sito non preferito non può contattare direttamente il proprio partner, ma può contattarlo tramite il mediatore, prenderà i suoi percorsi offline e attenderà il ritorno della connessione di replica.
+* Se un sito non preferito non può contattare direttamente il proprio partner o tramite un mediatore operativo, supporterà che il partner sia effettivamente non disponibile, oppure che sia stato isolato e che abbia portato i percorsi LUN offline. Il sito non preferito procede quindi al rilascio dello stato RPO=0 e continua l'elaborazione dell'i/o in lettura e scrittura. Assumerà il ruolo dell'origine della replica e diventerà il nuovo sito preferito.
+
+
+Se il mediatore non è completamente disponibile:
+
+* In caso di guasto dei servizi di replica per qualsiasi motivo, incluso un guasto del sito o del sistema storage non preferito, il sito preferito rilascerà lo stato RPO=0 e riprenderà l'elaborazione i/o in lettura e scrittura. Il sito non preferito prenderà i suoi percorsi offline.
+* Il guasto del sito preferito causerà un'interruzione poiché il sito non preferito non sarà in grado di verificare che il sito opposto sia effettivamente offline e quindi non sarebbe sicuro per il sito non preferito riprendere i servizi.
+
+
+
+
+== Ripristino dei servizi in corso
+
+Dopo aver risolto un errore, come il ripristino della connettività da sito a sito o l'accensione di un sistema guasto, gli endpoint di sincronizzazione attivi di SnapMirror rilevano automaticamente la presenza di una relazione di replica difettosa e la riportano allo stato RPO=0. Una volta ristabilita la replica sincrona, i percorsi non riusciti torneranno in linea.
+
+In molti casi, le applicazioni in cluster rilevano automaticamente la restituzione dei percorsi non riusciti e tali applicazioni tornano online. In altri casi, potrebbe essere necessaria una scansione SAN a livello di host oppure potrebbe essere necessario riportare le applicazioni online manualmente. Dipende dall'applicazione e dal modo in cui è configurata, e in generale tali attività possono essere facilmente automatizzate. ONTAP si sta auto-riparando e non deve richiedere alcun intervento da parte dell'utente per riprendere le operazioni di storage RPO = 0 KB.
+
+
+
+== Failover manuale
+
+La modifica del sito preferito richiede un'operazione semplice. I/o si fermeranno per un secondo o due come autorità sugli switch del comportamento di replica tra i cluster, ma in caso contrario i/o non vengono influenzati.

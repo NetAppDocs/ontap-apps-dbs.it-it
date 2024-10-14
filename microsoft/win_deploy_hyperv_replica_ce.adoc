@@ -10,7 +10,7 @@ summary: Scopri come distribuire e configurare la replica di Hyper-V con il clus
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

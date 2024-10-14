@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-8node.html 
+keywords: epic,cache,iris 
+summary: Architettura EPIC a otto nodi 
+---
+= Architettura EPIC a otto nodi
+:allow-uri-read: 
+
+
+[role="lead"]
+Le figure qui sotto mostrano l'architettura scale-out a otto nodi. Ancora una volta, puoi iniziare con quattro nodi e scalare fino a sei nodi e continuare con la scalabilità fino a otto nodi e oltre. Questa architettura offre il miglior equilibrio di performance e capacità sui sei nodi di produzione.
+
+Gli ambienti di test vengono clonati da Report anziché dalla produzione in questa progettazione. Questo alleggerisce il carico degli ambienti di test e dei controlli dell'integrità dalla produzione.
+
+
+
+== Architettura a otto nodi
+
+image:epic-8node.png["Architettura EPIC a 4 nodi"]
+
+
+
+== Posizionamento dei carichi di lavoro a otto nodi
+
+image:epic-8node-design.png["Posizionamento EPIC a 8 nodi"]

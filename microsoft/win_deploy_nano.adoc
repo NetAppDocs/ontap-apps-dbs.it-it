@@ -10,7 +10,7 @@ summary: Informazioni sulla distribuzione di Microsoft Windows Nano Server
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

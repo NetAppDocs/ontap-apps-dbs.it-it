@@ -1,0 +1,19 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-files.html 
+keywords: epic,cache,iris 
+summary: Protocolli EPIC e file 
+---
+= Protocolli EPIC e file
+:allow-uri-read: 
+
+
+[role="lead"]
+È supportata la combinazione di NAS e SAN sullo stesso array all-flash.
+
+[TIP]
+====
+*NetApp consiglia* l'utilizzo di volumi FlexGroup per condivisioni NAS, ad esempio WebBLOB (se disponibile).
+
+====
+WebBLOB offre fino al 95% di dati cold. Puoi facoltativamente liberare spazio sul tuo array all-flash e sfruttare il tiering dei backup e dei dati cold nello storage a oggetti on-premise o nel cloud utilizzando la link:https://docs.netapp.com/us-en/ontap/fabricpool/index.html["FabricPool"^] funzionalità di ONTAP. Tutto ciò può essere realizzato senza alcun effetto significativo sulle prestazioni. FabricPool è una funzione inclusa in ONTAP. I clienti possono generare un report di dati cold (o inattivi) per esaminare quanti benefici possono essere realizzati abilitando FabricPool. Puoi impostare l'età dei dati da Tier tramite le policy. I clienti EPIC hanno ottenuto risparmi significativi grazie a questa funzionalità.

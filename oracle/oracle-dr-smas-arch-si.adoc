@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-arch-si.html 
+keywords: oracle, active sync, mcc, MCC-IP 
+summary: Sincronizzazione attiva di Oracle SnapMirror 
+---
+= Istanza singola Oracle con sincronizzazione attiva SnapMirror
+:allow-uri-read: 
+
+
+[role="lead"]
+Gli esempi illustrati di seguito mostrano alcune delle numerose opzioni per la distribuzione dei database Oracle Single Instance con la replica di sincronizzazione attiva SnapMirror.
+
+image:smas-oracle-si-nonuniform.png["Oracle si con accesso non uniforme"]
+
+
+
+== Failover con un sistema operativo preconfigurato
+
+La sincronizzazione attiva SnapMirror fornisce una copia sincrona dei dati nel sito di disaster recovery, ma la loro disponibilità richiede un sistema operativo e le applicazioni associate. L'automazione di base può migliorare notevolmente il tempo di failover dell'ambiente complessivo. I prodotti Clusterware come Pacemaker vengono spesso utilizzati per creare un cluster in tutti i siti, e in molti casi il processo di failover può essere guidato con semplici script.
+
+In caso di perdita dei nodi primari, il clusterware (o gli script) porterà i database online nel sito alternativo. Un'opzione è creare server di standby preconfigurati per le risorse SAN che compongono il database. Se il sito primario non funziona, il clusterware o l'alternativa con script esegue una sequenza di azioni simile alle seguenti:
+
+. Rileva i guasti del sito primario
+. Rilevamento di LUN FC o iSCSI
+. Montaggio di file system e/o montaggio di gruppi di dischi ASM
+. Avvio del database
+
+
+Il requisito principale di questo approccio è rappresentato da un sistema operativo in esecuzione sul sito remoto. Deve essere preconfigurato con i file binari di Oracle, il che significa anche che attività come l'applicazione delle patch Oracle devono essere eseguite sul sito primario e di standby. In alternativa, è possibile eseguire il mirroring dei file binari di Oracle nel sito remoto e montarli se viene dichiarato un disastro.
+
+La procedura di attivazione effettiva è semplice. Comandi come il rilevamento delle LUN richiedono solo pochi comandi per ogni porta FC. Il montaggio del file system non è altro che un `mount` comando e sia i database che ASM possono essere avviati e arrestati dalla CLI con un unico comando.
+
+
+
+== Failover con un sistema operativo virtualizzato
+
+Il failover degli ambienti di database può essere esteso per includere il sistema operativo stesso. In teoria, questo failover può essere eseguito con le LUN di avvio, ma nella maggior parte dei casi con un sistema operativo virtualizzato. La procedura è simile ai seguenti passaggi:
+
+. Rileva i guasti del sito primario
+. Montaggio dei datastore che ospitano le macchine virtuali del server di database
+. Avvio delle macchine virtuali
+. Avviare i database manualmente o configurare le macchine virtuali per avviare automaticamente i database.
+
+
+Ad esempio, un cluster ESX può estendersi su diversi siti. In caso di disastro, dopo lo switchover, è possibile portare online le macchine virtuali nel sito di disaster recovery.
+
+
+
+== Protezione dai guasti dello storage
+
+Il diagramma precedente mostra l'utilizzo di link:oracle-dr-smas-nonuniform.html["accesso non uniforme"], in cui la SAN non è estesa tra i siti. Questa configurazione potrebbe essere più semplice e, in alcuni casi, potrebbe essere l'unica opzione data le attuali funzionalità SAN, ma significa anche che un guasto del sistema di storage primario causerebbe un'interruzione del database fino a quando l'applicazione non è stata sottoposta a failover.
+
+Per una maggiore resilienza, la soluzione potrebbe essere implementata con link:oracle-dr-smas-uniform.html["accesso uniforme"]. Ciò consentirebbe alle applicazioni di continuare a funzionare utilizzando i percorsi pubblicizzati dal sito opposto.

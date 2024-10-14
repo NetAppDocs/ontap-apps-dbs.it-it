@@ -10,7 +10,7 @@ summary: Provisioning dello storage ONTAP per Windows e Hyper-V in ambienti SAN
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -91,7 +91,7 @@ image:win_image3.png["Percorsi multipli in ambiente SAN, larghezza=624, altezza=
 
 === MPIO
 
-NetApp ONTAP offre storage ad alta disponibilità in cui possono esistere più percorsi dallo storage controller a Windows Server. Il multipathing consente di utilizzare più percorsi dei dati da un server a uno storage array. Il multipathing protegge da guasti hardware (rottura dei cavi, guasto di switch e HBA (host Bus Adapter) e così via) e può offrire limiti di performance più elevati utilizzando le prestazioni aggregate di più connessioni. Quando un percorso o una connessione non è disponibile, il software multipathing sposta automaticamente il carico su uno degli altri percorsi disponibili. La funzione MPIO unisce i diversi percorsi fisici allo storage come unico percorso logico utilizzato per l'accesso ai dati allo scopo di garantire la resilienza dello storage e il bilanciamento del carico. Per utilizzare questa funzione, la funzione MPIO deve essere attivata su Windows Server.
+ONTAP offre uno storage ad alta disponibilità in cui possono esistere più percorsi dallo storage controller a Windows Server. Il multipathing consente di utilizzare più percorsi dei dati da un server a uno storage array. Il multipathing protegge da guasti hardware (rottura dei cavi, guasto di switch e HBA (host Bus Adapter) e così via) e può offrire limiti di performance più elevati utilizzando le prestazioni aggregate di più connessioni. Quando un percorso o una connessione non è disponibile, il software multipathing sposta automaticamente il carico su uno degli altri percorsi disponibili. La funzione MPIO unisce i diversi percorsi fisici allo storage come unico percorso logico utilizzato per l'accesso ai dati allo scopo di garantire la resilienza dello storage e il bilanciamento del carico. Per utilizzare questa funzione, la funzione MPIO deve essere attivata su Windows Server.
 
 
 

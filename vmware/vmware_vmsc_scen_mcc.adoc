@@ -22,7 +22,8 @@ Nelle sezioni seguenti vengono illustrati i risultati attesi da vari scenari di 
 
 In questo scenario, se componenti come la porta HBA, la porta di rete, la porta dello switch dati front-end o un cavo FC o Ethernet si guastano, quel particolare percorso al dispositivo di storage viene contrassegnato come inattivo dall'host ESXi. Se vengono configurati diversi percorsi per il dispositivo storage fornendo resilienza alla porta HBA/rete/switch, ESXi esegue uno switchover del percorso. Durante questo periodo, le macchine virtuali rimangono in esecuzione senza alcun impatto, perché la disponibilità dello storage viene garantita attraverso l'offerta di più percorsi al dispositivo di storage.
 
-*Nota:* in questo scenario non vi è alcun cambiamento nel comportamento di MetroCluster, e tutti i datastore continuano ad essere intatti dai rispettivi siti.
+
+NOTE: In questo scenario non vi sono cambiamenti nel comportamento di MetroCluster e tutti i datastore continuano a essere intatti dai rispettivi siti.
 
 
 
@@ -72,7 +73,10 @@ In questo scenario, si verifica un errore di più di due dischi o di un intero s
 
 image::../media/vmsc_5_3.png[Guasto a un singolo shelf di dischi.,624,576]
 
-*Nota:* durante questo periodo, non si verifica alcun impatto sulle operazioni i/o della macchina virtuale, ma le prestazioni sono ridotte a causa dell'accesso ai dati dallo shelf di dischi remoto tramite collegamenti ISL.
+*[NOTA]
+
+* Durante questo periodo, non si verifica alcun impatto sulle operazioni di i/o della macchina virtuale, tuttavia le performance sono peggiorate a causa dell'accesso ai dati dallo shelf di dischi remoto attraverso link ISL.
+
 
 
 
@@ -96,7 +100,8 @@ image::../media/vmsc_5_5.png[Errore del collegamento interswitch sulla rete di g
 
 In questo scenario, se i collegamenti ISL nella rete di gestione host front-end si guastano, gli host ESXi nel sito A non saranno in grado di comunicare con gli host ESXi nel sito B. Ciò determina una partizione di rete poiché gli host ESXi in un determinato sito non sono in grado di inviare gli heartbeat di rete al nodo master nel cluster ha. Come tale, ci saranno due segmenti di rete a causa della partizione e vi sarà un nodo master in ogni segmento che proteggerà le VM da guasti host all'interno del sito specifico.
 
-*Nota:* durante questo periodo, le macchine virtuali rimangono in esecuzione e non vi è alcuna modifica nel comportamento di MetroCluster in questo scenario. Tutti i datastore continuano a essere intatti dai rispettivi siti.
+
+NOTE: Durante questo periodo, le macchine virtuali rimangono in esecuzione e in questo scenario non si verifica alcuna modifica nel comportamento di MetroCluster. Tutti i datastore continuano a essere intatti dai rispettivi siti.
 
 
 
@@ -152,7 +157,8 @@ In uno scenario di guasto completo del sito A, gli host ESXi nel sito B non otte
 
 Se il tentativo dell'agente master vSphere ha di riavviare una VM (che comporta la registrazione e l'accensione) non riesce, il riavvio viene rieseguito dopo un ritardo. Il ritardo tra i riavvii può essere configurato fino a un massimo di 30 minuti. VSphere ha tenta di riavviare il sistema per un numero massimo di tentativi (sei tentativi per impostazione predefinita).
 
-*Nota:* il master ha non inizia i tentativi di riavvio fino a quando il placement manager non trova lo spazio di archiviazione adeguato, quindi in caso di un guasto completo del sito, ciò avverrà dopo l'esecuzione dello switchover.
+
+NOTE: Il master ha non avvia i tentativi di riavvio fino a quando il placement manager non trova lo storage appropriato, quindi in caso di un guasto completo del sito, ciò si verificherebbe dopo l'esecuzione dello switchover.
 
 Se il sito A è stato sottoposto a switchover, un guasto successivo di uno dei nodi del sito B sopravvissuto può essere gestito senza problemi attraverso il failover verso il nodo rimasto. In questo caso, il lavoro di quattro nodi viene ora eseguito da un solo nodo. Il ripristino in questo caso consisterebbe nell'esecuzione di un giveback al nodo locale. Quindi, quando il sito A viene ripristinato, viene eseguita un'operazione di switchback per ripristinare il funzionamento regolare della configurazione.
 

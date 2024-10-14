@@ -1,0 +1,33 @@
+= AFF
+:allow-uri-read: 
+
+
+Una caratteristica importante di SM-AS è la capacità di configurare i sistemi storage per sapere dove si trovano gli host. Quando si mappano i LUN a un determinato host, è possibile indicare se sono prossimali o meno a un determinato sistema di archiviazione.
+
+
+
+== AFF
+
+Con un sistema AFF, i percorsi vengono visualizzati come illustrato di seguito.
+
+image:smas-uniform-aff.png["Rete uniforme AFF con sincronizzazione attiva SnapMirror"]
+
+Durante le normali operazioni, tutti i io sono i/o locali. Le letture e le scritture sono gestite dallo storage array locale. Gli io in scrittura, naturalmente, dovranno anche essere replicati dal controller locale sul sistema remoto prima di essere riconosciuti, ma tutti gli io in lettura saranno serviti localmente e non subiranno una latenza aggiuntiva attraverso il collegamento SAN tra i siti.
+
+L'unica volta in cui verranno utilizzati i percorsi non ottimizzati è quando tutti i percorsi attivi/ottimizzati vengono persi. Ad esempio, se l'intero array sul sito A perde energia, gli host sul sito A sarebbero comunque in grado di accedere ai percorsi dell'array sul sito B e di rimanere quindi operativi, anche se sperimenterebbero una latenza più elevata.
+
+Esistono percorsi ridondanti attraverso il cluster locale non mostrati in questi diagrammi per semplicità. I sistemi di storage ONTAP sono ad alta disponibilità, pertanto un guasto a un controller non dovrebbe causare guasti nel sito. Ciò dovrebbe comportare solo una modifica dei percorsi locali utilizzati nel sito interessato.
+
+
+
+== ASA
+
+I sistemi NetApp ASA offrono multipathing Active-Active su tutti i percorsi di un cluster. Questo vale anche per le configurazioni SM-AS.
+
+image:smas-uniform-asa.png["Rete uniforme ASA con sincronizzazione attiva SnapMirror"]
+
+Una configurazione ASA con accesso non uniforme funzionerebbe in gran parte allo stesso modo di AFF. Con un accesso uniforme, io attraverserebbe la WAN. Ciò può essere o non può essere desiderabile.
+
+Se i due siti fossero a una distanza di 100 metri con connettività in fibra non dovrebbe esserci una latenza aggiuntiva rilevabile che attraversa la WAN, ma se i siti fossero a lunga distanza gli uni dagli altri, le performance in lettura risulterebbero compromesse su entrambi i siti. Al contrario, con AFF questi percorsi WAN sarebbero utilizzati solo se non ci fossero percorsi locali disponibili e le performance quotidiane sarebbero migliori, perché tutti i io sarebbero io locali. ASA con rete di accesso non uniforme sarebbe un'opzione per ottenere i vantaggi in termini di costi e funzionalità di ASA senza incorrere in penalizzazioni per l'accesso alla latenza tra siti.
+
+ASA con SM-as in una configurazione a bassa latenza offre due benefici interessanti. In primo luogo, essenzialmente *raddoppia* le prestazioni per ogni singolo host perché io può essere gestito dal doppio dei controller utilizzando il doppio dei percorsi. In secondo luogo, in un ambiente a sito singolo offre una disponibilità estrema, perché è possibile perdere un intero sistema storage senza interrompere l'accesso degli host.

@@ -24,7 +24,7 @@ image:mssql-filegroups.png["Errore: Immagine grafica mancante"]
 
 La possibilità di inserire più file di dati all'interno del filegroup consente di distribuire il carico su diversi dispositivi di archiviazione, migliorando le prestazioni di i/o del sistema. Al contrario, il log delle transazioni non trae vantaggio dai file multipli poiché SQL Server scrive nel log delle transazioni in modo sequenziale.
 
-La separazione tra il posizionamento degli oggetti logici nei filegroup e i file di database fisici consente di ottimizzare il layout dei file di database, ottenendo il massimo dal sottosistema di storage. Ad esempio, i fornitori di software indipendenti (ISV) che distribuiscono i propri prodotti a clienti diversi possono regolare il numero di file di database in base alla configurazione i/o sottostante e alla quantità prevista di dati durante la fase di implementazione. Tali modifiche sono trasparenti per gli sviluppatori di applicazioni, che posizionano gli oggetti database nei filegroup anziché nei file di database.
+La separazione tra il posizionamento degli oggetti logici nei filegroup e i file di database fisici consente di ottimizzare il layout dei file di database, ottenendo il massimo dal sottosistema di storage. Il numero di file di dati che supportano un carico di lavoro può essere variato in base alle necessità per supportare i requisiti di i/o e la capacità prevista, senza influire sull'applicazione. Queste variazioni nel layout del database sono trasparenti per gli sviluppatori di applicazioni, che posizionano gli oggetti del database nei filegroup piuttosto che nei file di database.
 
 
 TIP: *NetApp recommended* evitare l'utilizzo del filegroup primario per oggetti diversi da quelli di sistema. La creazione di un filegroup separato o di un set di filegroup per gli oggetti utente semplifica l'amministrazione del database e il ripristino di emergenza, soprattutto nel caso di database di grandi dimensioni.
@@ -62,8 +62,8 @@ Quando l'inizializzazione immediata del file non è attivata, il registro degli 
 
 image:mssql-zeroing.png["Errore: Immagine grafica mancante"]
 
-L'attività di manutenzione del volume viene semplificata in SQL Server 2016 e viene fornita come opzione durante il processo di installazione. In questa figura viene visualizzata l'opzione per concedere al servizio del motore di database di SQL Server il privilegio di eseguire l'attività di manutenzione del volume.
+L'attività Esegui manutenzione volume è semplificata in SQL Server 2016 e viene fornita come opzione durante il processo di installazione. In questa figura viene visualizzata l'opzione per concedere al servizio del motore di database di SQL Server il privilegio di eseguire l'attività di manutenzione del volume.
 
 image:mssql-maintenance.png["Errore: Immagine grafica mancante"]
 
-Un'altra importante opzione del database che controlla le dimensioni dei file di database è l'autohrink. Quando questa opzione è attivata, SQL Server riduce regolarmente i file di database, ne riduce le dimensioni e rilascia spazio al sistema operativo. Questa operazione richiede molte risorse ed è raramente utile perché i file di database crescono di nuovo dopo un certo periodo di tempo quando nuovi dati entrano nel sistema. Il collegamento automatico non deve mai essere attivato nel database.
+Un'altra importante opzione del database che controlla le dimensioni dei file di database è l'autohrink. Quando questa opzione è attivata, SQL Server riduce regolarmente i file di database, ne riduce le dimensioni e rilascia spazio al sistema operativo. Questa operazione richiede molte risorse ed è raramente utile perché i file di database crescono di nuovo dopo un certo periodo di tempo quando nuovi dati entrano nel sistema. Il collegamento automatico non deve essere attivato nel database.

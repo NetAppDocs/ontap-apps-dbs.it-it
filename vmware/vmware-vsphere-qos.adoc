@@ -20,7 +20,7 @@ I limiti di throughput sono utili per controllare i livelli di servizio, gestire
 
 == Supporto della policy QoS di ONTAP
 
-I sistemi che eseguono il software ONTAP possono utilizzare la funzionalità di qualità del servizio di storage per limitare il throughput in Mbps e/o i/o al secondo (IOPS) per diversi oggetti di storage come file, LUN, volumi o intere SVM.
+I sistemi che eseguono ONTAP possono utilizzare la funzionalità di qualità del servizio di storage per limitare il throughput in Mbps e/o i/o al secondo (IOPS) per diversi oggetti di storage come file, LUN, volumi o intere SVM.
 
 Sono supportati anche i livelli minimi di servizio basati sugli IOPS per fornire performance costanti per gli oggetti SAN in ONTAP 9.2 e per gli oggetti NAS in ONTAP 9.3.
 
@@ -51,7 +51,8 @@ Fare riferimento a. link:https://docs.netapp.com/us-en/ontap/performance-admin/i
 * Lo stesso host (esxi-01) utilizza VM2.vmdk e si trova sullo stesso volume.
 * Se VM1.vmdk viene rallentato, allora anche VM2.vmdk sembrerà essere rallentato poiché condivide la stessa coda io con VM1.vmdk.
 
-*Nota:* questo non si applica ai vVol.
+
+NOTE: Questo non si applica ai vVol.
 
 A partire da vSphere 6,5 è possibile gestire limiti granulari dei file sui datastore non vVol sfruttando la gestione basata su criteri dello storage (SPBM, Storage Policy-Based Management) con Storage i/o Control (SIOC) v2.
 
@@ -83,13 +84,14 @@ Utilizzando le LUN di ONTAP, le policy di QoS possono essere applicate al volume
 
 Durante la creazione di un profilo di capacità storage per il container vVol, specifica un valore IOPS max e/o min in termini di performance, quindi fai riferimento a questo SCP con la policy storage delle macchine virtuali. Utilizzare questo criterio quando si crea la macchina virtuale o si applica il criterio a una macchina virtuale esistente.
 
-*Nota:* vVol richiede l'utilizzo degli strumenti ONTAP per VMware vSphere, che funziona come provider VASA per ONTAP. Fare riferimento a. link:/vmware/vmware-vvols-overview.html["Volumi virtuali di VMware vSphere (vVol) con ONTAP"] Per le Best practice vVol.
+
+NOTE: VVol richiede l'utilizzo dei tool ONTAP per VMware vSphere, che funziona come provider VASA per ONTAP. Fare riferimento a link:/vmware/vmware-vvols-overview.html["Volumi virtuali di VMware vSphere (vVol) con ONTAP"] per le procedure consigliate per i vVol.
 
 
 
 == QoS ONTAP e SIOC VMware
 
-Il QoS di ONTAP e il controllo i/o dello storage VMware vSphere sono tecnologie complementari che vSphere e gli amministratori dello storage possono utilizzare insieme per gestire le performance delle macchine virtuali vSphere ospitate su sistemi che eseguono il software ONTAP. Ogni strumento ha i propri punti di forza, come mostrato nella tabella seguente. A causa dei diversi ambiti di VMware vCenter e ONTAP, alcuni oggetti possono essere visti e gestiti da un sistema e non dall'altro.
+ONTAP QoS e VMware vSphere Storage i/o Control (SIOC) sono tecnologie complementari che gli amministratori di vSphere e dello storage possono utilizzare insieme per gestire le performance delle VM vSphere ospitate in sistemi che eseguono ONTAP. Ogni strumento ha i propri punti di forza, come mostrato nella tabella seguente. A causa dei diversi ambiti di VMware vCenter e ONTAP, alcuni oggetti possono essere visti e gestiti da un sistema e non dall'altro.
 
 |===
 | Proprietà | QoS ONTAP | VMware SIOC 

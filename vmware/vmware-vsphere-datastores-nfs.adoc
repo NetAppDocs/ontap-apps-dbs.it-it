@@ -14,7 +14,7 @@ summary: 'In questa pagina sono descritte le Best practice per l"implementazione
 
 
 [role="lead"]
-NetApp ONTAP è, tra l'altro, un array NAS scale-out di livello Enterprise. ONTAP consente a VMware vSphere di accedere contemporaneamente agli archivi dati connessi a NFS da numerosi host ESXi, superando di gran lunga i limiti imposti ai file system VMFS. L'utilizzo di NFS con vSphere offre alcuni benefici in termini di facilità di utilizzo e di visibilità dell'efficienza dello storage, come menzionato nella link:vmware-vsphere-datastores-top.html["datastore"] sezione.
+ONTAP è, tra l'altro, un array NAS scale-out di livello Enterprise. ONTAP consente a VMware vSphere di accedere contemporaneamente agli archivi dati connessi a NFS da numerosi host ESXi, superando di gran lunga i limiti imposti ai file system VMFS. L'utilizzo di NFS con vSphere offre alcuni vantaggi in termini di facilità di utilizzo e di visibilità dell'efficienza dello storage, come menzionato nella link:vmware-vsphere-datastores-top.html["datastore"]sezione.
 
 Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Best practice:
 

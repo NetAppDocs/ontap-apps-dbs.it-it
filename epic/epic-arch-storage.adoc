@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-storage.html 
+keywords: epic,cache,iris 
+summary: Requisiti di storage EPIC 
+---
+= Requisiti di storage EPIC
+:allow-uri-read: 
+
+
+[role="lead"]
+Vengono generalmente fornite risorse di storage dedicate per il database di produzione, mentre le istanze dei database mirrorati condividono risorse di storage secondarie con altri componenti software Epic, come i tool di reporting Clarity.
+
+Altre risorse di storage di software, ad esempio quelle utilizzate per file di sistema e applicazioni, vengono fornite anche dalle risorse di storage secondario.
+
+Oltre alle considerazioni sul dimensionamento, Epic prevede le seguenti regole aggiuntive sul layout dello storage e considerazioni chiave:
+
+* A partire dal 2020, tutti i carichi di lavoro del database operativo (ODB) devono trovarsi su array all-flash.
+* EPIC consiglia di collocare ciascun pool di storage su hardware fisico separato, inclusi pool1, pool2, pool3, NAS1 ed NAS2.
+
+
+
+NOTE: Un nodo in un cluster può essere considerato come un pool di storage. Con ONTAP 9.4 o versioni successive e AQoS, è possibile creare pool protetti utilizzando criteri.
+
+* Nuovi suggerimenti per il backup su Epic 3-2-1.
++
+.. Copia situata nel sito remoto (disaster recovery)
+.. Una delle copie deve trovarsi su una piattaforma di storage diversa rispetto alla copia primaria
+.. Copie dei dati
+
+
+
+
+
+NOTE: I clienti che utilizzano NetApp SnapMirror per eseguire il backup di NetApp non soddisfano i consigli 3-2-1-5. Il motivo è che ONTAP to ONTAP non soddisfa il secondo requisito sopra elencato. Puoi utilizzare SnapMirror direttamente da ONTAP per lo storage a oggetti on-premise (ad esempio tramite StorageGRID) o nel cloud per soddisfare i requisiti Epic.
+
+Per ulteriori informazioni sugli obblighi di storage, consultare le seguenti guide Epic disponibili in Galaxy:
+
+* Considerazioni sulla SAN
+* Stato dei prodotti di storage e della tecnologia (SPATS)
+* Guida alla configurazione dell'hardware
+

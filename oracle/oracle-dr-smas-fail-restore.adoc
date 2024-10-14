@@ -1,0 +1,17 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-restore.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Sincronizzazione attiva di Oracle e SnapMirror - ripristino del servizio 
+---
+= Sincronizzazione attiva di Oracle e SnapMirror - ripristino del servizio
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapMirror è a riparazione automatica. La sincronizzazione attiva di SnapMirror rileva automaticamente la presenza di una relazione di replica difettosa e la riporta allo stato RPO=0. Una volta ristabilita la replica sincrona, i percorsi torneranno online.
+
+In molti casi, le applicazioni in cluster rilevano automaticamente la restituzione dei percorsi non riusciti e tali applicazioni tornano online. In altri casi, potrebbe essere necessaria una scansione SAN a livello di host oppure potrebbe essere necessario riportare le applicazioni online manualmente.
+
+Dipende dall'applicazione e dal modo in cui è configurata, e in generale tali attività possono essere facilmente automatizzate. La sincronizzazione attiva di SnapMirror stessa risolve automaticamente il problema e non richiede alcun intervento da parte dell'utente per ripristinare l'RPO = 0 operazioni di storage una volta ripristinata l'alimentazione e la connettività.

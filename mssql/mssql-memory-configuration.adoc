@@ -10,17 +10,15 @@ summary: Configurazione della memoria di Microsoft SQL Server
 
 
 [role="lead"]
-Nella sezione seguente viene illustrata la configurazione delle impostazioni della memoria di SQL Server per ottimizzare le prestazioni del database.
+La sezione seguente illustra le impostazioni della memoria di SQL Server necessarie per ottimizzare le prestazioni del database.
 
 
 
 == Memoria massima del server
 
-L'opzione memoria massima del server imposta la quantità massima di memoria che l'istanza di SQL Server può utilizzare.
+L'opzione memoria massima del server imposta la quantità massima di memoria che l'istanza di SQL Server può utilizzare. Viene generalmente utilizzata se più applicazioni vengono eseguite sullo stesso server in cui SQL Server è in esecuzione e si desidera garantire che queste applicazioni dispongano di memoria sufficiente per funzionare correttamente.
 
-Viene generalmente utilizzata se più applicazioni vengono eseguite sullo stesso server in cui SQL Server è in esecuzione e si desidera garantire che queste applicazioni dispongano di memoria sufficiente per funzionare correttamente.
-
-Alcune applicazioni utilizzano solo la memoria disponibile all'avvio e non richiedono altro, anche se necessario. È qui che entra in gioco l'impostazione della memoria massima del server.
+Alcune applicazioni utilizzano solo la memoria disponibile all'avvio e non richiedono memoria aggiuntiva, anche se sono sotto pressione della memoria. È qui che entra in gioco l'impostazione della memoria massima del server.
 
 In un cluster SQL Server con diverse istanze SQL Server, ciascuna istanza potrebbe competere per le risorse. L'impostazione di un limite di memoria per ciascuna istanza di SQL Server può contribuire a garantire le migliori prestazioni per ciascuna istanza.
 
@@ -33,7 +31,7 @@ image:mssql-max-server-memory.png["Errore: Immagine grafica mancante"]
 
 === Regolazione della memoria minima e massima del server mediante SQL Server Management Studio.
 
-L'utilizzo di SQL Server Management Studio per regolare la memoria minima o massima del server richiede il riavvio del servizio SQL Server. È possibile regolare la memoria del server utilizzando Transact SQL (T-SQL) utilizzando il seguente codice:
+L'utilizzo di SQL Server Management Studio per regolare la memoria minima o massima del server richiede il riavvio del servizio SQL Server. È inoltre possibile regolare la memoria del server utilizzando Transact SQL (T-SQL) utilizzando il seguente codice:
 
 ....
 EXECUTE sp_configure 'show advanced options', 1
@@ -48,15 +46,15 @@ RECONFIGURE WITH OVERRIDE
 
 == Accesso alla memoria non uniforme
 
-L'accesso alla memoria non uniforme (NUMA, non Uniform Memory Access) è un metodo di ottimizzazione dell'accesso alla memoria che consente di aumentare la velocità del processore senza aumentare il carico sul bus del processore.
+L'accesso alla memoria non uniforme (NUMA, non Uniform Memory Access) è una tecnologia di ottimizzazione dell'accesso alla memoria che consente di evitare un carico extra sul bus del processore.
 
-Se NUMA è configurato sul server su cui è installato SQL Server, non è necessaria alcuna configurazione aggiuntiva perché SQL Server è compatibile con NUMA e funziona bene sull'hardware NUMA.
+Se NUMA è configurato su un server in cui è installato SQL Server, non è necessaria alcuna configurazione aggiuntiva, in quanto SQL Server è compatibile con NUMA e funziona bene sull'hardware NUMA.
 
 
 
 == Indice creare memoria
 
-L'opzione di creazione della memoria di indice è un'altra opzione avanzata che solitamente non si dovrebbe modificare.
+L'opzione di creazione della memoria di indice è un'altra opzione avanzata che non dovrebbe normalmente essere modificata dai valori predefiniti.
 
 Controlla la quantità massima di RAM inizialmente allocata per la creazione degli indici. Il valore predefinito per questa opzione è 0, il che significa che è gestita automaticamente da SQL Server. Tuttavia, se si riscontrano difficoltà nella creazione degli indici, è consigliabile aumentare il valore di questa opzione.
 
@@ -66,45 +64,6 @@ Controlla la quantità massima di RAM inizialmente allocata per la creazione deg
 
 Quando viene eseguita una query, SQL Server tenta di allocare la quantità ottimale di memoria per un'esecuzione efficiente.
 
-Per impostazione predefinita, l'impostazione memoria minima per query assegna >= a 1024KB per ogni query da eseguire. È consigliabile lasciare questa impostazione al valore predefinito 0 per consentire a SQL Server di gestire dinamicamente la quantità di memoria allocata per le operazioni di creazione dell'indice. Tuttavia, se SQL Server dispone di una quantità di RAM superiore a quella necessaria per un'esecuzione efficiente, le prestazioni di alcune query possono essere migliorate se si aumenta questa impostazione. Pertanto, se sul server non viene utilizzata SQL Server, altre applicazioni o il sistema operativo è disponibile memoria, il miglioramento di questa impostazione può contribuire alle prestazioni complessive di SQL Server. Se non è disponibile memoria libera, l'aumento di questa impostazione potrebbe compromettere le prestazioni complessive.
+Per impostazione predefinita, l'impostazione memoria minima per query assegna >= a 1024KB per ogni query da eseguire. È consigliabile lasciare questa impostazione al valore predefinito per consentire a SQL Server di gestire dinamicamente la quantità di memoria allocata per le operazioni di creazione dell'indice. Tuttavia, se SQL Server dispone di una quantità di RAM superiore a quella necessaria per un'esecuzione efficiente, le prestazioni di alcune query possono essere migliorate se si aumenta questa impostazione. Pertanto, se sul server non viene utilizzata SQL Server, altre applicazioni o il sistema operativo è disponibile memoria, il miglioramento di questa impostazione può contribuire alle prestazioni complessive di SQL Server. Se non è disponibile memoria libera, l'aumento di questa impostazione potrebbe compromettere le prestazioni complessive.
 
 image:mssql-min-memory-per-query.png["Errore: Immagine grafica mancante"]
-
-
-
-== Estensioni del pool di buffer
-
-L'estensione del pool di buffer consente l'integrazione perfetta di un'estensione NVRAM con il pool di buffer del motore di database per migliorare significativamente la velocità i/O.
-
-L'estensione del pool di buffer non è disponibile in ogni edizione di SQL Server. È disponibile solo con le edizioni SQL Server Standard, Business Intelligence ed Enterprise a 64 bit.
-
-La funzione di estensione del pool di buffer estende la cache del pool di buffer con lo storage non volatile (generalmente SSD). L'estensione consente al pool di buffer di ospitare un working set di database più grande, forzando il paging dell'i/o tra la RAM e gli SSD e trasferendo efficacemente i/o casuali di piccole dimensioni dai dischi meccanici agli SSD. Grazie alla minore latenza e alle migliori prestazioni i/o random degli SSD, l'estensione del pool di buffer migliora significativamente l'elaborazione i/O.
-
-La funzione di estensione del pool di buffer offre i seguenti vantaggi:
-
-* Maggiore throughput i/o casuale
-* Latenza i/o ridotta
-* Aumento del throughput delle transazioni
-* Migliori performance di lettura con un pool di buffer ibridi più ampio
-* Architettura di caching che consente di sfruttare la memoria a basso costo esistente e futura
-
-
-[TIP]
-====
-*NetApp consiglia* di configurare le estensioni del pool di buffer in modo da:
-
-* Verificare che un LUN con supporto SSD (ad esempio NetApp AFF) venga presentato all'host SQL Server in modo che possa essere utilizzato come disco di destinazione dell'estensione del pool di buffer.
-* Il file di estensione deve avere la stessa dimensione del pool di buffer o essere più grande.
-
-
-====
-Nell'esempio seguente viene illustrato un comando T-SQL per impostare un'estensione del pool di buffer di 32GB.
-
-....
-USE master
-GO
-ALTER SERVER CONFIGURATION
-SET BUFFER POOL EXTENSION ON
-  (FILENAME = ‘P:\BUFFER POOL EXTENSION\SQLServerCache.BUFFER POOL EXTENSION', SIZE = 32 GB);
-GO
-....

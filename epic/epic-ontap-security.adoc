@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-security.html 
+keywords: epic,cache,iris 
+summary: EPIC su ONTAP Security 
+---
+= EPIC su ONTAP Security
+:allow-uri-read: 
+
+
+[role="lead"]
+Oggi la sicurezza è la preoccupazione principale per le organizzazioni e i dirigenti del settore sanitario. Non è mai stato così difficile da gestire e le organizzazioni devono affrontare problemi come compliance, governance dei dati, protezione antivirus e ransomware.
+
+Una guida completa a Epic e alla sicurezza dello storage esulano dall'ambito di questo documento; tuttavia, link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/security-hardening-overview.html["Guida alla protezione per ONTAP"^] elenca tutte le funzionalità di sicurezza estese e avanzate disponibili con ONTAP.
+
+NetApp Active IQ Unified Manager monitora le violazioni di sicurezza in base alle informazioni incluse nel link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/security-hardening-overview.html["TR-4569"^] e le segnala nella dashboard per semplificare la gestione della sicurezza. Questi strumenti possono aiutare la vostra organizzazione a raggiungere gli obiettivi di sicurezza per proteggere, rilevare e risolvere gli attacchi.
+
+NetApp ha inoltre collaborato con i vendor di sicurezza per fornire l'integrazione tramite link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/create-fpolicy.html["FPolicy di NetApp"^] software per migliorare la tua offerta di sicurezza. Inoltre, link:https://docs.netapp.com/us-en/ontap/authentication/mfa-overview.html["Autenticazione multifattore (MFA)"^] può essere aggiunto per proteggere l'ambiente Epic da accessi non autorizzati con credenziali trapelate.
+
+Infine, le copie snapshot native di ONTAP e le tecnologie immutabili SnapLock con link:https://docs.netapp.com/us-en/netapp-solutions/cyber-vault/ontap-cyber-vault-overview.html["Cyber vault di ONTAP"^], offrono un'esclusiva funzionalità air gap per proteggere le cartelle cliniche dei pazienti dal ransomware. Consultare la documentazione NetApp a link:https://docs.netapp.com/us-en/ontap/ransomware-solutions/ransomware-overview.html["La soluzione NetApp per ransomware"^]. Per un approccio più strategico alla protezione, vedere link:https://docs.netapp.com/us-en/ontap/zero-trust/zero-trust-overview.html["NetApp e zero trust"^].

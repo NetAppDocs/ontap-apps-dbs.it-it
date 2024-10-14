@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-4node.html 
+keywords: epic,cache,iris 
+summary: Architettura EPIC a quattro nodi 
+---
+= Architettura EPIC a quattro nodi
+:allow-uri-read: 
+
+
+[role="lead"]
+Le figure qui sotto mostrano il layout dello storage per un'architettura a quattro nodi: Una coppia ha in produzione e una coppia ha in disaster recovery. La dimensione dei controller e il numero di dischi si basano su quest'ultima immagine di dimensionamento.
+
+NetApp garantisce prestazioni di livello minimo accettando le policy AQoS consigliate da SLM. EPIC supporta il consolidamento dei pool di storage su ONTAP su hardware notevolmente inferiore. Per ulteriori informazioni, consulta il documento Epic Quarterly SPATS. Fondamentalmente, i sistemi pool1, pool2 e NAS1 (elencati nella Epic hardware Configuration Guide) possono essere eseguiti su una singola coppia ha, con i carichi di lavoro distribuiti in modo uniforme sui due controller. Nelle operazioni di disaster recovery, anche il pool Epic 3 e la NAS 3 sono divisi tra i due controller nella coppia ha.
+
+Gli ambienti di copia completa di test (come SUP, REL e PJX) sono clonati da Epic Production, Epic Report o Epic Disaster Recovery. Per informazioni su backup e refresh Epic, consulta la sezione intitolata, "Gestione dei dati".
+
+
+
+== Architettura a quattro nodi
+
+image:epic-4node.png["Architettura EPIC a 4 nodi"]
+
+
+
+== Posizionamento dei carichi di lavoro a quattro nodi
+
+image:epic-4node-design.png["Posizionamento EPIC a 4 nodi"]

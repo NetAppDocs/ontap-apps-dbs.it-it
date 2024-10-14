@@ -52,7 +52,7 @@ L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un s
 
 == Architettura di replica e disaster recovery
 
-Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster, tra cui link:../metrocluster/overview.html["MetroCluster"] e. link:../smbc/overview.html["Sincronizzazione attiva di SnapMirror"]
+Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster tra cui link:oracle-dr-mcc-failover.html["MetroCluster"] e. link:oracle-dr-smas-overview.html["Sincronizzazione attiva di SnapMirror"]
 
 L'RPO di DR è limitato dalla larghezza di banda della rete disponibile e dalle dimensioni totali dei dati da proteggere. Dopo la creazione del trasferimento di base iniziale, gli aggiornamenti si basano solo sui dati modificati, che in genere rappresentano una bassa percentuale dell'impatto totale dei dati, sebbene esistano delle eccezioni.
 

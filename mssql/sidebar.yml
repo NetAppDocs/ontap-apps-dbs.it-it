@@ -29,6 +29,34 @@ entries:
 - title: Protezione dei dati
   url: "/mssql/mssql-data-protection.html"
 - title: Disaster recovery
-  url: "/mssql/mssql-disaster-recovery.html"
+  entries:
+  - title: Panoramica
+    url: "/mssql/mssql-disaster-recovery.html"
+  - title: SnapMirror
+    url: "/mssql/mssql-dr-snapmirror.html"
+  - title: MetroCluster
+    entries:
+    - title: Architettura MetroCluster
+      url: "/mssql/mssql-dr-mcc-overview.html"
+    - title: SQL Server con MetroCluster
+      url: "/mssql/mssql-dr-mcc-sql.html"
+  - title: Sincronizzazione attiva di SnapMirror
+    entries:
+    - title: Panoramica
+      url: "/mssql/mssql-dr-smas-overview.html"
+    - title: Mediatore ONTAP
+      url: "/mssql/mssql-dr-smas-mediator.html"
+    - title: Sito preferito
+      url: "/mssql/mssql-dr-smas-preferred-site.html"
+    - title: Topologia di rete
+      entries:
+      - title: Accesso uniforme
+        url: "/mssql/mssql-dr-smas-uniform.html"
+      - title: Accesso non uniforme
+        url: "/mssql/mssql-dr-smas-nonuniform.html"
+    - title: SQL Server con SM-AS
+      url: "/mssql/mssql-dr-smas-sql.html"
+    - title: Scenari di errore
+      url: "/mssql/mssql-dr-smas-failure-scenarios.html"
 - title: Sicurezza dei dati
   url: "/mssql/mssql-data-security.html"

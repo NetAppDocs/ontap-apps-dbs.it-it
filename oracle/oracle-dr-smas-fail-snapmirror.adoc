@@ -1,0 +1,38 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-snapmirror.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Failover Active Sync di Oracle e SnapMirror 
+---
+= Sincronizzazione attiva SnapMirror - perdita della connettività SnapMirror
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Se il collegamento di replica sincrona attiva di SnapMirror, l'io in scrittura non può essere completato perché sarebbe impossibile per un cluster replicare le modifiche al sito opposto.
+
+
+
+== Sito A
+
+Il risultato sul sito A di un errore del collegamento di replica sarà una pausa di circa 15 secondi nell'elaborazione io in scrittura, poiché ONTAP tenta di replicare le scritture prima di determinare che il collegamento di replica è veramente inutilizzabile. Trascorsi i 15 secondi, il cluster ONTAP sul sito A riprende l'elaborazione i/o in lettura e scrittura. I percorsi SAN non vengono modificati e i LUN rimangono online.
+
+
+
+== Sito B
+
+Poiché il sito B non è il sito preferito di sincronizzazione attiva SnapMirror, i relativi percorsi LUN non saranno più disponibili dopo circa 15 secondi.
+
+Il collegamento di replica è stato tagliato alla data e ora 15:19:44. Il primo avviso da Oracle RAC arriva 100 secondi dopo l'avvicinarsi del timeout di 200 secondi (controllato dal disktimeout del parametro di Oracle RAC).
+
+....
+2024-09-10 15:21:24.702 [ONMD(2792)]CRS-1615: No I/O has completed after 50% of the maximum interval. If this persists, voting file /dev/mapper/grid2 will be considered not functional in 99340 milliseconds.
+2024-09-10 15:22:14.706 [ONMD(2792)]CRS-1614: No I/O has completed after 75% of the maximum interval. If this persists, voting file /dev/mapper/grid2 will be considered not functional in 49330 milliseconds.
+2024-09-10 15:22:44.708 [ONMD(2792)]CRS-1613: No I/O has completed after 90% of the maximum interval. If this persists, voting file /dev/mapper/grid2 will be considered not functional in 19330 milliseconds.
+2024-09-10 15:23:04.710 [ONMD(2792)]CRS-1604: CSSD voting file is offline: /dev/mapper/grid2; details at (:CSSNM00058:) in /gridbase/diag/crs/jfs13/crs/trace/onmd.trc.
+2024-09-10 15:23:04.710 [ONMD(2792)]CRS-1606: The number of voting files available, 0, is less than the minimum number of voting files required, 1, resulting in CSSD termination to ensure data integrity; details at (:CSSNM00018:) in /gridbase/diag/crs/jfs13/crs/trace/onmd.trc
+2024-09-10 15:23:04.716 [ONMD(2792)]CRS-1699: The CSS daemon is terminating due to a fatal error from thread: clssnmvDiskPingMonitorThread; Details at (:CSSSC00012:) in /gridbase/diag/crs/jfs13/crs/trace/onmd.trc
+2024-09-10 15:23:04.731 [OCSSD(2794)]CRS-1652: Starting clean up of CRSD resources.
+....
+Una volta raggiunto il timeout del disco di voting di 200 secondi, il nodo Oracle RAC verrà rimosso dal cluster e riavviato.

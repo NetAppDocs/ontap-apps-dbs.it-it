@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-scalability.html 
+keywords: epic,cache,iris 
+summary: EPIC su scalabilità ONTAP 
+---
+= EPIC su scalabilità ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+La Epic hardware Configuration Guide registra una crescita annua di circa il 20% per 3 anni. Tuttavia, anche gli ambienti possono crescere inaspettatamente.
+
+NetApp può scalare perfettamente performance e capacità fino a 12 nodi per cluster NAS, SAN e a oggetti. Potrai quindi scalare in verticale e in orizzontale senza interruzioni seguendo la crescita del tuo business.
+
+EPIC Iris offre ulteriori funzionalità di scalabilità. Consente ai clienti più grandi con diverse istanze Epic di consolidarsi in una singola istanza. Il link:https://www.netapp.com/media/27905-nva-1159-design.pdf["Epic sull'architettura verificata NetApp su SAN moderna"^] documento dimostra che Epic è in grado di scalare perfettamente i workload consolidati fino a 720K milioni di IOPS su una singola ha e di scalare in orizzontale fino a oltre 4M milioni di IOPS in un cluster. Puoi scalare in verticale senza interruzioni aggiornando i controller o aggiungendo dischi ai cluster esistenti.
+
+Inoltre, è possibile spostare i dati NAS, SAN e a oggetti senza interruzioni tra i nodi del cluster. Ogni coppia ha nel cluster può essere qualsiasi combinazione di tipi e dimensioni di sistemi ONTAP FAS e AFF. Puoi bilanciare i carichi di lavoro in un singolo cluster per massimizzare l'investimento storage.
+
+ONTAP offre anche la possibilità di utilizzare lo storage a oggetti su StorageGRID o nel cloud come destinazione di backup e/o destinazione del tiering automatico del cold storage. Questa funzionalità ti consente di liberare automaticamente sugli oggetti i costosi dischi all-flash, le snapshot di Tier e i dati cold.
+
+Il risultato è che Epic funziona semplicemente meglio con il portfolio di prodotti NetApp, sfruttando ONTAP, diversi protocolli, StorageGRID e il cloud di tua scelta. Questi prodotti offrono opzioni di disaster recovery, archiviazione, analisi, tiering e altro ancora.

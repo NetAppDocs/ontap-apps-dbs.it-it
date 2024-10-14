@@ -1,0 +1,53 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-manual.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Sincronizzazione attiva di Oracle e SnapMirror - failover manuale 
+---
+= Sincronizzazione attiva di Oracle e SnapMirror - failover manuale
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il termine "failover" non si riferisce alla direzione della replica con la sincronizzazione attiva di SnapMirror perché si tratta di una tecnologia di replica bidirezionale. "Failover" si riferisce invece al sistema di storage preferito in caso di guasto.
+
+Ad esempio, è possibile eseguire un failover per modificare il sito preferito prima di chiudere un sito per la manutenzione o prima di eseguire un test di DR.
+
+La modifica del sito preferito richiede un'operazione semplice. I/o si fermeranno per un secondo o due come autorità sugli switch del comportamento di replica tra i cluster, ma in caso contrario i/o non vengono influenzati.
+
+Esempio di GUI:
+
+image:smas-preferred-site.png["Clip SystemManager di SM-come sito preferito"]
+
+Esempio di modifica tramite l'interfaccia CLI:
+
+....
+Cluster2::> snapmirror failover start -destination-path jfs_as2:/cg/jfsAA
+[Job 9575] Job is queued: SnapMirror failover for destination "jfs_as2:/cg/jfsAA                      ".
+
+Cluster2::> snapmirror failover show
+
+Source    Destination                                          Error
+Path      Path        Type     Status    start-time end-time   Reason
+-------- -----------  -------- --------- ---------- ---------- ----------
+jfs_as1:/cg/jfsAA
+         jfs_as2:/cg/jfsAA
+                      planned  completed 9/11/2024  9/11/2024
+                                         09:29:22   09:29:32
+
+The new destination path can be verified as follows:
+
+
+Cluster1::> snapmirror show -destination-path jfs_as1:/cg/jfsAA
+
+                            Source Path: jfs_as2:/cg/jfsAA
+                       Destination Path: jfs_as1:/cg/jfsAA
+                      Relationship Type: XDP
+                Relationship Group Type: consistencygroup
+                 SnapMirror Policy Type: automated-failover-duplex
+                      SnapMirror Policy: AutomatedFailOverDuplex
+                            Tries Limit: -
+                           Mirror State: Snapmirrored
+                    Relationship Status: InSync
+....

@@ -10,9 +10,7 @@ summary: Efficienza dello storage di Microsoft SQL Server e ONTAP
 
 
 [role="lead"]
-L'efficienza dello storage di ONTAP è ottimizzata per la memorizzazione e la gestione dei dati di SQL Server in modo da utilizzare la minore quantità di spazio di storage con effetti minimi o nulli sulle performance complessive del sistema.
-
-L'efficienza dello storage è una combinazione di RAID, provisioning (layout e utilizzo generali), mirroring e altre tecnologie di protezione dei dati. Le tecnologie NetApp, tra cui snapshot, thin provisioning e cloning, ottimizzano lo storage esistente nell'infrastruttura e posticipano o evitando future spese per lo storage. Più si utilizzano queste tecnologie insieme, maggiore sarà il risparmio.
+L'efficienza dello storage di ONTAP è ottimizzata per memorizzare e gestire i dati di SQL Server in modo che utilizzino la minore quantità di spazio di storage senza impatti sulle performance.
 
 Le funzionalità di efficienza in termini di spazio, come compressione, compaction e deduplica, sono progettate per aumentare la quantità di dati logici applicabili a una determinata quantità di storage fisico. Il risultato è una riduzione dei costi e dell'overhead di gestione.
 
@@ -69,7 +67,7 @@ Il grado di risparmio ottenuto varia. I dati già compressi o crittografati non 
 
 === Efficienza di conservazione sensibile alla temperatura
 
-L'efficienza dello storage sensibile alla temperatura (TSSE) è disponibile in ONTAP 9,8 e versioni successive e si basa sulle mappe termiche di accesso ai blocchi per identificare i blocchi a cui si accede raramente e comprimerli con una maggiore efficienza.
+L'efficienza di stoccaggio sensibile alla temperatura (TSSE) è disponibile in ONTAP 9.8 e versioni successive. Si affida alle mappe termiche di accesso ai blocchi per identificare i blocchi a cui si accede raramente e comprimerli con una maggiore efficienza.
 
 
 
@@ -132,8 +130,11 @@ La compressione dei dati è attualmente supportata nelle edizioni Enterprise, De
 Di seguito sono riportati i suggerimenti per la gestione dello spazio per i file di dati di SQL Server
 
 * Utilizzo del thin provisioning negli ambienti SQL Server per migliorare l'utilizzo dello spazio e ridurre i requisiti generali di storage quando viene utilizzata la funzionalità di garanzia di spazio.
-* Utilizza l'espansione automatica per la maggior parte delle configurazioni di implementazione più comuni, perché l'amministratore dello storage deve solo monitorare l'utilizzo dello spazio nell'aggregato.
-* Si consiglia di non abilitare la deduplica su qualsiasi volume contenente file di dati di SQL Server a meno che non sia noto che il volume contiene più copie degli stessi dati, come ad esempio il ripristino del database dai backup su un singolo volume.
++
+** Utilizza l'espansione automatica per la maggior parte delle configurazioni di implementazione più comuni, perché l'amministratore dello storage deve solo monitorare l'utilizzo dello spazio nell'aggregato.
+
+
+* Non abilitare la deduplica su volumi contenenti file di dati di SQL Server a meno che non si sappia che il volume contiene più copie degli stessi dati, come ad esempio il ripristino del database dai backup su un singolo volume.
 
 
 

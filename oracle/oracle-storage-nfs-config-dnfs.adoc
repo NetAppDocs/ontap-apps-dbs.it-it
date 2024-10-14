@@ -42,4 +42,4 @@ Quando vengono utilizzate le opzioni di montaggio per i database a istanza singo
 Modificare le opzioni di montaggio solo quando (a) viene utilizzato DNFS e (b) un problema deriva da un ritardo nella visibilità dei file. Se DNFS non è in uso, l'utilizzo delle opzioni di montaggio di Oracle RAC su un database a singola istanza comporta un peggioramento delle prestazioni.
 
 
-NOTE: Vedere la nota su `nosharecache` poll link:../host-configuration/linux.html#linux-direct-nfs["Opzioni di montaggio NFS Linux"] Per un problema DNFS specifico di Linux che può produrre risultati insoliti.
+NOTE: Consultare la nota relativa a `nosharecache` in link:oracle-host-config-linux.html#linux-direct-nfs["Opzioni di montaggio NFS Linux"] per un problema DNFS specifico di Linux che può produrre risultati insoliti.

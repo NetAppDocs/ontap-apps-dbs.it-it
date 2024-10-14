@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-filesystems.html 
+keywords: epic,cache,iris 
+summary: EPIC su ONTAP esempio di distribuzione - filesystem 
+---
+= EPIC su ONTAP esempio di distribuzione - filesystem
+:allow-uri-read: 
+
+
+[role="lead"]
+Per informazioni su come montare i LUN, creare gruppi di volumi e volumi logici e configurare i file system, consulta la Epic Storage Configuration Quick Reference Guide. Utilizzare i seguenti comandi di esempio per configurare i server di produzione Epic per RHEL.
+
+
+
+== File system e opzioni di montaggio
+
+Una volta creati e mappati i LUN e completata la suddivisione in zone, attenersi alla seguente procedura per collegare lo storage al server.
+
+
+NOTE: In questo esempio abbiamo utilizzato 8x 1024Gb LUN per il database, 2x 1024Gb LUN per i diari e 2x 1024Gb LUN per le installazioni delle applicazioni.
+
+
+
+== I/o asincrono
+
+Una copia del white paper Epic SAN Considerations e del documento di riferimento rapido sulla configurazione dello storage fornisce dettagli su come configurare gli host e connettersi allo storage. In questa sezione viene descritto come configurare un host Red Hat Enterprise Linux. I dettagli di AIX sono disponibili nei documenti referenziati.

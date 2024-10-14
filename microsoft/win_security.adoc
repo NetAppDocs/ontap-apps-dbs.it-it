@@ -10,7 +10,7 @@ summary: Sicurezza dello storage ONTAP con Hyper-V.
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

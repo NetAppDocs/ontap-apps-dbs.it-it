@@ -1,0 +1,18 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-arch-overview.html 
+keywords: oracle, active sync, mcc, MCC-IP 
+summary: Istanza singola Oracle con sincronizzazione attiva SnapMirror 
+---
+= Oracle con sincronizzazione attiva SnapMirror
+:allow-uri-read: 
+
+
+[role="lead"]
+L'utilizzo della sincronizzazione attiva di SnapMirror non aggiunge o modifica necessariamente le procedure consigliate per il funzionamento di un database.
+
+La migliore architettura dipende dai requisiti di business. Ad esempio, se l'obiettivo è ottenere una protezione RPO=0:1 contro la perdita di dati, ma l'RTO non è più così semplice, utilizzare i database Oracle Single Instance e replicare le LUN con SM, potrebbe essere sufficiente così come meno costoso da un approccio basato su licenze Oracle. Un guasto del sito remoto non interromperebbe le operazioni e, di conseguenza, la perdita del sito primario porterebbe all'utilizzo di LUN online e pronte per l'uso nel sito rimasto.
+
+Se l'RTO fosse più rigoroso, l'automazione Active-passive di base tramite script o cluster come Pacemaker o Ansible migliorerebbe i tempi di failover. Ad esempio, VMware ha può essere configurato in modo da rilevare un guasto della VM nel sito primario e rendere attiva la VM nel sito remoto.
+
+Infine, per un failover estremamente rapido, Oracle RAC può essere implementato su più siti. L'RTO sarebbe praticamente pari a zero perché il database sarebbe sempre online e disponibile su entrambi i siti.

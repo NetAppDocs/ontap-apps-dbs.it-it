@@ -71,7 +71,7 @@ Il grado di risparmio ottenuto varia. I dati già compressi o crittografati non 
 
 === Efficienza di conservazione sensibile alla temperatura
 
-L'efficienza dello storage sensibile alla temperatura (TSSE) è disponibile in ONTAP 9,8 e versioni successive e si basa sulle mappe termiche di accesso ai blocchi per identificare i blocchi a cui si accede raramente e comprimerli con una maggiore efficienza.
+L'efficienza di stoccaggio sensibile alla temperatura (TSSE) è disponibile in ONTAP 9.8 e versioni successive. Si affida alle mappe termiche di accesso ai blocchi per identificare i blocchi a cui si accede raramente e comprimerli con una maggiore efficienza.
 
 
 

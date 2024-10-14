@@ -10,7 +10,7 @@ summary: 'La presente appendice descrive l"implementazione di un cluster Hyper-V
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

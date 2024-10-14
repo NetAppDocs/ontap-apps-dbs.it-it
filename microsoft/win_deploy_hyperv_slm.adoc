@@ -10,7 +10,7 @@ summary: Come configurare la migrazione live dello storage Hyper-V.
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

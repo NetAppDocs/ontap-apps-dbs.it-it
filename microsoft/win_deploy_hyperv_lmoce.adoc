@@ -10,7 +10,7 @@ summary: Questa appendice descrive come utilizzare la migrazione live di Hyper-V
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

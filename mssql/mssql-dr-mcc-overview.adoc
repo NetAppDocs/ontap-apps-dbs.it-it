@@ -1,0 +1,112 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-mcc-overview.html 
+keywords: MSSQL,SQL Server, MetroCluster, Disaster recovery 
+summary: Microsoft SQL Server e NetApp MetroCluster 
+---
+= Panoramica e architettura di MetroCluster
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La distribuzione di Microsoft SQL Server con ambiente MetroCluster richiede alcune spiegazioni sulla progettazione fisica di un sistema MetroCluster.
+
+MetroCluster esegue il mirroring sincrono di dati e configurazione tra due cluster ONTAP in posizioni separate o domini di errore. MetroCluster offre storage sempre disponibile per le applicazioni gestendo automaticamente due obiettivi:
+
+* RPO (Zero Recovery Point Objective) eseguendo il mirroring sincrono dei dati scritti nel cluster.
+* RTO (Recovery Time Objective) quasi nullo attraverso la configurazione del mirroring e l'automazione dell'accesso ai dati del secondo sito.
+
+
+MetroCluster offre semplicità con mirroring automatico dei dati e configurazione tra i due cluster indipendenti situati nei due siti. Poiché lo storage viene fornito all'interno di un cluster, viene automaticamente eseguito il mirroring nel secondo cluster del secondo sito. NetApp SyncMirror® fornisce una copia completa di tutti i dati con RPO pari a zero. Ciò significa che i carichi di lavoro da un sito possono passare in qualsiasi momento al sito opposto e continuare a fornire i dati senza perdita di dati. MetroCluster gestisce il processo di switchover per fornire accesso ai dati forniti da NAS e SAN al secondo sito. La progettazione di MetroCluster come soluzione validata contiene dimensionamento e configurazione che consente di eseguire uno switchover entro i periodi di timeout del protocollo (generalmente inferiori a 120 secondi). Questo consente un RPO prossimo allo zero e le applicazioni possono continuare ad accedere ai dati senza incorrere in guasti. Il MetroCluster è disponibile in diverse variazioni definite dal fabric dello storage back-end.
+
+
+
+== MetroCluster è disponibile in 3 diverse configurazioni
+
+* Coppie HA con connettività IP
+* Coppie HA con connettività FC
+* Controller singolo con connettività FC
+
+
+
+NOTE: Il termine connettività si riferisce alla connessione cluster utilizzata per la replica tra siti. Non si riferisce ai protocolli host. Tutti i protocolli lato host sono supportati come di consueto in una configurazione MetroCluster indipendentemente dal tipo di connessione utilizzata per la comunicazione tra cluster.
+
+
+
+== IP MetroCluster
+
+La configurazione MetroCluster IP ha-Pair utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
+
+La maggior parte dei clienti sceglie la connettività IP perché i requisiti dell'infrastruttura sono più semplici. In passato, la connettività cross-site ad alta velocità era generalmente più semplice da fornire utilizzando gli switch FC e in fibra scura, ma oggi i circuiti IP ad alta velocità e a bassa latenza sono più prontamente disponibili.
+
+L'architettura è anche più semplice perché le uniche connessioni cross-site sono per i controller. Nei MetroClusters collegati a FC SAN, un controller scrive direttamente sulle unità del sito opposto e quindi richiede connessioni SAN, switch e bridge aggiuntivi. Al contrario, un controller in una configurazione IP scrive sulle unità opposte tramite il controller.
+
+Per ulteriori informazioni, consultare la documentazione ufficiale di ONTAP e. https://www.netapp.com/pdf.html?item=/media/13481-tr4689.pdf["Architettura e progettazione della soluzione IP di MetroCluster"^].
+
+image:mccip.png["Errore: Immagine grafica mancante"]
+
+
+
+== MetroCluster HA-Pair FC SAN-Attached
+
+La configurazione ha-Pair MetroCluster FC utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
+
+image:mcc-4-node.png["Errore: Immagine grafica mancante"]
+
+Alcune infrastrutture multisito non sono progettate per le operazioni Active-Active, ma vengono utilizzate maggiormente come sito primario e sito di disaster recovery. In questa situazione, è generalmente preferibile un'opzione ha-Pair MetroCluster per i seguenti motivi:
+
+* Anche se un cluster MetroCluster a due nodi è un sistema ha, un guasto imprevisto di un controller o una manutenzione pianificata richiedono che i servizi dati vengano online sul sito opposto. Se la connettività di rete tra i siti non supporta la larghezza di banda richiesta, le prestazioni ne risentono. L'unica opzione sarebbe anche eseguire il failover dei vari sistemi operativi host e dei servizi associati al sito alternativo. Il cluster MetroCluster ha-Pair elimina questo problema grazie alla perdita di un controller che consente di eseguire un semplice failover all'interno dello stesso sito.
+* Alcune topologie di rete non sono progettate per l'accesso tra siti, ma utilizzano sottoreti o SAN FC isolate. In questi casi, il cluster MetroCluster a due nodi non funziona più come sistema ha, perché il controller alternativo non può fornire dati ai server del sito opposto. L'opzione ha-Pair MetroCluster è necessaria per garantire ridondanza completa.
+* Se un'infrastruttura a due siti viene vista come una singola infrastruttura ad alta disponibilità, la configurazione MetroCluster a due nodi è adatta. Tuttavia, se il sistema deve funzionare per un periodo di tempo prolungato dopo il guasto del sito, è preferibile una coppia ha perché continua a fornire ha all'interno di un singolo sito.
+
+
+
+
+== MetroCluster FC SAN-attached a due nodi
+
+La configurazione MetroCluster a due nodi utilizza un solo nodo per sito. Questo design è più semplice rispetto all'opzione ha-Pair perché richiede meno componenti da configurare e gestire. Inoltre, ha ridotto le richieste di infrastruttura in termini di cablaggio e switch FC. Infine, riduce i costi.
+
+image:mcc-2-node.png["Errore: Immagine grafica mancante"]
+
+L'evidente impatto di questa progettazione è che un guasto del controller su un singolo sito implica che i dati sono disponibili dal sito opposto. Questa restrizione non è necessariamente un problema. Molte aziende hanno operazioni di data center multisito con reti estese, ad alta velocità e a bassa latenza che funzionano essenzialmente come una singola infrastruttura. In questi casi, la configurazione preferita è la versione a due nodi di MetroCluster. Diversi service provider utilizzano attualmente sistemi a due nodi con scalabilità di petabyte.
+
+
+
+== Funzionalità di resilienza di MetroCluster
+
+Non esistono single point of failure in una soluzione MetroCluster:
+
+* Ogni controller dispone di due percorsi indipendenti verso gli shelf di dischi sul sito locale.
+* Ogni controller dispone di due percorsi indipendenti verso gli shelf di dischi sul sito remoto.
+* Ciascun controller dispone di due percorsi indipendenti verso i controller sul sito opposto.
+* Nella configurazione ha-Pair, ogni controller ha due percorsi verso il partner locale.
+
+
+Riassumendo, qualsiasi componente della configurazione può essere rimosso senza compromettere la capacità di MetroCluster di fornire dati. L'unica differenza in termini di resilienza tra le due opzioni è che la versione ha-Pair è ancora un sistema storage ha generale dopo un guasto del sito.
+
+
+
+== SyncMirror
+
+La protezione per SQL Server con MetroCluster si basa su SyncMirror, che offre una tecnologia di mirroring sincrono scale-out dalle performance massime.
+
+
+
+== Data Protection con SyncMirror
+
+Al livello più semplice, la replica sincrona significa che qualsiasi modifica deve essere apportata a entrambi i lati dello storage con mirroring prima che venga riconosciuta. Ad esempio, se un database sta scrivendo un registro o un guest VMware viene aggiornato, non deve mai andare persa una scrittura. Come livello di protocollo, il sistema di storage non deve riconoscere la scrittura fino a quando non è stato assegnato a un supporto non volatile in entrambi i siti. Solo allora è sicuro procedere senza il rischio di perdita dei dati.
+
+L'utilizzo di una tecnologia di replica sincrona è il primo passo nella progettazione e nella gestione di una soluzione di replica sincrona. La considerazione più importante è capire cosa potrebbe accadere durante i vari scenari di guasto pianificati e non pianificati. Non tutte le soluzioni di replica sincrona offrono le stesse funzionalità. Se hai bisogno di una soluzione che offra un recovery point objective (RPO) pari a zero, ovvero zero data loss, devi prendere in considerazione tutti gli scenari di guasto. In particolare, qual è il risultato previsto quando la replica è impossibile a causa della perdita di connettività tra i siti?
+
+
+
+== Disponibilità dei dati SyncMirror
+
+La replica MetroCluster si basa sulla tecnologia NetApp SyncMirror, che è progettata per passare in modo efficiente dalla modalità sincrona alla modalità sincrona e viceversa. Questa funzionalità soddisfa i requisiti dei clienti che richiedono una replica sincrona, ma che hanno bisogno anche di un'alta disponibilità per i propri servizi dati. Ad esempio, se la connettività a un sito remoto viene interrotta, è generalmente preferibile che il sistema di archiviazione continui a funzionare in uno stato non replicato.
+
+Molte soluzioni di replica sincrona sono in grado di funzionare solo in modalità sincrona. Questo tipo di replica "tutto o niente" viene talvolta chiamato modalità domino. Tali sistemi storage smettono di fornire i dati piuttosto che permettere che le copie locali e remote dei dati diventino non sincronizzate. Se la replica viene forzata, la risincronizzazione può richiedere molto tempo e lasciare un cliente esposto a una perdita di dati completa durante il tempo in cui il mirroring viene ristabilita.
+
+Non solo SyncMirror può passare alla modalità sincrona senza problemi se il sito remoto non è raggiungibile, ma può anche risincronizzare rapidamente uno stato RPO = 0 al ripristino della connettività. La copia obsoleta dei dati nel sito remoto può anche essere preservata in uno stato utilizzabile durante la risincronizzazione, garantendo l'esistenza in ogni momento di copie locali e remote dei dati.
+
+Quando è richiesta la modalità domino, NetApp offre SnapMirror Synchronous (SM-S). Esistono anche opzioni a livello di applicazione, come Oracle DataGuard o SQL Server Always on Availability Groups. Il mirroring del disco a livello del sistema operativo può essere opzionale. Per ulteriori informazioni e opzioni, consulta il tuo NetApp o il partner account team.

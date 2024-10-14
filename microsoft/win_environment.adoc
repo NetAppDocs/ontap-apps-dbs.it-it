@@ -10,13 +10,13 @@ summary: 'Ulteriori informazioni sullo storage NetApp e sull"ambiente server Win
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
 Come indicato nella link:win_overview.html["Panoramica"], I controller di storage NetApp forniscono un'architettura realmente unificata che supporta protocolli di file, blocchi e oggetti. Sono inclusi SMB/CIFS, NFS, NVMe/TCP, NVMe/FC, iSCSI, FC(FCP) e S3, inoltre, creano un accesso unificato a client e host. Lo stesso storage controller può offrire simultaneamente un servizio di storage a blocchi sotto forma di LUN SAN e un file service come NFS e SMB/CIFS. ONTAP è disponibile anche come All SAN Array (ASA) in grado di ottimizzare l'accesso host attraverso un multipathing Active-Active simmetrico con iSCSI e FCP, mentre i sistemi ONTAP unificati utilizzano un multipathing Active-Active asimmetrico. In entrambe le modalità, ONTAP utilizza ANA per la gestione multipath NVMe over Fabrics (NVMe-of).
 
-Uno storage controller NetApp con software ONTAP può supportare i seguenti carichi di lavoro in un ambiente Windows Server:
+Uno storage controller NetApp che esegue ONTAP può supportare i seguenti carichi di lavoro in un ambiente Windows Server:
 
 * Macchine virtuali in hosting sulle condivisioni SMB 3,0 sempre disponibili
 * VM ospitate su LUN CSV (Cluster Shared Volume) in esecuzione su iSCSI o FC
@@ -77,7 +77,7 @@ Per connettere, configurare e gestire lo storage NetApp da Windows Server 2016, 
 
 == Toolkit PowerShell NetApp
 
-Il NetApp PowerShell Toolkit (PSTK) è un modulo PowerShell che offre automazione end-to-end e consente l'amministrazione dello storage di NetApp ONTAP. Il modulo ONTAP contiene oltre 2.000 cmdlet e aiuta nell'amministrazione di FAS, NetApp All Flash FAS (AFF), commodity hardware e risorse cloud.
+Il NetApp PowerShell Toolkit (PSTK) è un modulo PowerShell che offre automazione end-to-end e consente l'amministrazione dello storage di ONTAP. Il modulo ONTAP contiene oltre 2.000 cmdlet e aiuta nell'amministrazione di FAS, NetApp All Flash FAS (AFF), commodity hardware e risorse cloud.
 
 
 

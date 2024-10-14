@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-efficiency.html 
+keywords: epic,cache,iris 
+summary: 'Configurazione straordinaria dell"efficienza dello storage' 
+---
+= Configurazione straordinaria dell'efficienza dello storage
+:allow-uri-read: 
+
+
+[role="lead"]
+Le efficienze inline di ONTAP sono attive per impostazione predefinita e funzionano indipendentemente dal protocollo storage, dall'applicazione o dal Tier storage.
+
+L'efficienza riduce la quantità di dati scritti sul costoso storage flash e limita il numero di dischi richiesti. ONTAP preserva l'efficienza con la replica. Ognuna di queste efficienze ha poco o nessun effetto sulle performance, anche per un'applicazione sensibile alla latenza come Epic.
+
+[TIP]
+====
+*NetApp consiglia* di attivare tutte le impostazioni di efficienza per ottimizzare l'utilizzo del disco. Queste impostazioni sono attivate per impostazione predefinita nei sistemi basati su AFF e ASA.
+
+====
+Le seguenti caratteristiche rendono possibile questa efficienza dello storage:
+
+* La deduplica consente di risparmiare spazio sullo storage primario rimuovendo copie ridondanti dei blocchi di un volume che ospita le LUN. Questa opzione consigliata è attivata per impostazione predefinita.
+* La compressione inline riduce la quantità di dati da scrivere su disco e con i workload Epic vengono realizzati considerevoli risparmi di spazio. Questa opzione consigliata è attivata per impostazione predefinita.
+* La inline compaction impiega blocchi da 4K KB e li combina in un singolo blocco. Questa opzione consigliata è attivata per impostazione predefinita.
+* La replica con risorse limitate è al centro del portfolio di software per la protezione dei dati di NetApp, che include il software NetApp SnapMirror. La thin Replication SnapMirror protegge i dati business-critical riducendo i requisiti di capacità dello storage. *NetApp consiglia* di attivare questa opzione.
+* Deduplica aggregata. La deduplica è sempre stata a livello di volume. Con ONTAP 9.2, è stata resa disponibile la deduplica aggregata, che offre ulteriori risparmi in termini di riduzione dei dischi. La deduplica dell'aggregato post-processo è stata aggiunta con ONTAP 9.3. *NetApp consiglia* di attivare questa opzione.
+

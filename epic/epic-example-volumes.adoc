@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-volumes.html 
+keywords: epic,cache,iris 
+summary: 'EPIC su ONTAP esempio di implementazione: Volumi' 
+---
+= EPIC su ONTAP esempio di implementazione: Volumi
+:allow-uri-read: 
+
+
+[role="lead"]
+Per creare volumi, vedere https://docs.netapp.com/us-en/ontap-cli-9141//volume-create.html[]
+
+
+NOTE: A partire da ONTAP 9.7, la crittografia dell'aggregato e del volume è abilitata per impostazione predefinita quando si dispone di una licenza NVE e gestione delle chiavi integrata o esterna. Per abilitare la deduplica a livello di volume, imposta l'errore add -crypt al comando di creazione/modifica del volume (se disponi di una licenza NVE).
+
+
+
+== Eliminazione automatica degli snapshot
+
+Per eliminare automaticamente le istantanee: https://docs.netapp.com/us-en/ontap-cli-9141//volume-snapshot-autodelete-modify.html[]

@@ -10,7 +10,7 @@ summary: Infrastruttura di storage Hyper-V con ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -78,7 +78,7 @@ A sua volta, ciascuna macchina virtuale di Hyper-V può essere fornita con i LUN
 
 == Trasferimento dei dati con offload
 
-Microsoft ODX, noto anche come offload delle copie, permette trasferimenti dei dati diretti all'interno di un dispositivo di storage o tra dispositivi di storage compatibili senza trasferire i dati attraverso il computer host. NetApp ONTAP supporta la funzionalità ODX per i protocolli CIFS e SAN. ODX può potenzialmente migliorare le performance se le copie si trovano all'interno dello stesso volume, ridurre l'utilizzo della CPU e della memoria sul client e ridurre l'utilizzo della larghezza di banda i/o di rete.
+Microsoft ODX, noto anche come offload delle copie, permette trasferimenti dei dati diretti all'interno di un dispositivo di storage o tra dispositivi di storage compatibili senza trasferire i dati attraverso il computer host. ONTAP supporta la funzionalità ODX per i protocolli CIFS e SAN. ODX può potenzialmente migliorare le performance se le copie si trovano all'interno dello stesso volume, ridurre l'utilizzo della CPU e della memoria sul client e ridurre l'utilizzo della larghezza di banda i/o di rete.
 
 Con ODX, è più rapido ed efficiente copiare i file all'interno delle condivisioni SMB, nelle LUN e tra le condivisioni SMB e le LUN, se si trovano nello stesso volume. Questo approccio risulta più utile in uno scenario in cui sono necessarie più copie dell'immagine dorata di un sistema operativo (VHD/VHDX) all'interno dello stesso volume. Se le copie si trovano all'interno dello stesso volume, è possibile eseguire più copie della stessa immagine Golden in tempi notevolmente inferiori. ODX viene applicato anche nella migrazione live dello storage Hyper-V per lo spostamento dello storage delle macchine virtuali.
 
@@ -134,7 +134,7 @@ Per informazioni su ODX, vedere https://docs.netapp.com/us-en/ontap/smb-admin/im
 
 I cluster di failover offrono disponibilità e scalabilità elevate per i server Hyper-V. Un cluster di failover è un gruppo di server Hyper-V indipendenti che lavorano insieme per aumentare la disponibilità e la scalabilità delle VM.
 
-I server in cluster Hyper-V (detti nodi) sono connessi dalla rete fisica e da un software cluster. Questi nodi utilizzano lo storage condiviso per memorizzare i file delle macchine virtuali, tra cui configurazione, file dell'hard disk virtuale (VHD) e copie Snapshot. Lo storage condiviso può essere una share SMB/CIFS di NetApp o un CSV posto sopra un LUN NetApp, come illustrato nella Figura 6. Si tratta di uno storage condiviso che offre un namespace coerente e distribuito, a cui tutti i nodi del cluster possono accedere contemporaneamente. Pertanto, se un nodo si guasta nel cluster, l'altro nodo fornisce il servizio mediante un processo chiamato failover. I cluster di failover possono essere gestiti utilizzando lo snap-in failover Cluster Manager e i cmdlet Windows PowerShell per il clustering di failover.
+I server in cluster Hyper-V (detti nodi) sono connessi dalla rete fisica e da un software cluster. Questi nodi utilizzano lo storage condiviso per memorizzare i file delle macchine virtuali, tra cui configurazione, file dell'hard disk virtuale (VHD) e copie Snapshot. Lo storage condiviso può essere una condivisione SMB/CIFS di NetApp o un CSV posto sopra una LUN NetApp, come illustrato di seguito. Si tratta di uno storage condiviso che offre un namespace coerente e distribuito, a cui tutti i nodi del cluster possono accedere contemporaneamente. Pertanto, se un nodo si guasta nel cluster, l'altro nodo fornisce il servizio mediante un processo chiamato failover. I cluster di failover possono essere gestiti utilizzando lo snap-in failover Cluster Manager e i cmdlet Windows PowerShell per il clustering di failover.
 
 
 
@@ -200,7 +200,7 @@ Per informazioni sulla distribuzione della migrazione live in un ambiente in clu
 
 Puoi eseguire la migrazione live di una macchina virtuale tra due server Hyper-V indipendenti e non in cluster. Questo processo può utilizzare la migrazione in tempo reale senza elementi condivisi o condivisi.
 
-* In una migrazione live condivisa, la macchina virtuale viene memorizzata in una condivisione SMB. Pertanto, quando si effettua la migrazione live di una macchina virtuale, lo storage della macchina virtuale rimane sulla condivisione SMB centrale per l'accesso istantaneo da parte dell'altro nodo, come illustrato nella figura seguente.
+* In una migrazione live condivisa, la macchina virtuale viene memorizzata in una condivisione SMB. Pertanto, quando si effettua la migrazione live di una macchina virtuale, lo storage della macchina virtuale rimane sulla condivisione SMB centrale per l'accesso istantaneo da parte dell'altro nodo, come illustrato di seguito.
 
 
 image:win_image8.png["Migrazione live condivisa in un ambiente non in cluster, larghezza=331, altezza=271"]

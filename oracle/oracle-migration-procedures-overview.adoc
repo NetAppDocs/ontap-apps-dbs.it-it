@@ -24,7 +24,9 @@ Non esiste un'unica Best practice per la creazione di una strategia di migrazion
 
 Ad esempio, un passaggio solleva il problema della dimensione totale del database. Il passaggio successivo dipende dal fatto che il database sia maggiore o minore di 1TB. I passaggi consigliati sono solo questi: Consigli basati su pratiche tipiche del cliente. La maggior parte dei clienti non utilizzerebbe DataGuard per copiare un database di piccole dimensioni, ma alcuni potrebbero farlo. La maggior parte dei clienti non tenterebbe di copiare un database 50TB per il tempo necessario, ma alcuni potrebbero avere una finestra di manutenzione sufficientemente grande da consentire tale operazione.
 
-È possibile trovare un diagramma di flusso dei tipi di considerazioni sul percorso di migrazione più adatto link:/media/migration-options-flowchart.png["qui"].
+Il diagramma di flusso riportato di seguito mostra i tipi di considerazioni sul percorso di migrazione più adatto. È possibile fare clic con il pulsante destro del mouse sull'immagine e aprirla in una nuova scheda per migliorare la leggibilità.
+
+image:migration-options-flowchart.png["Diagramma di flusso della migrazione"].
 
 
 

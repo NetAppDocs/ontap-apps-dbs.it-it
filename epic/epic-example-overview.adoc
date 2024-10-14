@@ -1,0 +1,61 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-overview.html 
+keywords: epic,cache,iris 
+summary: Esempio di implementazione EPIC su ONTAP 
+---
+= Esempio di implementazione EPIC su ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Questa sezione illustra una configurazione avanzata completa di un cluster ONTAP, un provisioning e una presentazione dello storage su un server Epic.
+
+Allo scopo di acquisire i dettagli e per semplificare la documentazione, viene utilizzata la riga di comando. Se si preferisce la GUI, è possibile eseguire il provisioning di tutte le impostazioni in System Manager.
+
+Storicamente, la configurazione iniziale in blocco per progetti di grandi dimensioni è in genere più veloce utilizzando i comandi elencati nella Tabella 1, soprattutto se si concatenano i comandi in un foglio di lavoro. Questo elenco di comandi serve anche come eccellente documentazione di compilazione.
+
+Un'altra opzione di provisioning utilizza gli script di automazione del giorno 0 e del giorno 1 utilizzando Ansible. NetApp mette a disposizione per il download centinaia di playbook Ansible, tra cui la raccolta Ansible Galaxy tramite il comando di installazione NetApp.ONTAP della raccolta ansible-Galaxy.
+
+Inoltre, la GUI funziona benissimo con un semplice LUN a una pagina e provisioning condiviso. La GUI è ideale per le operazioni di aggiunta, modifica o eliminazione dello storage. Entrambe le opzioni sono valide se si applicano le impostazioni di archiviazione di Best practice riportate nella Tabella 1.
+
+L'installazione completa del cluster e il provisioning dello storage/host non devono richiedere più di un'ora durante lo staging.
+
+*Procedure consigliate per le impostazioni di archiviazione*
+
+[cols="1,1"]
+|===
+
+
+| Impostazione | Valore 
+
+
+| Aggregato | Provisioning automatico predefinito, un aggregato ADP per nodo con RAID DEP 
+
+
+| SVM | Due SVM quando si utilizza multiprocol (SVM a blocchi e SMB/NFS). Utilizza Epic e la convenzione di naming dei protocolli. Utilizzare uno stile di sicurezza appropriato 
+
+
+| Garanzia di spazio per volumi | nessuno 
+
+
+| Policy di snapshot dei volumi | nessuno 
+
+
+| Dimensionamento automatico del volume | crescere 
+
+
+| Dimensionamento automatico volume max | 2T o 2 LUN 
+
+
+| Eliminazione automatica dello snapshot di un volume | attivato 
+
+
+| Dimensione del volume | 1,5 x LUN 
+
+
+| Layout del volume | Distribuito anche tra i controller 
+
+
+| tipo igroup | Sistema operativo se utilizzato con server fisici, tipo VMware se utilizzato con ESX. 
+|===

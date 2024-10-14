@@ -87,9 +87,13 @@ Solaris ZFS deve essere installato e configurato con attenzione per garantire pr
 
 === mvector
 
-Solaris 11 ha introdotto una modifica nel modo in cui elabora operazioni i/o di grandi dimensioni, che può causare gravi problemi di prestazioni sugli array di storage SAN. Il problema è documentato in dettaglio nel bug report di NetApp 630173, "riduzione delle prestazioni di Solaris 11 ZFS. " La soluzione è modificare un parametro OS chiamato `zfs_mvector_max_size`.
+Solaris 11 ha introdotto una modifica nel modo in cui elabora operazioni i/o di grandi dimensioni, che può causare gravi problemi di prestazioni sugli array di storage SAN. Il problema è documentato nel rapporto 630173 del bug di monitoraggio di NetApp, "regressione delle prestazioni di Solaris 11 ZFS".
 
-Eseguire il seguente comando come root:
+Questo non è un bug di ONTAP. Si tratta di un difetto di Solaris rilevato in Solaris Defects 7199305 e 7082975.
+
+È possibile consultare il supporto Oracle per scoprire se la versione di Solaris 11 in uso è interessata o per verificare la soluzione alternativa, passando `zfs_mvector_max_size` a un valore inferiore.
+
+È possibile farlo eseguendo il seguente comando come root:
 
 ....
 [root@host1 ~]# echo "zfs_mvector_max_size/W 0t131072" |mdb -kw

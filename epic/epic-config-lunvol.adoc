@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-lunvol.html 
+keywords: epic,cache,iris 
+summary: Configurazione EPIC di LUN e volume 
+---
+= Configurazione EPIC di LUN e volume
+:allow-uri-read: 
+
+
+[role="lead"]
+Il documento Epic Database Storage Layout Recommendations fornisce indicazioni sulle dimensioni e sul numero di LUN per ogni database.
+
+È importante rivedere questo documento con il supporto degli Epic DBA e Epic così come finalizzare il numero di LUN e le dimensioni delle LUN che potrebbero essere necessarie una modifica. Questi consigli relativi allo storage sono importanti in termini di profondità della coda degli HBA, prestazioni dello storage, facilità di funzionamento e facilità di espansione.
+
+Per la profondità della coda del sistema operativo del server, utilizzare un minimo di otto LUN (un LUN per volume) per un database. Aumentare il numero di LUN di multipli di otto. Per gli ambienti di grandi dimensioni potrebbe essere necessario un numero maggiore di LUN, ovvero utilizzare lo stesso numero di volumi (otto in totale, quattro per nodo) e aggiungere LUN in multipli di otto. EPIC consiglia di mantenere i LUN < 8TB e il numero di LUN < 32. Questo approccio ti consente di scalare facilmente il tuo ambiente Epic.
+
+Per massimizzare le performance di un carico di lavoro, ad esempio Epic ODB o Clarity, ogni layout funziona al meglio anche per lo storage NetApp. Utilizzando otto volumi, l'io in scrittura viene distribuito in modo uniforme tra i controller, massimizzando l'utilizzo della CPU. Per la replica e il backup, è consigliabile limitare il numero di volumi a otto per semplificare le operazioni.
+
+
+
+== Opzioni di scalabilità
+
+Se il server richiede più storage, l'opzione più semplice è aumentare le LUN che contengono volumi. La seconda opzione consiste nell'aggiungere LUN ai gruppi di volumi in multipli di otto alla volta (uno per ogni volume esistente). L'aggiunta di una o due LUN può creare un hot spot e influire sulle performance.
+
+
+
+== Volume e layout di 8 LUN
+
+image:epic-8lun.png["Layout EPIC a 8 LUN"]
+
+
+
+== Volume e layout di 16 LUN
+
+image:epic-16lun.png["Layout EPIC a 16 LUN"]
+
+
+
+== Volume e layout di 24 LUN
+
+image:epic-24lun.png["Layout EPIC a 24 LUN"]
+
+
+
+== Volume e layout di 32 LUN
+
+image:epic-32lun.png["Layout EPIC a 32 LUN"]
+
+
+
+== Best practice
+
+* Utilizza LUN 8, 16, 24 o 32 in volumi 8.
+* Bilancia i carichi di lavoro nella coppia ha per massimizzare performance ed efficienza.
+* Creare LUN delle dimensioni attese per 3 anni di crescita per evitare di colpire i limiti di espansione di 10 volte le LUN.
+* USA volumi e LUN con thin provisioning.
+* Utilizzare un minimo di otto LUN del database, due LUN di journal e due LUN delle applicazioni. Questa configurazione massimizza le prestazioni dello storage e la profondità della coda del sistema operativo. Se necessario, è possibile utilizzarne di più per motivi di capacità o di altro tipo.
+* Se non è necessario aggiungere LUN ai gruppi di volumi, aggiungere otto LUN alla volta.
+* I gruppi di coerenza (CGS) sono necessari per il gruppo di volumi e LUN di cui eseguire il backup insieme.
+* Non utilizzare la QoS durante Genio o le prestazioni i/O.
+* Dopo il test genio o Clarity, NetApp consiglia di eliminare lo storage e di eseguire nuovamente il provisioning prima di caricare i dati di produzione.
+* È importante che `-space-allocation` l'opzione abilitato sia impostata sui LUN. In caso contrario, i dati eliminati sulle LUN non verranno rilevati da ONTAP e potrebbero causare problemi di capacità. Per ulteriori informazioni, consulta la Epic Storage Configuration Quick Reference Guide.
+

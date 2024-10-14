@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-efficiency.html 
+keywords: epic,cache,iris 
+summary: EPIC su ONTAP Efficiency 
+---
+= EPIC su ONTAP Efficiency
+:allow-uri-read: 
+
+
+[role="lead"]
+EPIC viene eseguito su array all-flash in cui la maggior parte del costo è costituita dal disco. Pertanto, l'efficienza dello storage è fondamentale per il risparmio sui costi.
+
+L'efficienza dello storage inline di NetApp ottiene risparmi leader del settore sullo storage senza effetti sulle performance e offriamo persino una garanzia di efficienza scritta con gli array all-flash.
+
+Nel calcolo dell'efficienza dello storage, è importante misurare la capacità da raw a utilizzabile su quella effettiva.
+
+* *Capacità nativa* prima di applicare qualsiasi RAID, la dimensione del disco in base al numero di dischi.
+* *Capacità utilizzabile* dopo l'applicazione del RAID, quanto spazio di archiviazione utilizzabile è disponibile.
+* *Capacità effettiva* quantità di storage fornita e presentata all'host o al client.
+
+
+La figura riportata di seguito rappresenta un calcolo dell'efficienza di esempio di un'implementazione Epic tipica, che include tutti i carichi di lavoro che richiedono 852TB TB di storage effettivo e con un'efficienza di 5,2:1 che fornisce 1,32PB TB di dati effettivi totali.
+
+
+NOTE: In base al numero di dischi, la capacità da raw a utilizzabile varia leggermente.
+
+image:epic-efficiency.png["Straordinaria efficienza dello storage"]
+
+
+NOTE: NetApp non utilizza la tecnologia Snapshot di NetApp o il thin provisioning per calcolare l'efficienza nel programma di garanzia. In questo modo è possibile ottenere efficienze non realistiche pari a 30 o 100:1, cosa che non significa nulla per il dimensionamento della capacità dello storage reale.
