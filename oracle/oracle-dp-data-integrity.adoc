@@ -122,7 +122,9 @@ La figura precedente illustra una configurazione SyncMirror di esempio. È stato
 
 Di norma, SyncMirror viene utilizzato per fornire il mirroring remoto con i sistemi MetroCluster, con una copia dei dati in ciascun sito. A volte, è stato utilizzato per fornire un livello di ridondanza extra in un unico sistema. In particolare, fornisce ridondanza a livello di shelf. Uno shelf di dischi contiene già doppi controller e alimentatori e nel complesso è poco più di una lamiera, ma in alcuni casi è consigliabile garantire una protezione extra. Ad esempio, un cliente NetApp ha implementato SyncMirror per una piattaforma mobile di analytics in tempo reale utilizzata durante i test nel settore automobilistico. Il sistema è stato separato in due rack fisici forniti da alimentatori indipendenti da sistemi UPS indipendenti.
 
-==checksum
+
+
+== Checksum
 
 L'argomento dei checksum è di particolare interesse per i DBA abituati all'utilizzo dei backup in streaming Oracle RMAN che migrano a backup basati su snapshot. Una caratteristica di RMAN è che esegue controlli di integrità durante le operazioni di backup. Sebbene questa funzionalità offra un certo valore, il suo vantaggio principale è quello di un database non utilizzato su uno storage array moderno. Quando si utilizzano dischi fisici per un database Oracle, è quasi certo che il danneggiamento si verifica anche in caso di invecchiamento dei dischi, un problema che viene risolto dai checksum basati su array negli storage array reali.
 

@@ -102,6 +102,9 @@ Se un server NFSv3 viene riavviato, è pronto a servire i/o quasi istantaneament
 
 NFSv4, tuttavia, produrrà una breve pausa. È solo una parte di come funziona NFSv4.
 
+
+NOTE: Le sezioni seguenti sono aggiornate a partire da ONTAP 9.15,1, ma il comportamento lease e lock e le opzioni di ottimizzazione possono cambiare da versione a versione. Se è necessario ottimizzare i timeout di lease/lock NFSv4, consultare il supporto NetApp per le ultime informazioni.
+
 I server NFSv4 devono tenere traccia dei lease, dei blocchi e di chi utilizza i dati. Se un server NFS si riavvia o perde potenza per un momento o viene riavviato durante l'attività di manutenzione, il risultato è il lease/lock e le altre informazioni del client vengono perse. Il server deve individuare quale client utilizza i dati prima di riprendere le operazioni. È qui che entra in gioco il periodo di grazia.
 
 Se all'improvviso si spegne e riaccende il server NFSv4. Quando viene eseguito il backup, i client che tentano di riprendere io riceveranno una risposta che essenzialmente dice: "Ho perso le informazioni di lease/lock. Vuoi registrare nuovamente i blocchi?" Questo è l'inizio del periodo di grazia. Il valore predefinito è 45 secondi su ONTAP:
@@ -115,12 +118,23 @@ vserver1  45
 ....
 Il risultato è che, dopo un riavvio, un controller sospenderà io mentre tutti i client recuperano i loro lease e blocchi. Al termine del periodo di prova, il server riprenderà le operazioni io.
 
+Questo periodo di tolleranza controlla il recupero del leasing durante le modifiche all'interfaccia di rete, ma esiste un secondo periodo di tolleranza che controlla il recupero durante il failover dello storage, `locking.grace_lease_seconds`. Questa è un'opzione a livello di nodo.
+
+....
+cluster01::> node run [node names or *] options locking.grace_lease_seconds
+....
+Ad esempio, se hai spesso bisogno di eseguire failover LIF ed è necessario ridurre il periodo di tolleranza, cambierai `v4-grace-seconds`. Se si desidera migliorare il tempo di ripresa io durante il failover del controller, è necessario modificare `locking.grace_lease_seconds`.
+
+Alterare questi valori solo con cautela e dopo aver compreso appieno i rischi e le conseguenze. Le pause io coinvolte nelle operazioni di failover e migrazione con NFSv4.X non possono essere evitate del tutto. I periodi di blocco, leasing e grazia fanno parte della RFC NFS. Per molti clienti, NFSv3 è preferibile perché i tempi di failover sono più rapidi.
+
 
 
 == Timeout leasing vs periodi di grazia
 
-Il periodo di tolleranza e il periodo di leasing sono collegati. Come menzionato sopra, il timeout di lease predefinito è di 30 secondi, il che significa che NFSv4 client devono effettuare il check-in con il server almeno ogni 30 secondi o perdere i lease e, a loro volta, i blocchi. Il periodo di tolleranza esiste per consentire a un server NFS di ricostruire i dati di lease/lock e il valore predefinito è 45 secondi. ONTAP richiede che il periodo di tolleranza sia di 15 secondi più lungo del periodo di leasing. In questo modo, un ambiente client NFS progettato per rinnovare i lease almeno ogni 30 secondi avrà la possibilità di effettuare il check-in con il server dopo un riavvio. Un periodo di tolleranza di 45 secondi assicura che tutti quei clienti che si aspettano di rinnovare i loro leasing almeno ogni 30 secondi definitivamente hanno l'opportunità di farlo.
+Il periodo di tolleranza e il periodo di leasing sono collegati. Come menzionato sopra, il timeout di lease predefinito è di 30 secondi, il che significa che NFSv4 client devono effettuare il check-in con il server almeno ogni 30 secondi o perdere i lease e, a loro volta, i blocchi. Il periodo di tolleranza esiste per consentire a un server NFS di ricostruire i dati di lease/lock e il valore predefinito è 45 secondi. Il periodo di tolleranza deve essere più lungo del periodo di leasing. In questo modo, un ambiente client NFS progettato per rinnovare i lease almeno ogni 30 secondi avrà la possibilità di effettuare il check-in con il server dopo un riavvio. Un periodo di tolleranza di 45 secondi assicura che tutti quei clienti che si aspettano di rinnovare i loro leasing almeno ogni 30 secondi definitivamente hanno l'opportunità di farlo.
 
-Se un timeout di 30 secondi non è accettabile, è possibile scegliere di prolungare il periodo di leasing. Se si desidera aumentare il timeout del lease a 60 secondi per resistere a un'interruzione di rete di 60 secondi, sarà necessario aumentare il periodo di tolleranza ad almeno 75 secondi. ONTAP richiede che sia superiore di 15 secondi al periodo di leasing. Ciò significa che si verificheranno pause di i/o più lunghe durante il failover del controller.
+Se un timeout di 30 secondi non è accettabile, è possibile scegliere di prolungare il periodo di leasing.
 
-Normalmente questo non dovrebbe essere un problema. Gli utenti tipici aggiornano i controller ONTAP solo una o due volte all'anno e il failover non pianificato dovuto a guasti hardware è estremamente raro. Inoltre, se aveste una rete in cui un'interruzione di rete di 60 secondi fosse una possibilità preoccupante e aveste bisogno di un timeout del leasing di 60 secondi, probabilmente non vi opporreste a un raro failover del sistema storage con una pausa di 75 secondi. Hai già riconosciuto che la tua rete è in pausa per più di 60 secondi piuttosto frequentemente.
+Se si desidera aumentare il timeout del lease a 60 secondi per resistere a un'interruzione di rete di 60 secondi, sarà necessario aumentare anche il periodo di tolleranza. Ciò significa che si verificheranno pause di i/o più lunghe durante il failover del controller.
+
+Normalmente questo non dovrebbe essere un problema. Gli utenti tipici aggiornano i controller ONTAP solo una o due volte all'anno e il failover non pianificato dovuto a guasti hardware è estremamente raro. Inoltre, se aveste una rete in cui un'interruzione di rete di 60 secondi fosse una possibilità preoccupante e aveste bisogno di un timeout del leasing di 60 secondi, probabilmente non vi opporreste a un raro failover del sistema storage con una pausa di 61 secondi. Hai già riconosciuto che la tua rete è in pausa per più di 60 secondi piuttosto frequentemente.
