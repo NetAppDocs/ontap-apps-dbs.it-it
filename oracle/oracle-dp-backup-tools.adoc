@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dp-backup-tools.html 
 keywords: ontap, data protection 
 summary: Tool di gestione e automazione del database Oracle 
+searchtitle: Tool di gestione e automazione del database Oracle 
 ---
-= Tool di gestione e automazione del database Oracle
+= Tool di gestione e automazione del database
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

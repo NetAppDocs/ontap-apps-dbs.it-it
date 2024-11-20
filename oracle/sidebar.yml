@@ -142,7 +142,7 @@ entries:
     url: "/oracle/oracle-dr-overview.html"
   - title: MetroCluster
     entries:
-    - title: Failover di Oracle con MetroCluster
+    - title: Dr Oracle con MetroCluster
       url: "/oracle/oracle-dr-mcc-failover.html"
     - title: Architettura fisica
       url: "/oracle/oracle-dr-mcc-physical.html"

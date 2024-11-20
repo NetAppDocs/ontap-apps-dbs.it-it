@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-host-config-hp-ux.html 
 keywords: oracle, database, ontap, hp-ux 
 summary: Database Oracle con HP-UX 
+searchtitle: Database Oracle con HP-UX 
 ---
-= Database Oracle con HP-UX
+= HP-UX
 :allow-uri-read: 
 
 

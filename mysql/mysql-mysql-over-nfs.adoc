@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-mysql-over-nfs.html 
 keywords: MySQL,MariaDB,NFS 
 summary: MySQL con NFS 
+searchtitle: MySQL con NFS 
 ---
-= MySQL con NFS
+= NFS
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

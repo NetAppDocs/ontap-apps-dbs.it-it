@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-app-config-rac.html 
 keywords: oracle, database, ontap, rac, disktimeout, misscount 
 summary: Timeout Oracle RAC 
+searchtitle: Timeout di Oracle Real Application Clusters 
 ---
-= Timeout di Oracle Real Application Clusters (RAC)
+= Timeout RAC
 :allow-uri-read: 
 
 

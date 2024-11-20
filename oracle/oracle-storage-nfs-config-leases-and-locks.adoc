@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-storage-nfs-config-leases-and-locks.html 
 keywords: NFS, lease 
 summary: I database Oracle e NFS vengono affittati e bloccati 
+searchtitle: I database Oracle e NFS vengono affittati e bloccati 
 ---
-= I database Oracle e NFS vengono affittati e bloccati
+= Leasing e blocchi di NFS
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

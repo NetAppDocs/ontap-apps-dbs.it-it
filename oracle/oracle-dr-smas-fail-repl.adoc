@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-smas-fail-repl.html 
 keywords: Oracle, SnapMirror active sync, SMBC, failover 
 summary: Failover Active Sync di Oracle e SnapMirror 
+searchtitle: SnapMirror Active Sync - perdita totale di connettività 
 ---
-= SnapMirror Active Sync - perdita totale di connettività
+= Errore interconnettività di rete totale
 :allow-uri-read: 
 :imagesdir: ../media/
 

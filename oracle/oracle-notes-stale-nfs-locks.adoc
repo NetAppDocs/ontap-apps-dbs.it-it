@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-notes-stale-nfs-locks.html 
 keywords: oracle, database, ontap, stale, nfs, locks 
 summary: Database Oracle e blocchi NFSv3 obsoleti 
+searchtitle: Database Oracle e blocchi NFSv3 obsoleti 
 ---
-= Blocchi NFSv3 obsoleti e database Oracle
+= NFSv3 serrature obsolete
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

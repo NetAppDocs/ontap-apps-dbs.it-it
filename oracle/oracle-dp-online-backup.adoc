@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dp-online-backup.html 
 keywords: oracle, data protection, hot backup 
 summary: Backup e ripristino basati su snapshot dei database Oracle 
+searchtitle: Backup online dei database Oracle 
 ---
-= Backup online dei database Oracle
+= Backup in linea
 :allow-uri-read: 
 
 

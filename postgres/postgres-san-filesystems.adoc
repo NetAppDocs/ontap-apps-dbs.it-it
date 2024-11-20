@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: postgres/postgres-san-filesystems.html 
 keywords: PostgreSQL,database,postgres 
 summary: Database PostgreSQL con SAN su ONTAP 
+searchtitle: PostgreSQL con SAN Filesystems 
 ---
-= PostgreSQL con SAN Filesystems
+= SAN
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

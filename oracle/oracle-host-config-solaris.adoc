@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-host-config-solaris.html 
 keywords: oracle, database, ontap, solaris, zfs 
 summary: Database Oracle con Solaris 
+searchtitle: Database Oracle con Solaris 
 ---
-= Database Oracle con Solaris
+= Solaris
 :allow-uri-read: 
 
 

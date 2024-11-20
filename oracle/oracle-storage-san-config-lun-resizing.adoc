@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-storage-san-config-lun-resizing.html 
 keywords: SAN, ASM, LVM 
 summary: LUN e LVM vengono ridimensionati con database Oracle 
+searchtitle: Ridimensionamento e ridimensionamento delle LUN dei database Oracle 
 ---
-= Ridimensionamento di LUN dei database Oracle e ridimensionamento basato su LVM
+= Ridimensionamento LUN e ridimensionamento LVM
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

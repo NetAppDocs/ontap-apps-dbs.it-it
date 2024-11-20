@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mssql/mssql-data-security.html 
 keywords: MSSQL,SQL Server, securing databases on ONTAP, snaplock, multiadmin verification, backup, tamperproof snapshots 
 summary: Protezione di Microsoft SQL Server su ONTAP 
+searchtitle: Protezione di Microsoft SQL Server su ONTAP 
 ---
-= Protezione di Microsoft SQL Server su ONTAP
+= Sicurezza dei dati
 :allow-uri-read: 
 :imagesdir: ../media/
 

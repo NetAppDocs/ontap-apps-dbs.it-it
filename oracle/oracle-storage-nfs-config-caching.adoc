@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-storage-nfs-config-caching.html 
 keywords: NFS 
 summary: Caching NFS con database Oracle 
+searchtitle: Caching NFS con database Oracle 
 ---
-= Caching NFS con database Oracle
+= Caching di NFS
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

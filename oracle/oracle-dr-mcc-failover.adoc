@@ -2,9 +2,10 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-mcc-failover.html 
 keywords: Metrocluster, mcc, MCC-IP 
-summary: Failover del database Oracle con MetroCluster 
+summary: Dr dei database Oracle con MetroCluster 
+searchtitle: Dr dei database Oracle con MetroCluster 
 ---
-= Failover del database Oracle con MetroCluster
+= Disaster recovery con MetroCluster
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

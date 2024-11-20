@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-slot-tables.html 
 keywords: MySQL,MariaDB,TR-4722 
 summary: MySQL e NFSv3 slot tables 
+searchtitle: MySQL e NFSv3 slot tables 
 ---
-= MySQL e NFSv3 slot tables
+= NFSv3 tavoli con slot
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

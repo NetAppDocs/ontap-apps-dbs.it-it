@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-containers.html 
 keywords: MySQL,MariaDB,containers,trident 
 summary: Containerizzazione di MySQL 
+searchtitle: Containerizzazione MySQL 
 ---
-= Containerizzazione MySQL
+= Containerizzazione
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

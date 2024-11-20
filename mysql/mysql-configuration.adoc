@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-configuration.html 
 keywords: MySQL,MariaDB 
 summary: Parametri di configurazione MySQL 
+searchtitle: Parametri di configurazione MySQL 
 ---
-= Parametri di configurazione MySQL
+= Parametri di configurazione
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

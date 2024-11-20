@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-tiering-backups.html 
 keywords: tiering, fabricpool 
 summary: Tiering del backup Oracle 
+searchtitle: Tiering del backup dei database Oracle 
 ---
-= Tiering del backup dei database Oracle
+= Tiering del backup
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

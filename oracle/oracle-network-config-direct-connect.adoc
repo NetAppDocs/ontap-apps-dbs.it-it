@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-network-config-direct-connect.html 
 keywords: direct-connect, oracle 
 summary: Database Oracle e connettività ONTAP a collegamento diretto 
+searchtitle: Database Oracle e connettività ONTAP a collegamento diretto 
 ---
-= Database Oracle e connettività ONTAP a collegamento diretto
+= Connessione di rete diretta
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dp-storage-snapshot-optimized-backups.html 
 keywords: oracle, data protection, snapshot-optimized, crash-consistent 
 summary: Backup ottimizzati per le snapshot di storage Oracle 
+searchtitle: Backup ottimizzati per le istantanee dello storage dei database Oracle 
 ---
-= Backup ottimizzati per le istantanee dello storage dei database Oracle
+= Backup ottimizzati per le snapshot di storage
 :allow-uri-read: 
 
 
