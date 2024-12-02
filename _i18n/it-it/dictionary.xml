@@ -5272,25 +5272,12 @@ Impostare sul valore predefinito (1024MB) per 6.5U3, 6.7U3 e 7,0 o versioni succ
   <block id="e7a8be60cff2fec7b8ed793c4d2dddfe" category="summary">Configurazione EPIC di LUN e volume</block>
   <block id="acdbb325faec5e3e2d86b3dbbaf90c54" category="paragraph">Il documento Epic Database Storage Layout Recommendations fornisce indicazioni sulle dimensioni e sul numero di LUN per ogni database.</block>
   <block id="a620ecf0a73eb209a145eb913a29bc5a" category="paragraph">È importante rivedere questo documento con il supporto degli Epic DBA e Epic così come finalizzare il numero di LUN e le dimensioni delle LUN che potrebbero essere necessarie una modifica. Questi consigli relativi allo storage sono importanti in termini di profondità della coda degli HBA, prestazioni dello storage, facilità di funzionamento e facilità di espansione.</block>
-  <block id="4442aab15395384af6aee974a5a581bc" category="paragraph">Per la profondità della coda del sistema operativo del server, utilizzare un minimo di otto LUN (un LUN per volume) per un database. Aumentare il numero di LUN di multipli di otto. Per gli ambienti di grandi dimensioni potrebbe essere necessario un numero maggiore di LUN, ovvero utilizzare lo stesso numero di volumi (otto in totale, quattro per nodo) e aggiungere LUN in multipli di otto. EPIC consiglia di mantenere i LUN &lt; 8TB e il numero di LUN &lt; 32. Questo approccio ti consente di scalare facilmente il tuo ambiente Epic.</block>
   <block id="21ebeea1f14a138dfebb1b9599a4c3dd" category="paragraph">Per massimizzare le performance di un carico di lavoro, ad esempio Epic ODB o Clarity, ogni layout funziona al meglio anche per lo storage NetApp. Utilizzando otto volumi, l'io in scrittura viene distribuito in modo uniforme tra i controller, massimizzando l'utilizzo della CPU. Per la replica e il backup, è consigliabile limitare il numero di volumi a otto per semplificare le operazioni.</block>
   <block id="90adf331b7868c7af46ad6e035e93844" category="section-title">Opzioni di scalabilità</block>
-  <block id="68b3c97d7d89bcf19218f4db828d1f62" category="paragraph">Se il server richiede più storage, l'opzione più semplice è aumentare le LUN che contengono volumi. La seconda opzione consiste nell'aggiungere LUN ai gruppi di volumi in multipli di otto alla volta (uno per ogni volume esistente). L'aggiunta di una o due LUN può creare un hot spot e influire sulle performance.</block>
   <block id="b323bb297a66afc2eea7b89dd4019798" category="section-title">Volume e layout di 8 LUN</block>
   <block id="66d125e77a6185ef5cf43b2a6bffea80" category="inline-image-macro">Layout EPIC a 8 LUN</block>
   <block id="99a54ac1eaa5bd57b4c4c29d6a63f1ac" category="paragraph"><block ref="99a54ac1eaa5bd57b4c4c29d6a63f1ac" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="671393f63bb9ef1dfab4931884d7598d" category="section-title">Volume e layout di 16 LUN</block>
-  <block id="0c02643253fbb18be382d4c1ad110e4f" category="inline-image-macro">Layout EPIC a 16 LUN</block>
-  <block id="3a69aefd67fab9412b92fa902b37d20e" category="paragraph"><block ref="3a69aefd67fab9412b92fa902b37d20e" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="f7b18cfcf87c0f98b439b4c7b3c92c97" category="section-title">Volume e layout di 24 LUN</block>
-  <block id="6fc8903e912275e630ffd2c72a17adcb" category="inline-image-macro">Layout EPIC a 24 LUN</block>
-  <block id="c07e1713e37928ebf0d4e02dbd302844" category="paragraph"><block ref="c07e1713e37928ebf0d4e02dbd302844" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="b7e595df4f29c46e9a8f1aa1c32fd1bf" category="section-title">Volume e layout di 32 LUN</block>
-  <block id="7ae005614524eafc3188227a0e2095bb" category="inline-image-macro">Layout EPIC a 32 LUN</block>
-  <block id="45c0c385be9c9d903ed267e0455dc156" category="paragraph"><block ref="45c0c385be9c9d903ed267e0455dc156" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="3d120048605480bd8cf2a834fe477bb8" category="list-text">Utilizza LUN 8, 16, 24 o 32 in volumi 8.</block>
   <block id="bad4d79343f04d8b64999875ad328086" category="list-text">Bilancia i carichi di lavoro nella coppia ha per massimizzare performance ed efficienza.</block>
-  <block id="cd4b8ea65e0732fcfa8614a31fb02e8f" category="list-text">Creare LUN delle dimensioni attese per 3 anni di crescita per evitare di colpire i limiti di espansione di 10 volte le LUN.</block>
   <block id="26b591a32a8a235db7f742995589a455" category="list-text">USA volumi e LUN con thin provisioning.</block>
   <block id="9fb0aaeb125238e83485971ae6b7e2fc" category="list-text">Utilizzare un minimo di otto LUN del database, due LUN di journal e due LUN delle applicazioni. Questa configurazione massimizza le prestazioni dello storage e la profondità della coda del sistema operativo. Se necessario, è possibile utilizzarne di più per motivi di capacità o di altro tipo.</block>
   <block id="ba5e00554d1ba1b8ca0fc2eaeda44672" category="list-text">Se non è necessario aggiungere LUN ai gruppi di volumi, aggiungere otto LUN alla volta.</block>
@@ -5927,4 +5914,14 @@ Impostare sul valore predefinito (1024MB) per 6.5U3, 6.7U3 e 7,0 o versioni succ
   <block id="03095e209912bbf8e40f883c88befe49" category="searchtitle">Protezione dei dati nativa di PostgreSQL</block>
   <block id="300e5ea4a0c7d02b8a4efeba5a1f6faf" category="doc">Protezione DDTA nativa</block>
   <block id="1c3ee6977dcad0709502549dd7b111f3" category="sidebar">Dr Oracle con MetroCluster</block>
+  <block id="662637dadb14be675de52ed993629bcd" category="paragraph">Per la profondità della coda del sistema operativo del server, utilizzare un minimo di otto LUN (un LUN per volume) per un database. Aumentare il numero di LUN in base al numero di nodi nel cluster ONTAP. Ad esempio, Aggiungi 4 LUN quando utilizzi un cluster da 4 nodi (2 coppie ha). Per gli ambienti più grandi potrebbe essere necessario un numero maggiore di LUN, ovvero utilizzare lo stesso numero di volumi (otto totali distribuiti nel nodo storage) e aggiungere LUN in multipli di due nei nodi e volumi del cluster. Questo approccio ti consente di scalare facilmente il tuo ambiente Epic.</block>
+  <block id="f73f987e4ea887ccfd1bf297bad46e22" category="paragraph">*Esempio 1: Cluster ONTAP a 2 nodi*</block>
+  <block id="f08ea6531fe21723a28ec9f89ea3e451" category="paragraph">2 nodi, 1 ha Pair 8 volumi, 4 volumi per nodo 8 LUN, una LUN per volume che aggiunge 2 LUN aggiuntive, una su node01 in volume01, una su node02 in volume02.</block>
+  <block id="fd52d4fb0b6e3cfb46cae3e012d26c20" category="paragraph">*Esempio 2: Cluster ONTAP a 4 nodi*</block>
+  <block id="489d5412107ca7c901de568b7c7dcce3" category="paragraph">4 nodi, 2 ha Pair 8 volumi, 2 volumi per nodo 8 LUN, una LUN per volume che aggiunge 4 LUN aggiuntive, una su node01 in volume01, una su node02 in volume02, una su node03 in volume03, una su node04 in volume04.</block>
+  <block id="2feec0f4e37d9566d4cf292116430adb" category="paragraph">Se il server richiede più storage, l'opzione più semplice è aumentare le LUN che contengono volumi. La seconda opzione consiste nell'aggiungere LUN ai gruppi di volumi in multipli di due alla volta (uno per volume per nodo).</block>
+  <block id="c338b7a4eb0c6f0bb88b444f6c195b01" category="admonition">Se in un ambiente di grandi dimensioni che richiede più di 4 nodi o 8 LUN, consulta il nostro Alliance team Epic per confermare le progettazioni delle LUN. Il team può essere raggiunto a EPIC@NetApp.com.</block>
+  <block id="e9afc81d3b8e2990f966bb247fa75a6b" category="list-text">Utilizzare 8 LUN in volumi 8 per iniziare, aggiungendo 2 LUN alla volta, in tutti i nodi del cluster.</block>
+  <block id="eb75aeb3b4b2b9734ba3e52f5483f0b2" category="inline-link-macro">Documentazione ONTAP</block>
+  <block id="c5432110ad66f4e2e624118b88a48126" category="list-text">Creare LUN delle dimensioni previste per 3 anni di crescita. (Per conoscere le dimensioni massime dei LUN, consulta la<block ref="2a57767dbf71d600f009b2fefab6360d" category="inline-link-macro-rx"></block>).</block>
 </blocks>
