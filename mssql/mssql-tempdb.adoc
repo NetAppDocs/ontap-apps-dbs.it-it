@@ -3,7 +3,7 @@ sidebar: sidebar
 permalink: mssql/mssql-tempdb.html 
 keywords: MSSQL,SQL Server, tempdb, ONTAP 
 summary: Posizionamento dei tempdb in Microsoft SQL Server su ONTAP 
-searchtitle: File tempdb Microsoft SQL Server 
+searchtitle: File tempdb di Microsoft SQL Server 
 ---
 = File tempdb
 :allow-uri-read: 
@@ -11,15 +11,16 @@ searchtitle: File tempdb Microsoft SQL Server
 
 
 [role="lead"]
-Il database Tempdb può essere utilizzato in modo intensivo. Oltre al posizionamento ottimale dei file di database degli utenti su ONTAP, anche il posizionamento dei file di dati tempdb è fondamentale per ridurre il conflitto di allocazione
+Il database Tempdb può essere utilizzato in modo intensivo. Oltre al posizionamento ottimale dei file di database degli utenti su ONTAP, anche il posizionamento dei file di dati tempdb è fondamentale per ridurre il conflitto di allocazione. Tempdb deve essere posizionato su un disco separato e non condiviso con i file di dati dell'utente.
 
 Il conflitto di pagina può verificarsi nelle pagine GAM (Global allocation map), SGAM (Shared Global allocation map) o PFS (page free space) quando SQL Server deve scrivere in pagine di sistema speciali per allocare nuovi oggetti. I fermi bloccano queste pagine in memoria. In un'istanza SQL Server occupata, può essere necessario molto tempo per ottenere un blocco in una pagina di sistema in tempdb. Ciò si traduce in tempi di esecuzione delle query più lenti ed è noto come conflitto di latch. Per la creazione di file di dati tempdb, vedere le procedure consigliate riportate di seguito:
 
 * Per < o = a 8 core: File di dati tempdb = numero di core
 * Per più di 8 core: 8 file di dati tempdb
+* Il file dati tempdb deve essere creato con le stesse dimensioni
 
 
-Lo script di esempio seguente modifica tempdb creando otto file tempdb e spostando tempdb nel punto di montaggio `C:\MSSQL\tempdb` Per SQL Server 2012 e versioni successive.
+Lo script di esempio seguente modifica tempdb creando otto file tempdb di pari dimensioni e spostando tempdb sul punto di montaggio `C:\MSSQL\tempdb` per SQL Server 2012 e versioni successive.
 
 ....
 use master
