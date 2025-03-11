@@ -45,12 +45,11 @@ In un cluster vSphere ha, vengono rilevati tre tipi di errore dell'host:
 
 L'host master monitora gli host slave nel cluster. Questa comunicazione viene fatta attraverso lo scambio di heartbeat di rete ogni secondo. Quando l'host master smette di ricevere questi heartbeat da un host slave, controlla la liveness dell'host prima di dichiarare che l'host non è riuscito. Il controllo liveness che l'ospite principale effettua è di determinare se l'ospite secondario sta scambiando i heartbeat con uno dei datastore. Inoltre, l'host master verifica se l'host risponde ai ping ICMP inviati ai propri indirizzi IP di gestione per rilevare se è semplicemente isolato dal suo nodo master o completamente isolato dalla rete. Per farlo, eseguire il ping del gateway predefinito. È possibile specificare manualmente uno o più indirizzi di isolamento per migliorare l'affidabilità della convalida dell'isolamento.
 
-
-
-=== _Best practice_
-
+[TIP]
+====
 NetApp consiglia di specificare un minimo di due indirizzi di isolamento aggiuntivi e che ciascuno di questi indirizzi sia locale al sito. Ciò migliorerà l'affidabilità della convalida dell'isolamento.
 
+====
 
 
 == Risposta di isolamento dell'host
@@ -61,12 +60,11 @@ Lo "spegnimento" è migliore dello "spegnimento", che non svuota le modifiche pi
 
 Prima che ha avvii la risposta di isolamento, verifica prima se l'agente master ha vSphere è proprietario del datastore che contiene i file di configurazione della VM. In caso contrario, l'host non attiverà la risposta di isolamento, poiché non vi è alcun master per riavviare le VM. L'host controllerà periodicamente lo stato del datastore per determinare se viene richiesto da un agente vSphere ha che detiene il ruolo master.
 
-
-
-=== _Best practice_
-
+[TIP]
+====
 NetApp consiglia di impostare la risposta di isolamento dell'host su Disabilitato.
 
+====
 Una condizione split-brain può verificarsi se un host viene isolato o partizionato dall'host master vSphere ha e il master non è in grado di comunicare tramite datastore heartbeat o tramite ping. Il master dichiara l'host isolato inattivo e riavvia le macchine virtuali su altri host nel cluster. Esiste ora una condizione split-brain perché esistono due istanze della macchina virtuale in esecuzione, una sola delle quali è in grado di leggere o scrivere i dischi virtuali. Le condizioni split-brain possono ora essere evitate configurando VMCP (VM Component Protection).
 
 
@@ -81,12 +79,11 @@ Uno dei miglioramenti delle funzionalità di vSphere 6, relativi all'ha, è VMCP
 
 PDL è una condizione che si verifica quando un dispositivo di memorizzazione si guasta in modo permanente o viene rimosso amministrativamente e non deve essere restituito. L'array di storage NetApp invia un codice di rilevamento SCSI a ESXi dichiarando che il dispositivo è perso in modo permanente. Nella sezione Condizioni di guasto e Risposta VM di vSphere ha, è possibile configurare la risposta che deve essere dopo il rilevamento di una condizione PDL.
 
-
-
-==== _Best practice_
-
+[TIP]
+====
 NetApp consiglia di impostare "Risposta per datastore con PDL" su "*Spegni e riavvia VM*". Quando viene rilevata questa condizione, una VM viene riavviata istantaneamente su un host integro all'interno del cluster vSphere ha.
 
+====
 
 
 === Tutti i percorsi verso il basso (APD)
@@ -95,22 +92,15 @@ APD è una condizione che si verifica quando un dispositivo di archiviazione div
 
 Quando viene rilevata una condizione APD, viene avviato un timer. Dopo 140 secondi, la condizione APD viene dichiarata ufficialmente e il dispositivo viene contrassegnato come timeout APD. Una volta trascorsi i 140 secondi, ha inizia il conteggio dei minuti specificati nell'APD Delay for VM failover. Una volta trascorso il tempo specificato, ha riavvia le macchine virtuali interessate. È possibile configurare VMCP in modo che risponda in modo diverso, se lo si desidera (Disattivato, Eventi problema o Spegni e riavvia le macchine virtuali).
 
+[TIP]
+====
+* NetApp consiglia di configurare "Risposta per datastore con APD" su "*Spegni e riavvia le VM (conservative)*".
+* Conservative si riferisce alla probabilità che ha sia in grado di riavviare le VM. Quando è impostata su Conservative, ha riavvia la VM interessata dall'APD solo se sa che un altro host può riavviarla. In caso di problemi aggressivi, ha tenterà di riavviare la macchina virtuale anche se non conosce lo stato degli altri host. Ciò può comportare il mancato riavvio delle VM se non vi è alcun host con accesso al datastore su cui si trova.
+* Se lo stato APD viene risolto e l'accesso allo storage viene ripristinato prima del termine del timeout, l'ha non riavvia inutilmente la macchina virtuale a meno che non sia stata configurata esplicitamente. Se si desidera una risposta anche quando l'ambiente è stato ripristinato dalla condizione APD, è necessario configurare la risposta per il ripristino APD dopo il timeout APD in modo da ripristinare le VM.
+* NetApp consiglia di configurare la risposta per il ripristino APD dopo il timeout APD su Disabilitato.
 
 
-==== _Best practice_
-
-NetApp consiglia di configurare "Risposta per datastore con APD" su "*Spegni e riavvia le VM (conservative)*".
-
-Conservative si riferisce alla probabilità che ha sia in grado di riavviare le VM. Quando è impostata su Conservative, ha riavvia la VM interessata dall'APD solo se sa che un altro host può riavviarla. In caso di problemi aggressivi, ha tenterà di riavviare la macchina virtuale anche se non conosce lo stato degli altri host. Ciò può comportare il mancato riavvio delle VM se non vi è alcun host con accesso al datastore su cui si trova.
-
-Se lo stato APD viene risolto e l'accesso allo storage viene ripristinato prima del termine del timeout, l'ha non riavvia inutilmente la macchina virtuale a meno che non sia stata configurata esplicitamente. Se si desidera una risposta anche quando l'ambiente è stato ripristinato dalla condizione APD, è necessario configurare la risposta per il ripristino APD dopo il timeout APD in modo da ripristinare le VM.
-
-
-
-==== _Best practice_
-
-NetApp consiglia di configurare la risposta per il ripristino APD dopo il timeout APD su Disabilitato.
-
+====
 
 
 == Implementazione VMware DRS per NetApp MetroCluster
@@ -143,16 +133,19 @@ La disponibilità dei servizi dovrebbe sempre prevalere sulle prestazioni. Nello
 
 == Implementazione di VMware Storage DRS con NetApp MetroCluster
 
-La funzione VMware Storage DRS consente l'aggregazione di datastore in una singola unità e bilancia i dischi della macchina virtuale quando vengono superate le soglie di controllo i/o di storage.
+La funzionalità VMware Storage DRS consente l'aggregazione di datastore in una singola unità e bilancia i dischi della macchina virtuale quando vengono superate le soglie di controllo i/o di storage (SIOC).
 
 Il controllo i/o dello storage è abilitato per impostazione predefinita sui cluster DRS abilitati per Storage DRS. Il controllo i/o dello storage consente a un amministratore di controllare la quantità di i/o dello storage allocata alle macchine virtuali nei periodi di congestione dell'i/o e di conseguenza le macchine virtuali più importanti possono preferire le macchine virtuali meno importanti per l'allocazione delle risorse i/O.
 
 Storage DRS utilizza Storage vMotion per migrare le macchine virtuali in datastore diversi all'interno di un cluster di datastore. In un ambiente NetApp MetroCluster, la migrazione di una macchina virtuale deve essere controllata all'interno dei datastore di quel sito. Ad esempio, la macchina virtuale A, in esecuzione su un host nel sito A, dovrebbe idealmente migrare all'interno dei datastore della SVM nel sito A. In caso contrario, la macchina virtuale continuerà a funzionare ma con prestazioni ridotte, poiché la lettura/scrittura del disco virtuale avverrà dal sito B attraverso collegamenti tra siti.
 
+[TIP]
+====
+*Quando si utilizza l'archiviazione ONTAP, si consiglia di disattivare l'archiviazione DRS.
+
+* I DRS di archiviazione non sono generalmente necessari o consigliati per l'uso con i sistemi di archiviazione ONTAP.
+* ONTAP offre proprie funzionalità di efficienza dello storage, come deduplica, compressione e compaction, che possono essere influenzate dallo Storage DRS.
+* Se si utilizzano snapshot ONTAP, storage vMotion lascerebbe la copia della macchina virtuale nella snapshot, aumentando potenzialmente l'utilizzo dello storage e potrebbe avere un impatto sulle applicazioni di backup, come NetApp SnapCenter, che tengono traccia delle macchine virtuali e delle relative snapshot ONTAP.
 
 
-=== _Best practice_
-
-NetApp consiglia di creare cluster di datastore in relazione all'affinità con i siti storage. In altre parole, i datastore con affinità con i siti per il sito A non devono essere mescolati con i cluster di datastore con datastore con affinità con i siti per il sito B.
-
-Ogni volta che viene eseguito il provisioning o la migrazione di una macchina virtuale mediante Storage vMotion, NetApp consiglia di aggiornare manualmente tutte le regole VMware DRS specifiche di tali macchine virtuali. In questo modo, si verificherà l'affinità della macchina virtuale a livello di sito per host e datastore, riducendo così l'overhead di rete e storage.
+====

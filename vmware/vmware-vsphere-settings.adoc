@@ -18,7 +18,7 @@ NetApp ha sviluppato una serie di impostazioni ottimali per l'host ESXi sia per 
 
 Questi valori possono essere impostati facilmente utilizzando gli strumenti ONTAP per VMware vSphere: Dal dashboard Riepilogo, fare clic su Modifica impostazioni nel portlet sistemi host o fare clic con il pulsante destro del mouse sull'host in vCenter, quindi accedere a Strumenti ONTAP > Imposta valori consigliati.
 
-Di seguito sono riportate le impostazioni dell'host attualmente consigliate per le versioni 9,8-9,13.
+Di seguito sono riportate le impostazioni dell'host consigliate per tutte le versioni di ONTAP attualmente supportate.
 
 |===
 
@@ -32,8 +32,7 @@ Di seguito sono riportate le impostazioni dell'host attualmente consigliate per 
 | VMFS3.HardwareAcceleratedLocking | Mantieni predefinito (1) | No 
 
 
-| VMFS3.EnableBlockDelete | Mantenere l'impostazione predefinita (0), ma può essere modificata se necessario.
-Per ulteriori informazioni, vedere link:https://knowledge.broadcom.com/external/article?legacyId=2007427["Tastiera VMware 2007427"] | No 
+| VMFS3.EnableBlockDelete | Mantenere l'impostazione predefinita (0), ma può essere modificata se necessario. Per ulteriori informazioni, vedere link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/storage-provisioning-and-space-reclamation-in-vsphere/storage-space-reclamation-in-vsphere/space-reclamation-for-guest-operating-systems.html["Recupero di spazio per VMFS5 macchine virtuali"] | No 
 
 
 | VMFS3.EnableVMFS6Unmap | Mantieni predefinito (1)
@@ -155,15 +154,12 @@ Gli strumenti ONTAP specificano anche alcune impostazioni predefinite durante la
 
 Sebbene non sia attualmente configurato dagli strumenti ONTAP disponibili, NetApp suggerisce le seguenti opzioni di configurazione:
 
-* In ambienti dalle performance elevate o quando si testano le performance con un singolo datastore LUN, si consiglia di modificare l'impostazione del bilanciamento del carico del criterio di selezione del percorso (PSP) round-robin (VMW_PSP_RR) dall'impostazione IOPS predefinita di 1000 a un valore di 1. Consulta la Knowledge base di VMware https://kb.vmware.com/s/article/2069356["2069356"^] per ulteriori informazioni.
-* In vSphere 6.7 Update 1, VMware ha introdotto un nuovo meccanismo di bilanciamento del carico di latenza per la PSP Round Robin. La nuova opzione prende in considerazione la larghezza di banda i/o e la latenza del percorso quando si seleziona il percorso ottimale per i/O. Potresti trarre vantaggio dall'utilizzo in ambienti con una connettività di percorso non equivalente, ad esempio casi in cui sono presenti più hop di rete su un percorso piuttosto che su un altro, o quando utilizzi un sistema NetApp All SAN Array. Vedere https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-in e policy per la selezione del percorso"^] per ulteriori informazioni.
+* In ambienti dalle performance elevate o quando si testano le performance con un singolo datastore LUN, si consiglia di modificare l'impostazione del bilanciamento del carico del criterio di selezione del percorso (PSP) round-robin (VMW_PSP_RR) dall'impostazione IOPS predefinita di 1000 a un valore di 1. Per ulteriori informazioni, vederelink:https://knowledge.broadcom.com/external/article?legacyId=2069356["VMware KB 2069356"^].
+* In vSphere 6.7 Update 1, VMware ha introdotto un nuovo meccanismo di bilanciamento del carico di latenza per la PSP Round Robin. La nuova opzione prende in considerazione la larghezza di banda i/o e la latenza del percorso quando si seleziona il percorso ottimale per i/O. Potresti trarre vantaggio dall'utilizzo in ambienti con una connettività di percorso non equivalente, ad esempio casi in cui sono presenti più nodi di rete su un percorso rispetto all'altro o quando si utilizza un sistema ASA (NetApp All SAN Array). Per ulteriori informazioni, vedere https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/understanding-multipathing-and-failover-in-the-esxi-environment/viewing-and-managing-storage-paths-on-esxi-hosts.html#GUID-1940AE9E-04CF-40BE-BB71-398621F0642E-en["Modifica dei parametri predefiniti per la latenza Round Robin"^] .
 
 
 
 
 == Documentazione aggiuntiva
 
-Per FCP e iSCSI con vSphere 7, è possibile trovare ulteriori dettagli all'indirizzo https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_7.html["Utilizzo di VMware vSphere 7.x con ONTAP"^]
-Per FCP e iSCSI con vSphere 8, è possibile trovare ulteriori dettagli all'indirizzo https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_8.html["Utilizzo di VMware vSphere 8.x con ONTAP"^]
-Per NVMe-of con vSphere 7, è possibile trovare ulteriori dettagli all'indirizzo https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 7.x con ONTAP"^]
-Per NVMe-of con vSphere 8, è possibile trovare ulteriori dettagli all'indirizzo https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_8.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 8.x con ONTAP"^]
+Per FCP e iSCSI con vSphere 7, è possibile trovare ulteriori dettagli all'indirizzo link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_7.html["Utilizzo di VMware vSphere 7.x con ONTAP"^] per FCP e iSCSI con vSphere 8. Per ulteriori dettagli, visitare la pagina link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_8.html["Utilizzo di VMware vSphere 8.x con ONTAP"^] relativa a NVMe-of con vSphere 7. Per ulteriori dettagli, visitare il sito link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 7.x con ONTAP"^] per NVMe-of con vSphere 8, ulteriori dettagli sono disponibili all'indirizzo link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_8.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 8.x con ONTAP"^]

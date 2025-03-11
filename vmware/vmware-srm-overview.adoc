@@ -57,6 +57,9 @@ SRM può verificare il vostro piano DR senza interruzioni utilizzando la tecnolo
 In caso di disastro reale o persino di migrazione pianificata, SRM consente di inviare eventuali modifiche dell'ultimo minuto al dataset tramite un aggiornamento finale di SnapMirror (se si sceglie di farlo). Quindi, interrompe il mirror e monta il datastore sugli host DR. A questo punto, le VM possono essere alimentate automaticamente in qualsiasi ordine in base alla strategia prepianificata.
 
 
+NOTE: Mentre i sistemi ONTAP permettono di accoppiare le SVM nello stesso cluster per la replica SnapMirror, questo scenario non viene testato e certificato con SRM. Pertanto, si consiglia di utilizzare solo SVM di cluster diversi quando si utilizza SRM.
+
+
 
 == SRM con ONTAP e altri casi di utilizzo: Cloud ibrido e migrazione
 

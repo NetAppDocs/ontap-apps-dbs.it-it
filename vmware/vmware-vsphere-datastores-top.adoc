@@ -26,7 +26,7 @@ Per collegare VMware vSphere ai datastore su un sistema che esegue ONTAP sono ut
 
 FCP, NVMe/FC, NVMe/TCP e iSCSI sono protocolli a blocchi che utilizzano il VMFS (vSphere Virtual Machine file System) per memorizzare le VM nei LUN di ONTAP o negli namespace NVMe contenuti in un ONTAP FlexVol volume. NFS è un protocollo di file che inserisce le macchine virtuali in datastore (che sono semplicemente volumi ONTAP) senza la necessità di VMFS. SMB (CIFS), iSCSI, NVMe/TCP o NFS possono essere utilizzati anche direttamente da un sistema operativo guest a ONTAP.
 
-Le tabelle seguenti presentano le funzionalità tradizionali del datastore supportate da vSphere con ONTAP. Queste informazioni non si applicano agli archivi dati vVol, ma in genere si applicano a vSphere 6.x e alle versioni successive che utilizzano le versioni supportate di ONTAP. È inoltre possibile consultare link:https://www.vmware.com/support/pubs/["Valori massimi di configurazione VMware"^] per release specifiche di vSphere per confermare i limiti specifici.
+Le tabelle seguenti presentano le funzionalità tradizionali del datastore supportate da vSphere con ONTAP. Queste informazioni non si applicano agli archivi dati vVol, ma in genere si applicano a vSphere 6.x e alle versioni successive che utilizzano le versioni supportate di ONTAP. È inoltre possibile consultare il link:https://configmax.broadcom.com/guest?vmwareproduct=vSphere&release=vSphere%208.0&categories=2-0["Strumento VMware Configuration Maximums"^] per le release specifiche di vSphere per confermare i limiti specifici.
 
 |===
 | Funzionalità | FC | ISCSI | NVMe-of | NFS 
@@ -129,9 +129,9 @@ La tabella seguente elenca le funzionalità di backup supportate.
 
 | Granularità NDMP | Datastore | Datastore | Datastore | Datastore o macchina virtuale 
 |===
-^1^ *NetApp consiglia* l'utilizzo di iSCSI in-guest per i cluster Microsoft piuttosto che VMDK abilitati per il multi-writer in un datastore VMFS. Questo approccio è pienamente supportato da Microsoft e VMware, offre una grande flessibilità con ONTAP (da SnapMirror ai sistemi ONTAP on-premise o nel cloud), è semplice da configurare e automatizzare e può essere protetto con SnapCenter. VSphere 7 aggiunge una nuova opzione VMDK in cluster. Si tratta di un'operazione diversa dai VMDK abilitati per il multi-writer, che richiede un datastore presentato tramite il protocollo FC che ha attivato il supporto VMDK in cluster. Sono previste altre restrizioni. Per le linee guida sulla configurazione, consultare la documentazione di VMware https://docs.vmware.com/en/VMware-vSphere/7.0/vsphere-esxi-vcenter-server-70-setup-wsfc.pdf["Configurazione per il clustering di failover di Windows Server"^].
+^1^ *NetApp consiglia* l'utilizzo di iSCSI in-guest per i cluster Microsoft piuttosto che VMDK abilitati per il multi-writer in un datastore VMFS. Questo approccio è pienamente supportato da Microsoft e VMware, offre una grande flessibilità con ONTAP (da SnapMirror ai sistemi ONTAP on-premise o nel cloud), è semplice da configurare e automatizzare e può essere protetto con SnapCenter. VSphere 7 aggiunge una nuova opzione VMDK in cluster. Si tratta di un'operazione diversa dai VMDK abilitati per il multi-writer, che richiede un datastore presentato tramite il protocollo FC che ha attivato il supporto VMDK in cluster. Sono previste altre restrizioni. Per le linee guida sulla configurazione, consultare la documentazione di VMwarelink:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/setup-for-windows-server-failover-clustering.html["Configurazione per il clustering di failover di Windows Server"^].
 
-^2^ i datastore che utilizzano NVMe-of e NFS v4,1 richiedono la replica vSphere. La replica basata su array non è supportata da SRM.
+^2^ i datastore che utilizzano NVMe-of e NFS v4,1 richiedono la replica vSphere. La replica basata su array per NFS v4,1 non è attualmente supportata da SRM. La replica basata su array con NVMe-of non è attualmente supportata dai tool ONTAP per VMware vSphere Storage Replication Adapter (SRA).
 
 
 

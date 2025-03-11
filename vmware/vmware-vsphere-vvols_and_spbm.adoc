@@ -14,11 +14,36 @@ summary: 'In questa pagina sono descritte le Best practice per l"implementazione
 
 
 [role="lead"]
-NetApp è stato un primo partner di progettazione di VMware nello sviluppo di vVol (vSphere Virtual Volumes), fornendo input architetturale e supporto iniziale per vVol e API VMware vSphere per la consapevolezza dello storage (VASA). Questo approccio non solo ha portato la gestione granulare dello storage delle macchine virtuali a VMFS, ma ha anche supportato l'automazione del provisioning dello storage tramite Storage Policy Based Management (SPBM).
+Annunciato per la prima volta nel 2012, NetApp è stato un primo partner di progettazione di VMware nello sviluppo di VMware vSphere APIs for Storage Awareness (VASA), le fondamenta della gestione basata su criteri storage (SPBM, Storage Policy Based Management) con array storage Enterprise. Questo approccio offriva una gestione granulare dello storage delle macchine virtuali limitata allo storage VMFS e NFS.
 
-SPBM fornisce un framework che funge da layer di astrazione tra i servizi di storage disponibili per l'ambiente di virtualizzazione e gli elementi di storage sottoposti a provisioning tramite policy. Questo approccio consente agli architetti dello storage di progettare pool di storage con diverse funzionalità che possono essere facilmente utilizzate dagli amministratori delle macchine virtuali. Gli amministratori possono quindi associare i requisiti di carico di lavoro delle macchine virtuali ai pool di storage con provisioning, consentendo un controllo granulare delle varie impostazioni a livello di macchina virtuale o disco virtuale.
+ As a technology design partner, NetApp provided architectural input and in 2015 announced support for vVols. This new technology now enabled the automation of VM-granular and truly array-native storage provisioning through SPBM.
 
-ONTAP è leader nel settore dello storage in termini di scalabilità vVol, supportando centinaia di migliaia di vVol in un singolo cluster, mentre i vendor di array Enterprise e flash array più piccoli supportano solo diverse migliaia di vVol per array. NetApp sta inoltre guidando l'evoluzione della gestione granulare delle macchine virtuali con funzionalità imminenti a supporto di vVol 3.0.
+
+== Volumi virtuali (vVol)
+
+I vVol sono una rivoluzionaria architettura di storage che consente la gestione granulare dello storage delle macchine virtuali, consentendo la gestione dello storage non solo in base alle macchine virtuali (compresi i metadati delle macchine virtuali) ma anche in base ai VMDK. I vVol sono un componente chiave della strategia SDDC (Software Defined Data Center) che costituisce la base di VMware Cloud Foundation (VCF), fornendo un'architettura di storage più efficiente e scalabile per gli ambienti virtualizzati.
+
+I vVol consentono alle macchine virtuali di utilizzare lo storage per ogni macchina virtuale, perché ogni oggetto storage delle macchine virtuali è un'entità univoca in NetApp ONTAP. Con i sistemi ASA R2, che non richiedono più la gestione dei volumi, questo significa che ogni oggetto storage delle macchine virtuali è un'unica unità di storage (su) sull'array e può essere controllato in modo indipendente. Ciò consente la creazione di policy di storage che possono essere applicate a singole macchine virtuali o VMDK (e quindi include un SUS duale), fornendo un controllo granulare sui servizi storage quali performance, disponibilità e protezione dei dati.
+
+
+
+== Gestione basata su criteri storage (SPBM)
+
+SPBM fornisce un framework che funge da layer di astrazione tra i servizi di storage disponibili per l'ambiente di virtualizzazione e gli elementi di storage sottoposti a provisioning tramite policy. Questo approccio consente agli storage architect di progettare pool di storage con funzionalità differenti. Questi pool possono essere facilmente utilizzati dagli amministratori VM. Gli amministratori possono quindi abbinare i requisiti dei carichi di lavoro delle macchine virtuali ai pool di storage di cui è stato eseguito il provisioning. Questo approccio semplifica la gestione dello storage e permette un utilizzo più efficiente delle risorse di storage.
+
+SPBM è un componente chiave di vVol, che fornisce un framework basato su criteri per la gestione dei servizi storage. Le policy vengono create dagli amministratori di vSphere utilizzando regole e funzionalità esposte dal provider VASA (VP) del vendor. È possibile creare policy per diversi servizi di storage, quali performance, disponibilità e protezione dei dati. È possibile assegnare le policy a singole macchine virtuali o VMDK per un controllo granulare sui servizi storage.
+
+
+
+== NetApp ONTAP e vVol
+
+NetApp ONTAP è leader nel settore dello storage nella scalabilità dei vVol, supportando centinaia di migliaia di vVol in un singolo cluster*. Al contrario, gli array Enterprise e i vendor di flash array più piccoli supportano fino a diverse migliaia di vVol per array. ONTAP offre una soluzione storage scalabile ed efficiente per ambienti VMware vSphere, supportando i vVol con un ricco set di servizi storage, tra cui deduplica dei dati, compressione, thin provisioning e protezione dei dati. SPBM consente un'integrazione perfetta con gli ambienti VMware vSphere.
+
+In precedenza abbiamo indicato agli amministratori delle macchine virtuali la possibilità di consumare capacità come pool di storage. Ciò avviene mediante l'utilizzo di container di storage rappresentati in vSphere come datastore logici.
+
+I container storage vengono creati dagli amministratori dello storage e utilizzati per raggruppare le risorse storage che possono essere consumate dagli amministratori delle macchine virtuali. I container storage possono essere creati in maniera differente a seconda del tipo di sistema ONTAP che stai utilizzando. Con i cluster tradizionali ONTAP 9, ai container viene assegnato uno o più FlexVol di supporto che formano insieme il pool di storage. Con i sistemi ASA R2, l'intero cluster è il pool di storage.
 
 
 NOTE: Per ulteriori informazioni su VMware vSphere Virtual Volumes, SPBM e ONTAP, vedere link:vmware-vvols-overview.html["TR-4400: Volumi virtuali VMware vSphere con ONTAP"^].
+
+ \* Depending on platform and protocol
