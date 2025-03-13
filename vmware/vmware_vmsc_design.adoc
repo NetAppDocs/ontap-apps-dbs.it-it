@@ -137,13 +137,13 @@ image::../media/vmsc_3_6.png[Schermata della descrizione di un computer generata
 
 Gli eventi di isolamento si verificano quando gli host all'interno di un cluster ha perdono la connettività alla rete o ad altri host nel cluster. Per impostazione predefinita, vSphere ha utilizzerà il gateway predefinito per la propria rete di gestione come indirizzo di isolamento predefinito. Tuttavia, è possibile specificare indirizzi di isolamento aggiuntivi per l'host al ping per determinare se deve essere attivata una risposta di isolamento. Aggiungere due IP di isolamento in grado di eseguire il ping, uno per sito. Non utilizzare l'indirizzo IP del gateway. L'impostazione avanzata vSphere ha utilizzata è das.isolationaddress. A tale scopo, è possibile utilizzare gli indirizzi IP ONTAP o Mediator.
 
-Fare riferimento a. https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices#sec2-sub5["core.vmware.com"] per ulteriori informazioni__.__
+Fare riferimento a https://www.vmware.com/docs/vmw-vmware-vsphere-metro-storage-cluster-recommended-practices["Procedure consigliate per VMware vSphere Metro Storage Cluster"] per ulteriori informazioni__.__
 
 image::../media/vmsc_3_7.png[Schermata della descrizione di un computer generata automaticamente,624,545]
 
 L'aggiunta di un'impostazione avanzata denominata das.heartbeatDsPerHost può aumentare il numero di datastore heartbeat. Utilizzare quattro datastore heartbeat (HB DSS), due per sito. Utilizzare l'opzione "Select from List but complent" (Seleziona da elenco ma complimento). Questo è necessario perché se un sito non funziona, è necessario ancora due HB DSS. Tuttavia, questi elementi non devono essere protetti con la sincronizzazione attiva di MCC o SnapMirror.
 
-Fare riferimento a. https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices#sec2-sub5["core.vmware.com"] per ulteriori informazioni__.__
+Fare riferimento a https://www.vmware.com/docs/vmw-vmware-vsphere-metro-storage-cluster-recommended-practices["Procedure consigliate per VMware vSphere Metro Storage Cluster"] per ulteriori informazioni__.__
 
 Affinità con VMware DRS per NetApp MetroCluster
 
