@@ -14,7 +14,7 @@ Durante il normale funzionamento, è possibile accedere a un LUN dalla replica l
 
 La linea verde è un percorso attivo, ma richiede una maggiore latenza, perché i/o su quel percorso devono essere passati attraverso il percorso di sincronizzazione attivo di SnapMirror. La latenza aggiuntiva dipende dalla velocità dell'interconnessione tra i siti utilizzati per la sincronizzazione attiva di SnapMirror.
 
-image:smas-failover-1.png["Errore: Immagine grafica mancante"]
+image:../media/smas-failover-1.png["SnapMirror Active Sync normali operazioni"]
 
 
 
@@ -22,7 +22,7 @@ image:smas-failover-1.png["Errore: Immagine grafica mancante"]
 
 Se la copia del mirror attivo non è più disponibile, a causa di un failover pianificato o non pianificato, ovviamente non sarà più utilizzabile. Tuttavia, il sistema remoto possiede una replica sincrona e i percorsi SAN verso il sito remoto esistono già. Il sistema remoto è in grado di gestire i/o per quel LUN.
 
-image:smas-failover-2.png["Errore: Immagine grafica mancante"]
+image:../media/smas-failover-2.png["Errore di sincronizzazione attiva SnapMirror"]
 
 
 
@@ -30,7 +30,7 @@ image:smas-failover-2.png["Errore: Immagine grafica mancante"]
 
 Il failover fa sì che la copia remota diventi la copia attiva. I percorsi vengono modificati da Active a Active/Optimized e l'io continua a essere gestito senza perdita di dati.
 
-image:smas-failover-3.png["Errore: Immagine grafica mancante"]
+image:../media/smas-failover-3.png["Failover di sincronizzazione attiva SnapMirror"]
 
 
 
@@ -38,7 +38,7 @@ image:smas-failover-3.png["Errore: Immagine grafica mancante"]
 
 Una volta che il sistema di origine è tornato in servizio, SnapMirror Active Sync può risincronizzare la replica, ma eseguendo l'altra direzione. Attualmente la configurazione è essenzialmente la stessa del punto di partenza, con la sola eccezione che i siti mirror attivi sono stati invertiti.
 
-image:smas-failover-4.png["Errore: Immagine grafica mancante"]
+image:../media/smas-failover-4.png["Riparazione sincronizzazione attiva SnapMirror"]
 
 
 
@@ -46,4 +46,4 @@ image:smas-failover-4.png["Errore: Immagine grafica mancante"]
 
 Se lo si desidera, un amministratore può eseguire un failback e riportare la copia attiva delle LUN nei controller originali.
 
-image:smas-failover-1.png["Errore: Immagine grafica mancante"]
+image:../media/smas-failover-1.png["Failback di sincronizzazione attivo di SnapMirror"]

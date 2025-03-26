@@ -19,7 +19,7 @@ La `source` designazione è controlla il sito preferito. In caso di perdita del 
 
 La configurazione di origine/destinazione può essere visualizzata tramite SystemManager:
 
-image:smas-source-systemmanager.png["SM screenshot di SM-as source"]
+image:../media/smas-source-systemmanager.png["SM screenshot di SM-as source"]
 
 O all'interfaccia CLI:
 

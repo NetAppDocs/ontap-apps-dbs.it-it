@@ -52,7 +52,8 @@ Come misura di sicurezza generale, impostare `dr-force-nvfail` contrassegnare tu
 
 Il risultato è come usare l' `-force-nvfail-all` flag per commutatori manuali. Tuttavia, il numero di volumi interessati può essere limitato solo a quei volumi che devono essere protetti da applicazioni o sistemi operativi con cache obsolete.
 
-Ci sono due requisiti critici per un ambiente che non utilizza `dr-force-nvfail` su volumi applicativi:
+
+CAUTION: Ci sono due requisiti critici per un ambiente che non utilizza `dr-force-nvfail` su volumi applicativi:
 
 * Uno switchover forzato non deve avvenire più di 30 secondi dopo la perdita del sito primario.
 * Lo switchover non deve essere eseguito durante le attività di manutenzione o in altre condizioni in cui i plex SyncMirror o la replica della NVRAM non sono sincronizzati. Il primo requisito può essere soddisfatto con il software tiebreaker configurato per eseguire uno switchover entro 30 secondi da un guasto del sito. Questo requisito non significa che lo switchover debba essere eseguito entro 30 secondi dal rilevamento di un guasto del sito. Ciò significa che non è più sicuro forzare uno switchover se sono trascorsi 30 secondi da quando un sito è stato confermato operativo.

@@ -3,9 +3,13 @@ sidebar: sidebar
 permalink: mssql/mssql-dr-mcc-sql.html 
 keywords: MSSQL,SQL Server, MetroCluster 
 summary: Microsoft SQL Server con NetApp MetroCluster 
+searchtitle: Microsoft SQL Server con NetApp MetroCluster 
 ---
 = SQL Server con MetroCluster
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -26,4 +30,4 @@ Ad esempio, una procedura di DR rapida di base dopo una perdita improvvisa del s
 
 Il requisito principale di questo approccio è rappresentato da un sistema operativo in esecuzione sul sito remoto. Deve essere preconfigurato con l'installazione di SQL Server e deve essere aggiornato con una versione di build equivalente. È inoltre possibile eseguire il mirroring dei database di sistema di SQL Server nel sito remoto e montarli se viene dichiarata un'emergenza.
 
-Se i volumi, i file system e il datastore che ospitano database virtualizzati non vengono utilizzati nel sito di disaster recovery prima dello switchover, non è necessario impostare i `dr-force- nvfail` volumi associati.
+Se i volumi, i file system e il datastore che ospitano database virtualizzati non vengono utilizzati nel sito di disaster recovery prima dello switchover, non è necessario impostare i `dr-force-nvfail` volumi associati.

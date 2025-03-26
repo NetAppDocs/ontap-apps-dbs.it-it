@@ -44,7 +44,7 @@ L'architettura è anche più semplice perché le uniche connessioni cross-site s
 
 Per ulteriori informazioni, consultare la documentazione ufficiale di ONTAP e. https://www.netapp.com/pdf.html?item=/media/13481-tr4689.pdf["Architettura e progettazione della soluzione IP di MetroCluster"^].
 
-image:mccip.png["Errore: Immagine grafica mancante"]
+image:../media/mccip.png["Architettura IP di MetroCluster"]
 
 
 
@@ -52,7 +52,7 @@ image:mccip.png["Errore: Immagine grafica mancante"]
 
 La configurazione ha-Pair MetroCluster FC utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
 
-image:mcc-4-node.png["Errore: Immagine grafica mancante"]
+image:../media/mcc-4-node.png["MetroCluster a quattro nodi"]
 
 Alcune infrastrutture multisito non sono progettate per le operazioni Active-Active, ma vengono utilizzate maggiormente come sito primario e sito di disaster recovery. In questa situazione, è generalmente preferibile un'opzione ha-Pair MetroCluster per i seguenti motivi:
 
@@ -67,7 +67,7 @@ Alcune infrastrutture multisito non sono progettate per le operazioni Active-Act
 
 La configurazione MetroCluster a due nodi utilizza un solo nodo per sito. Questo design è più semplice rispetto all'opzione ha-Pair perché richiede meno componenti da configurare e gestire. Inoltre, ha ridotto le richieste di infrastruttura in termini di cablaggio e switch FC. Infine, riduce i costi.
 
-image:mcc-2-node.png["Errore: Immagine grafica mancante"]
+image:../media/mcc-2-node.png["MetroCluster a due nodi"]
 
 L'evidente impatto di questa progettazione è che un guasto del controller su un singolo sito implica che i dati sono disponibili dal sito opposto. Questa restrizione non è necessariamente un problema. Molte aziende hanno operazioni di data center multisito con reti estese, ad alta velocità e a bassa latenza che funzionano essenzialmente come una singola infrastruttura. In questi casi, la configurazione preferita è la versione a due nodi di MetroCluster. Diversi service provider utilizzano attualmente sistemi a due nodi con scalabilità di petabyte.
 

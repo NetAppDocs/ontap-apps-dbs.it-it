@@ -14,4 +14,4 @@ L'obiettivo principale di una configurazione con striping è quello di garantire
 
 La figura seguente mostra tre possibili opzioni per la regolazione delle dimensioni dello stripe e della larghezza. Il numero di LUN viene selezionato per soddisfare i requisiti di prestazioni come descritto sopra, ma in tutti i casi i dati totali all'interno di uno stripe singolo sono 1MB.
 
-image:ontap-lvm-striping.png["Errore: Immagine grafica mancante"]
+image:../media/ontap-lvm-striping.png["Striping LVM"]

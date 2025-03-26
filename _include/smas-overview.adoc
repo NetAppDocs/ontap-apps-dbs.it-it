@@ -16,11 +16,11 @@ La sincronizzazione attiva SnapMirror (SM-AS) si basa sulla sincronizzazione Sna
 
 SnapMirror Active Sync offre LUN che esistono su due siti diversi. Durante il normale funzionamento, non è presente alcuna "sorgente" o "destinazione". La direzione è bidirezionale. Tutti gli io in lettura diretti contro un determinato percorso LUN saranno gestiti dal controller locale utilizzando la propria copia locale dei dati. Tutte le scritture verranno replicate sul partner remoto e scritte localmente prima di essere riconosciute.
 
-image:smas-overview.png["Panoramica su SnapMirror Active Sync"]
+image:../media/smas-overview.png["Panoramica su SnapMirror Active Sync"]
 
 A livello logico, il comportamento è simile a un singolo set di LUN. È possibile indirizzare l'io a queste LUN logiche attraverso percorsi SAN esistenti su due cluster diversi, ma i dati sono sempre gli stessi. Il comportamento io è simmetrico, aspetto critico per molte configurazioni di applicazioni Active-Active.
 
-image:smas-logical.png["Design logico di sincronizzazione attiva SnapMirror"]
+image:../media/smas-logical.png["Design logico di sincronizzazione attiva SnapMirror"]
 
 
 

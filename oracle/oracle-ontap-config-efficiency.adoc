@@ -98,13 +98,14 @@ Il thin provisioning è vivamente consigliato in quanto consente di semplificare
 
 Alcuni clienti preferiscono utilizzare il thick provisioning, per carichi di lavoro specifici o generalmente basato su pratiche operative e di approvvigionamento consolidate.
 
-*Attenzione:* se un volume viene sottoposto a thick provisioning, è necessario fare attenzione a disattivare completamente tutte le funzioni di efficienza per quel volume, inclusa la decompressione e la rimozione della deduplica tramite `sis undo` comando. Il volume non dovrebbe essere visualizzato in `volume efficiency show` output. In tal caso, il volume è ancora parzialmente configurato per le funzioni di efficienza. Di conseguenza, la sovrascrittura garantisce un funzionamento diverso, aumentando le possibilità che le sovrascritture causino l'esaurimento inaspettato dello spazio del volume, con conseguenti errori di i/o del database.
+
+CAUTION: Se un volume viene sottoposto a thick provisioning, è necessario fare attenzione a disattivare completamente tutte le funzionalità di efficienza per quel volume, inclusa la decompressione e la rimozione della deduplica tramite il `sis undo` comando. Il volume non dovrebbe comparire nell' `volume efficiency show`output. In tal caso, il volume è ancora parzialmente configurato per le funzioni di efficienza. Di conseguenza, la sovrascrittura garantisce un funzionamento diverso, aumentando le possibilità che le sovrascritture causino l'esaurimento inaspettato dello spazio del volume, con conseguenti errori di i/o del database.
 
 
 
 == Best practice di efficienza
 
-NetApp consiglia di:
+*NetApp consiglia* quanto segue:
 
 
 

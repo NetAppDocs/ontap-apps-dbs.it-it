@@ -24,7 +24,7 @@ Senza impostazioni di prossimità, l'host utilizzerà entrambi i sistemi storage
 
 Con un sistema AFF, i percorsi vengono visualizzati come mostrato di seguito quando è stata configurata la prossimità dell'host.
 
-image:smas-uniform-aff.png["Rete uniforme AFF con sincronizzazione attiva SnapMirror"]
+image:../media/smas-uniform-aff.png["Rete uniforme AFF con sincronizzazione attiva SnapMirror"]
 
 Durante le normali operazioni, tutti i io sono i/o locali. Le letture e le scritture sono gestite dallo storage array locale. Gli io in scrittura, naturalmente, dovranno anche essere replicati dal controller locale sul sistema remoto prima di essere riconosciuti, ma tutti gli io in lettura saranno serviti localmente e non subiranno una latenza aggiuntiva attraverso il collegamento SAN tra i siti.
 
@@ -38,7 +38,7 @@ Esistono percorsi ridondanti attraverso il cluster locale non mostrati in questi
 
 I sistemi NetApp ASA offrono multipathing Active-Active su tutti i percorsi di un cluster. Questo vale anche per le configurazioni SM-AS.
 
-image:smas-uniform-asa.png["Rete uniforme ASA con sincronizzazione attiva SnapMirror"]
+image:../media/smas-uniform-asa.png["Rete uniforme ASA con sincronizzazione attiva SnapMirror"]
 
 Una configurazione ASA con accesso non uniforme funzionerebbe in gran parte allo stesso modo di AFF. Con un accesso uniforme, io attraverserebbe la WAN. Ciò può essere o non può essere desiderabile.
 

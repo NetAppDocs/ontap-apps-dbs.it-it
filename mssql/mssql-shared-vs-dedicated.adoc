@@ -3,10 +3,13 @@ sidebar: sidebar
 permalink: mssql/mssql-shared-vs-dedicated.html 
 keywords: MSSQL,SQL Server, multiple instances, dedicated instance, ONTAP 
 summary: Distribuzione delle istanze di Microsoft SQL Server 
-searchtitle: Istanza condivisa Microsoft SQL Server rispetto a istanza dedicata 
+searchtitle: Distribuzione delle istanze di Microsoft SQL Server 
 ---
 = Istanza condivisa contro istanza dedicata
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

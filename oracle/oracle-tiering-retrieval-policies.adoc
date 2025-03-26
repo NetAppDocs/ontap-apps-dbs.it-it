@@ -23,10 +23,10 @@ I criteri di tiering controllano i blocchi di database Oracle sottoposti a tieri
 
 Tutti i volumi FabricPool sono inizialmente impostati su `default`, il che significa che il comportamento è controllato da `cloud-retrieval-policy. `il comportamento esatto dipende dal criterio di tiering utilizzato.
 
-* `auto`– consente di recuperare solo dati letti in modo casuale
-* `snapshot-only`– consente di recuperare tutti i dati letti in modo sequenziale o casuale
-* `none`– consente di recuperare tutti i dati letti in modo sequenziale o casuale
-* `all`– non recuperare i dati dal tier di capacità
+* `auto`consente di recuperare solo dati letti in modo casuale
+* `snapshot-only`- consente di recuperare tutti i dati letti in modo sequenziale o casuale
+* `none`- consente di recuperare tutti i dati letti in modo sequenziale o casuale
+* `all`- non recuperare i dati dal tier di capacità
 
 
 

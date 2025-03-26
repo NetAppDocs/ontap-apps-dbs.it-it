@@ -4,7 +4,7 @@
 
 Il mediatore non è realmente un tiebreaker, anche se quella è effettivamente la funzione che fornisce. Non esegue alcuna azione, ma fornisce un canale di comunicazione alternativo per la comunicazione tra cluster e cluster.
 
-image:smas-mediator.png["Diagramma di sincronizzazione attivo SnapMirror con mediatore"]
+image:../media/smas-mediator.png["Diagramma di sincronizzazione attivo SnapMirror con mediatore"]
 
 La sfida #1 con il failover automatizzato è il problema split-brain, e questo problema sorge se i due siti perdono la connettività tra loro. Che cosa dovrebbe accadere? Non si desidera che due siti diversi si designino come copie sopravvissute dei dati, ma in che modo un singolo sito può distinguere tra la perdita effettiva del sito opposto e l'impossibilità di comunicare con il sito opposto?
 

@@ -6,7 +6,10 @@ summary: Directory di registro di Microsoft SQL Server
 searchtitle: Directory di registro di Microsoft SQL Server 
 ---
 = Directory di log
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
