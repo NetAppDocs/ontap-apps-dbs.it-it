@@ -1,15 +1,12 @@
 ---
 sidebar: sidebar 
-permalink: mssql/mssql-files-and-filegroups.html 
-keywords: MSSQL,SQL Server, backup, recovery, database file management 
-summary: Posizionamento dei file del database Microsoft SQL Server 
-searchtitle: Posizionamento dei file del database Microsoft SQL Server 
+permalink: mssql/mssql-files-and-filegroups-ASA.html 
+keywords: MSSQL,SQL Server, backup, recovery, database file management ,ASA 
+summary: Posizionamento dei file del database Microsoft SQL Server su ASA 
+searchtitle: File di database e filegroup di Microsoft SQL Server 
 ---
 = File di database e filegroup
-:hardbreaks:
 :allow-uri-read: 
-:icons: font
-:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -84,28 +81,17 @@ Un'altra importante opzione del database che controlla le dimensioni dei file di
 
 === Directory di log
 
-La directory di registro è specificata in SQL Server per memorizzare i dati di backup del registro delle transazioni a livello di host. Se si utilizza SnapCenter per eseguire il backup dei file di registro, ciascun host SQL Server utilizzato da SnapCenter deve disporre di una directory di registro host configurata per eseguire i backup dei registri. SnapCenter dispone di un repository di database, pertanto i metadati relativi alle operazioni di backup, ripristino o clonazione vengono memorizzati in un repository di database centrale.
+La directory di registro è specificata in SQL Server per memorizzare i dati di backup del registro delle transazioni a livello di host. Se si utilizza SnapCenter per eseguire il backup dei file di registro, ciascun host SQL Server utilizzato da SnapCenter deve disporre di una directory di registro host configurata per eseguire i backup dei registri.
 
-Le dimensioni della directory del registro host vengono calcolate come segue:
-Dimensione della directory del log host = ( (dimensione massima LDF DB x velocità di modifica giornaliera del log %) x (conservazione snapshot) ÷ (1 - spazio di overhead LUN %)
-La formula di dimensionamento della directory del registro host presuppone uno spazio di overhead LUN del 10%
-
-Posizionare la directory di registro su un volume o LUN dedicato. La quantità di dati nella directory del registro host dipende dalle dimensioni dei backup e dal numero di giorni in cui i backup vengono conservati. SnapCenter consente una sola directory di registro host per host SQL Server. È possibile configurare le directory del registro host in SnapCenter --> host --> Configura plug-in.
+Posizionare la directory di registro su un'unità di archiviazione dedicata. La quantità di dati nella directory del registro host dipende dalle dimensioni dei backup e dal numero di giorni in cui i backup vengono conservati. SnapCenter consente una sola directory di registro host per host SQL Server. È possibile configurare le directory del registro host in SnapCenter --> host --> Configura plug-in.
 
 [TIP]
 ====
 *NetApp consiglia* quanto segue per una directory del registro host:
 
 * Assicurarsi che la directory del registro host non sia condivisa da altri tipi di dati che potrebbero danneggiare i dati dello snapshot di backup.
-* Non posizionare database utente o database di sistema su un LUN che ospita punti di montaggio.
-* Creare la directory di registro dell'host su un volume dedicato in cui SnapCenter copia i registri delle transazioni.
-* Utilizzare le procedure guidate SnapCenter per migrare i database nello storage NetApp in modo che i database vengano memorizzati in posizioni valide, consentendo operazioni di backup e ripristino SnapCenter corrette. Tenere presente che il processo di migrazione causa interruzioni e può causare la disconnessione dei database mentre è in corso la migrazione.
-* Per le istanze di cluster di failover (FCI) di SQL Server devono essere presenti le seguenti condizioni:
-+
-** Se si utilizza un'istanza del cluster di failover, il LUN della directory del log host deve essere una risorsa del disco del cluster nello stesso gruppo di cluster dell'istanza di SQL Server di cui viene eseguito il backup in SnapCenter.
-** Se si utilizza un'istanza cluster di failover, i database utente devono essere collocati su LUN condivisi che sono risorse cluster di dischi fisici assegnate al gruppo di cluster associato all'istanza di SQL Server.
-
-
+* Creare la directory del registro host su un'unità di archiviazione dedicata in cui SnapCenter copia i registri delle transazioni.
+* Se si utilizza un'istanza cluster di failover sempre attiva, l'unità di storage utilizzata per la directory di log dell'host deve essere una risorsa disco del cluster nello stesso gruppo di cluster dell'istanza di SQL Server di cui si esegue il backup in SnapCenter.
 
 
 ====

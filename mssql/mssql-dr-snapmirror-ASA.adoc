@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-snapmirror-ASA.html 
+keywords: MSSQL,SQL Server, disaster recovery, snapmirror 
+summary: Disaster recovery per Microsoft SQL Server con ONTAP 
+searchtitle: Disaster recovery per Microsoft SQL Server con SnapMirror 
+---
+= SnapMirror
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Di seguito sono riportati alcuni consigli su SnapMirror per SQL Server:
+
+* Utilizza la replica sincrona con la sincronizzazione attiva SnapMirror, in cui la richiesta di un recovery di dati rapido è maggiore e soluzioni asincrone per la flessibilità negli RPO.
+* Se stai utilizzando SnapCenter per eseguire il backup dei database e replicare le snapshot su un cluster remoto, non pianificare gli aggiornamenti SnapMirror dai controller per motivi di coerenza. Attiva invece gli update di SnapMirror da SnapCenter per aggiornare SnapMirror al termine del backup completo o del log.
+* Bilancia le unità di storage che contengono dati SQL Server nei diversi nodi del cluster per consentire a tutti i nodi del cluster di condividere l'attività di replica di SnapMirror. Questa distribuzione ottimizza l'utilizzo delle risorse dei nodi.
+
+
+Per ulteriori informazioni su SnapMirror, vedere link:https://www.netapp.com/us/media/tr-4015.pdf["TR-4015: Guida alle Best practice e alla configurazione di SnapMirror per ONTAP 9"^].

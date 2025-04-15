@@ -1,0 +1,36 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-disaster-recovery-ASA.html 
+keywords: MSSQL,SQL Server, disaster recovery, snapmirror 
+summary: Disaster recovery per Microsoft SQL Server con ONTAP 
+searchtitle: Disaster recovery per Microsoft SQL Server con ONTAP 
+---
+= Disaster recovery
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+I database e le infrastrutture applicative aziendali spesso richiedono la replica per proteggersi da disastri naturali o interruzioni impreviste del business, con tempi di inattività minimi.
+
+La funzionalità di replica del gruppo di disponibilità always-on di SQL Server può essere un'opzione eccellente e NetApp offre opzioni per integrare la protezione dei dati con Always-on. In alcuni casi, tuttavia, è consigliabile prendere in considerazione la tecnologia di replica ONTAP utilizzando le seguenti opzioni.
+
+
+
+== SnapMirror
+
+La tecnologia SnapMirror offre una soluzione aziendale rapida e flessibile per la replica dei dati su LAN e WAN. La tecnologia SnapMirror trasferisce solo i blocchi di dati modificati a destinazione dopo la creazione del mirror iniziale, riducendo in modo significativo i requisiti di larghezza di banda della rete. Può essere configurato in modalità sincrona o asincrona. La replica sincrona SnapMirror in NetApp ASA è configurata con la sincronizzazione attiva SnapMirror.
+
+
+
+== Sincronizzazione attiva di SnapMirror
+
+Per molti clienti, la business continuity richiede molto più del semplice possesso di una copia remota dei dati, ma richiede la capacità di sfruttarli rapidamente, cosa possibile in NetApp ONTAP utilizzando la sincronizzazione attiva di SnapMirror
+
+Con la sincronizzazione attiva di SnapMirror, avrai essenzialmente due sistemi ONTAP diversi che mantengono copie indipendenti dei dati LUN, ma cooperano per presentare una singola istanza di tale LUN. Dal punto di vista dell'host, si tratta di una singola entità LUN. La sincronizzazione attiva di SnapMirror è supportata per LUN basata su iSCSI/FC.
+
+La SnapMirror Active Sync può fornire una replica con RPO=0 ed è semplice da implementare tra due cluster indipendenti. Una volta sincronizzate le due copie di dati, i due cluster devono solo mirrorare le scritture. Quando si verifica una scrittura su un cluster, questa viene replicata nell'altro cluster. La scrittura viene riconosciuta all'host solo quando la scrittura è stata completata su entrambi i siti. A parte questo comportamento di suddivisione del protocollo, i due cluster sono altrimenti normali cluster ONTAP.
+
+Un caso d'utilizzo chiave per SM-AS è la replica granulare. A volte non vuoi replicare tutti i dati come una singola unità oppure devi eseguire il failover selettivo su alcuni carichi di lavoro.
+
+Un altro caso d'utilizzo chiave per SM-AS è per operazioni Active-Active, dove desideri che siano disponibili copie dei dati completamente utilizzabili su due cluster diversi situati in due posizioni diverse con caratteristiche di performance identiche e, se desiderato, non richiedere l'estensione della SAN tra i siti. Le applicazioni potranno essere già in esecuzione su entrambi i siti, a condizione che sia supportata un'applicazione, con una conseguente riduzione dell'RTO complessivo durante le operazioni di failover.

@@ -45,6 +45,9 @@ NOTE: Non è possibile eseguire il tiering delle snapshot a prova di manomission
 Per ulteriori informazioni sugli snapshot antimanomissione, consultare la link:https://docs.netapp.com/us-en/ontap/snaplock/snapshot-lock-concept.html["Documentazione ONTAP."]
 
 
+NOTE: Nella nuova piattaforma ASA, replicare le snapshot nel cluster remoto utilizzando il criterio _vault_, quindi bloccare la destinazione per rendere le snapshot a prova di manomissione.
+
+
 
 == Replica SnapMirror
 

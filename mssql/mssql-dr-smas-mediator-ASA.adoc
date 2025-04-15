@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-smas-mediator-ASA.html 
+keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
+summary: Microsoft SQL Server e ONTAP mediator 
+searchtitle: Microsoft SQL Server e ONTAP mediator 
+---
+= Mediatore ONTAP
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il mediatore è necessario per automatizzare in modo sicuro il failover. Idealmente, sarebbe posizionato su un sito 3rd indipendente, ma può comunque funzionare per la maggior parte delle esigenze se colocated con uno dei cluster che partecipano alla replica.
+
+Il mediatore non è realmente un tiebreaker, anche se quella è effettivamente la funzione che fornisce. Non esegue alcuna azione, ma fornisce un canale di comunicazione alternativo per la comunicazione tra cluster e cluster.
+
+image:smas-mediator-ASA.png["Diagramma di sincronizzazione attivo SnapMirror con mediatore"]
+
+La sfida #1 con il failover automatizzato è il problema split-brain, e questo problema sorge se i due siti perdono la connettività tra loro. Che cosa dovrebbe accadere? Non si desidera che due siti diversi si designino come copie sopravvissute dei dati, ma in che modo un singolo sito può distinguere tra la perdita effettiva del sito opposto e l'impossibilità di comunicare con il sito opposto?
+
+Qui entra il mediatore nell'immagine. Se si trova in un sito 3rd e ciascun sito dispone di una connessione di rete separata per tale sito, è disponibile un percorso aggiuntivo per ciascun sito per convalidare lo stato dell'altro. Esaminare nuovamente l'immagine sopra riportata e considerare i seguenti scenari.
+
+* Cosa succede se il mediatore non riesce o è irraggiungibile da uno o entrambi i siti?
++
+** I due cluster possono ancora comunicare tra loro sullo stesso link utilizzato per i servizi di replica.
+** I dati sono ancora serviti con protezione RPO=0/7
+
+
+* Cosa succede se il sito A non funziona?
++
+** Il sito B vedrà che entrambi i canali di comunicazione si interrompono.
+** Il sito B sostituirà i servizi dati, ma senza RPO = mirroring 0:1
+
+
+* Cosa succede se il sito B non funziona?
++
+** Il sito A vedrà che entrambi i canali di comunicazione si interrompono.
+** Il sito A sostituirà i servizi dati, ma senza RPO = mirroring 0:1
+
+
+
+
+Esiste un altro scenario da considerare: La perdita del collegamento di replica dei dati. In caso di perdita del link di replica tra i siti, RPO=0 Mirroring sarà ovviamente impossibile. Che cosa dovrebbe accadere allora?
+
+Questo è controllato dallo stato del sito preferito. In una relazione SM-AS, uno dei siti è secondario all'altro. Questo non ha alcun effetto sulle normali operazioni e tutto l'accesso ai dati è simmetrico, ma se la replica viene interrotta, il legame dovrà essere interrotto per riprendere le operazioni. Ne risulta che il sito preferito continuerà le operazioni senza mirroring e il sito secondario interromperà l'elaborazione io fino al ripristino della comunicazione di replica.

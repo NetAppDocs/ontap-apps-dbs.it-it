@@ -1,15 +1,12 @@
 ---
 sidebar: sidebar 
-permalink: mssql/mssql-dr-smas-uniform.html 
+permalink: mssql/mssql-dr-smas-uniform-ASA.html 
 keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
 summary: 'Microsoft SQL Server e SM: Accesso uniforme' 
 searchtitle: 'Microsoft SQL Server e SM: Accesso uniforme' 
 ---
 = Accesso uniforme
-:hardbreaks:
 :allow-uri-read: 
-:icons: font
-:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -17,6 +14,16 @@ searchtitle: 'Microsoft SQL Server e SM: Accesso uniforme'
 Una rete ad accesso uniforme significa che gli host sono in grado di accedere ai percorsi su entrambi i siti (o ai domini di errore all'interno dello stesso sito).
 
 Una caratteristica importante di SM-AS è la capacità di configurare i sistemi storage per sapere dove si trovano gli host. Quando si mappano i LUN a un determinato host, è possibile indicare se sono prossimali o meno a un determinato sistema di archiviazione.
+
+I sistemi NetApp ASA offrono multipathing Active-Active su tutti i percorsi di un cluster. Questo vale anche per le configurazioni SM-AS.
+
+image:smas-uniform-SQL-ASA.png["Rete uniforme ASA con sincronizzazione attiva SnapMirror"]
+
+Con un accesso uniforme, io attraverserebbe la WAN. Si tratta di un cluster completamente mesh collegato in rete e questo può essere o meno auspicabile per tutti i casi di utilizzo.
+
+Se i due siti fossero a una distanza di 100 metri con connettività in fibra non dovrebbe esserci una latenza aggiuntiva rilevabile che attraversa la WAN, ma se i siti fossero a lunga distanza gli uni dagli altri, le performance in lettura risulterebbero compromesse su entrambi i siti. ASA con rete di accesso non uniforme sarebbe un'opzione per ottenere i vantaggi in termini di costi e funzionalità di ASA senza incorrere in penalizzazioni per l'accesso alla latenza tra siti o utilizzare la funzionalità di prossimità dell'host per consentire l'accesso in lettura/scrittura locale tra siti per entrambi i siti.
+
+ASA con SM-as in una configurazione a bassa latenza offre due benefici interessanti. In primo luogo, essenzialmente *raddoppia* le prestazioni per ogni singolo host perché io può essere gestito dal doppio dei controller utilizzando il doppio dei percorsi. In secondo luogo, in un ambiente a sito singolo offre una disponibilità estrema, perché è possibile perdere un intero sistema storage senza interrompere l'accesso degli host.
 
 
 
@@ -32,16 +39,6 @@ Ad esempio, un host del sito A potrebbe essere configurato in modo da accedere a
 
 Senza impostazioni di prossimità, l'host utilizzerà entrambi i sistemi storage allo stesso modo perché entrambi i sistemi storage pubblicizzeranno i percorsi attivi/ottimizzati. Se la latenza SAN e/o la larghezza di banda tra i siti è limitata, questa operazione potrebbe non essere disattivabile e potrebbe essere necessario assicurarsi che durante il normale funzionamento ogni host utilizzi preferenzialmente i percorsi verso il sistema di storage locale. Viene configurato aggiungendo l'ID WWN/iSCSI dell'host al cluster locale come host prossimale. Questa operazione può essere eseguita dalla CLI o da SystemManager.
 
+I percorsi vengono visualizzati come mostrato di seguito quando è stata configurata la prossimità host.
 
-
-== AFF
-
-Con un sistema AFF, i percorsi vengono visualizzati come mostrato di seguito quando è stata configurata la prossimità dell'host.
-
-image:smas-uniform-aff.png["Rete uniforme AFF con sincronizzazione attiva SnapMirror"]
-
-Durante le normali operazioni, tutti i io sono i/o locali. Le letture e le scritture sono gestite dallo storage array locale. Gli io in scrittura, naturalmente, dovranno anche essere replicati dal controller locale sul sistema remoto prima di essere riconosciuti, ma tutti gli io in lettura saranno serviti localmente e non subiranno una latenza aggiuntiva attraverso il collegamento SAN tra i siti.
-
-L'unica volta in cui verranno utilizzati i percorsi non ottimizzati è quando tutti i percorsi attivi/ottimizzati vengono persi. Ad esempio, se l'intero array sul sito A perde energia, gli host sul sito A sarebbero comunque in grado di accedere ai percorsi dell'array sul sito B e di rimanere quindi operativi, anche se sperimenterebbero una latenza più elevata.
-
-Esistono percorsi ridondanti attraverso il cluster locale non mostrati in questi diagrammi per semplicità. I sistemi di storage ONTAP sono ad alta disponibilità, pertanto un guasto a un controller non dovrebbe causare guasti nel sito. Ciò dovrebbe comportare solo una modifica dei percorsi locali utilizzati nel sito interessato.
+image:smas-uniform-SQL-ASA-Proximity.png["Rete uniforme SnapMirror Active Sync ASA con prossimità"]
