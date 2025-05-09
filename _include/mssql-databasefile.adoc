@@ -2,11 +2,6 @@
 :allow-uri-read: 
 
 
-[role="lead"]
-Il corretto posizionamento dei file del database SQL Server su ONTAP è fondamentale durante la fase di distribuzione iniziale. Ciò garantisce prestazioni ottimali, gestione dello spazio, tempi di backup e ripristino che possono essere configurati in base alle esigenze aziendali.
-
-In teoria, SQL Server (a 64 bit) supporta 32.767 database per istanza e 524.272TB di dimensioni del database, sebbene l'installazione tipica abbia in genere diversi database. Tuttavia, il numero di database che SQL Server è in grado di gestire dipende dal carico e dall'hardware. Non è insolito vedere le istanze di SQL Server che ospitano decine, centinaia o persino migliaia di database di piccole dimensioni.
-
 
 
 === File di database e filegroup
