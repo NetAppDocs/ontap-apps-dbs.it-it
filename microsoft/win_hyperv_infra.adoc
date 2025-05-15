@@ -52,7 +52,7 @@ A sua volta, ciascuna macchina virtuale di Hyper-V può essere fornita con i LUN
 === Best practice
 
 * Quando una macchina virtuale e i relativi dati vengono memorizzati nello storage NetApp, NetApp consiglia di eseguire la deduplica NetApp a livello di volume a intervalli regolari. Questa pratica consente notevoli risparmi di spazio quando macchine virtuali identiche vengono ospitate in una condivisione CSV o SMB. La deduplica viene eseguita sullo storage controller e non influisce sul sistema host e sulle performance delle macchine virtuali.
-* Quando si utilizzano LUN iSCSI per Hyper-V, accertarsi di abilitare `iSCSI Service (TCP-In) for Inbound` e. `iSCSI Service (TCP-Out) for Outbound` Nelle impostazioni del firewall sull'host Hyper-V. In questo modo, si consente il passaggio del traffico iSCSI da e verso l'host Hyper-V e il controller NetApp.
+* Quando si utilizzano LUN iSCSI per Hyper-V, accertarsi di abilitare "Servizio iSCSI (TCP-in) per l'ingresso" e "Servizio iSCSI (TCP-out) per l'uscita" nelle impostazioni del firewall sull'host Hyper-V. In questo modo, si consente il passaggio del traffico iSCSI da e verso l'host Hyper-V e il controller NetApp.
 * NetApp consiglia di deselezionare l'opzione Consenti al sistema operativo di gestione di condividere la scheda di rete per lo switch virtuale Hyper-V. In questo modo si crea una rete dedicata per le VM.
 
 
@@ -60,7 +60,7 @@ A sua volta, ciascuna macchina virtuale di Hyper-V può essere fornita con i LUN
 
 === Cose da ricordare
 
-* Il provisioning di una macchina virtuale tramite Fibre Channel virtuale richiede un HBA FC abilitato Virtualizationâ N_Port ID. È supportato un massimo di quattro porte FC.
+* Il provisioning di una macchina virtuale tramite Fibre Channel virtuale richiede un HBA FC abilitato alla virtualizzazione N_Port ID. È supportato un massimo di quattro porte FC.
 * Se il sistema host è configurato con più porte FC e presentato alla macchina virtuale, MPIO deve essere installato nella macchina virtuale per consentire il multipathing.
 * Non è possibile fornire all'host dischi pass-through se si utilizza MPIO su quell'host, poiché i dischi pass-through non supportano MPIO.
 * Il disco utilizzato per i file VHD/VHDx deve utilizzare la formattazione 64K per l'allocazione.
@@ -70,7 +70,7 @@ A sua volta, ciascuna macchina virtuale di Hyper-V può essere fornita con i LUN
 
 === Ulteriori letture
 
-* Per informazioni sugli HBA FC, consultare la http://mysupport.netapp.com/matrix/["Matrice di interoperabilità NetApp"].
+* Per informazioni sugli HBA FC, vedere http://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità (IMT)"] .
 * Per ulteriori informazioni su Fibre Channel virtuale, consultare Microsoft https://technet.microsoft.com/en-us/library/hh831413.aspx["Panoramica di Hyper-V Virtual Fibre Channel"] pagina.
 
 
@@ -134,7 +134,7 @@ Per informazioni su ODX, vedere https://docs.netapp.com/us-en/ontap/smb-admin/im
 
 I cluster di failover offrono disponibilità e scalabilità elevate per i server Hyper-V. Un cluster di failover è un gruppo di server Hyper-V indipendenti che lavorano insieme per aumentare la disponibilità e la scalabilità delle VM.
 
-I server in cluster Hyper-V (detti nodi) sono connessi dalla rete fisica e da un software cluster. Questi nodi utilizzano lo storage condiviso per memorizzare i file delle macchine virtuali, tra cui configurazione, file dell'hard disk virtuale (VHD) e copie Snapshot. Lo storage condiviso può essere una condivisione SMB/CIFS di NetApp o un CSV posto sopra una LUN NetApp, come illustrato di seguito. Si tratta di uno storage condiviso che offre un namespace coerente e distribuito, a cui tutti i nodi del cluster possono accedere contemporaneamente. Pertanto, se un nodo si guasta nel cluster, l'altro nodo fornisce il servizio mediante un processo chiamato failover. I cluster di failover possono essere gestiti utilizzando lo snap-in failover Cluster Manager e i cmdlet Windows PowerShell per il clustering di failover.
+I server in cluster Hyper-V (detti nodi) sono connessi dalla rete fisica e da un software cluster. Questi nodi utilizzano lo storage condiviso per archiviare i file delle macchine virtuali, che includono configurazione, file dell'hard disk virtuale (VHD) e snapshot. Lo storage condiviso può essere una condivisione SMB/CIFS di NetApp o un CSV posto sopra una LUN NetApp, come illustrato di seguito. Si tratta di uno storage condiviso che offre un namespace coerente e distribuito, a cui tutti i nodi del cluster possono accedere contemporaneamente. Pertanto, se un nodo si guasta nel cluster, l'altro nodo fornisce il servizio mediante un processo chiamato failover. I cluster di failover possono essere gestiti utilizzando lo snap-in failover Cluster Manager e i cmdlet Windows PowerShell per il clustering di failover.
 
 
 

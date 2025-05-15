@@ -22,7 +22,7 @@ Gli strumenti ONTAP includono inoltre estensioni dell'interfaccia utente vCenter
 
 == Prodotti e documentazione
 
-La licenza ONTAP One include tutte le licenze necessarie per l'utilizzo di vVol con i sistemi ONTAP. L'unico requisito aggiuntivo è il ONTAP gratuito strumenti OVA, che agisce come il fornitore VASA. In un ambiente vVol, il software VASA Provider traduce le funzionalità di array in attributi basati su policy che possono essere sfruttati attraverso le API VASA senza che l'amministratore vSphere debba sapere come le funzionalità vengono gestite dietro le quinte. Ciò consente un consumo dinamico della capacità dello storage allocata in base alle policy, eliminando la necessità di creare manualmente datastore tradizionali e di gestire i rispettivi tassi di consumo dello storage individuale. In breve, i vVol eliminano tutta la complessità della gestione dello storage Enterprise e lo astraggono dall'amministratore vSphere, consentendo loro di concentrarsi sul layer di virtualizzazione.
+La licenza di ONTAP One include tutte le licenze necessarie per l'utilizzo di vVol con i sistemi ONTAP. L'unico requisito aggiuntivo è il ONTAP gratuito strumenti OVA, che agisce come il fornitore VASA. In un ambiente vVol, il software VASA Provider traduce le funzionalità di array in attributi basati su policy che possono essere sfruttati attraverso le API VASA senza che l'amministratore vSphere debba sapere come le funzionalità vengono gestite dietro le quinte. Ciò consente un consumo dinamico della capacità dello storage allocata in base alle policy, eliminando la necessità di creare manualmente datastore tradizionali e di gestire i rispettivi tassi di consumo dello storage individuale. In breve, i vVol eliminano tutta la complessità della gestione dello storage Enterprise e lo astraggono dall'amministratore vSphere, consentendo loro di concentrarsi sul layer di virtualizzazione.
 
 Per i clienti che utilizzano VMware Cloud Foundation con vSAN, è possibile aggiungere vVol a qualsiasi dominio di gestione o carico di lavoro come storage supplementare. VVol si integra perfettamente con vSAN attraverso un framework di gestione comune basato su criteri di storage.
 
@@ -47,7 +47,7 @@ Fare riferimento a link:vmware-vvols-deploy.html["Implementazione dello storage 
 È consigliabile archiviare gli strumenti ONTAP e le appliance vCenter sui tradizionali datastore NFS o VMFS, in modo da evitare conflitti di interdipendenza. Poiché sia i tool vCenter che ONTAP devono comunicare tra loro durante le operazioni dei vVol, non installare o spostare le appliance dei tool ONTAP o le appliance vCenter Server (VCSA) nello storage vVol che stanno gestendo. In questo caso, il riavvio delle appliance per gli strumenti vCenter o ONTAP può causare un'interruzione dell'accesso al piano di controllo e l'impossibilità di avviare l'appliance.
 
 ====
-Gli aggiornamenti in-place degli strumenti ONTAP sono supportati utilizzando il file ISO di aggiornamento disponibile per il download all'indirizzo https://mysupport.netapp.com/site/products/all/details/otv10/downloads-tab["Tool ONTAP per VMware vSphere 10 - Download"] sul sito di supporto NetApp (NSS - è richiesto l'accesso). Seguire le https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["Aggiornamento dai tool ONTAP per VMware vSphere 10.x alla 10,3"] istruzioni della guida per aggiornare l'apparecchio. È inoltre possibile eseguire un aggiornamento affiancato dagli strumenti ONTAP 9,13 a 10,3. Fare riferimento a https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/migrate/migrate-to-latest-ontaptools.html["Migrazione dai tool ONTAP per VMware vSphere 9.x a 10,3"] per un'analisi più approfondita dell'argomento.
+Gli aggiornamenti in-place degli strumenti ONTAP sono supportati utilizzando il file ISO di aggiornamento disponibile per il download all'indirizzo https://mysupport.netapp.com/site/products/all/details/otv10/downloads-tab["Tool ONTAP per VMware vSphere 10 - Download"] sul sito di supporto NetApp (è richiesto l'accesso). Seguire le https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["Aggiornamento dai tool ONTAP per VMware vSphere 10.x alla 10,3"] istruzioni della guida per aggiornare l'apparecchio. È inoltre possibile eseguire un aggiornamento affiancato dagli strumenti ONTAP 9,13 a 10,3. Fare riferimento a https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/migrate/migrate-to-latest-ontaptools.html["Migrazione dai tool ONTAP per VMware vSphere 9.x a 10,3"] per un'analisi più approfondita dell'argomento.
 
 Per il dimensionamento dell'appliance virtuale e la comprensione dei limiti di configurazione, fare riferimento alla sezione https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html#configuration-limits-to-deploy-ontap-tools-for-vmware-vsphere["Limiti di configurazione per l'implementazione dei tool ONTAP per VMware vSphere"^]
 
@@ -73,7 +73,7 @@ https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["Tool ONT
 
 ==== Utilizzare gli strumenti ONTAP
 
-* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-vvols-datastore.html["Eseguire il provisioning degli archivi dati"^]
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["Eseguire il provisioning degli archivi dati"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurare il controllo degli accessi in base al ruolo"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Configurare la disponibilità elevata"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-esxi-host-settings.html["Modificare le impostazioni dell'host ESXi"^]
@@ -110,7 +110,7 @@ Anche se è possibile creare datastore vVol con l'interfaccia generale vSphere, 
 
 *Non memorizzare mai l'appliance ONTAP Tools o l'appliance vCenter Server (VCSA) su un datastore vVol gestito.*
 
-Questo può causare una "situazione a base di uova e pollo" se occorre riavviare le appliance perché non saranno in grado di ricollegare i propri vVol durante il riavvio. È possibile memorizzarli in un datastore vVol gestito da un diverso tool ONTAP e da una distribuzione vCenter.
+Questo può risultare in una "situazione uova e pollo" se è necessario riavviare gli apparecchi perché non sarà in grado di riassociare i loro vVol durante il riavvio. È possibile memorizzarli in un datastore vVol gestito da un diverso tool ONTAP e da una distribuzione vCenter.
 
 *Evitare le operazioni vVol in diverse release di ONTAP.*
 
@@ -130,7 +130,7 @@ https://www.netapp.com/media/10680-tr4080.pdf["_TR-4080 Best practice per la MOD
 
 https://www.netapp.com/pdf.html?item=/media/10681-tr4684.pdf["_TR-4684 implementazione e configurazione delle moderne SAN con NVMe-of_"^]
 
-*Pianificare FlexVol di supporto in base alle proprie esigenze.*
+*Pianificate i vostri volumi FlexVol di backup in base alle vostre esigenze.*
 
 Per i sistemi diversi da ASA R2, può essere conveniente aggiungere diversi volumi di backup al datastore vVol per distribuire il carico di lavoro nel cluster ONTAP, supportare diverse opzioni di policy o aumentare il numero di LUN o file consentiti. Tuttavia, se è richiesta la massima efficienza dello storage, posizionare tutti i volumi di backup su un singolo aggregato. In alternativa, se sono richieste le massime prestazioni di cloning, prendere in considerazione l'utilizzo di un singolo volume FlexVol e la conservazione dei modelli o della libreria di contenuti nello stesso volume. Il provider VASA trasferisce molte operazioni di storage vVol a ONTAP, tra cui migrazione, cloning e snapshot. Quando questa operazione viene eseguita all'interno di un singolo volume FlexVol, vengono utilizzati cloni di file efficienti in termini di spazio e sono quasi immediatamente disponibili. Quando questo viene eseguito su volumi FlexVol, le copie sono rapidamente disponibili e utilizzano la deduplica e la compressione inline, ma la massima efficienza dello storage potrebbe non essere ripristinata fino a quando i processi in background non vengono eseguiti su volumi che utilizzano la deduplica e la compressione in background. A seconda dell'origine e della destinazione, un certo livello di efficienza potrebbe risultare degradato.
 

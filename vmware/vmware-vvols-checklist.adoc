@@ -17,9 +17,9 @@ Utilizzare questo elenco di controllo per garantire una distribuzione corretta (
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["Uno"] Pianificazione iniziale
 [role="quick-margin-list"]
-* Prima di iniziare l'installazione, è necessario controllare il https://imt.netapp.com/matrix/#search["Tool di matrice di interoperabilità"] per assicurarsi che la distribuzione sia stata certificata.
+* Prima di iniziare l'installazione, è necessario controllare il https://imt.netapp.com/matrix/#search["Tool di matrice di interoperabilità (IMT)"^] per assicurarsi che la distribuzione sia stata certificata.
 * Determina le dimensioni e il tipo di configurazione degli strumenti ONTAP richiesti dall'ambiente. Per ulteriori informazioni, fare riferimento alla https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html["Limiti di configurazione per l'implementazione dei tool ONTAP per VMware vSphere"] .
-* Determinare se si utilizzeranno SVM multi-tenant o consentire l'accesso completo al cluster. Se utilizzi SVM multi-tenant, dovrai disporre di un LIF di gestione SVM su ciascuna SVM da utilizzare. Questa LIF deve essere raggiungibile tramite la porta 443 dagli strumenti ONTAP.
+* Determina se utilizzi SVM multitenant o consenti un accesso completo al cluster. Se utilizzi SVM multitenant, dovrai avere un LIF di gestione SVM su ciascuna SVM da utilizzare. Questa LIF deve essere raggiungibile tramite la porta 443 dagli strumenti ONTAP.
 * Determinare se si utilizzerà Fibre Channel (FC) per la connettività dello storage. In tal caso, occorre https://docs.netapp.com/us-en/ontap/san-config/fibre-channel-fcoe-zoning-concept.html["configurare lo zoning"] utilizzare gli switch FC per abilitare la connettività tra gli host ESXi e le LIF FC della SVM.
 * Determinare se si intende utilizzare l'adattatore di replica dello storage (SRA) degli strumenti ONTAP per VMware Site Recovery Manager (SRM) o Live Site Recovery (VLSR). In tal caso, sarà necessario accedere all'interfaccia di gestione del server SRM/VLSR per installare SRA.
 * Se si utilizza la replica di SnapMirror gestita dagli strumenti ONTAP (inclusa, ma non solo, la sincronizzazione attiva di SnapMirror), l'amministratore di ONTAP deve https://docs.netapp.com/us-en/ontap/peering/create-cluster-relationship-93-later-task.html["Creare una relazione di peer cluster in ONTAP"] e https://docs.netapp.com/us-en/ontap/peering/create-intercluster-svm-peer-relationship-93-later-task.html["Creare una relazione di peer intercluster SVM in ONTAP"] prima di poter utilizzare gli strumenti ONTAP con SnapMirror.
@@ -79,7 +79,7 @@ Utilizzare questo elenco di controllo per garantire una distribuzione corretta (
 * Se utilizzato se si utilizza la multi-tenancy dello storage con SVM
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["cluster integrati"] In ONTAP Tools Manager e associarli a vCenter.
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["SVM integrate"] Negli strumenti ONTAP, l'interfaccia utente vCenter.
-* In caso contrario * utilizzando SVM multi-tenant
+* In caso contrario* utilizzando SVM multitenant
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["cluster integrati"] Direttamente nell'interfaccia utente vCenter degli strumenti ONTAP. In alternativa, in questo scenario è possibile aggiungere SVM direttamente quando non si utilizzano i vVol.
 
 

@@ -18,9 +18,9 @@ La configurazione delle impostazioni di rete quando si utilizza vSphere con sist
 
 Ecco alcuni aspetti da considerare:
 
-* Separare il traffico di rete dello storage dalle altre reti. È possibile ottenere una rete separata utilizzando una VLAN dedicata o switch separati per lo storage. Se la rete di storage condivide percorsi fisici come gli uplink, potrebbe essere necessario QoS o porte di uplink aggiuntive per garantire una larghezza di banda sufficiente. Non connettere gli host direttamente allo storage; utilizzare gli switch per disporre di percorsi ridondanti e consentire a VMware ha di funzionare senza alcun intervento. Vedere link:vmware-vsphere-network.html["Connessione di rete diretta"] per ulteriori informazioni.
-* I frame jumbo possono essere utilizzati se lo si desidera e supportati dalla rete, in particolare quando si utilizza iSCSI. Se vengono utilizzati, assicurarsi che siano configurati in modo identico su tutti i dispositivi di rete, VLAN e così via nel percorso tra lo storage e l'host ESXi. In caso contrario, potrebbero verificarsi problemi di connessione o di prestazioni. La MTU deve essere impostata in modo identico anche sullo switch virtuale ESXi, sulla porta VMkernel e anche sulle porte fisiche o sui gruppi di interfacce di ciascun nodo ONTAP.
-* NetApp consiglia di disattivare il controllo del flusso di rete solo sulle porte di rete del cluster all'interno di un cluster ONTAP. NetApp non fornisce altri consigli sulle Best practice per le restanti porte di rete utilizzate per il traffico dati. Se necessario, è necessario attivarlo o disattivarlo. Vedere https://www.netapp.com/pdf.html?item=/media/16885-tr-4182pdf.pdf["TR-4182"^] per ulteriori informazioni sul controllo di flusso.
+* Separare il traffico di rete dello storage dalle altre reti. È possibile ottenere una rete separata utilizzando una VLAN dedicata o switch separati per lo storage. Se la rete di storage condivide percorsi fisici come gli uplink, potrebbe essere necessario QoS o porte di uplink aggiuntive per garantire una larghezza di banda sufficiente. Non connettere gli host direttamente allo storage a meno che la guida alla soluzione non lo richieda specificamente; utilizzare gli switch per disporre di percorsi ridondanti e consentire a VMware ha di funzionare senza alcun intervento.
+* I frame jumbo devono essere utilizzati se supportati dalla rete. Se vengono utilizzati, assicurarsi che siano configurati in modo identico su tutti i dispositivi di rete, VLAN e così via nel percorso tra lo storage e l'host ESXi. In caso contrario, potrebbero verificarsi problemi di connessione o di prestazioni. La MTU deve essere impostata in modo identico anche sullo switch virtuale ESXi, sulla porta VMkernel e anche sulle porte fisiche o sui gruppi di interfacce di ciascun nodo ONTAP.
+* NetApp consiglia di disattivare solo il controllo di flusso di rete sulle porte di cluster Interconnect in un cluster ONTAP. NetApp non fornisce altre raccomandazioni per le Best practice relative al controllo di flusso per le restanti porte di rete utilizzate per il traffico dati. Se necessario, è necessario attivarlo o disattivarlo. Vedere https://www.netapp.com/pdf.html?item=/media/16885-tr-4182pdf.pdf["TR-4182"^] per ulteriori informazioni sul controllo di flusso.
 * Quando gli array di storage ESXi e ONTAP sono collegati a reti di storage Ethernet, NetApp consiglia di configurare le porte Ethernet a cui questi sistemi si connettono come porte edge RSTP (Rapid Spanning Tree Protocol) o utilizzando la funzione PortFast di Cisco. NetApp consiglia di abilitare la funzione di trunk PortFast Spanning-Tree in ambienti che utilizzano la funzionalità Cisco PortFast e che dispongono di un trunking VLAN 802.1Q abilitato per il server ESXi o gli array di storage ONTAP.
 * NetApp consiglia le seguenti Best practice per l'aggregazione dei collegamenti:
 +
@@ -64,7 +64,7 @@ La seguente tabella fornisce un riepilogo degli elementi di configurazione di re
 
 
 
-== SAN (FC, FCoE, NVMe/FC, iSCSI), RDM
+== SAN (FC, NVMe/FC, iSCSI, NVMe/TCP), RDM
 
 ONTAP offre storage a blocchi di livello Enterprise per VMware vSphere utilizzando i tradizionali iSCSI e Fibre Channel Protocol (FCP) oltre al protocollo a blocchi di nuova generazione, NVMe over Fabrics (NVMe-of), ad alta efficienza e performance, con supporto per NVMe/FC e NVMe/TCP.
 
@@ -82,7 +82,7 @@ Per le Best practice consigliate fare riferimento a. link:vmware-vsphere-datasto
 
 == Connessione di rete diretta
 
-Gli amministratori dello storage a volte preferiscono semplificare le loro infrastrutture rimuovendo gli switch di rete dalla configurazione. Questo può essere supportato in alcuni scenari.
+Gli amministratori dello storage a volte preferiscono semplificare le loro infrastrutture rimuovendo gli switch di rete dalla configurazione. Questo può essere supportato in alcuni scenari. Tuttavia, ci sono alcune limitazioni e avvertimenti da essere informati di.
 
 
 
@@ -100,7 +100,7 @@ Il motivo per cui il failover senza interruzioni è complicato con lo storage NF
 
 La seconda scheda NIC del sistema operativo potrebbe essere configurata come 19 2.168.1.2 e sarebbe in grado di comunicare con l'indirizzo 192.168.1.50 non riuscito, ma le tabelle di routing locali avrebbero un valore predefinito di utilizzo di un solo indirizzo *e di un solo indirizzo* per comunicare con la subnet 192.168.1.0/24. Un amministratore di sistema potrebbe creare un framework di script che rilevi una connessione di rete non riuscita e alteri le tabelle di routing locali o che porti le interfacce verso l'alto e verso il basso. La procedura esatta dipende dal sistema operativo in uso.
 
-In pratica, i clienti NetApp dispongono di NFS con connessione diretta, ma in genere solo per i workload in cui le pause io durante i failover sono accettabili. Quando si utilizzano i supporti rigidi, non devono verificarsi errori di i/o durante tali pause. L'io dovrebbe bloccarsi finché i servizi non vengono ripristinati, mediante failback o intervento manuale, per spostare gli indirizzi IP tra le schede NIC dell'host.
+In pratica, i clienti NetApp dispongono di NFS con connessione diretta, ma in genere solo per i workload in cui le pause io durante i failover sono accettabili. Quando si utilizzano i supporti rigidi, non devono verificarsi errori di i/o durante tali pause. L'io dovrebbe bloccarsi fino a quando i servizi non vengono ripristinati, mediante failback o intervento manuale, per spostare gli indirizzi IP tra le schede NIC dell'host.
 
 
 

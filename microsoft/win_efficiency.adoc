@@ -32,7 +32,7 @@ Il thin provisioning è un modo efficiente per il provisioning dello storage per
 
 == Qualità del servizio
 
-La qualità del servizio di storage di Clustered ONTAP consente di raggruppare gli oggetti di storage e di impostare limiti di throughput per il gruppo. È possibile utilizzare la qualità del servizio di storage per limitare il throughput ai carichi di lavoro e monitorare le performance del carico di lavoro. Grazie a questa possibilità, gli amministratori dello storage possono separare i workload in base all'organizzazione, all'applicazione, alla business unit o agli ambienti di produzione o sviluppo.
+La qualità del servizio di storage in NetApp ONTAP consente di raggruppare gli oggetti di storage e di impostare limiti di throughput per il gruppo. È possibile utilizzare la qualità del servizio di storage per limitare il throughput ai carichi di lavoro e monitorare le performance del carico di lavoro. Grazie a questa possibilità, gli amministratori dello storage possono separare i workload in base all'organizzazione, all'applicazione, alla business unit o agli ambienti di produzione o sviluppo.
 
 Negli ambienti aziendali, la qualità del servizio di storage aiuta a ottenere quanto segue:
 

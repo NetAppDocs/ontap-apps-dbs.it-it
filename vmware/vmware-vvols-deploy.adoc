@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-vvols-deploy.html 
-keywords: tr-4400, vvols, ontap, virtual volumes, deploy 
+keywords: tr-4400, vvols, ontap, virtual volumes, deploy, ASA r2, ASA, AFF, FAS, vSphere, VMware 
 summary:  
 ---
-= Implementazione dello storage vVol
+= Implementazione di vVol su sistemi AFF, ASA, ASA R2 e FAS
 :allow-uri-read: 
 :nofooter: 
 :icons: font
@@ -15,21 +15,21 @@ summary:
 [role="lead"]
 Seguire queste Best practice per la creazione dello storage vVol per le macchine virtuali.
 
-Il provisioning dei datastore vVol implica diversi passaggi. I sistemi ASA R2 di NetApp sono progettati per carichi di lavoro VMware e offrono un'esperienza utente diversa dai sistemi ONTAP tradizionali. Quando si utilizzano i sistemi ASA R2, i tool ONTAP versione 10,3 o successive richiedono pochi passaggi per configurare e includere le estensioni dell'interfaccia utente e il supporto delle API REST ottimizzato per l'architettura storage aggiornata.
+Il provisioning dei datastore vVol implica diversi passaggi. I sistemi ASA R2 di NetApp sono progettati per carichi di lavoro VMware e offrono un'esperienza utente diversa dai sistemi ONTAP tradizionali. Quando si utilizzano i sistemi ASA R2, i tool ONTAP versione 10,3 o successive richiedono pochi passaggi per configurare e includere le estensioni dell'interfaccia utente e il supporto delle API REST ottimizzato per la nuova architettura storage.
 
 
 
 == Preparazione alla creazione di archivi dati vVol con gli strumenti ONTAP
 
-È possibile saltare le prime due fasi del processo di distribuzione se si utilizzano già strumenti ONTAP per gestire, automatizzare e creare report sui sistemi di storage VMFS o tradizionali basati su NFS.
+È possibile saltare le prime due fasi del processo di distribuzione se si utilizzano già strumenti ONTAP per gestire, automatizzare e creare report sui sistemi di storage VMFS o tradizionali basati su NFS. Per la distribuzione e la configurazione degli strumenti ONTAP, è anche possibile fare riferimento a questa sezione completalink:vmware-vvols-checklist.html["elenco di controllo"].
 
-. Creare la Storage Virtual Machine (SVM) e la relativa configurazione del protocollo. Questa operazione potrebbe non essere necessaria per i sistemi ASA R2, in quanto in genere disporranno già di una singola SVM per i servizi dati. È possibile selezionare NVMe/FC (solo tool ONTAP 9,13), NFSv3, NFSv4,1, iSCSI, FCP o un mix di queste opzioni. NVMe/TCP e NVMe/FC possono essere utilizzati anche per datastore VMFS tradizionali con tool ONTAP 10,3. È possibile utilizzare le procedure guidate di ONTAP System Manager o la riga di comando della shell del cluster.
+. Creare la Storage Virtual Machine (SVM) e la relativa configurazione del protocollo. Questa operazione potrebbe non essere necessaria per i sistemi ASA R2, in quanto in genere disporranno già di una singola SVM per i servizi dati. È possibile selezionare NVMe/FC (solo tool ONTAP 9,13), NFSv3, NFSv4,1, iSCSI, FCP o un mix di queste opzioni. NVMe/TCP e NVMe/FC possono essere utilizzati anche per datastore VMFS tradizionali con tool ONTAP 10,3 e versioni successive. È possibile utilizzare le procedure guidate di ONTAP System Manager o la riga di comando della shell del cluster.
 +
 ** https://docs.netapp.com/us-en/ontap/disks-aggregates/assign-aggregates-svms-task.html["Assegnazione dei Tier locali (aggregati) alle SVM"] Per tutti i sistemi non ASA R2.
 ** Almeno un LIF per nodo per ogni connessione switch/fabric. Come Best practice, creare due o più per nodo per i protocolli basati su FCP, iSCSI o NVMe. Un'unica LIF per nodo è sufficiente per i vVol basati su NFS, ma questa LIF deve essere protetta da un ifgroup LACP. Per ulteriori informazioni, fare riferimento alla https://docs.netapp.com/us-en/ontap/networking/configure_lifs_cluster_administrators_only_overview.html["Panoramica sulla configurazione delle LIF"] e https://docs.netapp.com/us-en/ontap/networking/combine_physical_ports_to_create_interface_groups.html["Combina le porte fisiche per creare gruppi di interfacce"] alla.
 ** Almeno una LIF di gestione per SVM se intendi utilizzare le credenziali scoped della SVM per i vCenter del tenant.
 ** Se si prevede di utilizzare SnapMirror, assicurarsi che l'origine e la destinazione https://docs.netapp.com/us-en/ontap/peering/["Peering di cluster ONTAP e SVM"]siano corrette.
-** È possibile creare volumi in questo momento, ma è consigliabile consentire alla procedura guidata _Provision DataStore_ negli strumenti ONTAP di crearli. L'unica eccezione a questa regola è se si prevede di utilizzare la replica vVol con VMware Site Recovery Manager e gli strumenti ONTAP 9. Questa operazione è più semplice da configurare con volumi FlexVol preesistenti con relazioni SnapMirror esistenti. Prestare attenzione a non abilitare la qualità del servizio su alcun volume da utilizzare per i vVol, in quanto questa operazione deve essere gestita dai tool SPBM e ONTAP.
+** Per i sistemi non ASA R2, è possibile creare volumi in questo momento, ma è consigliabile consentire la creazione della procedura guidata _Provision DataStore_ negli strumenti ONTAP. L'unica eccezione a questa regola è se si prevede di utilizzare la replica vVol con VMware Site Recovery Manager e gli strumenti ONTAP 9,13. Questa operazione è più semplice da configurare con volumi FlexVol preesistenti con relazioni SnapMirror esistenti. Prestare attenzione a non abilitare la qualità del servizio su alcun volume da utilizzare per i vVol, in quanto questa operazione deve essere gestita dai tool SPBM e ONTAP.
 
 
 . https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["Implementa i tool ONTAP per VMware vSphere"] Utilizzando l'OVA scaricato dal sito di assistenza NetApp.
@@ -46,7 +46,7 @@ Il provisioning dei datastore vVol implica diversi passaggi. I sistemi ASA R2 di
 
 [TIP]
 ====
-* La Best practice consigliata prevede una https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Tool ONTAP a scalabilità orizzontale"] configurazione ha (High Availability, alta disponibilità) a 3 nodi da 10,3 RU per tutti i carichi di lavoro di produzione. Ai fini dei laboratori o del test, è possibile utilizzare un'implementazione a nodo singolo.
+* La Best practice consigliata è https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Tool ONTAP a scalabilità orizzontale"] 10,3 GbE e versioni successive alla configurazione ha (High Availability, alta disponibilità) a 3 nodi per tutti i carichi di lavoro di produzione. Ai fini dei laboratori o del test, è possibile utilizzare un'implementazione a nodo singolo.
 * La Best practice consigliata per l'uso dei vVol di produzione è eliminare ogni singolo punto di errore. Creare regole di anti-affinità per impedire l'esecuzione delle VM degli strumenti ONTAP sullo stesso host. Dopo l'implementazione iniziale, si consiglia anche di utilizzare storage vMotion per posizionare le macchine virtuali del tool ONTAP in datastore differenti. Ulteriori informazioni su https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/using-affinity-rules-without-vsphere-drs.html["Utilizzo delle regole di affinità senza vSphere DRS"] o https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/create-a-vm-vm-affinity-rule.html["Creare una regola di affinità VM-VM"]. È inoltre necessario pianificare backup frequenti e/o https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html#create-backup-and-download-the-backup-file["utilizzare l'utilità di backup della configurazione integrata"].
 
 
@@ -55,7 +55,7 @@ Il provisioning dei datastore vVol implica diversi passaggi. I sistemi ASA R2 di
 +
 ** https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["Aggiungere istanze di vCenter Server"] Nell'interfaccia utente di ONTAP Tools Manager.
 ** Gli strumenti ONTAP 10,3 supportano la multi-tenancy sicura. Se non hai bisogno della multi-tenancy sicura, puoi semplicemente https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Aggiungi i tuoi cluster ONTAP"] accedere al menu degli strumenti di ONTAP in vCenter, fare clic su _backend di archiviazione_ e fare clic sul pulsante _add_.
-** In un ambiente multitenant sicuro dove desideri delegare alcune Storage Virtual Machine (SVM) a vCenter specifici, devi eseguire le seguenti operazioni.
+** In un ambiente multitenant sicuro in cui desideri delegare alcune Storage Virtual Machine (SVM) a vCenter specifici, devi eseguire le seguenti operazioni.
 +
 *** Accedere all'interfaccia utente di ONTAP Tools Manager
 *** https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Integrare il cluster di storage"]

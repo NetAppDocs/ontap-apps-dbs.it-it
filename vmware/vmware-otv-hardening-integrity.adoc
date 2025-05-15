@@ -4,7 +4,7 @@ permalink: vmware/vmware-otv-hardening-integrity.html
 keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
 summary: 'Security Hardening Guide for ONTAP tools for VMware vSphere, verifica dell"integrità.' 
 ---
-= Verifica dell'integrità dei tool ONTAP per i pacchetti di installazione di VMware vSphere
+= Verifica dell'integrità dei tool ONTAP per i pacchetti di installazione di VMware vSphere 9,13
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -36,7 +36,7 @@ I clienti devono inoltre caricare il certificato root e intermedio fornito su vC
 
 . Accedere con il client VMware vSphere a vCenter Server.
 . Specificare il nome utente e la password per adminutator@vsphere.local o un altro membro del gruppo vCenter Single Sign-on Administrators. Se durante l'installazione è stato specificato un dominio diverso, accedere come Administrator@mydomain.
-. Accedere all'interfaccia utente di Gestione certificati: a. Dal menu principale, selezionare Amministrazione. b. Nella sezione certificati, fare clic su Gestione certificati.
+. Accedere all'interfaccia utente di Gestione certificati: a. dal menu iniziale, selezionare Amministrazione. b. in certificati, fare clic su Gestione certificati.
 . Se richiesto dal sistema, immettere le credenziali di vCenter Server.
 . In certificati principali attendibili, fare clic su Aggiungi.
 . Fare clic su Sfoglia e selezionare la posizione del file .pem del certificato (OTV_OVA_INTER_ROOT_CERT_CHAIN.pem).

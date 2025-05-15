@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware_vmsc_resiliency.html 
-keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
+keywords: VMware, Data protection, MetroCluster, SMBC, SMas, SnapMirror active sync, vMSC, metro storage cluster, vSphere, vCenter, business continuity, disaster recovery, ONTAP 
 summary: Ulteriori informazioni su vSphere Metro Storage Cluster con ONTAP 
 ---
 = Resilienza per eventi pianificati e non pianificati
@@ -16,7 +16,7 @@ summary: Ulteriori informazioni su vSphere Metro Storage Cluster con ONTAP
 [role="lead"]
 NetApp MetroCluster e SnapMirror Active Sync sono potenti strumenti che migliorano l'alta disponibilità e le operazioni senza interruzioni dell'hardware NetApp e del software ONTAP®.
 
-Questi strumenti garantiscono una protezione a livello di sito per l'intero ambiente di storage, garantendo che i tuoi dati siano sempre disponibili. Che si stiano utilizzando server standalone, cluster di server ad alta disponibilità, container Docker o server virtualizzati, la tecnologia NetApp permette di conservare perfettamente la disponibilità dello storage in caso di black-out totale causato da black-out, raffreddamento o connettività di rete, arresto dello storage array o errori operativi.
+Questi strumenti garantiscono una protezione a livello di sito per l'intero ambiente di storage, garantendo che i tuoi dati siano sempre disponibili. Che si stia utilizzando server standalone, cluster di server ad alta disponibilità, container o server virtualizzati, la tecnologia NetApp permette di conservare perfettamente la disponibilità dello storage in caso di black-out totale causato da black-out, raffreddamento o connettività di rete, arresto dello storage array o errori operativi.
 
 La sincronizzazione attiva di MetroCluster e SnapMirror offre tre metodi di base per la continuità dei dati in caso di eventi pianificati o non pianificati:
 
@@ -31,10 +31,10 @@ Tutti i cluster ONTAP, ad eccezione dei cluster a nodo singolo (in genere versio
 
 Il takeover è un processo automatizzato in cui un nodo assume il controllo dello storage dell'altro per la gestione dei servizi dati. Giveback è il processo inverso che ripristina il normale funzionamento. Il takeover può essere pianificato, ad esempio durante la manutenzione hardware o gli upgrade della ONTAP, o non pianificato, derivante da un nodo di panico o da un guasto dell'hardware.
 
-Durante un takeover, le interfacce logiche NAS (Network Attached Storage) nelle configurazioni MetroCluster eseguono automaticamente il failover. Tuttavia, le LIF (SAN) di Storage Area Network non subiscono failover e continueranno a utilizzare il percorso diretto dei LUN (Logical Unit Number).
+Durante un takeover, le LIF NAS nelle configurazioni MetroCluster eseguono automaticamente il failover. Tuttavia, le LIF SAN non vengono sottoposte a failover e continueranno a utilizzare il percorso diretto dei LUN (Logical Unit Number).
 
-Per ulteriori informazioni sul takeover e lo sconto ha, consulta la https://docs.netapp.com/us-en/ontap/high-availability/index.html["Panoramica sulla gestione delle coppie HA"]. È importante notare che questa funzionalità non è specifica per MetroCluster o SnapMirror Active Sync.
+Per ulteriori informazioni sul takeover e sullo sconto ha, consultare la https://docs.netapp.com/us-en/ontap/high-availability/index.html["Panoramica sulla gestione delle coppie HA"]. È importante notare che questa funzionalità non è specifica per MetroCluster o SnapMirror Active Sync.
 
 Lo switchover del sito con MetroCluster viene eseguito quando un sito è offline o come attività pianificata per la manutenzione di un intero sito. Il sito rimanente presuppone la proprietà delle risorse storage (dischi e aggregati) del cluster offline e le SVM del sito guasto vengono messe online e riavviate nel sito di disaster recovery, preservando la loro identità completa per l'accesso client e host.
 
-Con la sincronizzazione attiva di SnapMirror, poiché entrambe le copie vengono utilizzate contemporaneamente in modo attivo, gli host esistenti continueranno a funzionare. Il NetApp Mediator è necessario per garantire che il failover del sito avvenga correttamente.
+Con la sincronizzazione attiva di SnapMirror, poiché entrambe le copie vengono utilizzate contemporaneamente in modo attivo, gli host esistenti continueranno a funzionare. Il ONTAP Mediator è necessario per garantire che il failover del sito avvenga correttamente.

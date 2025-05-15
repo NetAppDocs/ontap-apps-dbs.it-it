@@ -4,7 +4,7 @@ permalink: vmware/vmware-otv-hardening-ntp.html
 keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
 summary: Guida al rafforzamento della protezione per gli strumenti ONTAP per VMware vSphere, configurazione NTP. 
 ---
-= Configurazione NTP (Network Time Protocol)
+= Configurazione del protocollo NTP (Network Time Protocol) per gli strumenti ONTAP 9,13
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

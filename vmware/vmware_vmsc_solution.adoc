@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware_vmsc_solution.html 
-keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
+keywords: VMware, Data protection, MetroCluster, SMBC, SMas, SnapMirror active sync, vMSC, metro storage cluster, vSphere, vCenter, business continuity, disaster recovery, ONTAP 
 summary: Panoramica della soluzione VMware vSphere 
 ---
 = Panoramica della soluzione VMware vSphere
@@ -20,13 +20,13 @@ VCenter Server Appliance (VCSA) è un potente sistema di gestione centralizzato 
 
 == Alta disponibilità vSphere
 
-La tecnologia cluster di VMware raggruppa i server ESXi in pool di risorse condivise per le macchine virtuali e offre vSphere High Availability (ha). VSphere ha offre alta disponibilità e facile da utilizzare per le applicazioni eseguite su macchine virtuali. Quando la funzionalità ha è abilitata sul cluster, ogni server ESXi mantiene la comunicazione con altri host in modo che, se un host ESXi non risponde o si isola, il cluster di ha può negoziare il recovery delle macchine virtuali in esecuzione sull'host ESXi tra gli host sopravvissuti nel cluster. In caso di errore del sistema operativo guest, vSphere ha riavvia la macchina virtuale interessata sullo stesso server fisico. VSphere ha consente di ridurre i downtime pianificati, prevenire i downtime non pianificati e eseguire un rapido ripristino in caso di interruzioni.
+La tecnologia cluster di VMware raggruppa i server ESXi in pool di risorse condivise per le macchine virtuali e fornisce vSphere High Availability (ha), offrendo un'elevata disponibilità e una semplicità d'uso per le applicazioni eseguite su macchine virtuali. Quando la funzionalità ha è abilitata sul cluster, ogni server ESXi mantiene la comunicazione con altri host in modo che, se un host ESXi non risponde o si isola, il cluster di ha può negoziare il recovery delle macchine virtuali in esecuzione sull'host ESXi tra gli host sopravvissuti nel cluster. In caso di errore del sistema operativo guest, vSphere ha può riavviare la macchina virtuale interessata sullo stesso server fisico. VSphere ha consente di ridurre i tempi di inattività pianificati, prevenire i tempi di inattività non pianificati e ripristinare rapidamente i dati in caso di interruzioni.
 
 Cluster vSphere ha in grado di ripristinare le VM dal server guasto.
 
 image::../media/vmsc_2_1.png[Diagramma vMSC,624,301]
 
-È importante comprendere che VMware vSphere non conosce NetApp MetroCluster o SnapMirror Active Sync e vede tutti gli host ESXi nel cluster vSphere come host idonei per le operazioni del cluster ha in base alle configurazioni di affinità dei gruppi VM e host.
+È importante comprendere che VMware vSphere non conosce la sincronizzazione attiva di NetApp MetroCluster o SnapMirror e vede tutti gli host ESXi nel cluster vSphere come host idonei per le operazioni del cluster ha in base alle configurazioni di affinità dei gruppi host e VM.
 
 
 
@@ -56,7 +56,7 @@ NetApp consiglia di specificare un minimo di due indirizzi di isolamento aggiunt
 
 Risposta di isolamento è un'impostazione in vSphere ha che determina l'azione attivata sulle macchine virtuali quando un host in un cluster vSphere ha perde le connessioni di rete di gestione ma continua a essere eseguito. Sono disponibili tre opzioni per questa impostazione: "Disabilitato", "Arresta e riavvia le macchine virtuali" e "Spegni e riavvia le macchine virtuali".
 
-Lo "spegnimento" è migliore dello "spegnimento", che non svuota le modifiche più recenti al disco o esegue il commit delle transazioni. Se le macchine virtuali non si sono arrestate entro 300 secondi, vengono spente. Per modificare il tempo di attesa, utilizzare l'opzione avanzata das.isolationshutdowntimeout.
+"Spegni" è meglio di "Spegni", che non elimina le modifiche più recenti al disco o alle transazioni di commit. Se le macchine virtuali non si sono arrestate entro 300 secondi, vengono spente. Per modificare il tempo di attesa, utilizzare l'opzione avanzata das.isolationshutdowntimeout.
 
 Prima che ha avvii la risposta di isolamento, verifica prima se l'agente master ha vSphere è proprietario del datastore che contiene i file di configurazione della VM. In caso contrario, l'host non attiverà la risposta di isolamento, poiché non vi è alcun master per riavviare le VM. L'host controllerà periodicamente lo stato del datastore per determinare se viene richiesto da un agente vSphere ha che detiene il ruolo master.
 
@@ -96,17 +96,22 @@ Quando viene rilevata una condizione APD, viene avviato un timer. Dopo 140 secon
 ====
 * NetApp consiglia di configurare "Risposta per datastore con APD" su "*Spegni e riavvia le VM (conservative)*".
 * Conservative si riferisce alla probabilità che ha sia in grado di riavviare le VM. Quando è impostata su Conservative, ha riavvia la VM interessata dall'APD solo se sa che un altro host può riavviarla. In caso di problemi aggressivi, ha tenterà di riavviare la macchina virtuale anche se non conosce lo stato degli altri host. Ciò può comportare il mancato riavvio delle VM se non vi è alcun host con accesso al datastore su cui si trova.
-* Se lo stato APD viene risolto e l'accesso allo storage viene ripristinato prima del termine del timeout, l'ha non riavvia inutilmente la macchina virtuale a meno che non sia stata configurata esplicitamente. Se si desidera una risposta anche quando l'ambiente è stato ripristinato dalla condizione APD, è necessario configurare la risposta per il ripristino APD dopo il timeout APD in modo da ripristinare le VM.
+* Se lo stato APD viene risolto e l'accesso allo storage viene ripristinato prima che sia trascorso il timeout, ha non riavvierà inutilmente la macchina virtuale a meno che non sia stata esplicitamente configurata. Se si desidera una risposta anche quando l'ambiente è stato ripristinato dalla condizione APD, è necessario configurare la risposta per il ripristino APD dopo il timeout APD in modo da ripristinare le VM.
 * NetApp consiglia di configurare la risposta per il ripristino APD dopo il timeout APD su Disabilitato.
 
 
 ====
 
 
+== Implementazione di VMware DRS per NetApp SnapMirror Active Sync
+
+VMware DRS è una funzionalità che aggrega le risorse host in un cluster e viene utilizzata principalmente per il bilanciamento del carico all'interno di un cluster in un'infrastruttura virtuale. VMware DRS calcola principalmente le risorse di CPU e memoria per eseguire il bilanciamento del carico in un cluster. Poiché vSphere non è consapevole del clustering allungato, considera tutti gli host in entrambi i siti durante il bilanciamento del carico.
+
+
+
 == Implementazione VMware DRS per NetApp MetroCluster
 
-VMware DRS è una funzionalità che aggrega le risorse host in un cluster e viene utilizzata principalmente per il bilanciamento del carico all'interno di un cluster in un'infrastruttura virtuale. VMware DRS calcola principalmente le risorse di CPU e memoria per eseguire il bilanciamento del carico in un cluster. Poiché vSphere non è consapevole del clustering allungato, considera tutti gli host in entrambi i siti durante il bilanciamento del carico. Per evitare il traffico tra siti, NetApp consiglia di configurare le regole di affinità DRS per gestire una separazione logica delle VM. In questo modo si garantisce che, a meno che non si verifichi un errore completo del sito, ha e DRS utilizzino solo host locali.
-
+ To avoid cross-site traffic, NetApp recommends configuring DRS affinity rules to manage a logical separation of VMs. This will ensure that unless there is a complete site failure, HA and DRS will only use local hosts.
 Se si crea una regola di affinità DRS per il cluster, è possibile specificare in che modo vSphere applica tale regola durante il failover di una macchina virtuale.
 
 Esistono due tipi di regole che è possibile specificare il comportamento di failover di vSphere ha:
@@ -125,9 +130,9 @@ image::../media/vmsc_2_2.png[Gruppi di host VM e regole di affinità,528,369]
 
 === _Best practice_
 
-NetApp consiglia di implementare le regole "should" invece di quelle "must", in quanto vengono violate da vSphere ha in caso di errore. L'utilizzo di regole "must" può potenzialmente causare interruzioni del servizio.
+NetApp consiglia di implementare regole "should" invece di regole "must", in quanto vengono violate da vSphere ha in caso di errore. L'utilizzo di regole "must" potrebbe potenzialmente causare interruzioni del servizio.
 
-La disponibilità dei servizi dovrebbe sempre prevalere sulle prestazioni. Nello scenario in cui si verifica un guasto di un data center completo, le regole "must" devono scegliere gli host dal gruppo di affinità degli host VM e, quando il data center non è disponibile, le macchine virtuali non verranno riavviate.
+La disponibilità dei servizi dovrebbe sempre prevalere sulle prestazioni. Nello scenario in cui un data center completo si guasta, le regole "must" devono scegliere gli host dal gruppo di affinità host VM e, quando il data center non è disponibile, le macchine virtuali non si riavviano.
 
 
 

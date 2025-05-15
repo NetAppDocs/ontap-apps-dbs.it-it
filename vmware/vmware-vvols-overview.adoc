@@ -23,7 +23,7 @@ NOTE: Questa documentazione sostituisce i report tecnici precedentemente pubblic
 Le Best practice integrano altri documenti come guide ed elenchi di compatibilità. Sono sviluppati in base a test di laboratorio e a un'ampia esperienza sul campo da parte di tecnici e clienti NetApp. Potrebbero non essere le uniche pratiche che funzionano o sono supportate, ma sono generalmente le soluzioni più semplici che soddisfano le esigenze della maggior parte dei clienti.
 
 
-TIP: Questo documento è stato aggiornato per includere le nuove funzionalità di vVol disponibili in vSphere 8,0 update 3 e nella versione 10,3 degli strumenti ONTAP.
+NOTE: Questo documento è stato aggiornato per includere le nuove funzionalità di vVol presenti in vSphere 8,0 update 3, nella versione 10,4 degli strumenti ONTAP e nei nuovi sistemi NetApp ASA.
 
 
 
@@ -71,7 +71,7 @@ I vVol sono i file e i dischi della macchina virtuale memorizzati nel datastore 
 
 == Gestione basata su criteri
 
-Le API VMware vSphere per la consapevolezza dello storage (VASA) semplificano l'utilizzo da parte di un amministratore delle macchine virtuali delle funzionalità di storage necessarie per il provisioning delle macchine virtuali senza dover interagire con il proprio team di storage. Prima di VASA, gli amministratori delle macchine virtuali potevano definire le policy di storage delle macchine virtuali, ma dovevano collaborare con gli amministratori dello storage per identificare gli archivi dati appropriati, spesso utilizzando la documentazione o le convenzioni di denominazione. Con VASA, gli amministratori di vCenter con le autorizzazioni appropriate possono definire una serie di funzionalità di storage che gli utenti di vCenter possono utilizzare per eseguire il provisioning delle macchine virtuali. Il mapping tra la policy dello storage delle macchine virtuali e le funzionalità del datastore consente a vCenter di visualizzare un elenco di datastore compatibili da selezionare, oltre a consentire ad altre tecnologie come aria (precedentemente nota come vRealize) Automation o Tanzu Kubernetes Grid di selezionare automaticamente lo storage da una policy assegnata. Questo approccio è noto come gestione basata su criteri di storage. Mentre le regole del provider VASA e le policy storage delle macchine virtuali possono anche essere utilizzate con i datastore tradizionali, la nostra attenzione si concentra sui datastore vVol.
+Le API VMware vSphere per la consapevolezza dello storage (VASA) semplificano l'utilizzo da parte di un amministratore delle macchine virtuali delle funzionalità di storage necessarie per il provisioning delle macchine virtuali senza dover interagire con il proprio team di storage. Prima di VASA, gli amministratori delle macchine virtuali potevano definire policy di storage delle macchine virtuali, ma dovevano collaborare con i loro amministratori dello storage per identificare i datastore appropriati, spesso utilizzando documentazione o convenzioni di naming. Con VASA, gli amministratori di vCenter con le autorizzazioni appropriate possono definire una serie di funzionalità di storage che gli utenti di vCenter possono utilizzare per eseguire il provisioning delle macchine virtuali. Il mapping tra la policy dello storage delle macchine virtuali e le funzionalità del datastore consente a vCenter di visualizzare un elenco di datastore compatibili da selezionare, oltre a consentire ad altre tecnologie come aria (precedentemente nota come vRealize) Automation o Tanzu Kubernetes Grid di selezionare automaticamente lo storage da una policy assegnata. Questo approccio è noto come gestione basata su criteri di storage. Mentre le regole del provider VASA e le policy storage delle macchine virtuali possono anche essere utilizzate con i datastore tradizionali, la nostra attenzione si concentra sui datastore vVol.
 
 
 
@@ -117,7 +117,7 @@ _Per ulteriori informazioni sulle Best practice di ONTAP e VMware vSphere, veder
 
 == Vantaggi dell'utilizzo di vVol con ONTAP
 
-Quando VMware ha introdotto il supporto vVol con VASA 2.0 nel 2015, lo ha descritto come "un framework di integrazione e gestione che offre un nuovo modello operativo per lo storage esterno (SAN/NAS)". Questo modello operativo offre diversi vantaggi insieme allo storage ONTAP.
+Quando nel 2015 VMware ha introdotto il supporto per vVol con VASA 2,0, lo ha descritto come "un framework di integrazione e gestione che offre un nuovo modello operativo per lo storage esterno (SAN/NAS)". Questo modello operativo offre diversi vantaggi insieme allo storage ONTAP.
 
 
 
@@ -155,7 +155,7 @@ Oltre a questi vantaggi, vediamo anche questi casi di utilizzo comuni per lo sto
 * *Provisioning su richiesta delle VM*
 +
 ** Cloud privato o provider di servizi IaaS.
-** Sfrutta l'automazione e l'orchestrazione tramite la suite aria (in precedenza vRealize), OpenStack, ecc.
+** Sfrutta automazione e orchestrazione tramite la suite aria (in precedenza vRealize), OpenStack e così via.
 
 
 * *Dischi di prima classe (FCD)*
