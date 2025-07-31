@@ -14,12 +14,12 @@ summary: 'La soluzione ONTAP per VMware Live Site Recovery (VLSR) e Site Recover
 
 
 [role="lead"]
-ONTAP è stata una soluzione storage leader per VMware vSphere e, più di recente, per gli ambienti Cloud Foundation dalla sua introduzione nel moderno data center nel 2002. Continua a introdurre funzionalità innovative che semplificano la gestione e riducono i costi.
+ONTAP è una soluzione di storage leader per VMware vSphere e, più di recente, per Cloud Foundation, da quando ESX è stato introdotto nei data center moderni più di due decenni fa.  NetApp continua a introdurre sistemi innovativi, come l'ultima generazione della serie ASA A, insieme a funzionalità come la sincronizzazione attiva SnapMirror .  Questi progressi semplificano la gestione, migliorano la resilienza e riducono il costo totale di proprietà (TCO) della tua infrastruttura IT.
 
-In questo documento viene presentata la soluzione ONTAP per VMware Live Site Recovery (VLSR), precedentemente nota come Site Recovery Manager (SRM), il software di disaster recovery (DR) leader del settore di VMware, che include le informazioni più recenti sui prodotti e le Best practice per semplificare la distribuzione, ridurre i rischi e semplificare la gestione continua.
+Questo documento presenta la soluzione ONTAP per VMware Live Site Recovery (VLSR), precedentemente nota come Site Recovery Manager (SRM), il software di disaster recovery (DR) leader del settore di VMware, comprese le informazioni più recenti sul prodotto e le best practice per semplificare la distribuzione, ridurre i rischi e semplificare la gestione continua.
 
 
-NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubblicato _TR-4900: VMware Site Recovery Manager con ONTAP_
+NOTE: Questa documentazione sostituisce il rapporto tecnico precedentemente pubblicato _TR-4900: VMware Site Recovery Manager con ONTAP_
 
 Le Best practice integrano altri documenti come guide e strumenti di compatibilità. Sono sviluppati in base a test di laboratorio e a un'ampia esperienza sul campo da parte di tecnici e clienti NetApp. In alcuni casi, le Best practice consigliate potrebbero non essere adatte al tuo ambiente; tuttavia, sono generalmente le soluzioni più semplici che soddisfano le esigenze della maggior parte dei clienti.
 
@@ -29,11 +29,11 @@ Questo documento si concentra sulle funzionalità delle versioni recenti di ONTA
 
 == Perché utilizzare ONTAP con VLSR o SRM?
 
-Le piattaforme di gestione dei dati NetApp basate su ONTAP sono alcune delle soluzioni di storage per VLSR più ampiamente adottate. I motivi sono molteplici: Una piattaforma per la gestione dei dati sicura, dalle performance elevate e protocollo unificato (NAS e SAN insieme) che offre efficienza dello storage definita dal settore, multitenancy, controlli della qualità del servizio, protezione dei dati con snapshot efficienti in termini di spazio e replica con SnapMirror. Tutto questo sfrutta l'integrazione multi-cloud ibrida nativa per la protezione dei carichi di lavoro VMware e una vasta gamma di strumenti di automazione e orchestrazione a portata di mano.
+Le piattaforme di gestione dati NetApp basate su ONTAP sono tra le soluzioni di storage più ampiamente adottate per VLSR.  Le ragioni sono molteplici: una piattaforma di gestione dei dati sicura, ad alte prestazioni e con protocollo unificato (NAS e SAN insieme) che fornisce efficienza di archiviazione senza pari nel settore, multi-tenancy, controlli della qualità del servizio, protezione dei dati con snapshot efficienti in termini di spazio e replica con SnapMirror.  Tutto ciò sfrutta l'integrazione nativa multi-cloud ibrida per la protezione dei carichi di lavoro VMware e una miriade di strumenti di automazione e orchestrazione a portata di mano.
 
-Utilizzando SnapMirror per la replica basata su array è possibile sfruttare una delle tecnologie ONTAP più comprovate e mature. SnapMirror offre il vantaggio di trasferimenti di dati sicuri ed altamente efficienti, copiando solo i blocchi di file system modificati, non intere macchine virtuali o datastore. Anche questi blocchi sfruttano il risparmio di spazio, come deduplica, compressione e compattazione. I moderni sistemi ONTAP utilizzano ora SnapMirror indipendente dalla versione, consentendo di scegliere i cluster di origine e di destinazione in modo flessibile. SnapMirror è diventato uno dei tool più potenti disponibili per il disaster recovery.
+Quando si utilizza SnapMirror per la replica basata su array, si sfrutta una delle tecnologie più collaudate e mature di ONTAP.  SnapMirror offre il vantaggio di trasferimenti di dati sicuri e altamente efficienti, copiando solo i blocchi del file system modificati e non intere VM o datastore.  Anche questi blocchi sfruttano il risparmio di spazio, tramite deduplicazione, compressione e compattazione.  I moderni sistemi ONTAP ora utilizzano SnapMirror indipendente dalla versione, consentendo flessibilità nella selezione dei cluster di origine e di destinazione.  SnapMirror è diventato davvero uno degli strumenti più potenti disponibili per il disaster recovery.
 
-Sia che stiate utilizzando datastore collegati a NFS, iSCSI o Fibre Channel tradizionali (ora con supporto per datastore vVol), VLSR offre una solida offerta di prima parte che sfrutta il meglio delle funzionalità ONTAP per il disaster recovery o la pianificazione e l'orchestrazione della migrazione dei data center.
+Indipendentemente dal fatto che si utilizzino datastore tradizionali collegati a NFS, iSCSI o Fibre Channel (ora con supporto per datastore vVols ), VLSR fornisce un'offerta proprietaria affidabile che sfrutta il meglio delle funzionalità ONTAP per il disaster recovery o la pianificazione e l'orchestrazione della migrazione del data center.
 
 
 
@@ -46,11 +46,11 @@ VLSR sfrutta le tecnologie avanzate di gestione dei dati dei sistemi ONTAP integ
 * SRA viene utilizzato insieme a VLSR per gestire la replica dei dati delle macchine virtuali tra siti di produzione e disaster recovery per datastore VMFS e NFS tradizionali e per il test senza interruzioni delle repliche DR. Consente di automatizzare le attività di rilevamento, ripristino e protezione. Include sia un server appliance SRA che adattatori SRA per il server Windows SRM e l'appliance VLSR.
 
 
-Dopo aver installato e configurato gli adattatori SRA sul server VLSR per proteggere gli archivi dati non vVol, è possibile iniziare l'attività di configurazione dell'ambiente vSphere per il disaster recovery.
+Dopo aver installato e configurato gli adattatori SRA sul server VLSR per la protezione dei datastore non vVols, è possibile iniziare l'attività di configurazione dell'ambiente vSphere per il disaster recovery.
 
 SRA fornisce un'interfaccia di comando e controllo per il server VLSR per la gestione dei volumi ONTAP FlexVol che contengono le macchine virtuali (VM) VMware, nonché la replica SnapMirror che le protegge.
 
-VLSR può verificare il vostro piano DR senza interruzioni utilizzando la tecnologia proprietaria FlexClone di NetApp per creare cloni quasi istantanei dei datastore protetti nel sito DR. VLSR crea un sandbox per eseguire test in modo sicuro in modo che la tua organizzazione e i tuoi clienti siano protetti in caso di disastro reale, offrendo la sicurezza della capacità delle organizzazioni di eseguire un failover durante un disastro.
+VLSR può testare il tuo piano DR in modo non invasivo utilizzando la tecnologia proprietaria FlexClone di NetApp per creare cloni quasi istantanei dei tuoi datastore protetti nel tuo sito DR.  VLSR crea un sandbox per effettuare test in modo sicuro, in modo che la tua organizzazione e i tuoi clienti siano protetti in caso di un vero disastro, dandoti fiducia nella capacità della tua organizzazione di eseguire un failover durante un disastro.
 
 In caso di disastro reale o persino di migrazione pianificata, VLSR consente di inviare eventuali modifiche dell'ultimo minuto al dataset tramite un aggiornamento finale di SnapMirror (se si sceglie di farlo). Quindi, interrompe il mirror e monta il datastore sugli host DR. A questo punto, le VM possono essere alimentate automaticamente in qualsiasi ordine in base alla strategia prepianificata.
 
@@ -61,7 +61,7 @@ NOTE: Mentre i sistemi ONTAP permettono di accoppiare le SVM nello stesso cluste
 
 == VLSR con ONTAP e altri casi di utilizzo: Cloud ibrido e migrazione
 
-L'integrazione dell'implementazione VLSR con le funzionalità avanzate di gestione dei dati di ONTAP consente di migliorare notevolmente scalabilità e performance rispetto alle opzioni di storage locale. Ma oltre a questo, offre la flessibilità del cloud ibrido. Il cloud ibrido ti consente di risparmiare denaro tiering dei blocchi di dati inutilizzati dal tuo array dalle performance elevate all'hyperscaler preferito utilizzando FabricPool, che potrebbe essere un store S3 on-premise come NetApp StorageGRID. Puoi anche utilizzare SnapMirror per i sistemi basati su edge con software-defined ONTAP Select o disaster recovery basato su cloud utilizzando Cloud Volumes ONTAP (CVO) o https://www.equinix.com/partners/netapp["Storage NetApp su Equinix Metal®"^] altri servizi ONTAP in hosting.
+L'integrazione della distribuzione VLSR con le funzionalità avanzate di gestione dei dati ONTAP consente di ottenere prestazioni e scalabilità notevolmente migliorate rispetto alle opzioni di archiviazione locale.  Ma più di questo, offre la flessibilità del cloud ibrido.  Il cloud ibrido consente di risparmiare denaro suddividendo i blocchi di dati inutilizzati dal tuo array ad alte prestazioni al tuo hyperscaler preferito tramite FabricPool, che potrebbe essere un archivio S3 locale come NetApp StorageGRID.  È inoltre possibile utilizzare SnapMirror per sistemi edge-based con ONTAP Select definito dal software o DR basato su cloud utilizzando Cloud Volumes ONTAP (CVO) o https://www.equinix.com/partners/netapp["Storage NetApp su Equinix Metal®"^] o altri servizi ONTAP ospitati.
 
 Quindi, grazie a FlexClone, è possibile eseguire un failover di test nel data center di un cloud service provider con un impatto dello storage prossimo allo zero. Proteggere la tua organizzazione può ora costare meno che mai.
 
