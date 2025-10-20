@@ -25,7 +25,6 @@ NOTE: *Questa documentazione sostituisce i report tecnici pubblicati in preceden
 * Un'architettura unificata software-defined
 +
 ** ONTAP Select in esecuzione su VMware vSphere o KVM
-** Cloud Volumes ONTAP in esecuzione come istanza cloud nativa
 
 
 * Offerte di first party degli hyperscale cloud provider

@@ -60,7 +60,7 @@ Per funzionalità di disaster recovery migliorate, considerare l'utilizzo di Net
 
 == NetApp Disaster Recovery
 
-Disaster Recovery (DR) è un servizio basato su cloud che fornisce una soluzione completa per la protezione dei dati e delle applicazioni in caso di disastro. Offre una gamma di funzionalità, tra cui failover e failback automatizzati, più punti di ripristino point-in-time, disaster recovery coerente con l'applicazione e supporto per sistemi ONTAP sia on-premise che basati su cloud. BlueXP DR è progettato per funzionare in modo ottimale con ONTAP e l'ambiente VMware vSphere, offrendo una soluzione unificata per il disaster recovery.
+Disaster Recovery (DR) è un servizio basato su cloud che fornisce una soluzione completa per la protezione dei dati e delle applicazioni in caso di disastro. Offre una gamma di funzionalità, tra cui failover e failback automatizzati, più punti di ripristino point-in-time, disaster recovery coerente con l'applicazione e supporto per sistemi ONTAP sia on-premise che basati su cloud. NetApp Disaster Recovery è progettato per funzionare in modo ottimale con ONTAP e l'ambiente VMware vSphere, offrendo una soluzione unificata per il disaster recovery.
 
 
 
