@@ -2,7 +2,7 @@
 :allow-uri-read: 
 
 
-Il mediatore non è realmente un tiebreaker, anche se quella è effettivamente la funzione che fornisce. Non esegue alcuna azione, ma fornisce un canale di comunicazione alternativo per la comunicazione tra cluster e cluster.
+Il mediatore non è propriamente uno strumento decisivo, sebbene questa sia effettivamente la sua funzione. Il mediatore aiuta a determinare lo stato dei nodi del cluster e supporta il processo di commutazione automatica in caso di guasto del sito. Il mediatore non trasferisce dati in nessun caso.
 
 image:../media/smas-mediator.png["Diagramma di sincronizzazione attivo SnapMirror con mediatore"]
 
