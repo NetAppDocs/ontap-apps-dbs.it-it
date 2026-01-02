@@ -103,6 +103,6 @@ Utilizzare questo elenco di controllo per garantire una distribuzione corretta (
 * Se si utilizza l'ha, lo storage vMotion si nodi due e tre per separare i datastore (facoltativo, ma consigliato).
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["utilizzare gestisci certificati"] In ONTAP Tools Manager per installare tutti i certificati CA firmati richiesti.
 * Se SRA è stato abilitato per SRM/VLSR per proteggere i datastore tradizionali, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/configure-on-srm-appliance.html["Configurare SRA sull'appliance VMware Live Site Recovery"].
-* Configurare i backup nativi per https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html["RPO prossimo allo zero"].
+* Configurare backup nativi per https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/backup-settings.html["RPO prossimo allo zero"].
 * Configurare backup regolari su altri supporti di archiviazione.
 

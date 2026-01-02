@@ -59,19 +59,19 @@ Per ulteriori informazioni, vedere https://docs.vmware.com/en/VMware-vSphere/8.0
 
 === Datastore di volumi virtuali
 
-| il datastore Virtual Volume è una rappresentazione logica del datastore di un contenitore vVol creato e gestito da un provider VASA. Il container rappresenta un pool di capacità di storage fornito dai sistemi storage gestiti dal provider VASA. Gli strumenti ONTAP supportano l'allocazione di più volumi FlexVol (noti come volumi di backup) a un singolo datastore vVols e questi datastore vVols possono estendersi su più nodi in un cluster ONTAP, combinando sistemi flash e ibridi con funzionalità diverse. L'amministratore può creare nuovi volumi FlexVol utilizzando la procedura guidata di provisioning o l'API REST oppure selezionare volumi FlexVol pre-creati per il backup dello storage, se disponibili.
+| Il datastore Virtual Volume è una rappresentazione logica del datastore di un contenitore vVols , creato e gestito da un provider VASA. Il contenitore rappresenta un pool di capacità di archiviazione fornita dai sistemi di archiviazione gestiti dal provider VASA. Gli strumenti ONTAP supportano l'allocazione di più volumi FlexVol (denominati volumi di backup) a un singolo datastore vVols ; questi datastore vVols possono estendersi su più nodi in un cluster ONTAP , combinando sistemi flash e ibridi con diverse funzionalità. L'amministratore può creare nuovi volumi FlexVol utilizzando la procedura guidata di provisioning o l'API REST oppure selezionare volumi FlexVol pre-creati per l'archiviazione di backup, se disponibili.
 
 
 
 === Volumi virtuali (vVol)
 
-I vVol sono i file e i dischi della macchina virtuale memorizzati nel datastore vVols. Il termine vVol (singolo) si riferisce a un singolo file, LUN o namespace specifico. ONTAP crea spazi dei nomi NVMe, LUN o file a seconda del protocollo utilizzato dal datastore. Esistono diversi tipi diversi di vVol; i più comuni sono Config (l'unico con VMFS su di esso, contiene file di metadati come il file VMX della VM), dati (disco virtuale o VMDK) e Swap (creato quando la VM è accesa). I vVol protetti dalla crittografia VMware VM saranno di tipo Altro. La crittografia di VMware VM non deve essere confusa con la crittografia aggregata o del volume ONTAP.
+I vVols sono i file e i dischi effettivi della macchina virtuale archiviati nel datastore vVols . Utilizzando il termine vVol (singolare) si fa riferimento a un singolo file specifico, LUN o namespace. ONTAP crea namespace, LUN o file NVMe a seconda del protocollo utilizzato dal datastore. Esistono diversi tipi distinti di vVols; i più comuni sono Config (l'unico con VMFS, contiene file di metadati come il file VMX della VM), Data (disco virtuale o VMDK) e Swap (creato all'accensione della VM). I vVols protetti dalla crittografia della VM VMware saranno di tipo Altro. La crittografia delle VM VMware non deve essere confusa con la crittografia dei volumi ONTAP o con quella degli aggregati.
 
 
 
-== Gestione basata su criteri
+== Gestione basata sulle policy
 
-Le API VMware vSphere per la consapevolezza dello storage (VASA) semplificano l'utilizzo da parte di un amministratore delle macchine virtuali delle funzionalità di storage necessarie per il provisioning delle macchine virtuali senza dover interagire con il proprio team di storage. Prima di VASA, gli amministratori delle macchine virtuali potevano definire policy di storage delle macchine virtuali, ma dovevano collaborare con i loro amministratori dello storage per identificare i datastore appropriati, spesso utilizzando documentazione o convenzioni di naming. Con VASA, gli amministratori di vCenter con le autorizzazioni appropriate possono definire una serie di funzionalità di storage che gli utenti di vCenter possono utilizzare per eseguire il provisioning delle macchine virtuali. Il mapping tra la policy dello storage delle macchine virtuali e le funzionalità del datastore consente a vCenter di visualizzare un elenco di datastore compatibili da selezionare, oltre a consentire ad altre tecnologie come aria (precedentemente nota come vRealize) Automation o Tanzu Kubernetes Grid di selezionare automaticamente lo storage da una policy assegnata. Questo approccio è noto come gestione basata su criteri di storage. Mentre le regole del provider VASA e le policy storage delle macchine virtuali possono anche essere utilizzate con i datastore tradizionali, la nostra attenzione si concentra sui datastore vVol.
+Le API VMware vSphere per Storage Awareness (VASA) consentono agli amministratori di VM di utilizzare facilmente tutte le funzionalità di storage necessarie per il provisioning delle VM, senza dover interagire con il proprio team di storage. Prima di VASA, gli amministratori delle VM potevano definire le policy di archiviazione delle VM, ma dovevano collaborare con i propri amministratori di archiviazione per identificare gli archivi dati appropriati, spesso utilizzando la documentazione o convenzioni di denominazione. Con VASA, gli amministratori di vCenter dotati delle autorizzazioni appropriate possono definire una gamma di funzionalità di archiviazione che gli utenti di vCenter possono poi utilizzare per il provisioning delle VM. La mappatura tra la policy di archiviazione della VM e le funzionalità del datastore consente a vCenter di visualizzare un elenco di datastore compatibili tra cui scegliere, oltre ad abilitare altre tecnologie come VCF (in precedenza noto come Aria e vRealize) Automation o VMware vSphere Kubernetes Service (VKS) per selezionare automaticamente lo storage da una policy assegnata. Questo approccio è noto come gestione basata sulle policy di archiviazione. Sebbene le regole del provider VASA e le policy di archiviazione delle VM possano essere utilizzate anche con i datastore tradizionali, in questo caso ci concentreremo sui datastore vVols .
 
 
 
@@ -87,7 +87,7 @@ Come menzionato in precedenza, l'utilizzo delle policy può contribuire a sempli
 
 image::vvols-image3.png[Implementare la macchina virtuale utilizzando i criteri di storage,800,480]
 
-Una volta eseguito il provisioning di una VM, il provider VASA continuerà a verificare la conformità e avviserà l'amministratore della VM tramite un allarme in vCenter quando il volume di backup non è più conforme alla policy.
+Una volta eseguito il provisioning di una VM, il provider VASA continuerà a verificare la conformità e avviserà l'amministratore della VM con un allarme in vCenter quando il volume di supporto non è più conforme alla policy.
 
 
 
@@ -99,7 +99,7 @@ image::vvols-image4.png[Conformità alle policy di storage delle macchine virtua
 
 == Supporto vVol NetApp
 
-ONTAP ha supportato la specifica VASA dalla sua versione iniziale nel 2012. Sebbene altri sistemi storage NetApp possano supportare VASA, questo documento si concentra sulle versioni attualmente supportate di ONTAP 9.
+ONTAP supporta la specifica VASA fin dalla sua prima versione nel 2012. Sebbene altri sistemi di storage NetApp possano supportare VASA, questo documento si concentra sulle versioni attualmente supportate di ONTAP 9.
 
 
 
@@ -107,7 +107,7 @@ ONTAP ha supportato la specifica VASA dalla sua versione iniziale nel 2012. Sebb
 
 Oltre a ONTAP 9 sui sistemi AFF, ASA e FAS , NetApp supporta i carichi di lavoro VMware su ONTAP Select, Amazon FSx per NetApp con VMware Cloud su AWS, Azure NetApp Files con Azure VMware Solution, Google Cloud NetApp Volumes con Google Cloud VMware Engine e NetApp Private Storage in Equinix, ma le funzionalità specifiche possono variare in base al fornitore di servizi e alla connettività di rete disponibile.
 
-Al momento della pubblicazione, gli ambienti hyperscaler sono limitati solo agli archivi dati NFS v3 tradizionali, pertanto i vVol sono disponibili solo con sistemi ONTAP on-premise o con sistemi connessi al cloud che offrono la funzionalità completa di sistemi on-premise come quelli ospitati da partner e provider di servizi NetApp in tutto il mondo.
+Al momento della pubblicazione, gli ambienti hyperscaler sono limitati ai tradizionali datastore NFS v3; pertanto, i vVols sono disponibili solo con sistemi ONTAP on-premise o sistemi connessi al cloud che offrono tutte le funzionalità di un sistema on-premise, come quelli ospitati dai partner NetApp e dai provider di servizi in tutto il mondo.
 
 _Per ulteriori informazioni su ONTAP, vedere https://docs.netapp.com/us-en/ontap-family/["Documentazione del prodotto ONTAP"^]_
 
@@ -117,15 +117,15 @@ _Per ulteriori informazioni sulle Best practice di ONTAP e VMware vSphere, veder
 
 == Vantaggi dell'utilizzo di vVol con ONTAP
 
-Quando nel 2015 VMware ha introdotto il supporto per vVol con VASA 2,0, lo ha descritto come "un framework di integrazione e gestione che offre un nuovo modello operativo per lo storage esterno (SAN/NAS)". Questo modello operativo offre diversi vantaggi insieme allo storage ONTAP.
+Quando VMware introdusse il supporto vVols con VASA 2.0 nel 2015, lo descrisse come "un framework di integrazione e gestione che fornisce un nuovo modello operativo per l'archiviazione esterna (SAN/NAS)". Questo modello operativo offre numerosi vantaggi insieme allo storage ONTAP .
 
 
 
-=== Gestione basata su criteri
+=== Gestione basata sulle policy
 
-Come descritto nella sezione 1,2, la gestione basata su criteri consente di eseguire il provisioning delle macchine virtuali e di gestirle successivamente utilizzando criteri predefiniti. Questo può aiutare le operazioni IT in diversi modi:
+Come spiegato nella sezione 1.2, la gestione basata su policy consente di eseguire il provisioning delle VM e di gestirle successivamente utilizzando policy predefinite. Ciò può aiutare le operazioni IT in diversi modi:
 
-* *Aumentare la velocità.* i tool ONTAP eliminano il requisito per l'amministratore di vCenter di aprire i ticket con il team di storage per le attività di provisioning dello storage. Tuttavia, i ruoli RBAC dei tool ONTAP in vCenter e nel sistema ONTAP consentono ancora ai team indipendenti (come i team di storage) o alle attività indipendenti dello stesso team limitando l'accesso a funzioni specifiche, se necessario.
+* *Aumentare la velocità.* Grazie agli strumenti ONTAP , l'amministratore di vCenter non ha più bisogno di aprire ticket con il team di storage per le attività di provisioning dello storage. Tuttavia, i ruoli RBAC degli strumenti ONTAP in vCenter e nel sistema ONTAP consentono comunque team indipendenti (ad esempio team di archiviazione) o attività indipendenti da parte dello stesso team, limitando l'accesso a funzioni specifiche, se desiderato.
 * *Provisioning più intelligente.* le funzionalità del sistema di storage possono essere esposte attraverso le API VASA, consentendo ai flussi di lavoro di provisioning di sfruttare funzionalità avanzate senza che l'amministratore delle macchine virtuali debba comprendere come gestire il sistema di storage.
 * *Provisioning più rapido.* diverse funzionalità di storage possono essere supportate in un singolo datastore e selezionate automaticamente in base alla policy della macchina virtuale.
 * *Evitare errori.* le policy di storage e macchine virtuali vengono sviluppate in anticipo e applicate in base alle necessità senza dover personalizzare lo storage ogni volta che viene eseguito il provisioning di una macchina virtuale. Gli allarmi di compliance vengono generati quando le funzionalità dello storage si scostano dalle policy definite. Come accennato in precedenza, gli SCP rendono il provisioning iniziale prevedibile e ripetibile, mentre basare le policy di storage delle macchine virtuali sugli SCP garantisce un posizionamento preciso.
@@ -136,15 +136,15 @@ Come descritto nella sezione 1,2, la gestione basata su criteri consente di eseg
 
 === Gestione granulare delle macchine virtuali nella moderna SAN
 
-I sistemi storage SAN che utilizzano Fibre Channel e iSCSI sono stati i primi ad essere supportati da VMware per ESX, ma non hanno la capacità di gestire singoli file e dischi VM dal sistema storage. Al contrario, vengono forniti i LUN e VMFS gestisce i singoli file. Questo rende difficile per il sistema storage gestire direttamente le performance, la clonazione e la protezione dello storage delle singole macchine virtuali. VVol offre una granularità dello storage di cui già godono i clienti che utilizzano lo storage NFS, con le solide funzionalità SAN ad alte performance di ONTAP.
+I primi sistemi di archiviazione SAN che utilizzano Fibre Channel e iSCSI sono stati supportati da VMware per ESX, ma non erano in grado di gestire singoli file e dischi VM dal sistema di archiviazione. Al contrario, vengono predisposti i LUN e VMFS gestisce i singoli file. Ciò rende difficile per il sistema di storage gestire direttamente le prestazioni di storage, la clonazione e la protezione delle singole VM. I vVols offrono la granularità di storage di cui i clienti che utilizzano storage NFS già godono, con le solide e performanti funzionalità SAN di ONTAP.
 
-Ora, con gli strumenti vSphere 8 e ONTAP per VMware vSphere 9.12 e versioni successive, gli stessi controlli granulari utilizzati da vVol per i protocolli basati su SCSI legacy sono ora disponibili nella MODERNA SAN Fibre Channel che utilizza NVMe over Fabrics per ottenere performance ancora maggiori su larga scala. Con vSphere 8.0 update 1, è ora possibile implementare una soluzione NVMe end-to-end completa utilizzando vVol senza alcuna traduzione i/o nello stack di storage dell'hypervisor.
+Ora, con vSphere 8 e gli ONTAP tools for VMware vSphere 9.12 e versioni successive, gli stessi controlli granulari utilizzati da vVols per i protocolli legacy basati su SCSI sono disponibili nella moderna SAN Fibre Channel che utilizza NVMe su Fabric per prestazioni ancora maggiori su larga scala. Con vSphere 8.0 Update 1, è ora possibile distribuire una soluzione NVMe end-to-end completa utilizzando vVols senza alcuna traduzione di I/O nello stack di storage dell'hypervisor.
 
 
 
 === Maggiori funzionalità di offload dello storage
 
-Mentre VAAI offre una varietà di operazioni che vengono trasferite allo storage, ci sono alcune lacune che vengono affrontate dal provider VASA. SAN VAAI non è in grado di trasferire le snapshot gestite da VMware al sistema storage. NFS VAAI è in grado di trasferire le snapshot gestite da macchine virtuali, ma esistono dei limiti per una macchina virtuale con snapshot native dello storage. Poiché i vVol utilizzano LUN, spazi dei nomi o file singoli per i dischi delle macchine virtuali, ONTAP può clonare in modo rapido ed efficiente i file o le LUN per creare snapshot granulari delle macchine virtuali che non richiedono più file delta. Inoltre, NFS VAAI non supporta operazioni di offload dei cloni per le migrazioni vMotion di storage a caldo (attivate). La macchina virtuale deve essere spenta per consentire l'offload della migrazione quando si utilizza VAAI con datastore NFS tradizionali. Il provider VASA negli strumenti ONTAP consente cloni quasi istantanei ed efficienti in termini di storage per le migrazioni a caldo e a freddo e supporta anche copie quasi istantanee per le migrazioni tra volumi di vVol. Grazie a questi significativi vantaggi in termini di efficienza dello storage, è possibile sfruttare al meglio i carichi di lavoro vVol in base a. https://www.netapp.com/pdf.html?item=/media/8207-flyer-efficiency-guaranteepdf.pdf["Garanzia di efficienza"] programma. Allo stesso modo, se i cloni cross-volume con VAAI non soddisfano i tuoi requisiti, sarai in grado di risolvere le sfide per il tuo business grazie ai miglioramenti nell'esperienza di copia con i vVol.
+Sebbene VAAI offra una varietà di operazioni che vengono trasferite allo storage, vi sono alcune lacune che vengono affrontate dal fornitore VASA. SAN VAAI non è in grado di scaricare gli snapshot gestiti da VMware sul sistema di storage. NFS VAAI può scaricare gli snapshot gestiti dalla VM, ma su una VM con snapshot nativi di archiviazione sono presenti delle limitazioni. Poiché i vVols utilizzano LUN, namespace o file individuali per i dischi delle macchine virtuali, ONTAP può clonare in modo rapido ed efficiente i file o le LUN per creare snapshot granulari per VM che non richiedono più file delta. NFS VAAI non supporta inoltre le operazioni di clonazione di offload per le migrazioni Storage vMotion a caldo (attivate). Quando si utilizza VAAI con datastore NFS tradizionali, la VM deve essere spenta per consentire lo scaricamento della migrazione. Il provider VASA negli strumenti ONTAP consente cloni quasi istantanei ed efficienti in termini di archiviazione per migrazioni a caldo e a freddo e supporta anche copie quasi istantanee per migrazioni tra volumi di vVols. Grazie a questi significativi vantaggi in termini di efficienza di archiviazione, potresti essere in grado di sfruttare appieno i carichi di lavoro vVols con https://www.netapp.com/pdf.html?item=/media/8207-flyer-efficiency-guaranteepdf.pdf["Garanzia di efficienza"] programma. Allo stesso modo, se i cloni cross-volume che utilizzano VAAI non soddisfano i tuoi requisiti, probabilmente riuscirai a risolvere la sfida aziendale grazie ai miglioramenti nell'esperienza di copia con vVols.
 
 
 
@@ -160,8 +160,8 @@ Oltre a questi vantaggi, vediamo anche questi casi di utilizzo comuni per lo sto
 
 * *Dischi di prima classe (FCD)*
 +
-** VMware Tanzu Kubernetes Grid [TKG] volumi persistenti.
-** Fornire servizi di Amazon EBS attraverso una gestione indipendente del ciclo di vita VMDK.
+** Volumi persistenti VMware vSphere Kubernetes Service (VKS).
+** Fornire servizi simili ad Amazon EBS tramite la gestione indipendente del ciclo di vita VMDK.
 
 
 * *Provisioning on-demand delle macchine virtuali temporanee*
@@ -178,7 +178,7 @@ Oltre a questi vantaggi, vediamo anche questi casi di utilizzo comuni per lo sto
 
 Se utilizzato a pieno vantaggio, come nei casi di utilizzo precedenti, i vVol forniscono i seguenti miglioramenti specifici:
 
-* I cloni vengono creati rapidamente all'interno di un singolo volume o su più volumi in un cluster ONTAP, un vantaggio rispetto ai cloni abilitati VAAI tradizionali. Sono inoltre efficienti in termini di storage. I cloni all'interno di un volume utilizzano il clone del file ONTAP, simile ai volumi FlexClone, e memorizzano solo le modifiche dal file/LUN/namespace vVol di origine. In questo modo, le macchine virtuali a lungo termine per la produzione o altri scopi applicativi vengono create rapidamente, occupano poco spazio e possono beneficiare della protezione a livello di macchine virtuali (utilizzando il plug-in NetApp SnapCenter per VMware vSphere, le snapshot gestite da VMware o il backup VADP) e della gestione delle performance (con QoS ONTAP). I cloni cross volume sono molto più veloci con vVol che con VAAI becuase con VASA, possiamo creare il clone e permetterne l'accesso alla destinazione prima del completamento della copia. I blocchi di dati vengono copiati come processo in background per popolare il vVol di destinazione. In questo modo, lo spostamento delle LUN senza interruzioni di ONTAP funziona anche con le LUN tradizionali.
+* I cloni vengono creati rapidamente all'interno di un singolo volume o su più volumi in un cluster ONTAP , il che rappresenta un vantaggio rispetto ai tradizionali cloni abilitati per VAAI. Sono anche efficienti in termini di stoccaggio. I cloni all'interno di un volume utilizzano il clone di file ONTAP , che è simile ai volumi FlexClone e memorizza solo le modifiche dal file vVol/LUN/namespace di origine. Le VM a lungo termine per scopi di produzione o altre applicazioni vengono create rapidamente, occupano uno spazio minimo e possono trarre vantaggio dalla protezione a livello di VM (utilizzando il plug-in NetApp SnapCenter per VMware vSphere, gli snapshot gestiti da VMware o il backup VADP) e dalla gestione delle prestazioni (con ONTAP QoS). I cloni tra volumi sono molto più rapidi con vVols che con VAAI perché con VASA possiamo creare il clone e consentirne l'accesso alla destinazione prima che la copia sia completata. I blocchi di dati vengono copiati come processo in background per popolare il vVol di destinazione. Questo è simile al funzionamento dello spostamento LUN non-disruptive ONTAP per le LUN tradizionali.
 * I vVol sono la tecnologia di storage ideale quando si utilizza TKG con vSphere CSI, fornendo classi di storage e capacità discrete gestite dall'amministratore di vCenter.
-* Amazon EBS-like Services può essere fornito attraverso FCD perché un FCD VMDK, come suggerisce il nome, è un cittadino di prima classe in vSphere e ha un ciclo di vita che può essere gestito in modo indipendente separato dalle macchine virtuali a cui potrebbe essere collegato.
+* I servizi simili ad Amazon EBS possono essere forniti tramite FCD perché un FCD VMDK, come suggerisce il nome, è un cittadino di prima classe in vSphere e ha un ciclo di vita che può essere gestito in modo indipendente, separato dalle VM a cui potrebbe essere collegato.
 
