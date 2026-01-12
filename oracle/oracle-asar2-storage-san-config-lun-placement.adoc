@@ -1,0 +1,96 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-storage-san-config-lun-placement.html 
+keywords: SAN, ASM, LVM, oracle, LUN, ASA r2 
+summary: Posizionamento LUN Oracle e ONTAP con ASA r2 
+searchtitle: Posizionamento LUN del database Oracle con ASA r2 
+---
+= Posizionamento delle LUN
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il posizionamento ottimale delle LUN del database nei sistemi ASA r2 dipende principalmente dal modo in cui verranno utilizzate le varie funzionalità ONTAP .
+
+Nei sistemi ASA r2, le unità di archiviazione (LUN o namespace NVMe) vengono create da un livello di archiviazione semplificato denominato Storage Availability Zone (SAZ), che funge da pool di archiviazione comuni per una coppia HA.
+
+
+NOTE: In genere è presente una sola zona di disponibilità dello storage (SAZ) per coppia HA.
+
+
+
+== Zone di disponibilità di stoccaggio (SAZ)
+
+Nei sistemi ASA r2, i volumi sono ancora presenti, ma vengono creati automaticamente quando vengono create le unità di archiviazione. Le unità di archiviazione (LUN o namespace NVMe) vengono fornite direttamente all'interno dei volumi creati automaticamente nelle Storage Availability Zone (SAZ). Questa progettazione elimina la necessità di una gestione manuale dei volumi e rende il provisioning più diretto e semplificato per carichi di lavoro a blocchi come i database Oracle.
+
+
+
+== SAZ e unità di stoccaggio
+
+Le unità di archiviazione correlate (LUN o namespace NVMe) sono solitamente collocate all'interno di un'unica Storage Availability Zone (SAZ). Ad esempio, un database che richiede 10 unità di archiviazione (LUN) in genere avrebbe tutte e 10 le unità posizionate nella stessa SAZ per semplicità e prestazioni.
+
+[NOTE]
+====
+* Il comportamento predefinito ASA r2 è l'utilizzo di un rapporto 1:1 tra unità di archiviazione e volumi, ovvero un'unità di archiviazione (LUN) per volume.
+* In caso di più di una coppia HA nel sistema ASA r2, le unità di archiviazione (LUN) per un dato database possono essere distribuite su più SAZ per ottimizzare l'utilizzo e le prestazioni del controller.
+
+
+====
+
+NOTE: Nel contesto di FC SAN, qui l'unità di archiviazione si riferisce a LUN.
+
+
+
+== Gruppi di coerenza (CG), LUN e snapshot
+
+In ASA r2, i criteri e le pianificazioni degli snapshot vengono applicati a livello di gruppo di coerenza, ovvero una struttura logica che raggruppa più LUN o namespace NVMe per una protezione coordinata dei dati. Un set di dati composto da 10 LUN richiederebbe un solo criterio di snapshot quando tali LUN fanno parte dello stesso gruppo di coerenza.
+
+I gruppi di coerenza garantiscono operazioni di snapshot atomiche su tutti i LUN inclusi. Ad esempio, un database che risiede su 10 LUN o un ambiente applicativo basato su VMware composto da 10 sistemi operativi diversi possono essere protetti come un singolo oggetto coerente se i LUN sottostanti sono raggruppati nello stesso gruppo di coerenza. Se vengono inseriti in gruppi di coerenza diversi, gli snapshot potrebbero essere perfettamente sincronizzati o meno, anche se programmati contemporaneamente.
+
+In alcuni casi, potrebbe essere necessario suddividere un set correlato di LUN in due gruppi di coerenza diversi a causa dei requisiti di ripristino. Ad esempio, un database potrebbe avere quattro LUN per i file di dati e due LUN per i log. In questo caso, un gruppo di coerenza dei file di dati con 4 LUN e un gruppo di coerenza dei log con 2 LUN potrebbero essere l'opzione migliore. Il motivo è la recuperabilità indipendente: il gruppo di coerenza del file di dati potrebbe essere ripristinato selettivamente a uno stato precedente, il che significa che tutti e quattro i LUN verrebbero riportati allo stato dello snapshot, mentre il gruppo di coerenza del log con i suoi dati critici rimarrebbe inalterato.
+
+
+
+== CG, LUN e SnapMirror
+
+Le policy e le operazioni SnapMirror vengono eseguite, come le operazioni snapshot, sul gruppo di coerenza e non sulla LUN.
+
+La collocazione congiunta di LUN correlate in un singolo gruppo di coerenza consente di creare una singola relazione SnapMirror e di aggiornare tutti i dati contenuti con un singolo aggiornamento. Come per gli snapshot, anche l'aggiornamento sarà un'operazione atomica. La destinazione SnapMirror avrà sicuramente una replica puntuale dei LUN di origine. Se i LUN fossero distribuiti su più gruppi di coerenza, le repliche potrebbero essere coerenti tra loro o meno.
+
+[NOTE]
+====
+La replica SnapMirror sui sistemi ASA r2 presenta le seguenti limitazioni:
+
+* La replica sincrona SnapMirror non è supportata.
+* La sincronizzazione attiva SnapMirror è supportata solo tra due sistemi ASA r2.
+* La replica asincrona SnapMirror è supportata solo tra due sistemi ASA r2.
+* La replica asincrona SnapMirror non è supportata tra un sistema ASA r2 e un sistema ASA, AFF o FAS o il cloud.
+
+
+Scopri di più su https://docs.netapp.com/us-en/asa-r2/data-protection/pre-defined-protection-policies.html["Criteri di replica SnapMirror supportati sui sistemi ASA r2"].
+
+====
+
+
+== CG, LUN e QoS
+
+Sebbene la QoS possa essere applicata selettivamente a singole LUN, solitamente è più semplice impostarla a livello di gruppo di coerenza. Ad esempio, tutti i LUN utilizzati dagli ospiti in un dato server ESX potrebbero essere inseriti in un singolo gruppo di coerenza e quindi potrebbe essere applicata una policy QoS adattiva ONTAP . Il risultato è un limite IOPS per TiB auto-scalabile che si applica a tutte le LUN.
+
+Allo stesso modo, se un database richiedesse 100.000 IOPS e occupasse 10 LUN, sarebbe più semplice impostare un singolo limite di 100.000 IOPS su un singolo gruppo di coerenza piuttosto che impostare 10 limiti individuali di 10.000 IOPS, uno su ogni LUN.
+
+
+
+== Layout CG multipli
+
+In alcuni casi può essere utile distribuire le LUN su più gruppi di coerenza. Il motivo principale è lo striping del controller. Ad esempio, un sistema di archiviazione HA ASA r2 potrebbe ospitare un singolo database Oracle in cui è richiesta la piena capacità di elaborazione e memorizzazione nella cache di ciascun controller. In questo caso, una progettazione tipica sarebbe quella di posizionare metà delle LUN in un singolo gruppo di coerenza sul controller 1 e l'altra metà delle LUN in un singolo gruppo di coerenza sul controller 2.
+
+Allo stesso modo, per gli ambienti che ospitano numerosi database, la distribuzione delle LUN su più gruppi di coerenza può garantire un utilizzo equilibrato del controller. Ad esempio, un sistema HA che ospita 100 database da 10 LUN ciascuno potrebbe assegnare 5 LUN a un gruppo di coerenza sul controller 1 e 5 LUN a un gruppo di coerenza sul controller 2 per database. Ciò garantisce un caricamento simmetrico man mano che vengono forniti database aggiuntivi.
+
+Nessuno di questi esempi, però, prevede un rapporto LUN-gruppo di coerenza pari a 1:1. L'obiettivo rimane quello di ottimizzare la gestibilità raggruppando logicamente le LUN correlate in gruppi di coerenza.
+
+Un esempio in cui un rapporto LUN/gruppo di coerenza di 1:1 ha senso sono i carichi di lavoro containerizzati, in cui ogni LUN potrebbe rappresentare in realtà un singolo carico di lavoro che richiede policy di snapshot e replica separate e quindi deve essere gestito individualmente. In questi casi, un rapporto 1:1 potrebbe essere ottimale.

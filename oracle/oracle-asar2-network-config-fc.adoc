@@ -1,0 +1,36 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-network-config-fc.html 
+keywords: SAN, zoning, ASA r2 
+summary: Configurazione di rete FC per database Oracle con ASA r2 
+searchtitle: Configurazione FC SAN per database Oracle con ASA r2 
+---
+= Configurazione FC SAN
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La configurazione di FC SAN per database Oracle su sistemi ASA r2 consiste principalmente nel seguire le best practice SAN standard.
+
+ASA r2 è ottimizzato per carichi di lavoro esclusivamente SAN, pertanto i principi rimangono gli stessi di AFF/ FAS, con particolare attenzione a prestazioni, resilienza e semplicità. Ciò include misure di pianificazione tipiche, come la garanzia che esista una larghezza di banda sufficiente sulla SAN tra l'host e il sistema di archiviazione, la verifica che tutti i percorsi SAN esistano tra tutti i dispositivi richiesti, l'utilizzo delle impostazioni della porta FC richieste dal fornitore dello switch FC, l'evitamento di contese ISL e l'utilizzo di un monitoraggio adeguato della struttura SAN.
+
+
+
+== Suddivisione in zone
+
+Una zona FC non deve mai contenere più di un iniziatore. Una tale disposizione potrebbe sembrare funzionare inizialmente, ma la diafonia tra gli iniziatori interferisce eventualmente con le prestazioni e la stabilità.
+
+Le zone MultiTarget sono generalmente considerate sicure, anche se in rare circostanze il comportamento delle porte target FC di fornitori diversi ha causato problemi. Ad esempio, evita di includere nella stessa zona le porte di destinazione di uno storage array NetApp e non NetApp. Inoltre, l'inserimento di un sistema di storage NetApp e di un dispositivo a nastro nella stessa zona è ancora più probabile che causino problemi.
+
+[NOTE]
+====
+* ASA r2 utilizza le zone di disponibilità dello storage anziché gli aggregati, ma ciò non modifica i principi di zonizzazione FC.
+* Il multipathing (MPIO) rimane il meccanismo di resilienza principale; tuttavia, per i sistemi ASA r2 che supportano il multipathing attivo-attivo simmetrico, tutti i percorsi verso una LUN sono attivi e utilizzati simultaneamente per l'I/O.
+
+
+====

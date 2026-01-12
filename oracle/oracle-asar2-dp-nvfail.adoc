@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-dp-nvfail.html 
+keywords: oracle, nvfail, ASA r2 
+summary: Configurazione di NVFAIL per proteggere i database Oracle su ASA r2 
+searchtitle: Database Oracle e NVFAIL su ASA r2 
+---
+= NVFAIL
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NVFAIL è una funzionalità ONTAP che garantisce l'integrità dei dati durante scenari di failover catastrofici.
+
+Questa funzionalità è ancora applicabile sui sistemi ASA r2, anche se ASA r2 utilizza un'architettura SAN semplificata (SAZ e unità di archiviazione anziché volumi).
+
+I database sono vulnerabili al danneggiamento durante gli eventi di failover dell'archiviazione perché mantengono grandi cache interne. Se un evento catastrofico richiede di forzare un failover ONTAP , indipendentemente dallo stato di salute della configurazione complessiva, il risultato è che le modifiche precedentemente riconosciute possono essere effettivamente ignorate. Il contenuto dell'array di archiviazione torna indietro nel tempo e lo stato della cache del database non riflette più lo stato dei dati sul disco. Questa incoerenza provoca la corruzione dei dati.
+
+La memorizzazione nella cache può avvenire a livello di applicazione o di server. Ad esempio, una configurazione Oracle Real Application Cluster (RAC) con server attivi sia su un sito primario che su uno remoto memorizza nella cache i dati all'interno di Oracle SGA. Un'operazione di failover forzato che comportasse la perdita di dati esporrebbe il database al rischio di danneggiamento, poiché i blocchi memorizzati nell'SGA potrebbero non corrispondere ai blocchi sul disco.
+
+Un utilizzo meno ovvio della memorizzazione nella cache è a livello del file system del sistema operativo. Un file system in cluster basato su LUN ubicati nel sito primario potrebbe essere montato sui server nel sito remoto e, ancora una volta, i dati potrebbero essere memorizzati nella cache. In queste situazioni, un guasto della NVRAM o un'acquisizione forzata potrebbero causare il danneggiamento del file system.
+
+ONTAP protegge i database e i sistemi operativi da questo scenario utilizzando NVFAIL e le impostazioni associate, che segnalano all'host di invalidare i dati memorizzati nella cache e di rimontare i file system interessati dopo il failover. Questo meccanismo si applica ai LUN e agli spazi dei nomi ASA r2 proprio come avviene su AFF/ FAS.
+
+[NOTE]
+====
+Considerazioni chiave su ASA r2:
+
+* NVFAIL opera a livello LUN (unità di archiviazione), non a livello SAZ.
+* Per i database Oracle, NVFAIL deve essere abilitato su tutte le LUN che ospitano componenti critici (file di dati, redo log, file di controllo).
+* MetroCluster non è supportato su ASA r2, quindi NVFAIL si applica principalmente agli scenari di failover HA locale.
+* NFS non è supportato su ASA r2, pertanto le considerazioni su NVFAIL si applicano solo ai carichi di lavoro basati su SAN (FC/iSCSI/NVMe).
+
+
+====

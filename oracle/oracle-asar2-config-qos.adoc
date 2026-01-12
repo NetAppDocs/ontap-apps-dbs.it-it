@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-qos.html 
+keywords: qos, bandwidth, minimum, guaranteed, adaptive, ASA r2, oracle 
+summary: Gestione delle prestazioni del database Oracle con ONTAP QoS su ASA r2 
+searchtitle: Gestione delle prestazioni del database Oracle con ONTAP QoS su ASA r2 
+---
+= Gestione delle prestazioni con ONTAP QoS sui sistemi ASA r2
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Per gestire in modo sicuro ed efficiente più database Oracle su ASA r2 è necessaria una strategia QoS efficace. Ciò è particolarmente importante perché i sistemi ASA r2 sono piattaforme SAN all-flash progettate per prestazioni estremamente elevate e consolidamento dei carichi di lavoro.
+
+Un numero relativamente piccolo di SSD può saturare anche i controller più potenti, pertanto i controlli QoS sono essenziali per garantire prestazioni prevedibili su più carichi di lavoro. Come riferimento, i sistemi ASA r2 come ASA A1K o A90 possono fornire da centinaia di migliaia a oltre un milione di IOPS con una latenza inferiore al millisecondo. Sono pochissimi i carichi di lavoro singoli che consumano questo livello di prestazioni, quindi il pieno utilizzo in genere comporta l'hosting di più database o applicazioni. Per farlo in modo sicuro sono necessarie policy QoS per evitare conflitti di risorse.
+
+ONTAP QoS su ASA r2 funziona allo stesso modo dei sistemi AFF/ FAS , con due tipi principali di controlli: IOPS e larghezza di banda. I controlli QoS possono essere applicati a SVM e LUN.
+
+
+
+== QoS (IOPS)
+
+La QoS basata su IOPS limita gli IOPS totali per una determinata risorsa. In ASA r2, i criteri QoS possono essere applicati a livello SVM e a singoli oggetti di archiviazione, come le LUN. Quando un carico di lavoro raggiunge il limite di IOPS, vengono messe in coda ulteriori richieste di I/O per i token, il che introduce latenza. Si tratta di un comportamento previsto che impedisce a un singolo carico di lavoro di monopolizzare le risorse del sistema.
+
+
+NOTE: Prestare attenzione quando si applicano controlli QoS ai dati del registro delle transazioni/redo del database. Questi carichi di lavoro sono soggetti a raffiche e un limite QoS che sembra ragionevole per un'attività media potrebbe essere troppo basso per i picchi, causando gravi problemi di prestazioni. In generale, la registrazione delle operazioni di redo e di archiviazione non dovrebbe essere limitata dalla qualità del servizio.
+
+
+
+== QoS della larghezza di banda
+
+La QoS basata sulla larghezza di banda limita la velocità di trasmissione in Mbps. Questa funzionalità è utile quando i carichi di lavoro eseguono letture o scritture di blocchi di grandi dimensioni, come scansioni complete di tabelle o operazioni di backup, che consumano una larghezza di banda significativa ma relativamente pochi IOPS. Combinando i limiti di IOPS e larghezza di banda è possibile ottenere un controllo più granulare.
+
+
+
+== Qualità del servizio minima/garantita
+
+Le policy QoS minime riservano le prestazioni ai carichi di lavoro critici. Ad esempio, in un ambiente misto con database di produzione e sviluppo, applicare la massima qualità del servizio ai carichi di lavoro di sviluppo e la minima qualità del servizio ai carichi di lavoro di produzione per garantire prestazioni prevedibili.
+
+
+
+== QoS adattiva
+
+La QoS adattiva regola i limiti in base alle dimensioni dell'oggetto di archiviazione. Sebbene raramente utilizzato per i database (perché le dimensioni non sono correlate alle esigenze di prestazioni), può essere utile per i carichi di lavoro di virtualizzazione in cui i requisiti di prestazioni aumentano con la capacità.

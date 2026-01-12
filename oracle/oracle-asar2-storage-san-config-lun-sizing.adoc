@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-storage-san-config-lun-sizing.html 
+keywords: SAN, ASM, LVM, oracle, lun, sizing, count, ASA r2 
+summary: Linee guida per il dimensionamento e il conteggio delle LUN del database Oracle con ASA r2 
+searchtitle: Dimensionamento e conteggio LUN del database Oracle con ASA r2 
+---
+= Dimensionamento e numero di LUN
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La scelta delle dimensioni ottimali e del numero di LUN da utilizzare è un elemento critico per ottenere performance e gestibilità ottimali dei database Oracle.
+
+Una LUN è un oggetto virtualizzato su ONTAP presente su tutte le unità nella Storage Availability Zone (SAZ) di hosting sui sistemi ASA r2. Di conseguenza, le prestazioni della LUN non sono influenzate dalle sue dimensioni, poiché la LUN sfrutta appieno il potenziale prestazionale della SAZ, indipendentemente dalle dimensioni scelte.
+
+Per comodità, i clienti potrebbero desiderare di utilizzare un LUN di particolari dimensioni. Ad esempio, se un database è costruito su un gruppo di dischi LVM o Oracle ASM composto da due LUN da 1TB GB ciascuno, tale gruppo di dischi deve essere aumentato in incrementi di 1TB TB. Potrebbe essere preferibile costruire il gruppo di dischi da otto LUN da 500GB ciascuno in modo che il gruppo di dischi possa essere aumentato con incrementi più piccoli.
+
+La pratica di stabilire una dimensione LUN standard universale è scoraggiata perché ciò può complicare la gestibilità. Ad esempio, è possibile che una dimensione LUN standard di 100GB TB sia ottimale quando un database o un datastore è compreso nell'intervallo da 1TB a 2TB TB, ma un database o un datastore di 20TB GB richiederebbe 200 LUN. Ciò significa che i tempi di riavvio del server sono più lunghi, che vi sono più oggetti da gestire nelle varie interfacce utente e che prodotti come SnapCenter devono eseguire la ricerca su molti oggetti. Utilizzando un numero inferiore di LUN di dimensioni maggiori è possibile evitare questi problemi.
+
+* Considerazioni ASA r2:*
+
+* La dimensione massima della LUN per ASA r2 è 128 TB, il che consente di utilizzare meno LUN di dimensioni maggiori senza compromettere le prestazioni.
+* ASA r2 utilizza le Storage Availability Zone (SAZ) anziché gli aggregati, ma ciò non modifica la logica di dimensionamento delle LUN per i carichi di lavoro Oracle.
+* Il thin provisioning è abilitato per impostazione predefinita; il ridimensionamento delle LUN non comporta interruzioni e non richiede di metterle offline.
+
+
+
+
+== Numero di LUN
+
+A differenza delle dimensioni delle LUN, il numero di LUN influisce sulle performance. Spesso le prestazioni delle applicazioni dipendono dalla capacità di eseguire i/o paralleli attraverso il livello SCSI. Di conseguenza, due LUN offrono performance migliori rispetto a una singola LUN. Utilizzare un LVM come Veritas VxVM, Linux LVM2 o Oracle ASM è il metodo più semplice per aumentare il parallelismo.
+
+Con ASA r2, i principi per il conteggio LUN rimangono gli stessi di AFF/ FAS perché ONTAP gestisce l'I/O parallelo in modo simile su tutte le piattaforme. Tuttavia, l'architettura SAN-only di ASA r2 e i percorsi simmetrici attivi-attivi garantiscono prestazioni coerenti su tutte le LUN.
+
+I clienti di NetApp hanno in genere ottenuto il minimo beneficio dall'aumento del numero di LUN oltre i sedici, sebbene i test degli ambienti con dischi a stato solido al 100% con i/o casuali molto intensi abbiano dimostrato un ulteriore miglioramento fino a 64 LUN.
+
+[TIP]
+====
+*NetApp consiglia* quanto segue:
+
+In generale, da quattro a sedici LUN sono sufficienti per supportare le esigenze di I/O di qualsiasi carico di lavoro del database Oracle. Meno di quattro LUN potrebbero creare limitazioni nelle prestazioni a causa delle limitazioni nelle implementazioni SCSI host. L'aumento oltre i sedici LUN raramente migliora le prestazioni, tranne in casi estremi (ad esempio carichi di lavoro SSD con I/O casuale molto elevati).
+
+====

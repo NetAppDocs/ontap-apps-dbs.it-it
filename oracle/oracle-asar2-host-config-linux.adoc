@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-host-config-linux.html 
+keywords: oracle, database, ASA r2, ontap, linux, nfs, xfs, ext4, slot tables 
+summary: Database Oracle con Linux su ASA r2 
+searchtitle: Database Oracle con Linux su ASA r2 
+---
+= Linux
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Argomenti di configurazione specifici del sistema operativo Linux con ASA r2 ONTAP.
+
+[NOTE]
+====
+Linux (Oracle Linux, RHEL, SUSE) è supportato con ASA r2 per i database Oracle. Utilizzare protocolli SAN, configurare correttamente il multipathing e applicare le best practice di Oracle per l'ottimizzazione di ASM e I/O.
+
+====
+
+
+== Utilità di pianificazione i/O.
+
+Il kernel Linux permette un controllo di basso livello sul modo in cui l'i/o blocca i dispositivi è programmato. Le impostazioni predefinite su varie distribuzioni di Linux variano notevolmente. I test dimostrano che la scadenza di solito offre i migliori risultati, ma a volte NOOP è stato leggermente migliore. La differenza di prestazioni è minima, ma è necessario verificare entrambe le opzioni se è necessario estrarre le massime prestazioni possibili da una configurazione di database. CFQ è l'impostazione predefinita in molte configurazioni e ha dimostrato di avere problemi significativi di prestazioni con i carichi di lavoro del database.
+
+Per istruzioni sulla configurazione dello scheduler i/o, consultare la documentazione del fornitore di Linux pertinente.
+
+
+
+== Multipathing
+
+Alcuni clienti hanno riscontrato arresti anomali durante l'interruzione della rete perché il daemon multipath non era in esecuzione sul proprio sistema. Nelle versioni recenti di Linux, il processo di installazione del sistema operativo e del demone multipathing potrebbero lasciare questi sistemi operativi vulnerabili a questo problema. I pacchetti sono installati correttamente, ma non sono configurati per l'avvio automatico dopo un riavvio.
+
+Ad esempio, l'impostazione predefinita per il demone multipath su RHEL 9.7 potrebbe apparire come segue:
+
+....
+[root@host1 ~]# systemctl list-unit-files --type=service | grep multipathd
+multipathd.service                      disabled
+....
+Questo può essere corretto con i seguenti comandi:
+
+....
+[root@host1 ~]# systemctl enable multipathd.service
+[root@host1 ~]# systemctl list-unit-files --type=service | grep multipathd
+multipathd.service                      enabled
+....
+
+
+== Profondità della coda
+
+Impostare la profondità della coda appropriata per i dispositivi SAN per evitare colli di bottiglia I/O. La profondità della coda predefinita su Linux è spesso impostata su 128, il che può causare problemi di prestazioni con i database Oracle. Impostando una profondità della coda troppo alta si può causare un'eccessiva coda di I/O, con conseguente aumento della latenza e riduzione della produttività. Un valore troppo basso può limitare il numero di richieste I/O in sospeso, riducendo le prestazioni complessive. Una profondità della coda di 64 è spesso un buon punto di partenza per i carichi di lavoro del database Oracle su ASA r2, ma potrebbe essere necessario regolarla in base alle caratteristiche specifiche del carico di lavoro e ai test delle prestazioni.
+
+
+
+== Mirroring ASM
+
+Il mirroring ASM potrebbe richiedere modifiche alle impostazioni di multipath Linux per consentire ad ASM di riconoscere un problema e passare a un gruppo di errori alternativo. La maggior parte delle configurazioni ASM su ONTAP utilizza la ridondanza esterna, il che significa che la protezione dei dati è fornita dall'array esterno e ASM non esegue il mirroring dei dati. Alcuni siti utilizzano ASM con ridondanza normale per fornire il mirroring bidirezionale, in genere su siti diversi.
+
+Per i sistemi ASA r2 che supportano il multipathing attivo-attivo, è necessario regolare queste impostazioni multipath. Poiché tutti i percorsi sono attivi e con carico bilanciato, non è necessaria una coda indefinita. I parametri multipath dovrebbero invece dare priorità alle prestazioni e al failback rapido. Questo comportamento è importante per il mirroring ASM perché ASM deve ricevere un errore di I/O per poter riprovare l'I/O su una LUN alternativa. Se l'I/O viene messo in coda indefinitamente, ASM non può attivare un failover.
+
+Impostare i seguenti parametri in Linux `multipath.conf` File per i LUN ASM utilizzati con il mirroring ASM:
+
+....
+polling_interval 5
+no_path_retry 24
+failback immediate
+path_grouping_policy multibus
+path_selector "service-time 0"
+....
+Queste impostazioni creano un timeout di 120 secondi per i dispositivi ASM. Il timeout viene calcolato come `polling_interval` * `no_path_retry` in pochi secondi. In alcuni casi potrebbe essere necessario regolare il valore esatto, ma per la maggior parte degli utilizzi dovrebbe essere sufficiente un timeout di 120 secondi. In particolare, 120 secondi devono consentire il takeover o il giveback del controller senza produrre un errore di i/o che porterebbe il gruppo guasto a diventare offline.
+
+Un più basso `no_path_retry` Il valore può ridurre il tempo richiesto per ASM per passare a un gruppo di errori alternativo, ma aumenta anche il rischio di un failover indesiderato durante attività di manutenzione come il takeover di un controller. Il rischio può essere mitigato tramite un attento monitoraggio dello stato di mirroring ASM. Se si verifica un failover indesiderato, è possibile risincronizzare rapidamente i mirror se la risincronizzazione viene eseguita in modo relativamente rapido. Per ulteriori informazioni, consultare la documentazione Oracle su ASM Fast Mirror Resync per la versione del software Oracle in uso.
+
+
+
+== Linux xfs, ext3, e ext4 opzioni di mount
+
+
+TIP: * NetApp consiglia* di utilizzare le opzioni di montaggio predefinite. Assicurare il corretto allineamento durante la creazione di file system su LUN.

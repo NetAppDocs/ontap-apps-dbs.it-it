@@ -1,0 +1,45 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-svm.html 
+keywords: svm, ASA r2, oracle 
+summary: Provisioning SVM per database Oracle con ASA r2 
+searchtitle: Database Oracle e Storage Virtual Machine con ASA r2 
+---
+= Macchine virtuali di storage
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Anche la gestione dell'archiviazione del database Oracle sui sistemi ASA r2 è centralizzata su una Storage Virtual Machine (SVM), nota come vserver nella CLI ONTAP .
+
+Una SVM è l'unità fondamentale per il provisioning e la sicurezza dello storage in ONTAP, simile a una VM guest su un server VMware ESX. Quando ONTAP viene installato per la prima volta su ASA r2, non ha alcuna capacità di elaborazione dati finché non viene creata una SVM. L'SVM definisce la personalità e i servizi dati per l'ambiente SAN.
+
+I sistemi ASA r2 utilizzano una personalità ONTAP solo SAN, ottimizzata per supportare protocolli a blocchi (FC, iSCSI, NVMe/FC, NVMe/TCP) e rimuove le funzionalità correlate a NAS. Ciò semplifica la gestione e garantisce che tutte le configurazioni SVM siano ottimizzate per i carichi di lavoro SAN. A differenza dei sistemi AFF/ FAS , ASA r2 non espone opzioni per servizi NAS quali directory home o condivisioni NFS.
+
+Quando viene creato un cluster, ASA r2 fornisce automaticamente una SVM dati predefinita denominata svm1 con protocolli SAN abilitati. Questa SVM è pronta per operazioni di archiviazione a blocchi senza richiedere la configurazione manuale dei servizi di protocollo. Per impostazione predefinita, i LIF dei dati IP in questa SVM supportano i protocolli iSCSI e NVMe/TCP e utilizzano la policy di servizio default-data-blocks, che semplifica la configurazione iniziale per i carichi di lavoro SAN. In seguito gli amministratori possono creare SVM aggiuntive o personalizzare le configurazioni LIF in base ai requisiti di prestazioni, sicurezza o multi-tenant.
+
+
+NOTE: Le interfacce logiche (LIF) per i protocolli SAN devono essere progettate in base ai requisiti di prestazioni e disponibilità. ASA r2 supporta iSCSI, FC e NVMe LIF, ma tieni presente che il failover automatico iSCSI LIF non è abilitato per impostazione predefinita perché ASA r2 utilizza una rete condivisa per gli host NVMe e SCSI. Per abilitare il failover automatico, creare https://docs.netapp.com/us-en/asa-r2/administer/manage-client-vm-access.html#create-a-lif-network-interface["LIF solo iSCSI"].
+
+
+
+== SVM
+
+Come per altre piattaforme ONTAP , non esiste una best practice ufficiale per il numero di SVM da creare; la decisione dipende dai requisiti di gestione e sicurezza.
+
+La maggior parte dei clienti utilizza un singolo SVM primario per le operazioni quotidiane e crea SVM aggiuntivi per esigenze speciali, come:
+
+* Un SVM dedicato per un database aziendale critico gestito da un team di specialisti
+* Un SVM per un gruppo di sviluppo con controllo amministrativo delegato
+* Un SVM per dati sensibili che richiedono un accesso amministrativo limitato
+
+
+Negli ambienti multi-tenant, a ciascun tenant può essere assegnata una SVM dedicata. Il limite per il numero di SVM e LIF per cluster, coppia HA e nodo dipende dal protocollo utilizzato, dal modello di nodo e dalla versione di ONTAP. Consultare il link:https://hwu.netapp.com/["NetApp Hardware Universe"^] per questi limiti.
+
+
+NOTE: ASA r2 supporta fino a 256 SVM per cluster e per coppia HA a partire da ONTAP 9.18.1 (in precedenza 32 nelle versioni precedenti).

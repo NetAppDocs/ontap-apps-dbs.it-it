@@ -1,0 +1,39 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-failover.html 
+keywords: failover, takeover, ASA r2, oracle 
+summary: 'È necessaria una conoscenza della funzione di acquisizione dello storage per garantire che le operazioni del database Oracle non vengano interrotte da queste operazioni. Inoltre, gli argomenti utilizzati dall"operazione di acquisizione possono compromettere l"integrità dei dati se utilizzati in modo errato.' 
+searchtitle: Failover dei database Oracle e del controller ONTAP in ASA r2 
+---
+= Failover ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+È necessaria la conoscenza delle funzioni di acquisizione dello storage per garantire che le operazioni del database Oracle non vengano interrotte durante queste operazioni. Inoltre, gli argomenti utilizzati dalle operazioni di acquisizione possono compromettere l'integrità dei dati se utilizzati in modo errato.
+
+In condizioni normali, le scritture in arrivo su un determinato controller vengono replicate in modo sincrono sul suo partner HA. In un ambiente ASA r2 con SnapMirror Active Sync (SM-as), le scritture vengono anche replicate su un controller remoto nel sito secondario. Finché una scrittura non viene memorizzata su supporti non volatili in tutte le posizioni, non viene riconosciuta dall'applicazione host.
+
+Il supporto su cui vengono memorizzati i dati di scrittura è denominato memoria non volatile (NVMEM). A volte viene definita memoria non volatile ad accesso casuale (NVRAM) e può essere considerata più un registro di scrittura che una cache. Durante il normale funzionamento, i dati provenienti NVMEM non vengono letti; vengono utilizzati solo per proteggere i dati in caso di guasto del software o dell'hardware. Quando i dati vengono scritti sulle unità, vengono trasferiti dalla RAM di sistema e non dalla NVMEM.
+
+Durante un'operazione di acquisizione, un nodo in una coppia HA assume il controllo delle operazioni dal partner. In ASA r2, lo switchover non è applicabile perché MetroCluster non è supportato; al suo posto, SnapMirror Active Sync fornisce ridondanza a livello di sito. Le operazioni di acquisizione dello storage durante la manutenzione ordinaria dovrebbero essere trasparenti, fatta eccezione per una breve pausa nelle operazioni quando cambiano i percorsi di rete. Il networking può essere complesso e gli errori sono facili da commettere, quindi NetApp consiglia vivamente di testare attentamente le operazioni di acquisizione prima di mettere in produzione un sistema di storage. Solo così si può garantire che tutti i percorsi di rete siano configurati correttamente. In un ambiente SAN, verificare lo stato del percorso utilizzando il comando `sanlun lun show -p` o gli strumenti multipathing nativi del sistema operativo per garantire che tutti i percorsi previsti siano disponibili. I sistemi ASA r2 forniscono tutti i percorsi ottimizzati attivi per le LUN e i clienti che utilizzano namespace NVMe dovrebbero affidarsi a strumenti nativi del sistema operativo, poiché i percorsi NVMe non sono coperti da sanlun.
+
+Quando si emette un'acquisizione forzata, è necessario prestare attenzione. Forzare una modifica alla configurazione di archiviazione significa che lo stato del controller proprietario delle unità viene ignorato e il nodo alternativo assume forzatamente il controllo delle unità. L'esecuzione non corretta di un'acquisizione può comportare la perdita o il danneggiamento dei dati, poiché un'acquisizione forzata può eliminare il contenuto di NVMEM. Una volta completata l'acquisizione, la perdita di tali dati implica che i dati memorizzati sulle unità potrebbero tornare a uno stato leggermente più vecchio dal punto di vista del database.
+
+Un'acquisizione forzata con una coppia HA normale dovrebbe essere raramente necessaria. In quasi tutti gli scenari di errore, un nodo si spegne e informa il partner in modo che venga eseguito un failover automatico. Esistono alcuni casi limite, come un rolling failure in cui l'interconnessione tra i nodi viene persa e poi un controller fallisce, in cui è necessario un takeover forzato. In una situazione del genere, il mirroring tra i nodi viene perso prima del guasto del controller, il che significa che il controller ancora in vita non dispone più di una copia delle scritture in corso. L'acquisizione deve quindi essere forzata, il che significa che i dati potrebbero andare persi.
+
+[TIP]
+====
+NetApp consiglia di adottare le seguenti precauzioni:
+
+* Fate molta attenzione a non forzare accidentalmente un'acquisizione. Di solito, non dovrebbe essere necessario forzare la modifica, che può causare la perdita di dati.
+* Se è necessario un takeover forzato, assicurarsi che le applicazioni siano chiuse, che tutti i file system siano smontati e che i gruppi di volumi del gestore dei volumi logici (LVM) siano disattivati. I gruppi di dischi ASM devono essere smontati.
+* In caso di errore a livello di sito durante l'utilizzo di SM-as, il failover automatico non pianificato assistito ONTAP Mediator verrà avviato sul cluster attivo, determinando una breve pausa I/O e quindi le transizioni del database continueranno dal cluster attivo. Per maggiori informazioni, vedere il https://docs.netapp.com/us-en/asa-r2/data-protection/configure-snapmirror-active-sync.html["Sincronizzazione attiva SnapMirror sui sistemi ASA r2"] per i passaggi di configurazione dettagliati.
+
+
+====

@@ -1,0 +1,68 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-thin-provisioning.html 
+keywords: thin provisioning, oracle, ASA r2 
+summary: Thin provisioning di Oracle e ONTAP con ASA r2 
+searchtitle: Thin provisioning con database Oracle su ASA r2 
+---
+= Thin provisioning
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il thin provisioning per un database Oracle su ASA r2 richiede un'attenta pianificazione perché implica la configurazione di uno spazio logico maggiore di quello fisicamente disponibile. Se implementato correttamente, il thin provisioning garantisce notevoli risparmi sui costi e una migliore gestibilità.
+
+Il thin provisioning è parte integrante di ASA r2 ed è strettamente correlato alle tecnologie di efficienza ONTAP , poiché entrambe consentono di archiviare più dati logici rispetto alla capacità fisica del sistema. I sistemi ASA r2 sono solo SAN e il thin provisioning si applica alle unità di archiviazione e alle LUN all'interno delle Storage Availability Zone (SAZ).
+
+
+NOTE: Per impostazione predefinita, le unità di archiviazione ASA r2 sono sottoposte a thin provisioning.
+
+Quasi tutti gli utilizzi degli snapshot prevedono il thin provisioning. Ad esempio, un tipico database da 10 TiB con 30 giorni di snapshot potrebbe apparire come 310 TiB di dati logici, ma vengono consumati solo 12-15 TiB di spazio fisico, perché gli snapshot memorizzano solo i blocchi modificati.
+
+Allo stesso modo, la clonazione è un'altra forma di thin provisioning. Un ambiente di sviluppo con 40 cloni di un database da 80 TiB richiederebbe 3,2 PiB se fosse scritto completamente, ma in pratica ne consuma molto meno perché vengono memorizzate solo le modifiche.
+
+
+
+== Gestione dello spazio
+
+È necessario prestare particolare attenzione al thin provisioning in un ambiente applicativo, poiché la velocità di modifica dei dati può aumentare in modo imprevisto. Ad esempio, il consumo di spazio dovuto agli snapshot può aumentare rapidamente se le tabelle del database vengono reindicizzate o se vengono applicate patch su larga scala ai guest VMware. Un backup fuori posto può causare la perdita di una grande quantità di dati in pochissimo tempo. Infine, può essere difficile ripristinare alcune applicazioni se una LUN esaurisce inaspettatamente lo spazio libero.
+
+In ASA r2, questi rischi vengono mitigati tramite *thin provisioning*, *monitoraggio proattivo* e *politiche di ridimensionamento LUN*, anziché tramite funzionalità ONTAP come volume-autogrow o snapshot-autodelete. Gli amministratori dovrebbero:
+
+* Abilitare il thin provisioning sulle LUN (`space-reserve disabled`) - questa è l'impostazione predefinita in ASA r2
+* Monitorare la capacità utilizzando gli avvisi di System Manager o l'automazione basata su API
+* Utilizzare il ridimensionamento LUN pianificato o programmato per adattarsi alla crescita
+* Configurare la riserva di snapshot e l'eliminazione automatica degli snapshot tramite System Manager (GUI)
+
+
+
+CAUTION: È essenziale pianificare attentamente le soglie di spazio e gli script di automazione perché ASA r2 non supporta la crescita automatica del volume o l'eliminazione degli snapshot tramite CLI.
+
+ASA r2 non utilizza impostazioni di riserva frazionaria perché è un'architettura solo SAN che astrae le opzioni di volume basate su WAFL. Invece, l'efficienza dello spazio e la protezione da sovrascrittura vengono gestite a livello LUN. Ad esempio, se si dispone di una LUN da 250 GiB fornita da un'unità di archiviazione, gli snapshot consumano spazio in base alle effettive modifiche dei blocchi anziché riservare in anticipo una quantità di spazio equivalente. In questo modo si elimina la necessità di grandi prenotazioni statiche, comuni negli ambienti ONTAP tradizionali che utilizzavano la riserva frazionaria.
+
+
+NOTE: Se è richiesta una protezione da sovrascrittura garantita e il monitoraggio non è fattibile, gli amministratori devono predisporre una capacità sufficiente nell'unità di archiviazione e impostare opportunamente la riserva di snapshot. Tuttavia, la progettazione di ASA r2 rende la riserva frazionaria non necessaria per la maggior parte dei carichi di lavoro.
+
+
+
+== Compressione e deduplica
+
+La compressione e la deduplicazione in ASA r2 sono tecnologie di efficienza dello spazio, non meccanismi tradizionali di thin provisioning. Queste funzionalità riducono l'ingombro fisico dello storage eliminando i dati ridondanti e comprimendo i blocchi, consentendo di archiviare più dati logici di quanto la capacità grezza consentirebbe altrimenti.
+
+Ad esempio, un set di dati da 50 TiB potrebbe essere compresso a 30 TiB, risparmiando 20 TiB di spazio fisico. Dal punto di vista applicativo, ci sono ancora 50 TiB di dati, anche se occupano solo 30 TiB sul disco.
+
+
+NOTE: La comprimibilità di un set di dati può cambiare nel tempo, il che può aumentare il consumo di spazio fisico. Pertanto, la compressione e la deduplicazione devono essere gestite in modo proattivo attraverso il monitoraggio e la pianificazione della capacità.
+
+
+
+== Spazio libero e allocazione di spazio LVM
+
+Il thin provisioning negli ambienti ASA r2 può perdere efficienza nel tempo se i blocchi eliminati non vengono recuperati. A meno che lo spazio non venga liberato tramite TRIM/UNMAP o sovrascritto con zeri (tramite ASMRU - Automatic Space Management and Reclamation Utility), i dati eliminati continuano a consumare capacità fisica. In molti ambienti di database Oracle, il thin provisioning offre vantaggi limitati perché i file di dati vengono solitamente pre-allocati alla loro dimensione completa durante la creazione.
+
+Un'attenta pianificazione della configurazione LVM può migliorare l'efficienza e ridurre al minimo la necessità di provisioning dello storage e ridimensionamento delle LUN. Quando si utilizza un LVM come Veritas VxVM o Oracle ASM, le LUN sottostanti vengono suddivise in estensioni che vengono utilizzate solo quando necessario. Ad esempio, se un set di dati inizia con una dimensione di 2 TiB ma può crescere fino a 10 TiB nel tempo, questo set di dati potrebbe essere posizionato su 10 TiB di LUN con thin provisioning organizzate in un diskgroup LVM. Occuperebbe solo 2 TiB di spazio al momento della creazione e richiederebbe spazio aggiuntivo solo man mano che le estensioni vengono allocate per far fronte alla crescita dei dati. Questo processo è sicuro finché lo spazio è monitorato.

@@ -1,0 +1,50 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-host-config-hp-ux.html 
+keywords: oracle, database, ASA r2, ontap, hp-ux 
+summary: Database Oracle con HP-UX su ASA r2 
+searchtitle: Database Oracle con HP-UX su ASA r2 
+---
+= HP-UX
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Argomenti di configurazione per il database Oracle su HP-UX con ASA r2 ONTAP.
+
+[NOTE]
+====
+HP-UX è supportato con NetApp ASA r2 per l'hosting di database Oracle, a condizione che:
+
+* La versione ONTAP è 9.16.x o successiva.
+* Utilizzare protocolli SAN (FC/iSCSI/NVMe). NAS non è supportato su ASA r2.
+* Applicare le best practice di montaggio e ottimizzazione I/O specifiche di HP-UX.
+
+
+====
+
+
+== Opzioni di montaggio VxFS HP-UX
+
+Utilizzare le seguenti opzioni di montaggio per i file system che ospitano file binari Oracle:
+
+....
+delaylog,nodatainlog
+....
+Utilizzare le seguenti opzioni di montaggio per i file system contenenti file di dati, log di ripristino, log di archivio e file di controllo in cui la versione di HP-UX non supporta i/o simultanei:
+
+....
+nodatainlog,mincache=direct,convosync=direct
+....
+Quando l'i/o simultaneo è supportato (VxFS 5.0.1 e versioni successive o con ServiceGuard Storage Management Suite), utilizzare queste opzioni di montaggio per i file system contenenti file di dati, log di ripristino, log di archivio e file di controllo:
+
+....
+delaylog,cio
+....
+
+NOTE: Il parametro `db_file_multiblock_read_count` È particolarmente critico negli ambienti VxFS. Oracle consiglia di non impostare questo parametro in Oracle 10g R1 e versioni successive, a meno che non sia diversamente specificato. L'impostazione predefinita con dimensioni blocco Oracle 8KB è 128 KB. Se il valore di questo parametro è forzato a 16 o inferiore, rimuovere l' `convosync=direct` Montare l'opzione perché può danneggiare le prestazioni i/o sequenziali. Questa operazione danneggia altri aspetti delle prestazioni e deve essere eseguita solo se il valore di `db_file_multiblock_read_count` deve essere modificato dal valore predefinito.

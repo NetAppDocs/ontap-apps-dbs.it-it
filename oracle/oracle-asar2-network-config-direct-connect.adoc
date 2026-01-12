@@ -1,0 +1,30 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-network-config-direct-connect.html 
+keywords: direct-connect, oracle, ASA r2 
+summary: Database Oracle e connettività ONTAP a connessione diretta con ASA r2 
+searchtitle: Database Oracle e connettività ONTAP a connessione diretta con ASA r2 
+---
+= Connessione di rete diretta
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Gli amministratori dello storage a volte preferiscono semplificare le loro infrastrutture rimuovendo gli switch di rete dalla configurazione. Questo può essere supportato in alcuni scenari.
+
+
+
+== ISCSI e NVMe/TCP
+
+Un host che utilizza iSCSI o NVMe/TCP può essere collegato direttamente a un sistema di archiviazione ASA r2 e funzionare normalmente. Il motivo è il pathing. Le connessioni dirette a due diversi controller di archiviazione danno luogo a due percorsi indipendenti per il flusso di dati. La perdita di un percorso, di una porta o di un controller non impedisce l'utilizzo dell'altro percorso, a condizione che il multipathing sia configurato correttamente.
+
+
+
+== Connessione diretta FC
+
+Non è possibile connettere direttamente un host a un sistema di archiviazione ASA r2 utilizzando il protocollo FC. Il motivo è lo stesso dei sistemi AFF/ FAS : l'uso dell'NPIV. Il WWN che identifica una porta ONTAP FC nella rete FC utilizza un tipo di virtualizzazione denominato NPIV. Qualsiasi dispositivo connesso a un sistema ONTAP deve essere in grado di riconoscere un NPIV WWN. Attualmente non ci sono fornitori di HBA che offrano un HBA installabile in un host in grado di supportare un target NPIV.

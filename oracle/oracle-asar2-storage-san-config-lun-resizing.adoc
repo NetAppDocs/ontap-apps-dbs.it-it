@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-storage-san-config-lun-resizing.html 
+keywords: SAN, ASM, LVM, oracle, LUN, ASA r2 
+summary: Ridimensionamento di LUN e LVM con database Oracle su ASA r2 
+searchtitle: Ridimensionamento LUN del database Oracle e ridimensionamento LVM con ASA r2 
+---
+= Ridimensionamento LUN e ridimensionamento LVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quando un file system basato su SAN o un gruppo di dischi Oracle ASM raggiunge il limite di capacità su ASA r2, sono disponibili due opzioni per aumentare lo spazio disponibile:
+
+* Aumentare le dimensioni delle LUN (unità di archiviazione) esistenti
+* Aggiungere un nuovo LUN a un gruppo di dischi ASM o a un gruppo di volumi LVM esistente e aumentare il volume logico contenuto
+
+
+Sebbene il ridimensionamento LUN sia supportato su ASA r2, in genere è preferibile utilizzare un Logical Volume Manager (LVM) come Oracle ASM. Uno dei motivi principali per cui esistono gli LVM è quello di evitare la necessità di frequenti ridimensionamenti delle LUN. Con un LVM, più LUN vengono combinati in un pool virtuale di storage. I volumi logici ricavati da questo pool possono essere facilmente ridimensionati senza influire sulla configurazione di archiviazione sottostante.
+
+Ulteriori vantaggi derivanti dall'utilizzo di LVM o ASM includono:
+
+* Ottimizzazione delle prestazioni: distribuisce l'I/O su più LUN, riducendo gli hotspot.
+* Flessibilità: aggiungi nuove LUN senza interrompere i carichi di lavoro esistenti.
+* Migrazione trasparente: ASM o LVM possono spostare le estensioni su nuove LUN per il bilanciamento o la suddivisione in livelli senza tempi di inattività dell'host.
+
+
+[NOTE]
+====
+Considerazioni chiave su ASA r2:
+
+* Il ridimensionamento LUN viene eseguito a livello di unità di archiviazione all'interno di una Storage VM (SVM) utilizzando la capacità della Storage Availability Zone (SAZ).
+* Per Oracle, la procedura consigliata è quella di aggiungere LUN ai gruppi di dischi ASM anziché ridimensionare le LUN esistenti, per mantenere lo striping e il parallelismo.
+
+
+====

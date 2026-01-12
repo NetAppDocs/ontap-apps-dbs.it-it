@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-storage-san-config-asru.html 
+keywords: ontap, thin provisioning, oracle, ASRU, ASA r2 
+summary: Utilità di recupero ASM con rilevamento del blocco zero ONTAP su ASA r2 
+searchtitle: 'ASM Reclamation Utility (ASRU) con ONTAP su ASA r2' 
+---
+= Utilità di recupero ASM (ASRU)
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+ONTAP su ASA r2 rimuove in modo efficiente i blocchi azzerati scritti su una LUN (unità di archiviazione) quando è abilitata la compressione in linea. Utilità come Oracle ASM Reclamation Utility (ASRU) funzionano scrivendo zeri nelle estensioni ASM non utilizzate.
+
+Ciò consente agli amministratori di database di recuperare spazio sull'array di archiviazione dopo l'eliminazione dei dati. ONTAP intercetta gli zeri e dealloca lo spazio dalla LUN. Il processo di recupero è estremamente rapido perché nel sistema di archiviazione non vengono scritti dati effettivi.
+
+Dal punto di vista del database, il gruppo di dischi ASM contiene zero; la lettura di tali aree del LUN produce un flusso di zero, tuttavia ONTAP non memorizza gli zero sui dischi. Vengono invece apportate semplici modifiche ai metadati che contrassegnano internamente le aree azzerate del LUN come vuote di qualsiasi dato.
+
+Per motivi simili, il test delle performance che implica dati azzerati non è valido, in quanto i blocchi di zero non vengono effettivamente elaborati come scritture all'interno dello storage array.
+
+Considerazioni chiave ASRU con ASA r2 ONTAP:
+
+* Funziona allo stesso modo di AFF/ FAS per i carichi di lavoro SAN perché ASA r2 è solo a blocchi.
+* Si applica ai LUN e agli spazi dei nomi NVMe forniti all'interno delle SAZ.
+* Non esistono volumi FlexVol , ma il comportamento di recupero del blocco zero è identico.
+
+
+
+NOTE: Quando si utilizza ASRU, assicurarsi che tutte le patch consigliate da Oracle siano installate.
