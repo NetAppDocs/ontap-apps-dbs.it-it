@@ -5,7 +5,7 @@ keywords: PostgreSQL,database,postgres
 summary: Protezione dei dati PostgreSQL 
 searchtitle: Protezione dei dati nativa di PostgreSQL 
 ---
-= Protezione DDTA nativa
+= Data Protection nativa
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
