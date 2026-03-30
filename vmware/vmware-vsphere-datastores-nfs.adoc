@@ -26,17 +26,17 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 ** Quando non si utilizzano gli strumenti ONTAP per VMware vSphere, utilizzare una singola policy di esportazione per tutti i server o per ciascun cluster di server in cui è necessario un controllo aggiuntivo degli accessi.
 
 
-* Utilizzare una singola interfaccia logica (LIF) per ogni SVM su ciascun nodo del cluster ONTAP. Le raccomandazioni precedenti di un LIF per datastore non sono più necessarie. Benché l'accesso diretto (LIF e datastore nello stesso nodo) sia migliore, non preoccuparti dell'accesso indiretto perché l'effetto sulle performance è generalmente minimo (microsecondi).
+* Utilizzare una singola interfaccia logica (LIF) per ogni SVM su ciascun nodo nel cluster ONTAP. Le precedenti raccomandazioni di una LIF per ogni datastore non sono più necessarie. Sebbene l'accesso diretto (LIF e datastore sullo stesso nodo) sia la soluzione migliore, non preoccuparti dell'accesso indiretto perché l'effetto sulle prestazioni è generalmente minimo (microsecondi).
 * Se si utilizza fpolicy, assicurarsi di escludere i file .lck poiché vengono utilizzati da vSphere per il blocco ogni volta che una VM viene accesa.
 * Tutte le versioni di VMware vSphere attualmente supportate possono utilizzare sia NFS v3 che v4,1. Il supporto ufficiale per nconnect è stato aggiunto a vSphere 8,0 update 2 per NFS v3 e all'update 3 per NFS v4,1. Per NFS v4,1, vSphere continua a supportare il trunking della sessione, l'autenticazione Kerberos e l'autenticazione Kerberos con integrità. È importante notare che il trunking della sessione richiede ONTAP 9.14.1 o una versione successiva. È possibile ottenere ulteriori informazioni sulla funzione nconnect e sul modo in cui migliora le prestazioni a link:https://docs.netapp.com/us-en/netapp-solutions/virtualization/vmware-vsphere8-nfsv3-nconnect.html["Funzione NFSv3 nconnect con NetApp e VMware"].
 
 
 [TIP]
 ====
-* Il valore massimo per nconnect in vSphere 8 è 4 e il valore predefinito è 1. Il limite massimo di valore in vSphere può essere aumentato in base all'host tramite impostazioni avanzate, tuttavia in genere non è necessario.
+* Il valore massimo per nconnect in vSphere 8 è 4 e il valore predefinito è 1. Il limite del valore massimo in vSphere può essere aumentato per ogni singolo host tramite le impostazioni avanzate, sebbene in genere non sia necessario.
 * Per gli ambienti che richiedono prestazioni superiori a quelle consentite da una singola connessione TCP, si consiglia di utilizzare il valore 4.
-* Tenere presente che ESXi ha un limite di 256 connessioni NFS e ogni connessione nconnect conta per quel totale. Ad esempio, due datastore con nconnect=4 contano come otto connessioni totali.
-* È importante verificare l'impatto delle prestazioni di nconnect sull'ambiente prima di implementare cambiamenti su larga scala negli ambienti di produzione.
+* Tieni presente che ESXi ha un limite di 256 connessioni NFS e ogni connessione nconnect contribuisce a tale totale. Ad esempio, due datastore con nconnect=4 verrebbero conteggiati come otto connessioni totali.
+* È importante testare l'impatto sulle prestazioni di nconnect nel proprio ambiente prima di implementare modifiche su larga scala negli ambienti di produzione.
 
 
 ====
@@ -46,7 +46,7 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 ** Fare riferimento alle note della tabella di interoperabilità NFS v4,1 nella link:https://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità NetApp"^] per i livelli di patch ESXi specifici richiesti per il supporto.
 
 
-* Come menzionato in link:vmware/vmware-vsphere-settings.html["impostazioni"], se non si utilizza vSphere CSI per Kubernetes, è necessario impostare il nuovo SyncInterval per https://knowledge.broadcom.com/external/article/386364/reducing-excessive-vsan-cnssync-warnings.html["VMware KB 386364"^]
+* Come menzionato in link:vmware-vsphere-settings.html["impostazioni"], se non stai utilizzando il vSphere CSI per Kubernetes, dovresti impostare il newSyncInterval per  https://knowledge.broadcom.com/external/article/386364/reducing-excessive-vsan-cnssync-warnings.html["VMware KB 386364"^]
 * Regole delle policy di esportazione NFS vengono utilizzate per controllare l'accesso dagli host vSphere. È possibile utilizzare un criterio con più volumi (datastore). Con NFS, ESXi utilizza lo stile di sicurezza sys (UNIX) e richiede l'opzione di montaggio root per eseguire le macchine virtuali. In ONTAP, questa opzione viene definita superutente e, quando viene utilizzata l'opzione superutente, non è necessario specificare l'ID utente anonimo. Tenere presente che le regole delle policy di esportazione con valori diversi per `-anon` e `-allow-suid` possono causare problemi di rilevamento SVM con gli strumenti ONTAP. Gli indirizzi IP devono essere un elenco separato da virgole senza spazi degli indirizzi della porta vmkernel che montano gli archivi dati. Ecco un esempio di regola dei criteri:
 +
 ** Access Protocol: nfs (che include sia nfs3 che nfs4)
@@ -70,7 +70,7 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 ** Superutente: SYS (richiesto anche per il volume root con VAAI)
 
 
-* Sebbene ONTAP offra una struttura flessibile dello spazio dei nomi dei volumi per organizzare i volumi in un albero utilizzando le giunzioni, questo approccio non ha alcun valore per vSphere. Crea una directory per ogni VM nella directory principale dell'archivio dati, indipendentemente dalla gerarchia dello spazio dei nomi dello storage. Pertanto, la Best practice consiste nel montare semplicemente il percorso di giunzione per i volumi per vSphere nel volume root della SVM, che è il modo in cui i tool ONTAP per VMware vSphere prevedono il provisioning dei datastore. La mancanza di percorsi di giunzione nidificati significa anche che nessun volume dipende da un volume diverso dal volume root e che la sua eliminazione o la sua eliminazione, anche intenzionalmente, non influisce sul percorso verso altri volumi.
+* Sebbene ONTAP offra una struttura di namespace per i volumi flessibile per organizzare i volumi in una struttura ad albero utilizzando le giunzioni, questo approccio non ha valore per vSphere. Crea una directory per ogni VM nella radice del datastore, indipendentemente dalla gerarchia del namespace dello storage. Pertanto, la best practice consiste semplicemente nel montare il percorso di giunzione per i volumi per vSphere sul volume root della SVM, che è il modo in cui ONTAP tools for VMware vSphere esegue il provisioning dei datastore. Non avere percorsi di giunzione annidati significa anche che nessun volume dipende da alcun volume diverso dal volume root e che mettere offline o distruggere un volume, anche intenzionalmente, non influisce sul percorso verso gli altri volumi.
 * Una dimensione del blocco di 4K è adatta per le partizioni NTFS negli archivi dati NFS. La figura seguente mostra la connettività da un host vSphere a un datastore NFS ONTAP.
 
 

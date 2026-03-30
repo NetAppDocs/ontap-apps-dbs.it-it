@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-datastores-fp.html 
+keywords: vSphere, datastore, FabricPool 
+summary: 'Questa pagina descrive le best practice per l"implementazione di FabricPool per i datastore VMware.' 
+---
+= FabricPool per datastore VMware
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Lo storage delle macchine virtuali fluisce dai livelli del sistema operativo guest e dell'hypervisor fino a ONTAP, dove FabricPool tiering e WAFL garantiscono performance, efficienza e ottimizzazione dei costi.
+
+Dalla release ONTAP 9.6 in poi, FabricPool ha supportato i carichi di lavoro virtualizzati, inclusi i datastore VMware. Ora è possibile eseguire il tiering dei blocchi freddi dai volumi FlexVol che supportano i datastore VMware (template VM, VM spente, snapshot, backup, ecc.) verso storage a oggetti, mantenendo i dati caldi in locale.
+
+Detto questo, ci sono alcune sfumature di cui è necessario essere consapevoli.
+
+image:vmware-vsphere-datastores-fp-1.png["alt=Hypervisor stack di storage con FabricPool,width=525,height=500"]
+
+
+
+== Livelli di calcolo e disco virtuale
+
+Il sistema operativo guest viene eseguito su formati di disco virtuale come VMDK, QCOW2 o VHDX, che creano i livelli di compute e di dispositivo a blocchi accessibili ad applicazioni e utenti.
+
+È importante notare che il sistema operativo guest considera i dischi virtuali come dispositivi a blocchi; pertanto, i timeout dei dispositivi a blocchi all'interno del sistema operativo guest devono essere presi in considerazione nella pianificazione della tolleranza ai guasti durante aggiornamenti non interruttivi, guasti hardware o altri eventi imprevisti.
+
+
+TIP: Following the link:https://www.netapp.com/pdf.html?item=/media/17239-tr-4598.pdf["FabricPool best practice"], è necessario trattare i volumi FlexVol che ospitano i datastore delle macchine virtuali come storage SAN, anche quando si utilizzano protocolli NAS, a causa della natura a blocchi dei file del disco virtuale in relazione ai sistemi operativi guest. Pertanto, NetApp consiglia di utilizzare la policy di tiering basata esclusivamente su snapshot. La policy automatica può essere utilizzata per i dati non critici, ma si tenga presente che una disconnessione dal livello cloud può causare il blocco delle macchine o il loro passaggio allo stato di sola lettura.
+
+
+
+== Ruolo hypervisor
+
+L'hypervisor funge da intermediario tra le macchine virtuali in esecuzione e le risorse fisiche come CPU, memoria e storage. Nel caso d'uso NAS, l'hypervisor monta la condivisione NAS e presenta i file del disco virtuale alle macchine virtuali come dispositivi a blocchi.
+
+Il percorso del file system dell'hypervisor prevede l'archiviazione delle VM tramite LUN connesse via iSCSI/FCP o namespace NVMe formattati con file system specifici dell'hypervisor come VMFS, NTFS, EXT4, ecc.
+
+Il percorso del file system NAS fornisce acesso a livello di file tramite i protocolli NFS o SMB ai volumi ONTAP per l'archiviazione delle macchine virtuali.
+
+Entrambi i percorsi convergono al livello WAFL di ONTAP, abilitando servizi dati coerenti come snapshot e gestione dei metadati.
+
+
+
+== Integrazione di tiering FabricPool
+
+FabricPool gestisce in modo intelligente il posizionamento dei dati tra lo storage locale dalle performance elevate e i livelli di storage a oggetti cloud a basso costo.
+
+FabricPool suddivide automaticamente i dati tra storage locale dalle performance elevate e cloud scalabile storage a oggetti, in base alla policy di tiering FabricPool applicata al dataset.
+
+L'integrazione di FabricPool di ONTAP consente un efficiente posizionamento dei dati negli ambienti cloud ibridi senza compromettere le performance delle letture locali.
+
+
+
+== Efficienza e gestione dello storage
+
+È importante comprendere come FabricPool funziona prima di abilitarlo. Una configurazione corretta aiuta a migliorare le performance, ridurre i rischi e ottimizzare il TCO archiviando i dati giusti nel livello giusto.
+
+Sia i percorsi dei protocolli SAN/NVMe che quelli NAS convergono al livello WAFL. Il file system WAFL garantisce la coerenza dei metadati, supporta snapshot, clonazione e ottimizza le scritture per SSD, HDD e storage a oggetti.
