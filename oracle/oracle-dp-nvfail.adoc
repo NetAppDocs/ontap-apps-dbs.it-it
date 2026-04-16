@@ -19,3 +19,12 @@ La memorizzazione nella cache può avvenire a livello di applicazione o di serve
 Un uso meno ovvio della memorizzazione nella cache è a livello del file system del sistema operativo. I blocchi di un file system NFS montato possono essere memorizzati nella cache del sistema operativo. In alternativa, un file system in cluster basato su LUN che si trovano nel sito primario può essere montato sui server nel sito remoto e, ancora una volta, i dati possono essere memorizzati nella cache. In queste situazioni, un errore della NVRAM, un takeover forzato o uno switchover forzato possono danneggiare il file system.
 
 ONTAP protegge i database e i sistemi operativi da questo scenario con NVFAIL e le relative impostazioni.
+
+[NOTE]
+====
+* Nei database Oracle, NVFAIL deve essere abilitato su tutte le LUN che ospitano componenti critici (datafile, redo log, control file).
+* Sui sistemi AFF, NVFAIL opera a livello di volume e si applica a tutti i dati contenuti.
+* Su ASA, NVFAIL opera a livello di LUN o namespace.
+
+
+====

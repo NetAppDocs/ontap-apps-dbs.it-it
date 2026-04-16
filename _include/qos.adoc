@@ -4,9 +4,9 @@
 
 Nello specifico, la maggiore adozione dello storage all-flash ha permesso il consolidamento dei carichi di lavoro. Gli storage array che si affidano a supporti rotanti tendevano a supportare solo un numero limitato di workload i/o-intensive a causa delle limitate funzionalità IOPS della tecnologia delle unità rotazionali meno recente. Uno o due database altamente attivi saturerebbero i dischi sottostanti molto prima che gli storage controller raggiungano i loro limiti. Questo è cambiato. La capacità di performance di un numero relativamente contenuto di dischi SSD è in grado di saturare anche gli storage controller più potenti. Ciò significa che è possibile sfruttare tutte le funzionalità dei controller senza la paura di un improvviso crollo delle performance con picchi di latenza dei supporti rotanti.
 
-Come esempio di riferimento, un semplice sistema ha AFF A800 a due nodi è in grado di fornire fino a un milione di IOPS casuali prima che la latenza superi un millisecondo. Ci si aspetta che pochissimi carichi di lavoro singoli raggiungano tali livelli. L'utilizzo completo di questo array di sistema AFF A800 implicherà l'hosting di più carichi di lavoro, per questo motivo in modo sicuro, garantendo al contempo la prevedibilità dei requisiti di qualità del servizio.
+A titolo di esempio, un sistema AFF A800 HA a due nodi di vecchia generazione è in grado di gestire fino a un milione di IOPS casuali prima che la latenza superi un millisecondo. È improbabile che singoli carichi di lavoro raggiungano tali livelli. Sfruttare appieno questo array AFF A800 comporta l'hosting di più carichi di lavoro e, per farlo in modo sicuro garantendo la prevedibilità, sono necessari controlli QoS.
 
-Esistono due tipi di qualità del servizio (QoS) in ONTAP: IOPS e larghezza di banda. È possibile applicare controlli di qualità del servizio a SVM, volumi, LUN e file.
+Esistono due tipi di quality of service (QoS) in ONTAP: IOPS e larghezza di banda. I controlli QoS possono essere applicati a AFF SVM, AFF volumi, AFF file e LUN e namespace AFF/ASA.
 
 
 

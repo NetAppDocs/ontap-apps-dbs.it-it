@@ -18,17 +18,18 @@ I valori chiave sono i seguenti:
 * *Efficienza.* le istantanee non richiedono spazio al momento della creazione. Lo spazio viene occupato solo quando i dati vengono modificati.
 * *Gestibilità.* Una strategia di backup basata sugli snapshot è facile da configurare e gestire perché gli snapshot sono parte nativa del sistema operativo di storage. Se il sistema di archiviazione è acceso, è pronto per creare dei backup.
 * *Scalabilità.* è possibile conservare fino a 1024 backup di un singolo contenitore di file e LUN. Per set di dati complessi, più container di dati possono essere protetti da un singolo set coerente di snapshot.
-* Le prestazioni non sono influenzate, indipendentemente dal fatto che un volume contenga 1024 snapshot o nessuno.
+* Le prestazioni non subiscono variazioni, indipendentemente dal fatto che i dati vengano protetti da 1024 Snapshot o da nessuno.
 
 
 Sebbene molti vendor di soluzioni storage offrano la tecnologia Snapshot, la tecnologia Snapshot all'interno di ONTAP è unica e offre benefici significativi per gli ambienti applicativi aziendali e di database:
 
 * Le copie snapshot fanno parte del layout file WAFL (Write-Anywhere file Layout) sottostante. Non si tratta di una tecnologia aggiuntiva o esterna. Questo semplifica la gestione, perché il sistema storage è il sistema di backup.
 * Le copie Snapshot non influiscono sulle prestazioni, ad eccezione di alcuni casi edge, come ad esempio quando una quantità così elevata di dati viene memorizzata nelle snapshot che il sistema storage sottostante si riempie.
-* Il termine "gruppo di coerenza" viene spesso utilizzato per fare riferimento a un raggruppamento di oggetti di storage che vengono gestiti come una raccolta coerente di dati. Uno snapshot di un particolare volume ONTAP costituisce il backup del gruppo di coerenza.
+* Il termine "gruppo di coerenza" viene spesso utilizzato per riferirsi a un raggruppamento di oggetti di storage gestiti come una raccolta coerente di dati. Uno snapshot di un particolare volume AFF costituisce un backup del gruppo di coerenza.
+* Inoltre, è possibile unire facilmente più volumi AFF o LUN/namespace ASA in un gruppo di coerenza, applicando le policy di protezione dei dati come un'unica unità.
 
 
-Le snapshot ONTAP offrono anche una scalabilità migliore rispetto alle tecnologie della concorrenza. I clienti possono memorizzare 5, 50 o 500 snapshot senza influire sulle performance. Il numero massimo di snapshot attualmente consentiti in un volume è 1024. Se è necessaria una conservazione aggiuntiva degli snapshot, sono disponibili opzioni per trasferire gli snapshot in cascata ad altri volumi.
+Le snapshot di ONTAP offrono inoltre una scalabilità migliore rispetto alle tecnologie concorrenti. I clienti possono archiviare 5, 50 o 500 snapshot senza compromettere le prestazioni. Il numero massimo di snapshot attualmente consentito in un volume AFF o in un LUN/namespace ASA è 1024. Se è necessario conservare un numero maggiore di snapshot, sono disponibili opzioni per la gestione a cascata degli stessi.
 
 Di conseguenza, la protezione di un set di dati ospitato su ONTAP è semplice e altamente scalabile. I backup non richiedono lo spostamento dei dati, pertanto una strategia di backup può essere personalizzata in base alle esigenze dell'azienda piuttosto che alle limitazioni delle velocità di trasferimento di rete, del numero elevato di unità a nastro o delle aree di staging del disco.
 
@@ -66,33 +67,35 @@ La parola "coerente" in "coerente con l'applicazione" è spesso un nome scorrett
 
 Il termine "gruppo di coerenza" si riferisce alla capacità di un array di archiviazione di gestire più risorse di archiviazione come una singola immagine. Ad esempio, un database può essere composto da 10 LUN. L'array deve essere in grado di eseguire il backup, il ripristino e la replica delle 10 LUN in modo coerente. Il ripristino non è possibile se le immagini dei LUN non erano coerenti nel punto di backup. La replica di queste 10 LUN richiede che tutte le repliche siano perfettamente sincronizzate l'una con l'altra.
 
-Il termine "gruppo di coerenza" non viene spesso utilizzato quando si parla di ONTAP perché la coerenza è sempre stata una funzione di base dell'architettura di volumi e aggregati all'interno di ONTAP. Molti altri storage array gestiscono LUN o file system come unità singole. Possono quindi essere configurati facoltativamente come "gruppo di coerenza" ai fini della protezione dei dati, ma questo è un passaggio aggiuntivo nella configurazione.
+ONTAP è sempre stato in grado di acquisire immagini coerenti di dati locali e replicati. Sebbene i vari volumi su un sistema ONTAP AFF/FAS non vengano solitamente descritti formalmente come un gruppo di coerenza, di fatto lo sono. Uno snapshot di quel volume è un'immagine del gruppo di coerenza, il ripristino di quello snapshot è un ripristino del gruppo di coerenza ed entrambi SnapMirror e SnapVault offrono la replica del gruppo di coerenza.
 
-ONTAP è sempre stata in grado di acquisire immagini di dati coerenti locali e replicate. Anche se i vari volumi su un sistema ONTAP non vengono in genere formalmente descritti come un gruppo di coerenza, è proprio questo lo sono. Una snapshot di tale volume è un'immagine del gruppo di coerenza, il ripristino di tale snapshot è un ripristino di un gruppo di coerenza e sia SnapMirror che SnapVault offrono la replica di un gruppo di coerenza.
+I sistemi AFF includono anche una tipologia più ampia di gruppi di coerenza. Più volumi possono essere definiti come un CG all'interno di ONTAP. Snapshot, cloni e repliche possono quindi essere configurati a livello di CG. Ciò semplifica le strategie di protezione dei dati, poiché consente di impostare policy sui dataset, non solo sui singoli volumi o LUN. I CG sono presenti anche nei sistemi ASA. Più LUN o namespace possono essere raggruppati come un CG e quel CG può quindi essere protetto tramite snapshot, replicato, ripristinato o clonato.
 
 
 
 == Snapshot di gruppo di coerenza
 
-Le snapshot di gruppo di coerenza (cg-Snapshot) sono un'estensione della tecnologia Snapshot di base di ONTAP. Un'operazione Snapshot standard crea un'immagine coerente di tutti i dati all'interno di un singolo volume, ma a volte è necessario creare un set coerente di Snapshot su più volumi e persino su sistemi di storage multipli. Ne risulta una serie di snapshot che possono essere utilizzate allo stesso modo di uno snapshot di un solo volume. Possono essere utilizzati per il recovery locale dei dati, replicati a scopo di disaster recovery o clonati come una singola unità coerente.
+Gli snapshot dei gruppi di coerenza (CG) sono un'estensione della tecnologia Snapshot di ONTAP. Un'operazione di snapshot standard crea un'immagine coerente di tutti i dati all'interno di un singolo volume AFF/FAS o LUN/namespace ASA, ma a volte è necessario creare un set coerente di snapshot su più risorse di storage e persino su più sistemi di storage. Il risultato è un set di snapshot che può essere utilizzato allo stesso modo di uno snapshot di un singolo volume. Possono essere utilizzati per recovery di dati, replicati per scopi di disaster recovery o clonati come un'unica unità coerente.
 
-Il più grande utilizzo noto di cg-snapshot è per un ambiente di database di circa 1PB GB su 12 controller. Le cg-Snapshot create su questo sistema sono state utilizzate per il backup, il ripristino e il cloning.
+Gli snapshot CG offrono un'ottima scalabilità. Il più grande utilizzo noto di uno snapshot CG riguarda un ambiente database di circa 1PB distribuito su 12 controller. Gli snapshot CG creati su questo sistema sono stati utilizzati per backup, recovery e clonazione.
 
-Nella maggior parte dei casi, quando un set di dati copre i volumi e l'ordine di scrittura deve essere preservato, il software di gestione scelto utilizza automaticamente uno snapshot cg. In questi casi non è necessario comprendere i dettagli tecnici delle istantanee cg. Tuttavia, in alcune situazioni, i complessi requisiti di protezione dei dati richiedono un controllo dettagliato sul processo di protezione e replica dei dati. I flussi di lavoro di automazione o l'uso di script personalizzati per richiamare le API cg-snapshot sono alcune delle opzioni disponibili. La comprensione dell'opzione migliore e del ruolo di cg-snapshot richiede una spiegazione più dettagliata della tecnologia.
+Nella maggior parte dei casi, quando un set di dati si estende su volumi AFF o LUN/namespace ASA e l'ordine di scrittura deve essere preservato, è sufficiente definire un gruppo di coerenza ONTAP e gestire il gruppo di volumi, LUN o namespace in modo nativo per creare snapshot. Se si utilizza un software di gestione, questo dovrebbe rilevare la necessità di snapshot del gruppo di coerenza e richiamare le API necessarie.
 
-La creazione di una serie di istantanee cg è un processo in due fasi:
+In questi casi non è necessario comprendere i dettagli tecnici degli snapshot CG. Tuttavia, esistono situazioni in cui requisiti complessi di protezione dei dati richiedono un controllo dettagliato sul processo di protezione e replica dei dati. I flussi di lavoro automatizzati o l'utilizzo di script personalizzati per richiamare le API degli snapshot CG sono alcune delle opzioni. Per comprendere l'opzione migliore e il ruolo degli snapshot CG è necessaria una spiegazione più dettagliata della tecnologia.
 
-. Stabilire il recencing in scrittura su tutti i volumi di destinazione.
-. Creare Snapshot di tali volumi nello stato fenced (fenced).
+La creazione di un set di snapshot di consistency group è un processo in due fasi:
+
+. Stabilire il write fencing su tutti i volumi AFF di destinazione o sui LUN/namespace ASA.
+. Crea snapshot di quei volumi, LUN o namespace mentre si trovano in stato di recinzione.
 
 
-La recinzione in scrittura viene stabilita in serie. Ciò significa che, mentre il processo di scherma viene configurato su più volumi, l'i/o in scrittura viene bloccato sul primo volume della sequenza mentre continua ad essere assegnato ai volumi che compaiono in seguito. Questo potrebbe inizialmente sembrare una violazione del requisito per il mantenimento dell'ordine di scrittura, ma ciò si applica solo all'i/o emesso in modo asincrono sull'host e non dipende da altre scritture.
+Il fencing di scrittura viene stabilito in modo seriale. Ciò significa che, man mano che il processo di fencing viene impostato su più destinazioni di storage, l'I/O di scrittura viene bloccato sul primo oggetto della sequenza e continua a essere bloccato sulle destinazioni che compaiono successivamente nell'elenco. Inizialmente, questo potrebbe sembrare violare il requisito di preservazione dell'ordine di scrittura, ma ciò si applica solo all'I/O che viene eseguito in modo asincrono sull'host e non dipende da altre scritture.
 
 Ad esempio, un database potrebbe eseguire numerosi aggiornamenti asincroni del file dati, consentendo al sistema operativo di riordinare l'i/o e completarli in base alla propria configurazione dell'utilità di pianificazione. L'ordine di questo tipo di i/o non può essere garantito perché l'applicazione e il sistema operativo hanno già rilasciato il requisito di mantenere l'ordine di scrittura.
 
-Come esempio di contatore, la maggior parte delle attività di registrazione del database è sincrona. Il database non procede con ulteriori scritture di registro fino a quando l'i/o non viene riconosciuto e l'ordine di tali scritture deve essere conservato. Se un i/o di registro arriva su un volume fenced, non viene riconosciuto e le applicazioni vengono bloccate in ulteriori scritture. Analogamente, l'i/o di metadati del file system è di solito sincrono. Ad esempio, un'operazione di eliminazione file non deve essere persa. Se un sistema operativo con un file system xfs eliminava un file e l'i/o che aggiornava i metadati del file system xfs per rimuovere il riferimento a quel file apposto su un volume recintato, l'attività del file system si interrompeva. Ciò garantisce l'integrità del file system durante le operazioni cg-snapshot.
+A titolo di controesempio, la maggior parte delle attività di logging del database è sincrona. Il database non procede con ulteriori scritture di log finché l'I/O non viene confermato e l'ordine di tali scritture deve essere preservato. Se un'I/O di log arriva su una LUN isolata, non viene confermata e l'applicazione si blocca durante le scritture successive. Allo stesso modo, l'I/O dei metadati del file system è solitamente sincrono. Ad esempio, un'operazione di eliminazione di un file non deve andare persa. Se un sistema operativo con un file system xfs elimina un file e l'I/O che aggiorna i metadati del file system xfs per rimuovere il riferimento a quel file arriva su una LUN isolata, allora l'attività del file system si interrompe. Ciò garantisce l'integrità del file system durante le operazioni di CG.
 
-Dopo aver configurato la funzionalità write fencing nei volumi di destinazione, sono pronti per la creazione di snapshot. Non è necessario creare esattamente gli snapshot contemporaneamente, perché lo stato dei volumi è bloccato da un punto di vista di scrittura dipendente. Per evitare un difetto nell'applicazione che crea le istantanee cg, la recinzione iniziale include un timeout configurabile in cui ONTAP rilascia automaticamente la recinzione e riprende l'elaborazione di scrittura dopo un numero definito di secondi. Se tutte le istantanee vengono create prima dello scadere del periodo di timeout, il gruppo risultante di istantanee è un gruppo di coerenza valido.
+Una volta configurato il write fencing tra i target, questi sono pronti per la creazione degli snapshot. Gli snapshot non devono necessariamente essere creati contemporaneamente, poiché lo stato dei target viene congelato dal punto di vista della scrittura dipendente. Per proteggersi da eventuali vulnerabilità nell'applicazione che crea gli snapshot del gruppo di coerenza, il write fencing iniziale include un timeout configurabile in cui ONTAP rilascia automaticamente il fencing e riprende l'elaborazione di scrittura dopo un numero definito di secondi. Se tutti gli snapshot vengono creati prima dello scadere del timeout, il set di snapshot risultante costituisce un gruppo di coerenza valido.
 
 
 
@@ -109,20 +112,20 @@ Alcune operazioni di scrittura devono essere presenti sul disco prima che il dat
 Esistono due approcci principali ai backup basati su snapshot:
 
 * Backup coerenti con il crash
-* Backup a caldo protetti dagli snapshot
+* Backup online protetti da Snapshot
 
 
-Un backup coerente con i crash di un database si riferisce all'acquisizione dell'intera struttura del database, inclusi i file di dati, i log di ripristino e i file di controllo, in un singolo momento. Se il database è memorizzato in un singolo volume, il processo è semplice ed è possibile creare una Snapshot in qualsiasi momento. Se un database si estende su volumi, è necessario creare uno snapshot del gruppo di coerenza (CG). Esistono diverse opzioni per la creazione di snapshot CG, tra cui il software NetApp SnapCenter, le funzionalità native del gruppo di coerenza ONTAP e gli script gestiti dagli utenti.
+Un backup coerente con il crash di un database si riferisce all'acquisizione dell'intera struttura del database, inclusi datafile, redo log e file di controllo, in un singolo point-in-time. Se il database è memorizzato in un singolo volume, LUN o namespace, il processo è semplice; è possibile creare uno snapshot in qualsiasi momento. Se un database si estende su volumi AFF o LUN/namespace ASA, è necessario creare uno snapshot di un gruppo di coerenza (CG). Esistono diverse opzioni per la creazione di snapshot CG, tra cui NetApp SnapCenter software, funzionalità native dei gruppi di coerenza ONTAP e script gestiti dall'utente.
 
-I backup Snapshot coerenti con i crash vengono utilizzati principalmente quando è sufficiente un recovery point-of-the-backup. In alcune circostanze è possibile applicare i registri di archivio, ma quando è necessario un ripristino point-in-time più granulare, è preferibile un backup online.
+I backup snapshot coerenti con il crash vengono utilizzati principalmente quando è sufficiente il recovery point-in-time del backup. I log di archivio possono essere applicati in alcune circostanze, ma quando è richiesto un recovery point-in-time più granulare, un backup online è preferibile.
 
 La procedura di base per un backup online basato su snapshot è la seguente:
 
 . Inserire il database in `backup` modalità.
-. Creare una snapshot di tutti i volumi che ospitano file di dati.
+. Crea una Snapshot di tutte le risorse di storage (esportazioni NFS, LUN o namespace NVMe) che ospitano datafile.
 . Esci `backup` modalità.
 . Eseguire il comando `alter system archive log current` per forzare l'archiviazione del registro.
-. Creare snapshot di tutti i volumi che ospitano i log di archivio.
+. Creare snapshot di tutte le risorse di storage che ospitano i log di archivio.
 
 
 Questa procedura produce una serie di istantanee contenenti file di dati in modalità backup e i registri di archivio critici generati in modalità backup. Questi sono i due requisiti per il ripristino di un database. I file come i file di controllo dovrebbero essere protetti per comodità, ma l'unico requisito assoluto è la protezione per i file di dati e i registri di archivio.
@@ -133,21 +136,24 @@ Sebbene i diversi clienti possano avere strategie molto diverse, quasi tutte que
 
 == Recovery basato su Snapshot
 
-Quando si progettano layout di volumi per database Oracle, la prima decisione è se utilizzare la tecnologia VBSR (Volume-Based NetApp SnapRestore).
+Quando si progettano le configurazioni di storage per i database Oracle, la prima decisione da prendere riguarda se utilizzare la tecnologia NetApp SnapRestore basata sui volumi (VBSR), che è la tecnologia sottostante utilizzata per il ripristino dei volumi AFF e dei LUN/namespace ASA.
 
-La funzione SnapRestore basata su volume consente di ripristinare quasi istantaneamente un volume in un point-in-time precedente. Poiché tutti i dati sul volume vengono ripristinati, VBSR potrebbe non essere appropriato per tutti i casi di utilizzo. Ad esempio, se un intero database, inclusi file di dati, log di ripristino e log di archivio, viene memorizzato in un singolo volume e questo volume viene ripristinato con VBSR, i dati vengono persi perché i log di archivio e i dati di ripristino più recenti vengono scartati.
+VBSR consente di ripristinare i dati a un punto precedente nel tempo in modo quasi istantaneo. Poiché tutti i dati vengono ripristinati, VBSR potrebbe non essere appropriato per tutti i casi d'uso. Ad esempio, se un intero database, inclusi datafile, redo log e archive log, è memorizzato su un singolo AFF volume e questo volume viene ripristinato con VBSR, i dati andranno persi perché i dati di archive log e redo più recenti verranno scartati. Lo stesso vale per i dati ASA. Se l'intero database è stato memorizzato in un singolo ASA consistency group e quel CG è stato ripristinato a uno stato precedente, alcuni dei dati di archive log e redo più recenti andranno persi.
 
-VBSR non è necessario per il ripristino. Molti database possono essere ripristinati utilizzando SFSR (Single-file SnapRestore) basato su file o semplicemente copiando i file dalla snapshot nel file system attivo.
+VBSR non è necessario per il ripristino. Molti database possono essere ripristinati utilizzando il ripristino a file singolo basato su file SnapRestore (SFSR) o semplicemente clonando i file dallo snapshot nel file system attivo.
 
-VBSR è preferibile quando un database è molto grande o quando deve essere recuperato il più rapidamente possibile, e l'uso di VBSR richiede l'isolamento dei file di dati. In un ambiente NFS, i file di dati di un dato database devono essere archiviati in volumi dedicati che non sono contaminati da alcun altro tipo di file. In un ambiente SAN, i file di dati devono essere memorizzati in LUN dedicate su volumi dedicati. Se viene utilizzato un volume manager (incluso Oracle Automatic Storage Management [ASM]), il gruppo di dischi deve essere dedicato anche ai file di dati.
+VBSR è preferibile quando un database è molto grande o quando deve essere ripristinato il più rapidamente possibile, e l'utilizzo di VBSR richiede l'isolamento dei datafile. In un ambiente NFS, i datafile di un determinato database devono essere archiviati in volumi dedicati non contaminati da altri tipi di file. In un ambiente SAN, i datafile devono essere archiviati in LUN o namespace dedicati. Se si utilizza un volume manager (incluso Oracle Automatic Storage Management [ASM]), anche il disk group deve essere dedicato ai datafile.
 
-L'isolamento dei file di dati in questo modo consente loro di tornare a uno stato precedente senza danneggiare altri file system.
+Isolando i file di dati in questo modo, è possibile ripristinarli a uno stato precedente senza danneggiare altri file system.
 
 
 
-== Riserva di Snapshot
+== AFF riserva di Snapshot
 
-Per ogni volume con i dati Oracle in un ambiente SAN, il `percent-snapshot-space` Dovrebbe essere impostato su zero perché non è utile riservare spazio per uno snapshot in un ambiente LUN. Se la riserva frazionaria è impostata su 100, uno snapshot di un volume con LUN richiede spazio libero sufficiente nel volume, esclusa la riserva snapshot, per assorbire il 100% di turnover di tutti i dati. Se la riserva frazionaria è impostata su un valore inferiore, è necessaria una quantità di spazio libero corrispondente inferiore, ma esclude sempre la riserva istantanea. Ciò significa che viene sprecato lo spazio di riserva di Snapshot in un ambiente LUN.
+Per ogni volume con dati Oracle in un ambiente AFF SAN, il  `percent-snapshot-space` dovrebbe essere impostato a zero perché riservare spazio per uno snapshot in un ambiente LUN non è utile. Se la riserva frazionaria è impostata a 100, uno snapshot di un volume con LUN richiede abbastanza spazio libero nel volume, escludendo la riserva di Snapshot, per assorbire il 100% di turnover di tutti i dati. Se la riserva frazionaria è impostata su un valore inferiore, è richiesta una quantità di spazio libero corrispondentemente inferiore, ma esclude sempre la riserva di Snapshot. Ciò significa che lo spazio di riserva di Snapshot in un ambiente LUN viene sprecato.
+
+
+NOTE: La riserva di Snapshot non si applica allo storage ASA.
 
 In un ambiente NFS, esistono due opzioni:
 

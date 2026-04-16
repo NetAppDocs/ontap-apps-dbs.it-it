@@ -10,15 +10,15 @@
 
 
 
-=== Valori predefiniti AFF
+=== Impostazioni predefinite di AFF e ASA
 
-I volumi creati su ONTAP in esecuzione su un sistema AFF all-flash vengono sottoposti a thin provisioning con tutte le funzionalità di efficienza inline abilitate. Sebbene in genere i database non beneficino della deduplica e possano includere dati non comprimibili, le impostazioni predefinite sono comunque appropriate per quasi tutti i carichi di lavoro. ONTAP è progettato per elaborare in modo efficiente tutti i tipi di dati e gli schemi i/o, indipendentemente dal fatto che comportino risparmi. Le impostazioni predefinite devono essere modificate solo se le ragioni sono pienamente comprese e se vi è un vantaggio a deviare.
+I volumi creati su ONTAP in esecuzione su sistemi AFF e le LUN/namespace su sistemi ASA sono sottoposti a thin provisioning con tutte le funzionalità di efficienza inline abilitate. Sebbene i database in genere non traggano vantaggio dalla deduplicazione e possano includere dati non comprimibili, le impostazioni predefinite sono comunque appropriate per quasi tutti i carichi di lavoro. ONTAP è progettato per elaborare in modo efficiente tutti i tipi di dati e modelli di I/O, indipendentemente dal fatto che comportino o meno un risparmio. Le impostazioni predefinite devono essere modificate solo se le ragioni sono pienamente comprese e se la modifica apporta un vantaggio.
 
 
 
 === Raccomandazioni generali
 
-* Se i volumi e/o le LUN non sono dotati di thin provisioning, è necessario disabilitare tutte le impostazioni di efficienza perché queste funzionalità non offrono risparmi e la combinazione del thick provisioning con l'efficienza dello spazio può causare comportamenti imprevisti, inclusi errori di spazio esaurito.
+* Se i volumi AFF, le LUN o i namespace non sono configurati con thin provisioning, è necessario disabilitare tutte le impostazioni di efficienza, poiché l'utilizzo di queste funzionalità non offre alcun risparmio e la combinazione di thick provisioning con l'efficienza dello spazio abilitata può causare comportamenti imprevisti, inclusi errori di spazio insufficiente.
 * Se i dati non sono soggetti a sovrascritture, ad esempio con i backup o i log delle transazioni dei database, puoi ottenere una maggiore efficienza abilitando TSSE con un periodo di raffreddamento ridotto.
 * Alcuni file potrebbero contenere una quantità significativa di dati non comprimibili, ad esempio quando la compressione è già abilitata a livello di applicazione dei file sono crittografati. Se uno di questi scenari è vero, considerare la possibilità di disattivare la compressione per consentire un funzionamento più efficiente su altri volumi che contengono dati comprimibili.
 * Non utilizzare sia la compressione 32KB che la deduplica con i backup del database. Vedere la sezione <<Compressione adattiva>> per ulteriori informazioni.

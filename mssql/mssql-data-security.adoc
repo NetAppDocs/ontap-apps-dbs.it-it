@@ -35,7 +35,7 @@ Per ulteriori informazioni sulle istantanee, consultare la link:https://docs.net
 
 == Snapshot a prova di manomissione
 
-A partire da ONTAP 9.12.1, gli snapshot non sono solo di lettura, ma possono anche essere protetti da eliminazioni accidentali o intenzionali. La funzione è denominata istantanee antimanomissione. È possibile impostare e applicare un periodo di conservazione tramite policy snapshot. Gli snapshot risultanti non possono essere eliminati fino a quando non hanno raggiunto la data di scadenza. Non sono presenti sostituzioni amministrative o del centro di supporto.
+A partire da ONTAP 9.12.1, gli snapshot non sono solo di sola lettura, ma possono anche essere protetti da cancellazioni accidentali o intenzionali. La funzionalità si chiama tamperproof snapshots. È possibile impostare e applicare un periodo di conservazione tramite la policy degli snapshot. Gli snapshot risultanti non possono essere eliminati fino al raggiungimento della data di scadenza. Non sono previste eccezioni da parte degli amministratori o del centro di supporto.
 
 In questo modo, un intruso, un malintenzionato o persino un attacco ransomware non sono in grado di compromettere i backup, anche nel caso in cui abbiano accesso al sistema ONTAP stesso. Se combinato con una pianificazione degli snapshot frequente, offre una data Protection estremamente potente con un RPO molto basso.
 

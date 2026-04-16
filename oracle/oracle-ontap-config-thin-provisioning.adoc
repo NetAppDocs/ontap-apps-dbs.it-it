@@ -39,7 +39,10 @@ Vedere link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentazio
 
 Riserva frazionaria si riferisce al comportamento di un LUN in un volume rispetto all'efficienza dello spazio. Quando l'opzione `fractional-reserve` è impostato al 100%, tutti i dati nel volume possono subire un turnover del 100% con qualsiasi modello di dati senza esaurire lo spazio sul volume.
 
-Ad esempio, si consideri un database su una singola LUN da 250GB GB in un volume da 1TB GB. La creazione di uno snapshot comporterebbe immediatamente la riserva di ulteriori 250GB GB di spazio nel volume per garantire che il volume non esaurisca lo spazio per alcun motivo. L'utilizzo di riserve frazionarie comporta in genere uno spreco di risorse poiché è estremamente improbabile che ogni byte nel volume del database debba essere sovrascritto. Non c'è motivo di riservare spazio per un evento che non si verifica mai. Tuttavia, se un cliente non è in grado di monitorare il consumo di spazio in un sistema di storage e deve essere certo che lo spazio non si esaurisce mai, sarebbero necessarie prenotazioni frazionarie del 100% per utilizzare gli snapshot.
+Ad esempio, si consideri un database su una singola LUN da 250GB in un volume da 1TB su un sistema AFF. La creazione di uno snapshot comporterebbe immediatamente la prenotazione di ulteriori 250GB di spazio nel volume per garantire che il volume non si esaurisca per nessun motivo. L'utilizzo di riserve frazionarie è generalmente uno spreco, poiché è estremamente improbabile che ogni byte nel volume del database debba essere sovrascritto. Non c'è motivo di riservare spazio per un evento che non si verifica mai. Tuttavia, se un cliente non può monitorare il consumo di spazio in un sistema storage e deve essere certo che lo spazio non si esaurisca mai, per utilizzare gli snapshot sarebbero necessarie prenotazioni frazionarie al 100%.
+
+
+TIP: L'astrazione del volume non è presente su SAN, ma solo su ASA, e pertanto questa piattaforma non utilizza riserve frazionarie.
 
 
 
@@ -47,7 +50,7 @@ Ad esempio, si consideri un database su una singola LUN da 250GB GB in un volume
 
 Compressione e deduplica sono entrambe forme di thin provisioning. Ad esempio, un impatto dei dati di 50TB:1 potrebbe comprimere fino a 30TB:1, ottenendo un risparmio di 20TB:1. Affinché la compressione possa produrre vantaggi, alcuni di questi 20TB TB devono essere utilizzati per altri dati, altrimenti il sistema storage deve essere acquistato con meno di 50TB TB. In questo modo è possibile memorizzare una quantità di dati superiore rispetto a quella tecnicamente disponibile sul sistema storage. Dal punto di vista dei dati, i dati sono 50TB, anche se occupano solo 30TB sulle unità.
 
-Esiste sempre la possibilità che la compressibilità di un set di dati cambi, con conseguente aumento del consumo di spazio reale. Questo aumento dei consumi implica che la compressione deve essere gestita come con altre forme di thin provisioning in termini di monitoraggio e utilizzo `volume-autogrow` e. `snapshot-autodelete`.
+Esiste sempre la possibilità che la comprimibilità di un dataset cambi, il che comporterebbe un aumento del consumo di spazio reale. Questo aumento del consumo significa che la compressione deve essere gestita come con altre forme di thin provisioning in termini di monitoraggio e, su un sistema AFF, utilizzando  `volume-autogrow` e  `snapshot-autodelete`.
 
 Compressione e deduplica sono descritte in dettaglio nella sezione link:efficiency.html
 
@@ -69,7 +72,7 @@ Sebbene questa situazione possa sembrare confusa, è improbabile che si verifich
 
 [TIP]
 ====
-*NetApp consiglia* le seguenti configurazioni riservate:
+*NetApp consiglia* le seguenti configurazioni di riserva con le piattaforme AFF e FAS:
 
 * Impostare `fractional-reserve` a 0 quando è in atto il monitoraggio della capacità di base con `volume-autogrow` e. `snapshot-autodelete`.
 * Impostare `fractional-reserve` a 100 se non vi è alcuna capacità di monitoraggio o se è impossibile scaricare lo spazio in qualsiasi circostanza.

@@ -15,8 +15,15 @@ searchtitle: Posizionamento delle LUN dei database Oracle
 
 
 [role="lead"]
-Il posizionamento ottimale delle LUN del database all'interno dei volumi ONTAP dipende principalmente dalle diverse funzionalità di ONTAP.
+Il posizionamento ottimale delle LUN del database all'interno dei volumi ONTAP sui sistemi AFF e FAS dipende principalmente da come verranno utilizzate le diverse funzionalità di ONTAP.
 
+[]
+====
+* Questa sezione si applica ai sistemi AFF e FAS.
+* ASA è una piattaforma SAN semplificata e non espone un layer di astrazione,
+
+
+====
 
 
 == Volumi
