@@ -28,11 +28,11 @@ Quando si crea un nuovo database, Microsoft consiglia di specificare unità sepa
 
 
 
-== Aggregati
+== Aggregati AFF
 
-Gli aggregati sono i container di storage di livello più basso per le configurazioni di storage NetApp. Su Internet esiste una documentazione legacy che consiglia di separare i/o su diversi set di unità sottostanti. Questa operazione non è consigliata con ONTAP. NetApp ha eseguito diverse prove di caratterizzazione dei carichi di lavoro i/o utilizzando aggregati condivisi e dedicati con file di dati e file di log delle transazioni separati. I test dimostrano che un aggregato di grandi dimensioni con più gruppi RAID e dischi ottimizza e migliora le performance dello storage ed è più semplice da gestire per due motivi:
+Gli aggregati sono i contenitori di storage di livello più basso per le configurazioni di storage AFF. Esiste della documentazione obsoleta su internet che raccomanda di separare l'I/O su diversi set di unità sottostanti. Questa pratica non è consigliata con ONTAP. NetApp ha eseguito diversi test di caratterizzazione del carico di lavoro I/O utilizzando aggregati condivisi e dedicati con file di dati e file di log delle transazioni separati. I test dimostrano che un singolo grande aggregato con più gruppi RAID e unità ottimizza e migliora le performance dello storage ed è più facile da gestire per gli amministratori per due motivi:
 
-* Un aggregato di grandi dimensioni rende disponibili per tutti i file le funzionalità i/o di tutte le unità.
+* Un unico grande aggregato/SA rende disponibili a tutti i file le capacità di I/O di tutte le unità.
 * Un grande aggregato consente l'utilizzo più efficiente dello spazio su disco.
 
 

@@ -4,7 +4,7 @@
 
 
 
-=== File di database e filegroup
+== File di database e filegroup
 
 Ogni database è costituito da uno o più file di dati e da uno o più file di registro delle transazioni. Il registro delle transazioni memorizza le informazioni sulle transazioni del database e tutte le modifiche apportate ai dati da ciascuna sessione. Ogni volta che i dati vengono modificati, SQL Server memorizza informazioni sufficienti nel log delle transazioni per annullare (eseguire il rollback) o ripristinare (riprodurre nuovamente) l'azione. Un log delle transazioni di SQL Server è parte integrante della reputazione di SQL Server in termini di integrità e robustezza dei dati. Il log delle transazioni è fondamentale per le funzionalità di atomicità, coerenza, isolamento e durata (ACID) di SQL Server. SQL Server scrive nel registro delle transazioni non appena si verifica una modifica alla pagina dei dati. Ogni istruzione DML (Data Manipulation Language) (ad esempio, SELECT, INSERT, Update o DELETE) è una transazione completa e il log delle transazioni garantisce che l'intera operazione basata su set abbia luogo, assicurando l'atomicità della transazione.
 
@@ -23,7 +23,7 @@ TIP: *NetApp recommended* evitare l'utilizzo del filegroup primario per oggetti 
 
 
 
-=== Inizializzazione del file di istanza del database
+== Inizializzazione del file di istanza del database
 
 È possibile specificare le dimensioni iniziali del file e i parametri di crescita automatica al momento della creazione del database o dell'aggiunta di nuovi file a un database esistente. SQL Server utilizza un algoritmo di riempimento proporzionale quando sceglie in quale file di dati scrivere i dati. Scrive una quantità di dati proporzionalmente allo spazio libero disponibile nei file. Maggiore è lo spazio libero nel file, maggiore è il numero di scritture gestite.
 

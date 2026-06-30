@@ -85,7 +85,7 @@ Utilizzando le LUN di ONTAP, le policy di QoS possono essere applicate al volume
 Durante la creazione di un profilo di capacità storage per il container vVol, specifica un valore IOPS max e/o min in termini di performance, quindi fai riferimento a questo SCP con la policy storage delle macchine virtuali. Utilizzare questo criterio quando si crea la macchina virtuale o si applica il criterio a una macchina virtuale esistente.
 
 
-NOTE: VVol richiede l'utilizzo dei tool ONTAP per VMware vSphere, che funziona come provider VASA per ONTAP. Fare riferimento a link:/vmware/vmware-vvols-overview.html["Volumi virtuali di VMware vSphere (vVol) con ONTAP"] per le procedure consigliate per i vVol.
+NOTE: vVols richiede l'utilizzo di ONTAP tools for VMware vSphere, che funziona come VASA Provider per ONTAP. Consulta link:vmware-vvols-overview.html["Volumi virtuali di VMware vSphere (vVol) con ONTAP"] per le best practice di vVols.
 
 
 
