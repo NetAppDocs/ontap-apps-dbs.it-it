@@ -32,6 +32,7 @@ Se si prevede un io sequenziale pesante, le dimensioni del trasferimento NFS pos
 
 
 
+[[nfs-transfer-sizes]]
 == Dimensioni trasferimento NFS
 
 Per impostazione predefinita, ONTAP limita le dimensioni i/o NFS a 64K.
@@ -59,6 +60,7 @@ rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
 ....
 
 
+[[nfsv3-tcp-slot-tables]]
 == NFSv3 tabelle slot TCP
 
 Se NFSv3 viene usato con Linux, è fondamentale impostare correttamente le tabelle degli slot TCP.

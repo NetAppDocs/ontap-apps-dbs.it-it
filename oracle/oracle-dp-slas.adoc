@@ -23,12 +23,14 @@ Piccole modifiche alle policy di protezione e ripristino dei dati possono avere 
 
 
 
+[[recovery-time-objective]]
 == Recovery time objective
 
 L'obiettivo RTO (Recovery Time Objective) definisce il tempo massimo consentito per il ripristino di un servizio. Ad esempio, un database di risorse umane potrebbe avere un RTO di 24 ore perché, sebbene sarebbe molto scomodo perdere l'accesso a questi dati durante la giornata lavorativa, l'azienda può comunque operare. Al contrario, un database che supporta la contabilità generale di una banca avrebbe un RTO misurato in minuti o anche secondi. Un RTO di zero non è possibile, perché deve esserci un modo per distinguere tra un'effettiva interruzione del servizio e un evento di routine, come un pacchetto di rete perso. Tuttavia, un RTO prossimo allo zero è un requisito tipico.
 
 
 
+[[recovery-point-objective]]
 == Obiettivo RPO
 
 Il recovery point objective (RPO) definisce la massima perdita di dati tollerabile. In molti casi, l'RPO è determinato unicamente dalla frequenza delle snapshot o degli aggiornamenti di snapmirror.
@@ -39,6 +41,7 @@ In scenari insoliti, i dati del registro potrebbero andare persi. Ad esempio, un
 
 
 
+[[disaster-recovery]]
 == Disaster recovery
 
 Il ripristino di emergenza include l'architettura IT, i criteri e le procedure necessarie per il ripristino di un servizio in caso di emergenza fisica. Tra questi, inondazioni, incendi o persone che agiscono con intento doloso o negligente.
@@ -53,6 +56,7 @@ I requisiti di RTO e RPO per il disaster recovery variano in modo più ampio in 
 
 
 
+[[logical-disasters]]
 === Disastri logici
 
 I disastri logici includono la corruzione dei dati causata da utenti, bug delle applicazioni o del sistema operativo e malfunzionamenti del software. I disastri logici possono includere anche attacchi dannosi da parte di terzi con virus o worm o sfruttando le vulnerabilità delle applicazioni. In questi casi, l'infrastruttura fisica rimane intatta, ma i dati sottostanti non sono più validi.
@@ -61,6 +65,7 @@ Un tipo sempre più comune di disastro logico è noto come ransomware, in cui un
 
 
 
+[[physical-disasters]]
 === Disastri fisici
 
 I disastri fisici includono l'errore di componenti di un'infrastruttura che superano le sue capacità di ridondanza e causano una perdita di dati o un'estesa perdita di servizio. Ad esempio, la protezione RAID fornisce la ridondanza dell'unità disco e l'utilizzo di HBA fornisce la ridondanza di porte FC e cavi FC. I guasti hardware di tali componenti sono prevedibili e non influiscono sulla disponibilità.
@@ -69,6 +74,7 @@ In un ambiente aziendale, è generalmente possibile proteggere l'infrastruttura 
 
 
 
+[[synchronous-and-asynchronous-data-protection]]
 === Protezione dei dati sincrona e asincrona
 
 In un mondo ideale, tutti i dati verrebbero replicati in modo sincrono tra siti dispersi geograficamente. Tale replicazione non è sempre fattibile o addirittura possibile per diversi motivi:
@@ -84,6 +90,7 @@ NetApp offre soluzioni che includono replica sincrona per le più esigenti richi
 
 
 
+[[retention-time]]
 == Tempo di conservazione
 
 L'ultimo aspetto di una strategia di protezione dei dati è il tempo di conservazione dei dati, che può variare drasticamente.

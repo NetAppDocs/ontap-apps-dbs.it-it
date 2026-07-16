@@ -22,6 +22,7 @@ FabricPool risolve questi problemi offrendo una singola soluzione con tiering in
 
 
 
+[[policies]]
 == Policy
 
 Utilizzare un `tiering-minimum-cooling-days` la policy di pochi giorni comporta la conservazione dei blocchi nei file creati di recente (che sono i file più probabilmente necessari a breve termine) nel tier di performance. I blocchi di dati dei file meno recenti vengono quindi spostati nel Tier di capacità.

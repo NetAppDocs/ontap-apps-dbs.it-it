@@ -27,6 +27,7 @@ Vedere anche la discussione sull'allineamento dei blocchi di compressione nella 
 
 
 
+[[misalignment-warnings]]
 == Avvertenze di disallineamento
 
 La registrazione di ripristino del database/transazioni genera di solito un i/o non allineato che può causare avvisi fuorvianti riguardo ai LUN disallineati su ONTAP.

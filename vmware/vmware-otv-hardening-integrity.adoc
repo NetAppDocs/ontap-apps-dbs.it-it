@@ -24,6 +24,7 @@ I checksum sono disponibili nelle pagine di download dei pacchetti di installazi
 
 
 
+[[verifying-the-signature-of-the-ontap-tools-ova]]
 == Verifica della firma degli strumenti ONTAP OVA
 
 Il pacchetto di installazione vApp viene fornito sotto forma di tarball. Questo tarball contiene certificati intermedi e root per l'appliance virtuale insieme a un file README e un pacchetto OVA. Il file README guida gli utenti su come verificare l'integrità del pacchetto vApp OVA.
@@ -32,6 +33,7 @@ I clienti devono inoltre caricare il certificato root e intermedio fornito su vC
 
 
 
+[[uploading-the-trusted-root-certificate-to-vcenter]]
 === Caricamento del certificato root attendibile in vCenter
 
 . Accedere con il client VMware vSphere a vCenter Server.
@@ -49,6 +51,7 @@ image:vmware-otv-hardening-trusted-publisher.png["Certificato attendibile"]
 
 
 
+[[verifying-the-signature-of-the-ontap-tools-iso-and-sra-tar-gz]]
 == Verifica della firma degli attrezzi ONTAP ISO e SRA tar.gz
 
 NetApp condivide il proprio certificato di firma del codice con i clienti nella pagina di download del prodotto, insieme ai file zip del prodotto per OTV-ISO e SRA.tgz.

@@ -18,6 +18,7 @@ Il parametro innodb_Flush_Method specifica come InnoDB apre e svuota i file di l
 
 
 
+[[optimizations]]
 == Ottimizzazioni
 
 Nell'ottimizzazione InnoDB, l'impostazione di questo parametro modifica le prestazioni del database, se applicabile.
@@ -32,6 +33,7 @@ Le seguenti opzioni consentono di svuotare i file tramite InnoDB:
 
 
 
+[[observation]]
 == Osservazione
 
 Nei test di laboratorio di NetApp, il `fsync` L'opzione predefinita è stata utilizzata su NFS e SAN ed è stata un'improvvisazione per le prestazioni eccezionale rispetto a `O_DIRECT`. Mentre si utilizza il metodo di lavaggio come `O_DIRECT` Con ONTAP, abbiamo osservato che il client scrive molte scritture a byte singolo al margine del blocco 4096 in modo seriale. Queste operazioni di scrittura hanno aumentato la latenza sulla rete e degradato le performance.

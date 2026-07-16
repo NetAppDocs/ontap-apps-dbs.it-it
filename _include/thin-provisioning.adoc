@@ -10,6 +10,7 @@ Anche il cloning è un esempio di thin provisioning. Un importante cliente NetAp
 
 
 
+[[space-management]]
 == Gestione dello spazio
 
 È necessario prestare particolare attenzione al thin provisioning di un ambiente applicativo, perché la velocità di modifica dei dati può aumentare inaspettatamente. Ad esempio, il consumo di spazio dovuto agli snapshot può crescere rapidamente se le tabelle di database vengono riindicizzate o se viene applicata una patch su larga scala ai guest VMware. Un backup posizionato in modo errato può scrivere una grande quantità di dati in un tempo molto breve. Infine, può essere difficile recuperare alcune applicazioni se un file system esaurisce inaspettatamente lo spazio libero.
@@ -20,6 +21,7 @@ Vedere link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentazio
 
 
 
+[[fractional-reservations]]
 == Prenotazioni frazionarie
 
 Riserva frazionaria si riferisce al comportamento di un LUN in un volume rispetto all'efficienza dello spazio. Quando l'opzione `fractional-reserve` è impostato al 100%, tutti i dati nel volume possono subire un turnover del 100% con qualsiasi modello di dati senza esaurire lo spazio sul volume.
@@ -31,6 +33,7 @@ TIP: L'astrazione del volume non è presente su SAN, ma solo su ASA, e pertanto 
 
 
 
+[[compression-and-deduplication]]
 == Compressione e deduplica
 
 Compressione e deduplica sono entrambe forme di thin provisioning. Ad esempio, un impatto dei dati di 50TB:1 potrebbe comprimere fino a 30TB:1, ottenendo un risparmio di 20TB:1. Affinché la compressione possa produrre vantaggi, alcuni di questi 20TB TB devono essere utilizzati per altri dati, altrimenti il sistema storage deve essere acquistato con meno di 50TB TB. In questo modo è possibile memorizzare una quantità di dati superiore rispetto a quella tecnicamente disponibile sul sistema storage. Dal punto di vista dei dati, i dati sono 50TB, anche se occupano solo 30TB sulle unità.
@@ -41,6 +44,7 @@ Compressione e deduplica sono descritte in dettaglio nella sezione link:efficien
 
 
 
+[[compression-and-fractional-reservations]]
 === Compressioni e prenotazioni frazionarie
 
 La compressione è una forma di thin provisioning. Le prenotazioni frazionarie influiscono sull'utilizzo della compressione, con una nota importante; lo spazio viene riservato prima della creazione dell'istantanea. Normalmente, la riserva frazionaria è importante solo se esiste uno snapshot. Se non è presente uno snapshot, la riserva frazionaria non è importante. Questo non è il caso della compressione. Se viene creata una LUN su un volume con compressione, ONTAP preserva lo spazio per ospitare uno snapshot. Questo comportamento può creare confusione durante la configurazione, ma è previsto.

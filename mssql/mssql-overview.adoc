@@ -37,6 +37,7 @@ Per informazioni sulla compatibilità tra i prodotti NetApp, vedere link:https:/
 
 
 
+[[microsoft-sql-server-workloads]]
 == Workload di Microsoft SQL Server
 
 Prima di distribuire SQL Server, è necessario comprendere i requisiti dei carichi di lavoro delle applicazioni supportate dalle istanze dei database di SQL Server. Ogni applicazione ha requisiti differenti in termini di capacità, performance e disponibilità, per cui ogni database dovrebbe essere progettato per supportare al meglio tali requisiti. Molte organizzazioni classificano i database in più Tier di gestione, utilizzando i requisiti delle applicazioni per definire gli SLA. I carichi di lavoro di SQL Server sono spesso classificati come descritto di seguito:

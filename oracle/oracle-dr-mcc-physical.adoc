@@ -22,6 +22,7 @@ NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubbli
 
 
 
+[[metrocluster-is-avialable-in-3-different-configurations]]
 == MetroCluster è disponibile in 3 diverse configurazioni
 
 * Coppie HA con connettività IP
@@ -34,6 +35,7 @@ NOTE: Il termine connettività si riferisce alla connessione cluster utilizzata 
 
 
 
+[[metrocluster-ip]]
 == IP MetroCluster
 
 La configurazione MetroCluster IP ha-Pair utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
@@ -48,6 +50,7 @@ image:../media/mccip.png["Architettura IP di MetroCluster"]
 
 
 
+[[ha-pair-fc-san-attached-metrocluster]]
 == MetroCluster HA-Pair FC SAN-Attached
 
 La configurazione ha-Pair MetroCluster FC utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
@@ -63,6 +66,7 @@ Alcune infrastrutture multisito non sono progettate per le operazioni Active-Act
 
 
 
+[[two-node-fc-san-attached-metrocluster]]
 == MetroCluster FC SAN-attached a due nodi
 
 La configurazione MetroCluster a due nodi utilizza un solo nodo per sito. Questo design è più semplice rispetto all'opzione ha-Pair perché richiede meno componenti da configurare e gestire. Inoltre, ha ridotto le richieste di infrastruttura in termini di cablaggio e switch FC. Infine, riduce i costi.
@@ -73,6 +77,7 @@ L'evidente impatto di questa progettazione è che un guasto del controller su un
 
 
 
+[[metrocluster-resiliency-features]]
 == Funzionalità di resilienza di MetroCluster
 
 Non esistono single point of failure in una soluzione MetroCluster:

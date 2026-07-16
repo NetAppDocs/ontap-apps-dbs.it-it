@@ -18,6 +18,7 @@ La protezione di un ambiente di database SQL Server è un'operazione multidimens
 
 
 
+[[snapshot-copies]]
 == Copie Snapshot
 
 Le snapshot di storage sono repliche point-in-time dei dati di destinazione. L'implementazione di ONTAP include le funzionalità per impostare varie policy e memorizzare fino a 1024 snapshot per volume. Le Snapshot in ONTAP sono efficienti in termini di spazio. Lo spazio viene consumato solo quando viene modificato il set di dati originale. Sono anche di sola lettura. Uno snapshot può essere eliminato, ma non può essere modificato.
@@ -33,6 +34,7 @@ Per ulteriori informazioni sulle istantanee, consultare la link:https://docs.net
 
 
 
+[[tamperproof-snapshots]]
 == Snapshot a prova di manomissione
 
 A partire da ONTAP 9.12.1, gli snapshot non sono solo di sola lettura, ma possono anche essere protetti da cancellazioni accidentali o intenzionali. La funzionalità si chiama tamperproof snapshots. È possibile impostare e applicare un periodo di conservazione tramite la policy degli snapshot. Gli snapshot risultanti non possono essere eliminati fino al raggiungimento della data di scadenza. Non sono previste eccezioni da parte degli amministratori o del centro di supporto.
@@ -49,6 +51,7 @@ NOTE: Nella nuova piattaforma ASA, replicare le snapshot nel cluster remoto util
 
 
 
+[[snapmirror-replication]]
 == Replica SnapMirror
 
 Gli snapshot possono anche essere replicati su un sistema remoto. Sono inclusi gli snapshot antimanomissione, in cui il periodo di conservazione viene applicato e applicato sul sistema remoto. Come risultato otterrai gli stessi vantaggi di protezione dei dati delle snapshot locali, ma i dati verranno posizionati in un secondo storage array. In questo modo si garantisce che la distruzione dell'array originale non comprometta i backup.
@@ -59,6 +62,7 @@ Per ulteriori informazioni su SnapMirror, consultare la link:https://docs.netapp
 
 
 
+[[storage-virtual-machines]]
 == Macchine virtuali di storage
 
 Un sistema di storage ONTAP appena configurato è simile a un server VMware ESX appena configurato, perché nessuno di questi può supportare gli utenti fino alla creazione di una macchina virtuale. Con ONTAP viene creata una Storage Virtual Machine (SVM) che diventa l'unità di gestione dello storage più base. Ciascuna SVM dispone di risorse di storage, configurazioni di protocolli, indirizzi IP e WWN FCP. Questa è la base della multi-tenancy di ONTAP.
@@ -69,6 +73,7 @@ Per ulteriori informazioni sulle SVM, consulta la link:https://docs.netapp.com/u
 
 
 
+[[administrative-rbac]]
 == RBAC amministrativo
 
 ONTAP offre un potente role-based access control (RBAC) per gli accessi amministrativi. Alcuni amministratori potrebbero aver bisogno di un accesso completo al cluster, altri invece potrebbero aver bisogno solo dell'accesso a determinate SVM. Il personale avanzato dell'helpdesk potrebbe aver bisogno di aumentare le dimensioni dei volumi. Il risultato è la possibilità di concedere agli utenti amministrativi l'accesso necessario per eseguire le proprie responsabilità lavorative, e niente di più. Inoltre, è possibile proteggere questi accessi utilizzando PKI di vari fornitori, limitare l'accesso solo alle chiavi ssh e applicare blocchi dei tentativi di accesso non riusciti.
@@ -77,6 +82,7 @@ Per ulteriori informazioni sul controllo dell'accesso amministrativo, consultare
 
 
 
+[[multifactor-authentication-mfa]]
 == Autenticazione multifattore (MFA)
 
 ONTAP e alcuni altri prodotti NetApp supportano ora l'autenticazione a più fattori (MFA) utilizzando una vasta gamma di metodi. Il risultato è un nome utente/password compromesso da solo non è un thread di sicurezza senza i dati del secondo fattore, come un FOB o un'applicazione per smartphone.
@@ -85,6 +91,7 @@ Per ulteriori informazioni sull'autenticazione multifattore (MFA), vedere link:h
 
 
 
+[[api-rbac]]
 == RBAC API
 
 L'automazione richiede chiamate API, ma non tutti gli strumenti richiedono un accesso amministrativo completo. Per contribuire a proteggere i sistemi di automazione, RBAC è disponibile anche a livello di API. È possibile limitare gli account utente di automazione alle chiamate API richieste. Ad esempio, il software di monitoraggio non richiede l'accesso alle modifiche, ma solo l'accesso in lettura. I workflow che forniscono storage non hanno bisogno della capacità di eliminare lo storage.
@@ -93,6 +100,7 @@ Per ulteriori informazioni su RBAC API, consulta la link:https://docs.netapp.com
 
 
 
+[[multi-admin-verification-mav]]
 == Verifica multi-admin (MAV)
 
 L'autenticazione a più "fattori" può essere ulteriormente eseguita richiedendo l'approvazione di determinate attività da parte di due amministratori diversi, ciascuno con le proprie credenziali. Ciò include la modifica delle autorizzazioni di accesso, l'esecuzione dei comandi diagnostici e l'eliminazione dei dati.

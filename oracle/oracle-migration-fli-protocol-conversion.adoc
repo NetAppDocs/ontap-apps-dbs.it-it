@@ -23,6 +23,7 @@ La seguente procedura illustra la conversione da FC a iSCSI, ma i principi gener
 
 
 
+[[install-iscsi-initiator]]
 == Installare iSCSI Initiator
 
 La maggior parte dei sistemi operativi include un iniziatore iSCSI software per impostazione predefinita, ma se non è incluso, può essere facilmente installato.
@@ -81,6 +82,7 @@ Complete!
 ....
 
 
+[[identify-iscsi-initiator-name]]
 == Identificare il nome dell'iniziatore iSCSI
 
 Durante il processo di installazione viene generato un nome iSCSI initiator univoco. Su Linux, si trova in `/etc/iscsi/initiatorname.iscsi` file. Questo nome viene utilizzato per identificare l'host sulla SAN IP.
@@ -91,6 +93,7 @@ InitiatorName=iqn.1992-05.com.redhat:497bd66ca0
 ....
 
 
+[[create-new-initiator-group]]
 == Creare un nuovo gruppo iniziatore
 
 Un gruppo iniziatore (igroup) fa parte dell'architettura di mascheramento LUN di ONTAP. Un LUN appena creato non è accessibile a meno che non venga concesso per la prima volta l'accesso a un host. Questa operazione viene eseguita creando un igroup che elenca i nomi WWN FC o iniziatori iSCSI che richiedono l'accesso.
@@ -102,12 +105,14 @@ Cluster01::*> igroup create -igroup linuxiscsi -protocol iscsi -ostype linux -in
 ....
 
 
+[[shut-down-environment]]
 == Chiudere l'ambiente
 
 Prima di modificare il protocollo LUN, è necessario disattivare completamente i LUN. Tutti i database di uno dei LUN da convertire devono essere chiusi, i file system devono essere dismontati e i gruppi di volumi devono essere disattivati. Se si utilizza ASM, assicurarsi che il gruppo di dischi ASM sia smontato e chiudere tutti i servizi della griglia.
 
 
 
+[[unmap-luns-from-fc-network]]
 == Rimuovere la mappatura dei LUN dalla rete FC
 
 Una volta terminate completamente le LUN, rimuovere le mappature dall'igroup FC originale.
@@ -121,6 +126,7 @@ Cluster01::*> lun unmap -vserver vserver1 -path /vol/new_lvm/LUN9 -igroup linuxh
 ....
 
 
+[[remap-luns-to-ip-network]]
 == Eseguire nuovamente il mapping dei LUN alla rete IP
 
 Concedere l'accesso a ogni LUN al nuovo gruppo di iniziatori basati su iSCSI.
@@ -135,6 +141,7 @@ Cluster01::*>
 ....
 
 
+[[discover-iscsi-targets]]
 == Rilevamento delle destinazioni iSCSI
 
 Il rilevamento iSCSI richiede due fasi. La prima è scoprire le destinazioni, che non è la stessa cosa per scoprire un LUN. Il `iscsiadm` il comando mostrato di seguito verifica il gruppo di portali specificato da `-p argument` Memorizza un elenco di tutti gli indirizzi IP e le porte che offrono servizi iSCSI. In questo caso, vi sono quattro indirizzi IP con servizi iSCSI sulla porta predefinita 3260.
@@ -151,6 +158,7 @@ NOTE: Il completamento di questo comando può richiedere alcuni minuti se non è
 ....
 
 
+[[discover-iscsi-luns]]
 == Rilevamento delle LUN iSCSI
 
 Dopo aver rilevato le destinazioni iSCSI, riavviare il servizio iSCSI per rilevare i LUN iSCSI disponibili e creare i dispositivi associati, ad esempio i dispositivi multipath o ASMlib.
@@ -161,6 +169,7 @@ Redirecting to /bin/systemctl restart  iscsi.service
 ....
 
 
+[[restart-environment]]
 == Riavviare l'ambiente
 
 Riavviare l'ambiente riattivando i gruppi di volumi, rimontando i file system, riavviando i servizi RAC e così via. Per precauzione, NetApp consiglia di riavviare il server al termine del processo di conversione, per assicurarsi che tutti i file di configurazione siano corretti e che tutti i dispositivi obsoleti vengano rimossi.

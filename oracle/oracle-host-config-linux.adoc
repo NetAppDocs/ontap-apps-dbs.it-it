@@ -14,6 +14,7 @@ Argomenti di configurazione specifici del sistema operativo Linux.
 
 
 
+[[linux-nfsv3-tcp-slot-tables]]
 == Tabelle degli slot TCP per Linux NFSv3
 
 Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
@@ -34,6 +35,7 @@ CAUTION: La mancata impostazione di questi parametri può avere effetti signific
 
 
 
+[[linux-nfs-mount-options]]
 == Opzioni di montaggio NFS Linux
 
 Nella tabella seguente sono elencate le opzioni di montaggio NFS Linux per una singola istanza.
@@ -96,12 +98,14 @@ In genere, i file non di database devono essere montati con le stesse opzioni ut
 
 
 
+[[access-and-getattr]]
 === ACCESSO e GETATTR
 
 Alcuni clienti hanno notato che un livello estremamente elevato di altri IOPS, come ACCESSO e GETATTR, può dominare i propri workload. In casi estremi, operazioni come letture e scritture possono arrivare fino al 10% del totale. Si tratta di un comportamento normale con qualsiasi database che include l'uso di `actimeo=0` e/o. `noac` Su Linux perché queste opzioni fanno sì che il sistema operativo Linux ricarichi costantemente i metadati dei file dal sistema di archiviazione. Operazioni quali ACCESS e GETATTR sono operazioni a basso impatto gestite dalla cache ONTAP in un ambiente di database. Non dovrebbero essere considerati IOPS autentici, come le letture e le scritture, che creano una vera domanda sui sistemi storage. Tuttavia, questi altri IOPS creano un certo carico, specialmente negli ambienti RAC. Per risolvere questo problema, abilitare DNFS, che ignora la cache buffer del sistema operativo ed evita queste operazioni non necessarie relative ai metadati.
 
 
 
+[[linux-direct-nfs]]
 === Linux Direct NFS
 
 Un'opzione di montaggio aggiuntiva, denominata  `nosharecache`, è necessaria quando (a) DNFS è abilitato e (b) una condivisione NFS di origine è montata più di una volta su un singolo server (c) con un montaggio NFS nidificato. Questa configurazione si riscontra principalmente negli ambienti che supportano applicazioni SAP. Ad esempio, una singola condivisione NFS su un sistema NetApp potrebbe avere una directory situata a  `/vol/oracle/base` e una seconda a  `/vol/oracle/home`. Se  `/vol/oracle/base` è montata a  `/oracle` e  `/vol/oracle/home` è montata a  `/oracle/home`, il risultato sono montaggi NFS nidificati che hanno origine dalla stessa origine.
@@ -110,6 +114,7 @@ Il sistema operativo può rilevare che  `/oracle` e  `/oracle/home` risiedono su
 
 
 
+[[linux-direct-nfs-and-oracle-rac]]
 === Linux Direct NFS e Oracle RAC
 
 L'uso di DNFS offre speciali vantaggi in termini di prestazioni per Oracle RAC sul sistema operativo Linux, poiché Linux non dispone di un metodo per forzare l'i/o diretto, necessario con RAC per la coerenza tra i nodi. Come soluzione, Linux richiede l'uso di `actimeo=0` Opzione di montaggio, che fa sì che i dati dei file scadano immediatamente dalla cache del sistema operativo. Questa opzione a sua volta obbliga il client NFS Linux a rileggere costantemente i dati degli attributi, danneggiando la latenza e aumentando il carico sullo storage controller.
@@ -118,12 +123,14 @@ Abilitando DNFS si ignora il client NFS dell'host ed evita questo danno. Diversi
 
 
 
+[[linux-direct-nfs-and-oranfstab-file]]
 === Linux Direct NFS e file oranfstab
 
 Quando si utilizza DNFS su Linux con l'opzione multipathing, è necessario utilizzare più sottoreti. Su altri sistemi operativi, è possibile stabilire più canali DNFS utilizzando `LOCAL` e. `DONTROUTE` Opzioni per configurare più canali DNFS su una singola subnet. Tuttavia, questo non funziona correttamente su Linux e possono verificarsi problemi di prestazioni imprevisti. Con Linux, ogni NIC utilizzata per il traffico DNFS deve trovarsi su una subnet diversa.
 
 
 
+[[io-scheduler]]
 === Utilità di pianificazione i/O.
 
 Il kernel Linux permette un controllo di basso livello sul modo in cui l'i/o blocca i dispositivi è programmato. Le impostazioni predefinite su varie distribuzioni di Linux variano notevolmente. I test dimostrano che la scadenza di solito offre i migliori risultati, ma a volte NOOP è stato leggermente migliore. La differenza di prestazioni è minima, ma è necessario verificare entrambe le opzioni se è necessario estrarre le massime prestazioni possibili da una configurazione di database. CFQ è l'impostazione predefinita in molte configurazioni e ha dimostrato di avere problemi significativi di prestazioni con i carichi di lavoro del database.
@@ -132,6 +139,7 @@ Per istruzioni sulla configurazione dello scheduler i/o, consultare la documenta
 
 
 
+[[multipathing]]
 === Multipathing
 
 Alcuni clienti hanno riscontrato arresti anomali durante l'interruzione della rete perché il daemon multipath non era in esecuzione sul proprio sistema. Nelle versioni recenti di Linux, il processo di installazione del sistema operativo e del demone multipathing potrebbero lasciare questi sistemi operativi vulnerabili a questo problema. I pacchetti sono installati correttamente, ma non sono configurati per l'avvio automatico dopo un riavvio.
@@ -151,6 +159,7 @@ multipathd      0:off   1:off   2:on    3:on    4:on    5:on    6:off
 ....
 
 
+[[asm-mirroring]]
 == Mirroring ASM
 
 Il mirroring ASM potrebbe richiedere modifiche alle impostazioni di multipath Linux per consentire ad ASM di riconoscere un problema e passare a un gruppo di errori alternativo. La maggior parte delle configurazioni ASM su ONTAP utilizza la ridondanza esterna, il che significa che la protezione dei dati è fornita dall'array esterno e ASM non esegue il mirroring dei dati. Alcuni siti utilizzano ASM con ridondanza normale per fornire il mirroring bidirezionale, in genere su siti diversi.
@@ -171,6 +180,7 @@ Un più basso `no_path_retry` Il valore può ridurre il tempo richiesto per ASM 
 
 
 
+[[linux-xfs-ext3-and-ext4-mount-options]]
 == Linux xfs, ext3, e ext4 opzioni di mount
 
 

@@ -18,6 +18,7 @@ Scoprite come configurare la migrazione live dello storage Hyper-V.
 
 
 
+[[prerequisites]]
 == Prerequisiti
 
 * È necessario disporre di un server Hyper-V standalone con storage indipendente (DAS o LUN) o storage SMB (locale o condiviso tra altri server Hyper-V).
@@ -26,6 +27,7 @@ Scoprite come configurare la migrazione live dello storage Hyper-V.
 
 
 
+[[deployment]]
 == Implementazione
 
 . Aprire Hyper-V Manager.

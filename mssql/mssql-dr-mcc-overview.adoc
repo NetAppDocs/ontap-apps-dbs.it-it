@@ -26,6 +26,7 @@ MetroCluster offre semplicità con mirroring automatico dei dati e configurazion
 
 
 
+[[metrocluster-is-avialable-in-3-different-configurations]]
 == MetroCluster è disponibile in 3 diverse configurazioni
 
 * Coppie HA con connettività IP
@@ -38,6 +39,7 @@ NOTE: Il termine connettività si riferisce alla connessione cluster utilizzata 
 
 
 
+[[metrocluster-ip]]
 == IP MetroCluster
 
 La configurazione MetroCluster IP ha-Pair utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
@@ -52,6 +54,7 @@ image:../media/mccip.png["Architettura IP di MetroCluster"]
 
 
 
+[[ha-pair-fc-san-attached-metrocluster]]
 == MetroCluster HA-Pair FC SAN-Attached
 
 La configurazione ha-Pair MetroCluster FC utilizza due o quattro nodi per sito. Questa opzione di configurazione aumenta la complessità e i costi rispetto all'opzione a due nodi, ma offre un vantaggio importante: La ridondanza intrasite. Un semplice errore del controller non richiede l'accesso ai dati nella WAN. L'accesso ai dati rimane locale attraverso il controller locale alternativo.
@@ -67,6 +70,7 @@ Alcune infrastrutture multisito non sono progettate per le operazioni Active-Act
 
 
 
+[[two-node-fc-san-attached-metrocluster]]
 == MetroCluster FC SAN-attached a due nodi
 
 La configurazione MetroCluster a due nodi utilizza un solo nodo per sito. Questo design è più semplice rispetto all'opzione ha-Pair perché richiede meno componenti da configurare e gestire. Inoltre, ha ridotto le richieste di infrastruttura in termini di cablaggio e switch FC. Infine, riduce i costi.
@@ -77,6 +81,7 @@ L'evidente impatto di questa progettazione è che un guasto del controller su un
 
 
 
+[[metrocluster-resiliency-features]]
 == Funzionalità di resilienza di MetroCluster
 
 Non esistono single point of failure in una soluzione MetroCluster:
@@ -91,12 +96,14 @@ Riassumendo, qualsiasi componente della configurazione può essere rimosso senza
 
 
 
+[[syncmirror]]
 == SyncMirror
 
 La protezione per SQL Server con MetroCluster si basa su SyncMirror, che offre una tecnologia di mirroring sincrono scale-out dalle performance massime.
 
 
 
+[[data-protection-with-syncmirror]]
 == Data Protection con SyncMirror
 
 Al livello più semplice, la replica sincrona significa che qualsiasi modifica deve essere apportata a entrambi i lati dello storage con mirroring prima che venga riconosciuta. Ad esempio, se un database sta scrivendo un registro o un guest VMware viene aggiornato, non deve mai andare persa una scrittura. Come livello di protocollo, il sistema di storage non deve riconoscere la scrittura fino a quando non è stato assegnato a un supporto non volatile in entrambi i siti. Solo allora è sicuro procedere senza il rischio di perdita dei dati.
@@ -105,6 +112,7 @@ L'utilizzo di una tecnologia di replica sincrona è il primo passo nella progett
 
 
 
+[[syncmirror-data-availability]]
 == Disponibilità dei dati SyncMirror
 
 La replica MetroCluster si basa sulla tecnologia NetApp SyncMirror, che è progettata per passare in modo efficiente dalla modalità sincrona alla modalità sincrona e viceversa. Questa funzionalità soddisfa i requisiti dei clienti che richiedono una replica sincrona, ma che hanno bisogno anche di un'alta disponibilità per i propri servizi dati. Ad esempio, se la connettività a un sito remoto viene interrotta, è generalmente preferibile che il sistema di archiviazione continui a funzionare in uno stato non replicato.

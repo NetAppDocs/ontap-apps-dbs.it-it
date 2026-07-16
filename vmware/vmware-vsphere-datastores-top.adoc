@@ -134,6 +134,7 @@ La tabella seguente elenca le funzionalità di backup supportate.
 
 
 
+[[selecting-a-storage-protocol]]
 == Selezione di un protocollo di storage
 
 I sistemi che eseguono ONTAP supportano tutti i principali protocolli di storage, quindi i clienti possono scegliere ciò che è meglio per il loro ambiente, a seconda dell'infrastruttura di rete esistente e pianificata e delle competenze del personale. Storicamente, i test di NetApp hanno generalmente mostrato poche differenze tra protocolli eseguiti a velocità di linea e numeri di connessioni simili. Tuttavia, NVMe-oF (NVMe/TCP e NVMe/FC) mostra notevoli miglioramenti in IOPS, riduzione della latenza e fino al 50% o più di riduzione del consumo di CPU host da parte dell'IO di storage. All'altro estremo dello spettro, NFS offre la massima flessibilità e facilità di gestione, soprattutto per un numero elevato di VM. Tutti questi protocolli possono essere utilizzati e gestiti con ONTAP tools for VMware vSphere, che fornisce un'interfaccia semplice per creare e gestire i datastore.
@@ -148,6 +149,7 @@ I seguenti fattori potrebbero essere utili per valutare una scelta di protocollo
 
 
 
+[[datastore-layout]]
 == Layout del datastore
 
 I sistemi storage ONTAP offrono una grande flessibilità nella creazione di datastore per macchine virtuali e dischi virtuali. Sebbene vengano applicate molte Best practice ONTAP quando si utilizzano gli strumenti ONTAP per il provisioning dei datastore per vSphere (elencati nella sezione link:vmware-vsphere-settings.html["Host ESXi consigliato e altre impostazioni ONTAP"]), di seguito sono riportate alcune linee guida aggiuntive da prendere in considerazione:
@@ -165,6 +167,7 @@ I sistemi storage ONTAP offrono una grande flessibilità nella creazione di data
 
 
 
+[[datastore-and-vm-migration]]
 == Migrazione di datastore e macchine virtuali
 
 Quando si esegue la migrazione delle macchine virtuali da un datastore esistente su un altro sistema storage a ONTAP, è necessario tenere presente alcune procedure:
@@ -176,6 +179,7 @@ Quando si esegue la migrazione delle macchine virtuali da un datastore esistente
 
 
 
+[[ontap-tools-for-vmware-vsphere]]
 == Strumenti ONTAP per VMware vSphere
 
 La best practice più importante quando si utilizza vSphere con sistemi che eseguono ONTAP è installare e utilizzare il plug-in ONTAP tools for VMware vSphere (precedentemente noto come Virtual Storage Console). Questo plug-in vCenter semplifica la gestione dello storage, migliora la disponibilità e riduce i costi di storage e il sovraccarico operativo, sia che si utilizzi SAN o NAS, su ASA, AFF, FAS o persino ONTAP Select (una versione software-defined di ONTAP in esecuzione su una VM VMware o KVM). Utilizza le best practice per il provisioning dei datastore e ottimizza le impostazioni dell'host ESXi per i timeout multipath e HBA (questi sono descritti nell'Appendice B). Poiché è un plug-in vCenter, è disponibile per tutti i client web vSphere che si connettono al server vCenter.
@@ -191,6 +195,7 @@ In generale, *NetApp consiglia* di utilizzare gli strumenti ONTAP per l'interfac
 
 
 
+[[general-networking]]
 == Rete generale
 
 La configurazione delle impostazioni di rete quando si utilizza vSphere con sistemi che eseguono ONTAP è semplice e simile ad altre configurazioni di rete. Ecco alcuni aspetti da considerare:

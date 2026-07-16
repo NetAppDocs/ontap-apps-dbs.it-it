@@ -6,6 +6,7 @@ Sono incluse misure di pianificazione tipiche, quali la garanzia della presenza 
 
 
 
+[[zoning]]
 == Suddivisione in zone
 
 Una zona FC non deve mai contenere più di un iniziatore. Una tale disposizione potrebbe sembrare funzionare inizialmente, ma la diafonia tra gli iniziatori interferisce eventualmente con le prestazioni e la stabilità.

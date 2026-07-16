@@ -4,6 +4,7 @@
 
 
 
+[[default]]
 == Predefinito
 
 Tutti i volumi FabricPool sono inizialmente impostati su `default`, il che significa che il comportamento è controllato da `cloud-retrieval-policy. `il comportamento esatto dipende dal criterio di tiering utilizzato.
@@ -16,6 +17,7 @@ Tutti i volumi FabricPool sono inizialmente impostati su `default`, il che signi
 
 
 
+[[on-read]]
 == A lettura
 
 Impostazione `cloud-retrieval-policy` in lettura sovrascrive il comportamento predefinito, in modo che una lettura di dati a livelli determini il ritorno dei dati al livello di prestazioni.
@@ -26,6 +28,7 @@ Se una modifica imprevista delle esigenze aziendali richiedeva la scansione ripe
 
 
 
+[[promote]]
 == Promuovi
 
 Il comportamento della policy di promozione dipende dalla policy di tiering. Se la policy di tiering è `auto`, quindi impostare `cloud-retrieval-policy `to `promote` riporta tutti i blocchi dal tier di capacità nella successiva scansione del tiering.
@@ -36,6 +39,7 @@ Se, tuttavia, i dati di un volume sono stati ripristinati da un'operazione SnapR
 
 
 
+[[never]]
 == Mai
 
 Non recuperare i blocchi dal Tier di capacità.

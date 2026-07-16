@@ -16,6 +16,7 @@ Il cluster RAC esteso tradizionale si basava sul mirroring ASM per garantire la 
 
 
 
+[[replication]]
 == Replica
 
 La chiave per comprendere le funzionalità RAC nella sincronizzazione attiva di SnapMirror è la visualizzazione dello storage come singolo set di LUN che si trovano sullo storage con mirroring. Ad esempio:
@@ -26,12 +27,14 @@ Nessuna copia primaria o copia speculare. A livello logico, esiste una sola copi
 
 
 
+[[storage-configuration]]
 == Configurazione dello storage
 
 In questa configurazione di esempio, i dischi ASM sono configurati come in qualsiasi configurazione RAC a sito singolo sullo storage Enterprise. Poiché il sistema di storage garantisce la protezione dei dati, viene utilizzata la ridondanza esterna ASM.
 
 
 
+[[uniform-vs-nonuninform-access]]
 == Accesso uniforme e non privo di informazioni
 
 La considerazione più importante con Oracle RAC sulla sincronizzazione attiva di SnapMirror è se utilizzare un accesso uniforme o non uniforme.
@@ -42,6 +45,7 @@ Nessuna delle due opzioni è specificamente consigliata o scoraggiata. Alcuni cl
 
 
 
+[[nonuniform-access]]
 == Accesso non uniforme
 
 L'accesso non uniforme è più semplice da configurare dal punto di vista della SAN.
@@ -52,6 +56,7 @@ L'aspetto negativo principale link:oracle-dr-smas-nonuniform.html["accesso non u
 
 
 
+[[uniform-access]]
 == Accesso uniforme
 
 Un accesso uniforme richiede l'estensione della SAN tra i siti. Il vantaggio principale consiste nel fatto che la perdita di un sistema di storage non provocherà la perdita di un'istanza del database. Al contrario, si otterrebbe una modifica multipathing in cui i percorsi sono attualmente in uso.
@@ -63,6 +68,7 @@ NOTE: Nei diagrammi di seguito sono presenti anche percorsi attivi ma non ottimi
 
 
 
+[[aff-with-proximity-settings]]
 === AFF con impostazioni di prossimità
 
 In presenza di una latenza significativa tra i siti, è possibile configurare i sistemi AFF con le impostazioni di prossimità dell'host. In questo modo, ciascun sistema storage può conoscere gli host locali e remoti e assegnare in maniera appropriata le priorità del percorso.
@@ -73,6 +79,7 @@ Durante il normale funzionamento, ogni istanza Oracle utilizzerebbe preferenzial
 
 
 
+[[asa-aff-without-proximity-settings]]
 === ASA / AFF senza impostazioni di prossimità
 
 In assenza di una latenza significativa tra i siti, è possibile configurare i sistemi AFF senza le impostazioni di prossimità dell'host oppure utilizzare ASA.

@@ -21,6 +21,7 @@ image:epic-cg-layout.png["Layout del gruppo di coerenza EPIC"]
 
 
 
+[[consistency-group-snapshots]]
 == Snapshot di gruppo di coerenza
 
 È necessario impostare una pianificazione degli snapshot del CG notturno su ciascuno dei CGS figlio associati ai volumi che forniscono spazio di archiviazione per il database di produzione. Ciò comporterà una nuova serie di backup coerenti di questi CGS ogni notte. Questi possono essere utilizzati per il cloning del database di produzione per l'utilizzo in ambienti non di produzione, come test e sviluppo. NetApp ha sviluppato workflow Ansible automatizzati basati su CG proprietari per Epic per automatizzare il backup dei database di produzione, il refresh e gli ambienti di test.

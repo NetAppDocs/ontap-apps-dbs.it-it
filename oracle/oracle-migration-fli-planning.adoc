@@ -26,6 +26,7 @@ Questo esempio mostra la migrazione di LUN ASM e LVM ospitati su un server Linux
 
 
 
+[[identify-lvm-luns]]
 == Identificare i LUN LVM
 
 La prima fase della preparazione consiste nell'identificare i LUN da migrare. Nell'esempio mostrato qui, due file system basati su SAN sono montati su `/orabin` e. `/backups`.
@@ -61,6 +62,7 @@ Il `pvdisplay` Il comando può essere utilizzato come segue per identificare i L
 ....
 
 
+[[identify-asm-luns]]
 == Identificare i LUN ASM
 
 Anche i LUN ASM devono essere migrati. Per ottenere il numero di LUN e percorsi LUN da sqlplus come utente sysasm, eseguire il comando seguente:
@@ -84,6 +86,7 @@ SQL>
 ....
 
 
+[[fc-network-changes]]
 == Modifiche alla rete FC
 
 L'ambiente corrente contiene 20 LUN da migrare. Aggiornare la SAN corrente in modo che ONTAP possa accedere ai LUN correnti. I dati non sono ancora stati migrati, ma ONTAP deve leggere le informazioni di configurazione dalle LUN correnti per creare la nuova home page per quei dati.
@@ -94,6 +97,7 @@ Al termine di questa operazione, ONTAP dovrebbe essere in grado di visualizzare 
 
 
 
+[[identify-foreign-array]]
 == Identificare un array esterno
 
 ....
@@ -105,6 +109,7 @@ Cluster01::>
 ....
 
 
+[[identify-foreign-luns]]
 == Identificare i LUN esterni
 
 I LUN possono essere elencati passando l' `array-name` al `storage disk show` comando. I dati restituiti vengono referenziati più volte durante la procedura di migrazione.
@@ -138,6 +143,7 @@ Cluster01::>
 ....
 
 
+[[register-foreign-array-luns-as-import-candidates]]
 == Registrare LUN di array esterni come candidati di importazione
 
 Le LUN esterne vengono inizialmente classificate come qualsiasi tipo di LUN specifico. Prima di poter importare i dati, i LUN devono essere contrassegnati come esterni e quindi come candidati al processo di importazione. Questo passaggio viene completato passando il numero di serie a. `storage disk modify` , come illustrato nell'esempio seguente. Si noti che questa procedura etichetta solo il LUN come estraneo all'interno di ONTAP. Nessun dato viene scritto nella LUN esterna stessa.
@@ -152,6 +158,7 @@ Cluster01::*>
 ....
 
 
+[[create-volumes-to-host-migrated-luns]]
 == Creazione di volumi per l'hosting di LUN migrati
 
 Per ospitare le LUN migrate è necessario un volume. La configurazione esatta dei volumi dipende dal piano generale per sfruttare le funzionalità di ONTAP. In questo esempio, i LUN ASM vengono posizionati in un volume e i LUN LVM in un secondo volume. In questo modo, puoi gestire le LUN come gruppi indipendenti per scopi come il tiering, la creazione di snapshot o l'impostazione di controlli della qualità del servizio.
@@ -167,6 +174,7 @@ Cluster01::>
 ....
 
 
+[[create-ontap-luns]]
 == Creare LUN ONTAP
 
 Una volta creati i volumi, è necessario creare i nuovi LUN. In genere, la creazione di un LUN richiede all'utente di specificare tali informazioni come la dimensione LUN, ma in questo caso l'argomento del disco esterno viene passato al comando. Di conseguenza, ONTAP replica i dati di configurazione LUN correnti dal numero di serie specificato. Utilizza inoltre la geometria del LUN e i dati della tabella delle partizioni per regolare l'allineamento delle LUN e stabilire prestazioni ottimali.
@@ -187,6 +195,7 @@ Created a LUN of size 10g (10737418240)
 ....
 
 
+[[create-import-relationships]]
 == Creare relazioni di importazione
 
 I LUN sono stati creati ma non sono configurati come destinazione di replica. Prima di eseguire questo passaggio, i LUN devono essere messi offline. Questo passaggio aggiuntivo è progettato per proteggere i dati dagli errori dell'utente. Se ONTAP consentisse di eseguire una migrazione su un LUN online, rischierebbe di provocare la sovrascrittura dei dati attivi con un errore tipografico. Questa fase aggiuntiva, che obbliga l'utente a portare un LUN offline, consente di verificare se viene utilizzato il LUN di destinazione corretto come destinazione della migrazione.
@@ -231,6 +240,7 @@ Cluster01::*>
 ....
 
 
+[[create-initiator-group]]
 == Crea gruppo iniziatore
 
 Un gruppo iniziatore (igroup) fa parte dell'architettura di mascheramento LUN di ONTAP. Un LUN appena creato non è accessibile a meno che non venga concesso per la prima volta l'accesso a un host. A tale scopo, creare un igroup in cui siano elencati i nomi WWN FC o iSCSI Initiator a cui è necessario concedere l'accesso. Al momento della scrittura del report, FLI era supportato solo per LUN FC. Tuttavia, la conversione in post-migrazione iSCSI è un'attività semplice, come illustrato nella link:oracle-migration-fli-protocol-conversion.html["Conversione protocollo"].
@@ -242,6 +252,7 @@ Cluster01::*> igroup create linuxhost -protocol fcp -ostype linux -initiator 21:
 ....
 
 
+[[map-new-luns-to-host]]
 == Mappare nuovi LUN all'host
 
 Dopo la creazione di igroup, i LUN vengono quindi mappati all'igroup definito. Questi LUN sono disponibili solo per i WWN inclusi in questo igroup. In questa fase del processo di migrazione, NetApp presume che l'host non sia stato sottoposto a zoning in ONTAP. Questo è importante perché se l'host è contemporaneamente collegato all'array esterno e al nuovo sistema ONTAP, vi è il rischio che su ogni array possano essere rilevati LUN con lo stesso numero di serie. Questa situazione potrebbe causare malfunzionamenti del multipath o danni ai dati.

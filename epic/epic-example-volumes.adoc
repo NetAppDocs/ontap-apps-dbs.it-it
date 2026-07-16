@@ -16,6 +16,7 @@ NOTE: A partire da ONTAP 9.7, la crittografia dell'aggregato e del volume è abi
 
 
 
+[[autodelete-snapshots]]
 == Eliminazione automatica degli snapshot
 
 Per eliminare automaticamente le istantanee: https://docs.netapp.com/us-en/ontap-cli-9141//volume-snapshot-autodelete-modify.html[]

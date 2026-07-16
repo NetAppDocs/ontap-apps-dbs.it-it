@@ -25,6 +25,7 @@ Infine, vi sono alcuni fattori che esulano dal processo di backup e ripristino s
 
 
 
+[[is-a-snapshot-a-backup]]
 == Uno snapshot è un backup?
 
 Un'obiezione comunemente sollevata all'utilizzo delle snapshot come strategia di protezione dei dati è rappresentata dal fatto che i dati "reali" e i dati snapshot si trovano sugli stessi dischi. La perdita di tali unità causerebbe la perdita sia dei dati primari che del backup.
@@ -35,6 +36,7 @@ Gli snapshot locali non dovrebbero, tuttavia, mai essere l'unica strategia di ba
 
 
 
+[[crash-consistent-backups]]
 == Backup coerenti con il crash
 
 Un backup coerente con il crash prevede l'acquisizione dello stato di un dataset (o di più dataset) in un singolo punto atomico nel tempo. Come esempio di database, questo include tutti i componenti del database, come datafile, file di log e altri file direttamente associati al database. Questo funziona con quasi tutti i prodotti di database relazionali, inclusi Oracle RDBMS, Microsoft SQL Server, SAP HANA, PostgreSQL, MySQL e MariaDB. La protezione di una configurazione VMware con un backup di un gruppo di coerenza sarebbe simile: acquisire tutti i datastore e potenzialmente le LUN di avvio di ESX in un singolo punto atomico nel tempo.
@@ -51,6 +53,7 @@ L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un s
 
 
 
+[[replication-and-disaster-recovery-architecture]]
 == Architettura di replica e disaster recovery
 
 Questa sezione riguarda la protezione dei dati remoti, per la quale i dati vengono replicati in un sito remoto ai fini di uno storage offsite sicuro e di un disaster recovery. Si noti che queste tabelle non riguardano la protezione dei dati di mirroring sincrono. Per questo requisito, consultare la documentazione di NetApp MetroCluster tra cui link:oracle-dr-mcc-failover.html["MetroCluster"] e. link:oracle-dr-smas-overview.html["Sincronizzazione attiva di SnapMirror"]
@@ -71,12 +74,14 @@ Il tempo di conservazione è in parte controllato dal limite di snapshot. Ad ese
 
 
 
+[[single-volume-consistency-group-aff]]
 === Gruppo di coerenza a volume singolo (AFF)
 
 L'approccio più semplice consiste nel posizionare tutti i file o le LUN in un singolo volume. Un volume è di per sé un gruppo di coerenza, il che significa che gli aggiornamenti SnapMirror e SnapVault possono essere pianificati direttamente sul sistema storage. Non è necessario alcun software esterno.
 
 
 
+[[single-lunnamespace-consistency-group-asa]]
 === Gruppo di coerenza LUN/namespace singolo (ASA)
 
 Sebbene possa sembrare strano posizionare un intero database su un singolo LUN/namespace, questa pratica sta diventando sempre più comune. Il motivo per cui i volume manager sono stati originariamente creati era quello di superare i limiti di prestazioni e capacità delle unità fisiche. Con gli array moderni, un singolo dispositivo a blocchi presentato a un host è già astratto su più unità. Le dimensioni possono essere regolate dinamicamente e le prestazioni sono di gran lunga superiori a quelle di una singola unità.
@@ -85,6 +90,7 @@ Il risultato è che carichi di lavoro che vanno da un datastore ESX a un databas
 
 
 
+[[multi-volume-consistency-group]]
 === Gruppo di coerenza multi-volume
 
 Quando un database deve estendersi su volumi AFF o LUN/namespace ASA, è necessario uno snapshot del gruppo di coerenza. Come accennato in precedenza, questa operazione può essere configurata tramite System Manager o chiamate API RESTful, inoltre SnapCenter è in grado di creare uno snapshot semplice del gruppo di coerenza.
@@ -93,16 +99,19 @@ C'è anche un'ulteriore considerazione da fare sull'utilizzo di snapshot coerent
 
 
 
+[[disaster-recovery-activation]]
 == Disaster recovery: Attivazione
 
 
 
+[[nfs]]
 === NFS
 
 Il processo di attivazione della copia di disaster recovery dipende dal tipo di storage. Con NFS, i file system possono essere premontati sul server di disaster recovery. Sono in uno stato di sola lettura e diventano lettura-scrittura quando il mirror è rotto. Ciò offre un RPO estremamente basso e il processo generale di disaster recovery è più affidabile, poiché ci sono meno parti da gestire.
 
 
 
+[[san]]
 === SAN
 
 L'attivazione delle configurazioni SAN in caso di disaster recovery diventa più complicata. L'opzione più semplice è in genere quella di rompere temporaneamente i mirror e montare le risorse SAN, tra cui passaggi come il rilevamento della configurazione LVM (incluse funzioni specifiche dell'applicazione come Oracle Automatic Storage Management [ASM]) e l'aggiunta di voci a /etc/fstab.

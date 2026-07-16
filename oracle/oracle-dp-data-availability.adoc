@@ -19,6 +19,7 @@ ONTAP è progettato per garantire la massima disponibilità dei database Oracle.
 
 
 
+[[ha-pairs]]
 == Coppie HA
 
 L'unità di base dell'alta disponibilità è la coppia ha. Ciascuna coppia contiene collegamenti ridondanti per supportare la replica dei dati nella NVRAM. NVRAM non è una cache di scrittura. La RAM all'interno del controller funge da cache di scrittura. Lo scopo della NVRAM è quello di memorizzare temporaneamente i dati come salvaguardia da errori di sistema imprevisti. A questo proposito, è simile a un log di ripristino del database.
@@ -29,6 +30,7 @@ Se un controller si guasta bruscamente, è probabile che vi siano modifiche in s
 
 
 
+[[takeover-and-giveback]]
 == Takeover e giveback
 
 Il takeover e il giveback fanno riferimento al processo di trasferimento della responsabilità delle risorse di storage fra i nodi di una coppia ha. L'acquisizione e il giveback presentano due aspetti:
@@ -48,6 +50,7 @@ Il secondo aspetto del takeover e dello sconto è il trasferimento della proprie
 
 
 
+[[takeover-time]]
 == Tempo di takeover
 
 L'i/o dell'host subisce una breve pausa in i/o durante le operazioni di takeover e giveback, senza tuttavia alcuna interruzione dell'applicazione in un ambiente configurato correttamente. L'effettivo processo di transizione in cui l'i/o subisce un ritardo viene generalmente misurato in secondi, ma l'host potrebbe richiedere tempo aggiuntivo per riconoscere la modifica nei percorsi di dati e inviare di nuovo le operazioni i/O.

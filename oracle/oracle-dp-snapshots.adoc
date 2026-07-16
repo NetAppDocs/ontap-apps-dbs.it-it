@@ -35,6 +35,7 @@ Di conseguenza, la protezione di un set di dati ospitato su ONTAP è semplice e 
 
 
 
+[[is-a-snapshot-a-backup]]
 == Uno snapshot è un backup?
 
 Una domanda comunemente posta sull'utilizzo delle istantanee come strategia di protezione dei dati è il fatto che i dati "reali" e i dati snapshot si trovano sulle stesse unità. La perdita di tali unità causerebbe la perdita sia dei dati primari che del backup.
@@ -45,6 +46,7 @@ Gli snapshot locali, tuttavia, non dovrebbero mai rappresentare l'unica strategi
 
 
 
+[[snapshot-based-backups]]
 == Backup basati su snapshot
 
 Le copie Snapshot di ONTAP sono disponibili diverse opzioni per la protezione dei dati, mentre le snapshot sono alla base di molte altre funzionalità di ONTAP, tra cui replica, disaster recovery e cloning. Una descrizione completa della tecnologia snapshot non rientra nell'ambito di questo documento, ma le sezioni seguenti forniscono una panoramica generale.
@@ -63,6 +65,7 @@ La parola "coerente" in "coerente con l'applicazione" è spesso un nome scorrett
 
 
 
+[[consistency-groups]]
 == Gruppi di coerenza
 
 Il termine "gruppo di coerenza" si riferisce alla capacità di un array di archiviazione di gestire più risorse di archiviazione come una singola immagine. Ad esempio, un database può essere composto da 10 LUN. L'array deve essere in grado di eseguire il backup, il ripristino e la replica delle 10 LUN in modo coerente. Il ripristino non è possibile se le immagini dei LUN non erano coerenti nel punto di backup. La replica di queste 10 LUN richiede che tutte le repliche siano perfettamente sincronizzate l'una con l'altra.
@@ -73,6 +76,7 @@ I sistemi AFF includono anche una tipologia più ampia di gruppi di coerenza. Pi
 
 
 
+[[consistency-group-snapshots]]
 == Snapshot di gruppo di coerenza
 
 Gli snapshot dei gruppi di coerenza (CG) sono un'estensione della tecnologia Snapshot di ONTAP. Un'operazione di snapshot standard crea un'immagine coerente di tutti i dati all'interno di un singolo volume AFF/FAS o LUN/namespace ASA, ma a volte è necessario creare un set coerente di snapshot su più risorse di storage e persino su più sistemi di storage. Il risultato è un set di snapshot che può essere utilizzato allo stesso modo di uno snapshot di un singolo volume. Possono essere utilizzati per recovery di dati, replicati per scopi di disaster recovery o clonati come un'unica unità coerente.
@@ -99,6 +103,7 @@ Una volta configurato il write fencing tra i target, questi sono pronti per la c
 
 
 
+[[dependent-write-order]]
 === Ordine di scrittura dipendente
 
 Da un punto di vista tecnico, la chiave per un gruppo di coerenza è preservare l'ordine di scrittura e, nello specifico, l'ordine di scrittura dipendente. Ad esempio, un database in scrittura su 10 LUN scrive simultaneamente su tutte. Molte scritture vengono emesse in modo asincrono, il che significa che l'ordine in cui vengono completate non è importante e l'ordine effettivo in cui vengono completate varia in base al comportamento del sistema operativo e della rete.
@@ -107,6 +112,7 @@ Alcune operazioni di scrittura devono essere presenti sul disco prima che il dat
 
 
 
+[[strategies]]
 == Strategie
 
 Esistono due approcci principali ai backup basati su snapshot:
@@ -134,6 +140,7 @@ Sebbene i diversi clienti possano avere strategie molto diverse, quasi tutte que
 
 
 
+[[snapshot-based-recovery]]
 == Recovery basato su Snapshot
 
 Quando si progettano le configurazioni di storage per i database Oracle, la prima decisione da prendere riguarda se utilizzare la tecnologia NetApp SnapRestore basata sui volumi (VBSR), che è la tecnologia sottostante utilizzata per il ripristino dei volumi AFF e dei LUN/namespace ASA.
@@ -148,6 +155,7 @@ Isolando i file di dati in questo modo, è possibile ripristinarli a uno stato p
 
 
 
+[[aff-snapshot-reserve]]
 == AFF riserva di Snapshot
 
 Per ogni volume con dati Oracle in un ambiente AFF SAN, il  `percent-snapshot-space` dovrebbe essere impostato a zero perché riservare spazio per uno snapshot in un ambiente LUN non è utile. Se la riserva frazionaria è impostata a 100, uno snapshot di un volume con LUN richiede abbastanza spazio libero nel volume, escludendo la riserva di Snapshot, per assorbire il 100% di turnover di tutti i dati. Se la riserva frazionaria è impostata su un valore inferiore, è richiesta una quantità di spazio libero corrispondentemente inferiore, ma esclude sempre la riserva di Snapshot. Ciò significa che lo spazio di riserva di Snapshot in un ambiente LUN viene sprecato.
@@ -171,6 +179,7 @@ Non esiste una chiara preferenza tra l'opzione 1 e l'opzione 2 tra gli utenti fi
 
 
 
+[[ontap-and-third-party-snapshots]]
 == ONTAP e snapshot di terze parti
 
 Oracle Doc ID 604683,1 illustra i requisiti per il supporto di snapshot di terze parti e le varie opzioni disponibili per le operazioni di backup e ripristino.

@@ -31,6 +31,7 @@ image:migration-options-flowchart.png["Diagramma di flusso della migrazione"].
 
 
 
+[[online-datafile-move]]
 == Spostamento file dati online
 
 Oracle 12cR1 e versioni successive includono la possibilità di spostare un file dati mentre il database rimane online. Inoltre funziona tra diversi tipi di filesystem. Ad esempio, è possibile spostare un file dati da un filesystem xfs ad ASM. Questo metodo non viene generalmente utilizzato su larga scala a causa del numero di operazioni singole di spostamento del file di dati che sarebbero necessarie, ma è un'opzione che vale la pena considerare con database più piccoli con meno file di dati.
@@ -39,12 +40,14 @@ Inoltre, il semplice spostamento di un file dati è un'ottima opzione per la mig
 
 
 
+[[database-level-migration]]
 == Migrazione a livello di database
 
 La migrazione a livello di database significa consentire il trasferimento dei dati. In particolare, ciò significa spedizione dei log. Tecnologie come RMAN e ASM sono prodotti Oracle, ma, ai fini della migrazione, operano a livello di host in cui copiano i file e gestiscono i volumi.
 
 
 
+[[log-shipping]]
 === Spedizione dei log
 
 La base per la migrazione a livello di database è il log di archivio di Oracle, che contiene un registro delle modifiche apportate al database. Nella maggior parte dei casi, un registro di archiviazione fa parte di una strategia di backup e ripristino. Il processo di ripristino inizia con il ripristino di un database e quindi la riproduzione di uno o più log di archivio per portare il database allo stato desiderato. Questa stessa tecnologia di base può essere utilizzata per eseguire una migrazione con interruzioni delle operazioni minime o nulle. Cosa ancora più importante, questa tecnologia consente la migrazione senza intaccare il database originale, preservando un percorso di back-out.
@@ -59,12 +62,14 @@ La distribuzione dei log si è dimostrata particolarmente utile per progetti di 
 
 
 
+[[oracle-dataguard]]
 === Oracle DataGuard
 
 In alcuni casi, è garantito un ambiente DataGuard completo. Non è corretto utilizzare il termine DataGuard per fare riferimento a qualsiasi configurazione del database di standby o di distribuzione dei log. Oracle DataGuard è un framework completo per la gestione della replica dei database, ma non è una tecnologia di replica. Il vantaggio principale di un ambiente DataGuard completo in uno sforzo di migrazione è lo switchover trasparente da un database all'altro. DataGuard consente inoltre uno switchover trasparente nel database originale in caso di problemi, ad esempio problemi di prestazioni o connettività di rete nel nuovo ambiente. Un ambiente DataGuard completamente configurato richiede la configurazione non solo del livello del database ma anche delle applicazioni in modo che le applicazioni siano in grado di rilevare una modifica nella posizione del database primario. In generale, non è necessario utilizzare DataGuard per completare una migrazione, ma alcuni clienti hanno una vasta esperienza DataGuard in-house e già si affidano a essa per le attività di migrazione.
 
 
 
+[[rearchitecture]]
 === Riarchitettura
 
 Come discusso in precedenza, per sfruttare le funzionalità avanzate degli storage array è talvolta necessario modificare il layout del database. Inoltre, una modifica nel protocollo di storage, come il passaggio da ASM a un file system NFS, altera necessariamente il layout del file system.
@@ -73,6 +78,7 @@ Uno dei principali vantaggi dei metodi di distribuzione dei log, incluso DataGua
 
 
 
+[[server-resources]]
 === Risorse dei server
 
 Un limite alla migrazione a livello di database è la necessità di un secondo server. Questo secondo server può essere utilizzato in due modi:
@@ -89,12 +95,14 @@ Sebbene sia possibile impostare la distribuzione dei log e replicare un database
 
 
 
+[[host-level-migration]]
 == Migrazione a livello di host
 
 Migrare i dati a livello di host significa utilizzare il sistema operativo host e le utility associate per completare la migrazione. Questo processo include qualsiasi utility che copia i dati, inclusi Oracle RMAN e Oracle ASM.
 
 
 
+[[data-copying]]
 === Copia dei dati
 
 Il valore di un'operazione di copia semplice non deve essere sottovalutato. Le moderne infrastrutture di rete sono in grado di spostare i dati a velocità misurate in gigabyte al secondo, mentre le operazioni di copia dei file si basano su un efficiente i/o di lettura e scrittura sequenziale L'interruzione è inevitabile con un'operazione di copia dell'host rispetto alla spedizione dei log, ma la migrazione non riguarda solo lo spostamento dei dati. In genere sono incluse le modifiche alla rete, il tempo di riavvio del database e i test post-migrazione.
@@ -103,6 +111,7 @@ Il tempo effettivo richiesto per copiare i dati potrebbe non essere significativ
 
 
 
+[[replatforming]]
 === Riformulazione
 
 Replatforming si riferisce a una modifica del tipo di CPU. Quando un database viene migrato da una piattaforma Solaris, AIX o HP-UX tradizionale a x86 Linux, i dati devono essere riformattati a causa delle modifiche apportate all'architettura della CPU. Le CPU SPARC, IA64 e POWER sono note come grandi processori endian, mentre le architetture x86 e x86_64 sono note come Little endian. Di conseguenza, alcuni dati all'interno dei file di dati Oracle vengono ordinati in modo diverso a seconda del processore in uso.
@@ -117,6 +126,7 @@ Una discussione completa su DataPump e tablespace trasportabili va oltre la docu
 
 
 
+[[logical-volume-manager-driven-migration]]
 === Migrazione guidata dal volume logico
 
 Le LVM funzionano prendendo un gruppo di uno o più LUN e suddividendoli in piccole unità generalmente denominate estensioni. Il pool di estensioni viene quindi utilizzato come origine per creare volumi logici essenzialmente virtualizzati. Questo livello di virtualizzazione offre valore in vari modi:
@@ -145,6 +155,7 @@ NOTE: Il rischio principale per le operazioni è la rimozione delle LUN vecchie 
 
 
 
+[[oracle-automatic-storage-management]]
 === Gestione automatica dello storage Oracle
 
 Oracle ASM è un volume manager e un file system logici combinati. A un livello elevato, Oracle ASM prende una raccolta di LUN, le suddivide in piccole unità di allocazione e le presenta come un singolo volume noto come gruppo di dischi ASM. ASM include inoltre la possibilità di eseguire il mirroring del gruppo di dischi impostando il livello di ridondanza. Un volume può essere senza mirror (ridondanza esterna), con mirroring (ridondanza normale) o con mirroring a tre vie (ridondanza elevata). Prestare attenzione durante la configurazione del livello di ridondanza perché non può essere modificato dopo la creazione.
@@ -158,12 +169,14 @@ NOTE: Poiché il livello di mirroring di Oracle ASM è fisso, non può essere ut
 
 
 
+[[storage-level-migration]]
 == Migrazione a livello di storage
 
 Migrazione a livello di storage: Migrazione al di sotto del livello dell'applicazione e del sistema operativo. In passato, questo a volte significava l'utilizzo di dispositivi specializzati che copiano i LUN a livello di rete, ma queste funzionalità ora si trovano in modo nativo in ONTAP.
 
 
 
+[[snapmirror]]
 === SnapMirror
 
 La migrazione di database da un sistema NetApp all'altro viene eseguita quasi universalmente con il software di replica dei dati NetApp SnapMirror. Il processo prevede la configurazione di una relazione di mirroring per i volumi da migrare, in modo che possano essere sincronizzati e quindi in attesa della finestra di cutover. Quando arriva, il database di origine viene arrestato, viene eseguito un aggiornamento finale del mirror e il mirror viene interrotto. I volumi di replica sono quindi pronti per l'uso, montando una directory del file system NFS contenuta oppure rilevando i LUN contenuti e avviando il database.
@@ -172,6 +185,7 @@ Il riposizionamento dei volumi in un singolo cluster ONTAP non viene preso in co
 
 
 
+[[foreign-lun-import-fli]]
 === Importazione di LUN esterne (FLI)
 
 FLI è una funzione che consente a un sistema Data ONTAP con versione 8,3 o superiore di migrare una LUN esistente da un altro storage array. La procedura è semplice: Il sistema ONTAP viene sottoposto a zoning sull'array di storage esistente come se fosse un qualsiasi altro host SAN. Data ONTAP può quindi controllare le LUN legacy desiderate ed eseguire la migrazione dei dati sottostanti. Inoltre, il processo di importazione utilizza le impostazioni di efficienza del nuovo volume durante la migrazione dei dati, vale a dire che i dati possono essere compressi e deduplicati inline durante il processo di migrazione.
@@ -196,6 +210,7 @@ Oracle ASM non ha dimensioni dei blocchi fondamentali. L'unico requisito è che 
 
 
 
+[[7-mode-transition-tool]]
 === 7-Mode Transition Tool
 
 7-Mode Transition Tool (7MTT) è un'utility di automazione utilizzata per migrare configurazioni 7- Mode di grandi dimensioni a ONTAP. La maggior parte dei clienti che gestiscono i database trovano altri metodi più semplici, in parte perché eseguono di solito la migrazione dei database piuttosto che trasferire l'intero footprint dello storage. Inoltre, i database sono spesso solo una parte di un ambiente di storage più ampio. Pertanto, spesso i database vengono migrati singolarmente, quindi l'ambiente rimanente può essere spostato con 7MTT.

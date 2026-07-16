@@ -24,6 +24,7 @@ image:vmware-vsphere-datastores-fp-1.png["alt=Hypervisor stack di storage con Fa
 
 
 
+[[compute-and-virtual-disk-layers]]
 == Livelli di calcolo e disco virtuale
 
 Il sistema operativo guest viene eseguito su formati di disco virtuale come VMDK, QCOW2 o VHDX, che creano i livelli di compute e di dispositivo a blocchi accessibili ad applicazioni e utenti.
@@ -35,6 +36,7 @@ TIP: Following the link:https://www.netapp.com/pdf.html?item=/media/17239-tr-459
 
 
 
+[[hypervisor-role]]
 == Ruolo hypervisor
 
 L'hypervisor funge da intermediario tra le macchine virtuali in esecuzione e le risorse fisiche come CPU, memoria e storage. Nel caso d'uso NAS, l'hypervisor monta la condivisione NAS e presenta i file del disco virtuale alle macchine virtuali come dispositivi a blocchi.
@@ -47,6 +49,7 @@ Entrambi i percorsi convergono al livello WAFL di ONTAP, abilitando servizi dati
 
 
 
+[[fabricpool-tiering-integration]]
 == Integrazione di tiering FabricPool
 
 FabricPool gestisce in modo intelligente il posizionamento dei dati tra lo storage locale dalle performance elevate e i livelli di storage a oggetti cloud a basso costo.
@@ -57,6 +60,7 @@ L'integrazione di FabricPool di ONTAP consente un efficiente posizionamento dei 
 
 
 
+[[storage-efficiency-and-management]]
 == Efficienza e gestione dello storage
 
 È importante comprendere come FabricPool funziona prima di abilitarlo. Una configurazione corretta aiuta a migliorare le performance, ridurre i rischi e ottimizzare il TCO archiviando i dati giusti nel livello giusto.

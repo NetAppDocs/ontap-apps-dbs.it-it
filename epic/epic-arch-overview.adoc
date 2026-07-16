@@ -17,6 +17,7 @@ Non rientra nello scopo di questo documento descrivere l'ampia gamma di funzioni
 
 
 
+[[intersystems-iris]]
 == IRIS intersistemi
 
 InterSystems Iris è il database utilizzato dall'applicazione Epic. In questo database, il server dati è il punto di accesso per i dati memorizzati in modo permanente. Il server applicazioni gestisce le query del database ed esegue le richieste di dati al server dati. Per la maggior parte degli ambienti software Epic, l'utilizzo dell'architettura SMP (Symmetric Multiprocessor) in un unico server di database è sufficiente per soddisfare le richieste di database delle applicazioni Epic. Nelle distribuzioni di grandi dimensioni, è possibile supportare un modello distribuito utilizzando il protocollo ECP (Enterprise Caché Protocol) di InterSystems.
@@ -33,6 +34,7 @@ Il database Iris aggiornato presenta numerosi vantaggi:
 
 
 
+[[cach-database-servers-and-storage-usage]]
 == Utilizzo dello storage e dei server del database Caché
 
 * *Produzione* negli ambienti software Epic viene implementato un singolo database incentrato sul paziente. Nei requisiti hardware di Epic, il server fisico che ospita il server primario dei dati IRIS di lettura/scrittura è chiamato server di database di produzione. Questo server richiede uno storage all-flash dalle performance elevate per i file appartenenti all'istanza del database primario. Per l'alta disponibilità, Epic supporta l'utilizzo di un server di database di failover che ha accesso agli stessi file. Iris utilizza Epic Mirror per la replica nel report di sola lettura, il disaster recovery e il supporto delle copie di sola lettura. Ogni tipo di server di database può essere impostato sulla modalità di lettura/scrittura per motivi di continuità aziendale.
@@ -66,6 +68,7 @@ I requisiti di storage di tutti questi workload, pool, protocolli NAS e SAN mult
 
 
 
+[[operational-database-workloads]]
 == Carichi di lavoro del database operativi
 
 Ogni server di database Epic esegue l'i/o sui seguenti tipi di file:

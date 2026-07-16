@@ -15,12 +15,14 @@ Questa architettura offre il miglior bilanciamento di performance e capacità ne
 
 
 
+[[six-node-architecture]]
 == Architettura a sei nodi
 
 image:epic-6node.png["Architettura EPIC a 6 nodi"]
 
 
 
+[[six-node-workload-placement]]
 == Posizionamento dei carichi di lavoro a sei nodi
 
 image:epic-6node-design.png["Posizionamento EPIC a 6 nodi"]

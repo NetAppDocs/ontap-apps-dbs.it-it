@@ -19,6 +19,7 @@ Il provisioning dei datastore vVol implica diversi passaggi. I sistemi ASA R2 di
 
 
 
+[[preparing-to-create-vvols-datastores-with-ontap-tools]]
 == Preparazione alla creazione di archivi dati vVol con gli strumenti ONTAP
 
 È possibile saltare le prime due fasi del processo di distribuzione se si utilizzano già strumenti ONTAP per gestire, automatizzare e creare report sui sistemi di storage VMFS o tradizionali basati su NFS. Per la distribuzione e la configurazione degli strumenti ONTAP, è anche possibile fare riferimento a questa sezione completalink:vmware-vvols-checklist.html["elenco di controllo"].
@@ -80,6 +81,7 @@ NOTE: Il motivo per cui l'intero cluster deve essere integrato nell'interfaccia 
 
 
 
+[[creating-vvols-datastores-with-ontap-tools]]
 == Creazione di archivi dati vVol con gli strumenti ONTAP
 
 Fare clic con il pulsante destro del mouse sull'host, sul cluster o sul data center su cui si desidera creare il datastore vVols, quindi selezionare _ONTAP Tools_ > _Provision Datastore_.
@@ -142,12 +144,14 @@ image:vvols-deploy-9.png["Role=\"thumb\" \"procedura guidata per il provisioning
 
 
 
+[[migrating-vms-from-traditional-datastores-to-vvols]]
 == Migrazione di macchine virtuali da datastore tradizionali a vVol
 
 La migrazione delle macchine virtuali dai datastore tradizionali a un datastore vVol è semplice quanto lo spostamento delle macchine virtuali tra datastore tradizionali. È sufficiente selezionare le macchine virtuali, quindi Migrate (Migra) dall'elenco delle azioni e selezionare un tipo di migrazione di _change storage only_. Quando richiesto, seleziona una policy storage della macchina virtuale che corrisponda al datastore vVol. È possibile eseguire l'offload delle operazioni di copia della migrazione con vSphere 6,0 e versioni successive per le migrazioni da VMFS SAN a vVol, ma non da VMDK NAS a vVol.
 
 
 
+[[managing-vms-with-policies]]
 == Gestione delle VM mediante policy
 
 Per automatizzare il provisioning dello storage con la gestione basata su policy, è necessario creare policy di storage per le VM che siano compatibili con le capacità di storage desiderate.
@@ -157,6 +161,7 @@ NOTE: Gli strumenti ONTAP 10,0 e versioni successive non utilizzano più i profi
 
 
 
+[[creating-vm-storage-policies]]
 === Creazione di policy di storage delle macchine virtuali
 
 Le policy di archiviazione delle VM vengono utilizzate in vSphere per gestire funzionalità opzionali quali Storage I/O Control o vSphere Encryption. Vengono inoltre utilizzati con vVols per applicare specifiche capacità di archiviazione alla VM. Utilizzare il tipo di archiviazione "NetApp.clustered.Data. ONTAP .VP.vvol". Per un esempio di ciò con gli strumenti ONTAP VASA Provider, vedere il collegamento:vmware-vvols-ontap.html#Best Practices[esempio di configurazione di rete utilizzando vVols su NFS v3]. Le regole per l'archiviazione " NetApp.clustered.Data. ONTAP.VP.VASA10" devono essere utilizzate con datastore non basati su vVols.

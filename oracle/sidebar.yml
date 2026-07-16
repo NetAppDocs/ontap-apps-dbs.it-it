@@ -133,8 +133,8 @@ entries:
       url: "/oracle/oracle-dp-snaprestore.html"
     - title: Backup online basati su snapshot
       url: "/oracle/oracle-dp-online-backup.html"
-    - title: Backup ottimizzati per le snapshot di storage
-      url: "/oracle/oracle-dp-storage-snapshot-optimized-backups.html"
+    - title: Ripristino automatico senza Snapshot
+      url: "/oracle/oracle-dp-automatic-recovery.html"
     - title: SnapCenter e altri strumenti
       url: "/oracle/oracle-dp-backup-tools.html"
 - title: Disaster recovery Oracle

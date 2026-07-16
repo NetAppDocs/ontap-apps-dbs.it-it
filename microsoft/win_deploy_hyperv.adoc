@@ -18,6 +18,7 @@ La presente appendice descrive l'implementazione di un cluster Hyper-V.
 
 
 
+[[prerequisites]]
 == Prerequisiti
 
 * Almeno due server Hyper-V sono connessi tra loro.
@@ -30,6 +31,7 @@ La presente appendice descrive l'implementazione di un cluster Hyper-V.
 
 
 
+[[deployment]]
 == Implementazione
 
 . Accedere a uno dei server Windows Hyper-V come membro del gruppo di amministratori.

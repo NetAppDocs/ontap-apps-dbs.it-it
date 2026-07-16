@@ -18,12 +18,14 @@ Questa appendice descrive la distribuzione della migrazione live in un ambiente 
 
 
 
+[[prerequisites]]
 == Prerequisiti
 
 Per distribuire la migrazione in tempo reale, è necessario che i server Hyper-V siano configurati in un cluster di failover con storage condiviso. Revisione link:win_deploy_hyperv.html["Distribuire il cluster Hyper-V."] per ulteriori dettagli.
 
 
 
+[[deployment]]
 == Implementazione
 
 Per utilizzare la migrazione live in un ambiente in cluster, attenersi alla seguente procedura:

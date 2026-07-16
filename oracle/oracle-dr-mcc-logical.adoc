@@ -19,6 +19,7 @@ Per comprendere il funzionamento dei database Oracle in un ambiente MetroCluster
 
 
 
+[[site-failure-protection-nvram-and-metrocluster]]
 == Protezione da errori del sito: NVRAM e MetroCluster
 
 MetroCluster estende la protezione dei dati NVRAM nei seguenti modi:
@@ -30,6 +31,7 @@ MetroCluster estende la protezione dei dati NVRAM nei seguenti modi:
 
 
 
+[[site-and-shelf-failure-protection-syncmirror-and-plexes]]
 == Protezione dai guasti di shelf e siti: SyncMirror e plessi
 
 SyncMirror è una tecnologia di mirroring che migliora, ma non sostituisce, RAID DP o RAID-TEC. Esegue il mirroring del contenuto di due gruppi RAID indipendenti. La configurazione logica è la seguente:
@@ -47,6 +49,7 @@ Di norma, SyncMirror viene utilizzato per fornire il mirroring remoto con i sist
 
 
 
+[[redundancy-failure-nvfail]]
 == Errore di ridondanza: NVFAIL
 
 Come discusso in precedenza, una scrittura non viene riconosciuta fino a quando non è stata registrata nella NVRAM locale e nella NVRAM su almeno un altro controller. Questo approccio garantisce che un guasto dell'hardware o un'interruzione di corrente non comporti la perdita dell'i/o in-flight Se si verifica un guasto nella NVRAM locale o nella connettività ad altri nodi, i dati non verranno più mirrorati.
@@ -65,6 +68,7 @@ Per evitare questa situazione, ONTAP consente di configurare i volumi per una pr
 
 
 
+[[ha-pairs-and-metrocluster]]
 === Coppie HA e MetroCluster
 
 MetroCluster è disponibile in due configurazioni: Due nodi e coppia ha. La configurazione a due nodi si comporta come una coppia ha in relazione alla NVRAM. In caso di guasto improvviso, il nodo partner può riprodurre i dati della NVRAM per rendere i dischi coerenti e garantire che non vengano perse scritture riconosciute.
@@ -75,12 +79,14 @@ Un aspetto importante di MetroCluster è che i nodi remoti non hanno accesso ai 
 
 
 
+[[switchover-and-switchback]]
 == Switchover e switchback
 
 I termini switchover e switchback si riferiscono al processo di transizione dei volumi tra controller remoti in una configurazione MetroCluster. Questo processo si applica solo ai nodi remoti. Se viene utilizzato MetroCluster in una configurazione a quattro volumi, il failover di nodo locale utilizza il medesimo processo di takeover e giveback descritto in precedenza.
 
 
 
+[[planned-switchover-and-switchback]]
 === Switchover e switchback pianificati
 
 Uno switchover o uno switchback pianificato è simile a un takeover o un giveback tra i nodi. Il processo prevede diverse fasi e potrebbe richiedere alcuni minuti, ma in realtà si tratta di una transizione graduale delle risorse di storage e di rete. Il momento in cui il trasferimento del controllo avviene molto più rapidamente del tempo richiesto per l'esecuzione del comando completo.
@@ -89,6 +95,7 @@ La differenza principale tra takeover/giveback e switchover/switchback influisce
 
 
 
+[[syncmirror-timeouts]]
 === Timeout SyncMirror
 
 SyncMirror è una tecnologia di mirroring ONTAP che fornisce protezione dai guasti agli shelf. Quando gli shelf sono separati su una distanza, il risultato è una data Protection remota.
@@ -103,6 +110,7 @@ In particolare, in molti casi, questo tipo di replica universale in modalità do
 
 
 
+[[automatic-unattended-switchover-with-fabric-attached-metrocluster]]
 === Switchover automatico senza intervento dell'utente con MetroCluster fabric-attached
 
 Lo switchover automatico non assistito (ASOLO) è una funzione MetroCluster collegata al fabric che offre un tipo di ha cross-site. Come indicato in precedenza, MetroCluster è disponibile in due tipi: Un singolo controller su ciascun sito o una coppia ha su ciascun sito. Il vantaggio principale dell'opzione ha è che l'arresto pianificato o non pianificato del controller consente comunque a tutti gli i/o di essere locali. Il vantaggio dell'opzione a nodo singolo consiste nella riduzione di costi, complessità e infrastruttura.
@@ -119,6 +127,7 @@ Un sistema MetroCluster può eseguire uno switchover automatico in modo sicuro s
 
 
 
+[[metrocluster-tiebreaker-with-fabric-attached-metrocluster]]
 === Tiebreaker MetroCluster con MetroCluster fabric-attached
 
 Il link:https://docs.netapp.com/us-en/ontap-metrocluster/install-ip/task_sw_config_configure_mediator.html["Tiebreaker NetApp MetroCluster"^] software può essere eseguito su un terzo sito per monitorare lo stato dell'ambiente MetroCluster, inviare notifiche e, facoltativamente, imporre uno switchover in una situazione di emergenza. Una descrizione completa di Tiebreaker link:http://mysupport.netapp.com["Sito di supporto NetApp"^]è disponibile sul , ma lo scopo principale di MetroCluster Tiebreaker è quello di rilevare la perdita del sito. Inoltre, deve discriminare tra la perdita del sito e la perdita della connettività. Ad esempio, lo switchover non deve essere eseguito perché il tiebreaker non è riuscito a raggiungere il sito primario; questo spiega perché il tiebreaker monitora anche la capacità del sito remoto di contattare il sito primario.
@@ -145,6 +154,7 @@ Inoltre, l'MCTB potrebbe non risolvere un disastro continuo che porta alla segue
 
 
 
+[[ontap-mediator-with-metrocluster-ip]]
 === ONTAP Mediator con MetroCluster IP
 
 ONTAP Mediator viene utilizzato con MetroCluster IP e con alcune altre soluzioni ONTAP. Funziona come un servizio di tiebreaker tradizionale, proprio come il software MetroCluster Tiebreaker descritto in precedenza, ma include anche una funzione critica: Eseguire uno switchover automatizzato e non assistito.
@@ -155,6 +165,7 @@ Al contrario, l'architettura IP di MetroCluster instrada tutti i/o esclusivament
 
 
 
+[[virtual-third-site-with-clusterlion]]
 === Terzo sito virtuale con ClusterLion
 
 ClusterLion è un'appliance di monitoraggio MetroCluster avanzata che funziona come un terzo sito virtuale. Questo approccio consente di implementare MetroCluster in maniera sicura in una configurazione a due siti con una funzionalità di switchover completamente automatizzata. Inoltre, ClusterLion può eseguire ulteriori operazioni di monitoraggio a livello di rete ed eseguire operazioni post-switchover. La documentazione completa è disponibile presso ProLion.

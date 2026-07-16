@@ -19,6 +19,7 @@ La release iniziale di FabricPool era rivolta a un caso di utilizzo di backup. L
 
 
 
+[[policies-local-snapshots]]
 == Criteri - istantanee locali
 
 Esistono due opzioni per il tiering di blocchi di snapshot inattivi nel Tier di capacità. Innanzitutto, la `snapshot-only` la politica riguarda solo i blocchi di snapshot. Anche se il `auto` il criterio include `snapshot-only` ed esegue il tiering dei blocchi dal file system attivo. Ciò potrebbe non essere desiderabile.
@@ -27,6 +28,7 @@ Il `tiering-minimum-cooling-days` valore deve essere impostato su un periodo di 
 
 
 
+[[policies-replicated-snapshots]]
 == Criteri - istantanee replicate
 
 Di norma, uno snapshot replicato con SnapMirror o SnapVault utilizzato solo per il ripristino deve utilizzare FabricPool `all` policy. Con questa policy, i metadati vengono replicati, ma tutti i blocchi di dati vengono inviati immediatamente al Tier di capacità, ottenendo il massimo delle performance. La maggior parte dei processi di recovery implica un i/o sequenziale, che è intrinsecamente efficiente. È necessario valutare il tempo di ripristino dalla destinazione dell'archivio oggetti, ma in un'architettura ben progettata questo processo di ripristino non deve essere significativamente più lento del ripristino da dati locali.

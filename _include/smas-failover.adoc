@@ -8,6 +8,7 @@ I diagrammi mostrano cosa accade durante le operazioni normali, di failover e di
 
 
 
+[[normal-operation]]
 == Funzionamento normale
 
 Durante il normale funzionamento, è possibile accedere a un LUN dalla replica locale o remota. La linea rossa indica il percorso ottimizzato come pubblicizzato da ALUA, e il risultato dovrebbe essere che io è preferenzialmente inviato lungo questo percorso.
@@ -18,6 +19,7 @@ image:../media/smas-failover-1.png["SnapMirror Active Sync normali operazioni"]
 
 
 
+[[failure]]
 == Guasto
 
 Se la copia del mirror attivo non è più disponibile, a causa di un failover pianificato o non pianificato, ovviamente non sarà più utilizzabile. Tuttavia, il sistema remoto possiede una replica sincrona e i percorsi SAN verso il sito remoto esistono già. Il sistema remoto è in grado di gestire i/o per quel LUN.
@@ -26,6 +28,7 @@ image:../media/smas-failover-2.png["Errore di sincronizzazione attiva SnapMirror
 
 
 
+[[failover]]
 == Failover
 
 Il failover fa sì che la copia remota diventi la copia attiva. I percorsi vengono modificati da Active a Active/Optimized e l'io continua a essere gestito senza perdita di dati.
@@ -34,6 +37,7 @@ image:../media/smas-failover-3.png["Failover di sincronizzazione attiva SnapMirr
 
 
 
+[[repair]]
 == Riparare
 
 Una volta che il sistema di origine è tornato in servizio, SnapMirror Active Sync può risincronizzare la replica, ma eseguendo l'altra direzione. Attualmente la configurazione è essenzialmente la stessa del punto di partenza, con la sola eccezione che i siti mirror attivi sono stati invertiti.
@@ -42,6 +46,7 @@ image:../media/smas-failover-4.png["Riparazione sincronizzazione attiva SnapMirr
 
 
 
+[[failback]]
 == Failback
 
 Se lo si desidera, un amministratore può eseguire un failback e riportare la copia attiva delle LUN nei controller originali.

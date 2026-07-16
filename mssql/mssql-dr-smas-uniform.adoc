@@ -20,6 +20,7 @@ Una caratteristica importante di SM-AS è la capacità di configurare i sistemi 
 
 
 
+[[proximity-settings]]
 == Impostazioni di prossimità
 
 La prossimità si riferisce a una configurazione per cluster che indica che un determinato WWN host o ID iniziatore iSCSI appartiene a un host locale. Si tratta di un secondo passo opzionale per la configurazione dell'accesso LUN.
@@ -34,6 +35,7 @@ Senza impostazioni di prossimità, l'host utilizzerà entrambi i sistemi storage
 
 
 
+[[aff]]
 == AFF
 
 Con un sistema AFF, i percorsi vengono visualizzati come mostrato di seguito quando è stata configurata la prossimità dell'host.

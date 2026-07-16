@@ -13,6 +13,7 @@ Per informazioni su come montare i LUN, creare gruppi di volumi e volumi logici 
 
 
 
+[[file-system-and-mount-options]]
 == File system e opzioni di montaggio
 
 Una volta creati e mappati i LUN e completata la suddivisione in zone, attenersi alla seguente procedura per collegare lo storage al server.
@@ -22,6 +23,7 @@ NOTE: In questo esempio abbiamo utilizzato 8x 1024Gb LUN per il database, 2x 102
 
 
 
+[[asynchronous-io]]
 == I/o asincrono
 
 Una copia del white paper Epic SAN Considerations e del documento di riferimento rapido sulla configurazione dello storage fornisce dettagli su come configurare gli host e connettersi allo storage. In questa sezione viene descritto come configurare un host Red Hat Enterprise Linux. I dettagli di AIX sono disponibili nei documenti referenziati.

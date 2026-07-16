@@ -23,6 +23,7 @@ Queste tre esigenze sono discusse nelle sezioni seguenti.
 
 
 
+[[network-corruption-checksums]]
 == Corruzione della rete: Checksum
 
 Il livello più basilare di protezione dei dati è il checksum, che è uno speciale codice di rilevamento degli errori memorizzato insieme ai dati. La corruzione dei dati durante la trasmissione di rete viene rilevata con l'utilizzo di un checksum e, in alcuni casi, di checksum multipli.
@@ -31,12 +32,14 @@ Ad esempio, un frame FC include una forma di checksum chiamata CRC (Cyclic Redun
 
 
 
+[[drive-corruption-checksums]]
 == Corruzione dei dischi: Checksum
 
 I checksum vengono utilizzati anche per verificare l'integrità dei dati memorizzati sui dischi. I blocchi di dati scritti sui dischi vengono memorizzati con una funzione di checksum che produce un numero imprevedibile e legato ai dati originali. Quando i dati vengono letti dall'unità, il checksum viene ricalcolato e confrontato con il checksum memorizzato. Se non corrisponde, i dati sono corrotti e devono essere recuperati dal livello RAID.
 
 
 
+[[data-corruption-lost-writes]]
 == Corruzione dei dati: Scritture perse
 
 Uno dei tipi più difficili di corruzione da rilevare è una scrittura persa o posizionata erroneamente. Quando una scrittura viene confermata, deve essere scritta sul supporto nella posizione corretta. La corruzione dei dati sul posto è relativamente semplice da rilevare utilizzando un semplice checksum memorizzato con i dati. Tuttavia, se la scrittura viene semplicemente persa, la versione precedente dei dati potrebbe ancora esistere e il checksum sarebbe corretto. Se la scrittura viene posizionata nella posizione fisica errata, il checksum associato sarebbe ancora una volta valido per i dati memorizzati, anche se la scrittura ha distrutto altri dati.
@@ -55,6 +58,7 @@ La corruzione in scrittura persa e posizionata erroneamente è estremamente rara
 
 
 
+[[drive-failures-raid-raid-dp-and-raid-tec]]
 == Guasti del disco: RAID, RAID DP e RAID-TEC
 
 Se un blocco di dati su un'unità viene rilevato come danneggiato o se l'intera unità si guasta e non è completamente disponibile, i dati devono essere ricostituiti. Questo viene fatto in ONTAP utilizzando unità di parità. Lo striping dei dati viene eseguito su più unità dati, quindi vengono generati i dati di parità. I dati vengono memorizzati separatamente dai dati originali.
@@ -75,6 +79,7 @@ In sintesi, rispetto al RAID 10, RAID DP e RAID-TEC offrono una capacità utiliz
 
 
 
+[[hardware-failure-protection-nvram]]
 == Protezione da errori hardware: NVRAM
 
 Qualsiasi storage array che gestisce un carico di lavoro del database deve eseguire le operazioni di scrittura il più rapidamente possibile. Inoltre, un'operazione di scrittura deve essere protetta dalla perdita da un evento imprevisto, come un'interruzione dell'alimentazione. Ciò significa che qualsiasi operazione di scrittura deve essere conservata in modo sicuro in almeno due posizioni.
@@ -92,6 +97,7 @@ In caso di guasto a un controller, il partner controller assume la proprietà de
 
 
 
+[[hardware-failure-protection-nvfail]]
 == Protezione da errori hardware: NVFAIL
 
 Come discusso in precedenza, una scrittura non viene riconosciuta fino a quando non è stata registrata nella NVRAM locale e nella NVRAM su almeno un altro controller. Questo approccio garantisce che un guasto dell'hardware o un'interruzione di corrente non comporti la perdita dell'i/o in-flight In caso di guasto della NVRAM locale o di guasto della connettività al partner di ha, i dati in-flight non verranno più mirrorati.
@@ -108,6 +114,7 @@ Di solito, i passaggi successivi prevedono che un amministratore arresti complet
 
 
 
+[[site-and-shelf-failure-protection-syncmirror-and-plexes]]
 == Protezione dai guasti di shelf e siti: SyncMirror e plessi
 
 SyncMirror è una tecnologia di mirroring che migliora, ma non sostituisce, RAID DP o RAID-TEC. Esegue il mirroring del contenuto di due gruppi RAID indipendenti. La configurazione logica è la seguente:
@@ -125,6 +132,7 @@ Di norma, SyncMirror viene utilizzato per fornire il mirroring remoto con i sist
 
 
 
+[[checksums]]
 == Checksum
 
 L'argomento dei checksum è di particolare interesse per i DBA abituati all'utilizzo dei backup in streaming Oracle RMAN che migrano a backup basati su snapshot. Una caratteristica di RMAN è che esegue controlli di integrità durante le operazioni di backup. Sebbene questa funzionalità offra un certo valore, il suo vantaggio principale è quello di un database non utilizzato su uno storage array moderno. Quando si utilizzano dischi fisici per un database Oracle, è quasi certo che il danneggiamento si verifica anche in caso di invecchiamento dei dischi, un problema che viene risolto dai checksum basati su array negli storage array reali.

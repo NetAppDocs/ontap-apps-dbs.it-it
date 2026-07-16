@@ -25,6 +25,7 @@ Se l'arresto richiesto da un'operazione di copia non è desiderabile, l'opzione 
 
 
 
+[[filesystem-to-filesystem-copying]]
 == Copia da filesystem a filesystem
 
 L'utilità di una semplice operazione di copia non deve essere sottovalutata. Si tratta di un processo altamente affidabile che non richiede particolari competenze su sistemi operativi, database o sistemi storage. Inoltre, è molto sicuro perché non influisce sui dati originali. In genere, un amministratore di sistema modifica i file system di origine in modo che vengano montati in sola lettura e quindi riavvia un server per garantire che nessun elemento possa danneggiare i dati correnti. Il processo di copia può essere eseguito tramite script per garantire che venga eseguito il più rapidamente possibile senza il rischio di errori dell'utente. Poiché il tipo di i/o è un semplice trasferimento sequenziale dei dati, risulta estremamente efficiente in termini di larghezza di banda.
@@ -33,6 +34,7 @@ Nell'esempio seguente viene illustrata un'opzione per una migrazione sicura e ra
 
 
 
+[[environment]]
 === Ambiente
 
 L'ambiente da migrare è il seguente:
@@ -68,6 +70,7 @@ Gli script di esempio illustrati automatizzano le seguenti operazioni:
 
 
 
+[[procedure]]
 === Procedura
 
 . Arrestare il database.
@@ -201,6 +204,7 @@ NTAP started
 
 
 
+[[fully-automated-cutover]]
 === Cutover completamente automatizzato
 
 Questo script di esempio accetta argomenti del SID del database seguiti da coppie di file system delimitate in comune. Per l'esempio sopra illustrato, il comando viene inviato come segue:
@@ -323,6 +327,7 @@ NTAP started
 ....
 
 
+[[oracle-asm-spfile-and-passwd-migration]]
 == Migrazione Oracle ASM spfile e passwd
 
 Una difficoltà nel completare la migrazione che coinvolge ASM è rappresentata dallo spfile specifico per ASM e dal file delle password. Per impostazione predefinita, questi file di metadati critici vengono creati nel primo gruppo di dischi ASM definito. Se un particolare gruppo di dischi ASM deve essere evacuato e rimosso, il file spfile e la password che governano l'istanza ASM deve essere riposizionato.
@@ -333,6 +338,7 @@ Quando il gruppo di dischi contiene anche il file ASM spfile/passwd, l'unico mod
 
 
 
+[[environment]]
 === Ambiente
 
 . SID database = TOAST
@@ -343,6 +349,7 @@ Quando il gruppo di dischi contiene anche il file ASM spfile/passwd, l'unico mod
 
 
 
+[[asm-spfilepasswd-file-locations]]
 === Posizioni dei file spfile/passwd ASM
 
 Il trasferimento di questi file può essere eseguito senza interruzione delle attività. Tuttavia, per motivi di sicurezza, NetApp consiglia di arrestare l'ambiente del database in modo da poter essere certi che i file siano stati spostati e che la configurazione sia stata aggiornata correttamente. Questa procedura deve essere ripetuta se su un server sono presenti più istanze ASM.
@@ -390,6 +397,7 @@ I file si trovano entrambi alla base di `+DATA` gruppo di dischi.
 
 
 
+[[copy-files]]
 === Copiare i file
 
 Copiare i file nel nuovo gruppo di dischi ASM con `spcopy` e. `pwcopy` comandi. Se il nuovo gruppo di dischi è stato creato di recente ed è attualmente vuoto, potrebbe essere necessario montarlo per primo.
@@ -454,6 +462,7 @@ ASMCMD> rm +DATA/orapwasm
 ....
 
 
+[[oracle-asm-to-asm-copy]]
 == Copia da Oracle ASM a ASM
 
 Oracle ASM è essenzialmente un volume manager e un file system combinati e leggeri. Poiché il file system non è facilmente visibile, è necessario utilizzare RMAN per eseguire operazioni di copia. Sebbene il processo di migrazione basato sulle copie sia sicuro e semplice, si traduce in un'interruzione. È possibile ridurre al minimo le interruzioni, ma non eliminarle completamente.
@@ -466,6 +475,7 @@ Questa procedura è una delle numerose opzioni che interessano RMAN. È progetta
 
 
 
+[[copy-database]]
 === Copia database
 
 Oracle RMAN crea una copia di livello 0 (completa) del database di origine attualmente presente nel gruppo di dischi ASM `+DATA` alla nuova posizione su `+NEWDATA`.
@@ -497,6 +507,7 @@ Finished backup at 06-DEC-15
 ....
 
 
+[[force-archive-log-switch]]
 === Forzare l'interruttore del registro di archiviazione
 
 È necessario forzare un'opzione del log di archivio per assicurarsi che i log di archivio contengano tutti i dati necessari per rendere la copia completamente coerente. Senza questo comando, i dati chiave potrebbero essere ancora presenti nei log di ripristino.
@@ -507,6 +518,7 @@ sql statement: alter system archive log current
 ....
 
 
+[[shut-down-source-database]]
 === Arrestare il database di origine
 
 L'interruzione inizia in questa fase perché il database viene arrestato e inserito in una modalità di sola lettura ad accesso limitato. Per arrestare il database di origine, eseguire i seguenti comandi:
@@ -529,6 +541,7 @@ Redo Buffers                   5455872 bytes
 ....
 
 
+[[controlfile-backup]]
 === Backup ControlFile
 
 È necessario eseguire il backup di controlfile nel caso in cui sia necessario interrompere la migrazione e ripristinare la posizione di archiviazione originale. Una copia del controlfile di backup non è richiesta al 100%, ma rende più semplice il processo di ripristino delle posizioni dei file di database nella posizione originale.
@@ -546,6 +559,7 @@ Finished backup at 06-DEC-15
 ....
 
 
+[[parameter-updates]]
 === Aggiornamenti dei parametri
 
 Il file spfile corrente contiene riferimenti ai file di controllo nelle posizioni correnti all'interno del vecchio gruppo di dischi ASM. Deve essere modificato, il che è fatto facilmente modificando una versione pfile intermedia.
@@ -619,6 +633,7 @@ Redo Buffers                   5455872 bytes
 ....
 
 
+[[restore-controlfile]]
 === Ripristina controlfile
 
 Il controlfile di backup creato da RMAN può anche essere ripristinato da RMAN direttamente nella posizione specificata nel nuovo spfile.
@@ -649,6 +664,7 @@ control_files                        string      +NEWLOGS/TOAST/CONTROLFILE/cur
 ....
 
 
+[[log-replay]]
 === Riproduzione del registro
 
 Il database utilizza attualmente i file di dati nella vecchia posizione. Prima di poter utilizzare la copia, è necessario sincronizzarla. È trascorso del tempo durante il processo di copia iniziale e le modifiche sono state registrate principalmente nei registri di archivio. Queste modifiche vengono replicate come segue:
@@ -702,6 +718,7 @@ Finished recover at 06-DEC-15
 
 
 
+[[activation]]
 === Attivazione
 
 Il controlfile ripristinato fa ancora riferimento ai file di dati nella posizione originale e contiene anche le informazioni di percorso per i file di dati copiati.
@@ -760,6 +777,7 @@ renamed tempfile 1 to +NEWDATA in control file
 
 
 
+[[redo-log-migration]]
 === Migrazione dei log di ripristino
 
 Il processo di migrazione è quasi completo, ma i log di ripristino si trovano ancora nel gruppo di dischi ASM originale. I log di ripristino non possono essere spostati direttamente. Viene invece creata una nuova serie di log di ripristino che viene aggiunta alla configurazione, seguita da una rimozione dei log precedenti.
@@ -869,12 +887,14 @@ ASMCMD>
 
 
 
+[[oracle-asm-to-file-system-copy]]
 == Copia da Oracle ASM al file system
 
 La procedura di copia da Oracle ASM a file system è molto simile alla procedura di copia da ASM a ASM, con vantaggi e restrizioni simili. La differenza principale è la sintassi dei vari comandi e parametri di configurazione quando si utilizza un file system visibile anziché un gruppo di dischi ASM.
 
 
 
+[[copy-database]]
 === Copia database
 
 Oracle RMAN viene utilizzato per creare una copia di livello 0 (completa) del database di origine attualmente presente nel gruppo di dischi ASM `+DATA` alla nuova posizione su `/oradata`.
@@ -916,6 +936,7 @@ Finished backup at 13-MAY-16
 ....
 
 
+[[force-archive-log-switch]]
 === Forzare l'interruttore del registro di archiviazione
 
 È necessario forzare lo switch del log di archivio per assicurarsi che i log di archivio contengano tutti i dati necessari per rendere la copia completamente coerente. Senza questo comando, i dati chiave potrebbero essere ancora presenti nei log di ripristino. Per forzare un'opzione del log di archivio, eseguire il comando seguente:
@@ -926,6 +947,7 @@ sql statement: alter system archive log current
 ....
 
 
+[[shut-down-source-database]]
 === Arrestare il database di origine
 
 L'interruzione inizia in questa fase perché il database viene arrestato e inserito in una modalità di sola lettura ad accesso limitato. Per arrestare il database di origine, eseguire i seguenti comandi:
@@ -948,6 +970,7 @@ Redo Buffers                5455872 bytes
 ....
 
 
+[[controlfile-backup]]
 === Backup ControlFile
 
 Eseguire il backup dei file di controllo nel caso in cui sia necessario interrompere la migrazione e ripristinare la posizione di archiviazione originale. Una copia del controlfile di backup non è richiesta al 100%, ma rende più semplice il processo di ripristino delle posizioni dei file di database nella posizione originale.
@@ -964,6 +987,7 @@ Finished backup at 08-DEC-15
 ....
 
 
+[[parameter-updates]]
 === Aggiornamenti dei parametri
 
 ....
@@ -1038,6 +1062,7 @@ Redo Buffers                   5455872 bytes
 ....
 
 
+[[restore-controlfile]]
 === Ripristina controlfile
 
 È stato creato un controlfile di backup nel percorso `/tmp/TOAST.ctrl` nelle fasi precedenti della procedura. Il nuovo spfile definisce le posizioni controlfile come /`logfs/TOAST/ctrl/ctrlfile1.ctrl` e. `/logfs/TOAST/redo/ctrlfile2.ctrl`. Tuttavia, tali file non esistono ancora.
@@ -1076,6 +1101,7 @@ control_files                        string      /logs/TOAST/arch/control01.ctl
 
 
 
+[[log-replay]]
 === Riproduzione del registro
 
 Il database sta attualmente utilizzando i file di dati nella vecchia posizione. Prima di poter utilizzare la copia, è necessario sincronizzare i file di dati. È trascorso del tempo durante il processo di copia iniziale e le modifiche sono state registrate principalmente nei registri di archivio. Queste modifiche vengono replicate nei due passaggi seguenti.
@@ -1124,6 +1150,7 @@ RMAN-06497: WARNING: control file is not current, control file AUTOBACKUP skippe
 
 
 
+[[activation]]
 === Attivazione
 
 Il controlfile ripristinato fa ancora riferimento ai file di dati nella posizione originale e contiene anche le informazioni di percorso per i file di dati copiati.
@@ -1177,6 +1204,7 @@ renamed tempfile 1 to /oradata/TOAST/temp01.dbf in control file
 
 
 
+[[redo-log-migration]]
 === Migrazione dei log di ripristino
 
 Il processo di migrazione è quasi completo, ma i log di ripristino si trovano ancora nel gruppo di dischi ASM originale. I log di ripristino non possono essere spostati direttamente. Al contrario, viene creata e aggiunta alla configurazione una nuova serie di log di ripristino, in seguito a una perdita dei vecchi log.
@@ -1283,6 +1311,7 @@ ASMCMD>
 
 
 
+[[data-file-cleanup-procedure]]
 === Procedura di pulizia del file di dati
 
 Il processo di migrazione potrebbe generare file di dati con sintassi lunga o criptica, a seconda del modo in cui è stato utilizzato Oracle RMAN. Nell'esempio illustrato, il backup è stato eseguito con il formato file di `/oradata/TOAST/%U`. `%U` Indica che RMAN deve creare un nome univoco predefinito per ciascun file di dati. Il risultato è simile a quanto illustrato nel testo seguente. I nomi tradizionali dei file di dati sono incorporati nei nomi. Questo può essere ripulito utilizzando l'approccio basato su script illustrato nella link:oracle-migration-sample-scripts.html#asm-migration-cleanup["Pulitura della migrazione ASM"].
@@ -1304,6 +1333,7 @@ alter database open;
 ....
 
 
+[[oracle-asm-rebalance]]
 == Ribilanciamento di Oracle ASM
 
 Come indicato in precedenza, è possibile eseguire la migrazione trasparente di un gruppo di dischi Oracle ASM in un nuovo sistema di storage utilizzando il processo di ribilanciamento. Riassumendo, il processo di ribilanciamento richiede l'aggiunta di LUN di dimensioni uguali al gruppo esistente di LUN, seguita da un'operazione di disgregazione del LUN precedente. Oracle ASM riposiziona automaticamente i dati sottostanti nel nuovo storage in un layout ottimale e, al termine, rilascia i vecchi LUN.
@@ -1312,6 +1342,7 @@ Il processo di migrazione utilizza un i/o sequenziale efficiente e non causa gen
 
 
 
+[[identify-data-to-be-migrated]]
 === Identificazione dei dati da migrare
 
 ....
@@ -1325,6 +1356,7 @@ SQL> select group_number||' '||name from v$asm_diskgroup;
 ....
 
 
+[[create-new-luns]]
 === Creazione di nuovi LUN
 
 Creare nuovi LUN delle stesse dimensioni e impostare l'appartenenza a utenti e gruppi come richiesto. I LUN devono essere visualizzati come `CANDIDATE` dischi.
@@ -1342,6 +1374,7 @@ NEWDATA_0001 1 10240 /dev/mapper/3600a098038303537762b47594c315862 MEMBER
 ....
 
 
+[[add-new-luns]]
 === Aggiungere nuovi LUN
 
 Anche se è possibile eseguire tutte le operazioni di aggiunta e rilascio, in genere è più semplice aggiungere nuovi LUN in due passaggi. Innanzitutto, aggiungere i nuovi LUN al gruppo di dischi. Questo passaggio comporta la migrazione di metà delle estensioni dai LUN ASM correnti ai nuovi LUN.
@@ -1360,6 +1393,7 @@ Diskgroup altered.
 ....
 
 
+[[monitor-operation]]
 === Funzionamento del monitor
 
 È possibile monitorare e gestire un'operazione di ribilanciamento in più modi. Per questo esempio è stato utilizzato il comando seguente.
@@ -1379,6 +1413,7 @@ no rows selected
 ....
 
 
+[[drop-old-luns]]
 === LUN meno recenti
 
 La migrazione è ormai a metà strada. Potrebbe essere opportuno eseguire alcuni test delle prestazioni di base per assicurarsi che l'ambiente sia sano. Dopo la conferma, è possibile spostare i dati rimanenti eliminando i vecchi LUN. Tenere presente che ciò non determina il rilascio immediato dei LUN. L'operazione di rilascio indica ad Oracle ASM di riposizionare prima le estensioni e quindi rilasciare il LUN.
@@ -1396,6 +1431,7 @@ Diskgroup altered.
 ....
 
 
+[[monitor-operation]]
 === Funzionamento del monitor
 
 L'operazione di ribilanciamento può essere monitorata e gestita in più modi. Per questo esempio è stato utilizzato il seguente comando:
@@ -1415,6 +1451,7 @@ no rows selected
 ....
 
 
+[[remove-old-luns]]
 === Rimuovere i vecchi LUN
 
 Prima di rimuovere i vecchi LUN dal gruppo di dischi, è necessario eseguire un controllo finale dello stato dell'intestazione. Dopo il rilascio di un LUN da ASM, non viene più elencato un nome e lo stato dell'intestazione viene elencato come `FORMER`. Questo indica che questi LUN possono essere rimossi in modo sicuro dal sistema.
@@ -1435,6 +1472,7 @@ NEWDATA_0006 1 10240 /dev/mapper/3600a098038303537762b47594c315858 MEMBER
 ....
 
 
+[[lvm-migration]]
 == Migrazione LVM
 
 La procedura qui presentata mostra i principi di una migrazione basata su LVM di un gruppo di volumi chiamato `datavg`. Gli esempi sono tratti da Linux LVM, ma i principi si applicano ugualmente a AIX, HP-UX e VxVM. I comandi precisi possono variare.

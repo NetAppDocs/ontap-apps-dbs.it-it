@@ -15,12 +15,14 @@ Gli ambienti di test vengono clonati da Report anziché dalla produzione in ques
 
 
 
+[[eight-node-architecture]]
 == Architettura a otto nodi
 
 image:epic-8node.png["Architettura EPIC a 4 nodi"]
 
 
 
+[[eight-node-workload-placement]]
 == Posizionamento dei carichi di lavoro a otto nodi
 
 image:epic-8node-design.png["Posizionamento EPIC a 8 nodi"]

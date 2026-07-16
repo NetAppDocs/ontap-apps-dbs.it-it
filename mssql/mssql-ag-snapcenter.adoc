@@ -19,6 +19,7 @@ SnapCenter rileva che tutti i database, le istanze e i gruppi di disponibilità 
 
 
 
+[[protecting-databases-in-always-on-availability-group]]
 == Protezione dei database nel gruppo di disponibilità always-on
 
 I database del gruppo di disponibilità possono essere protetti in più modi.
@@ -35,6 +36,7 @@ TIP: *NetApp consiglia* di utilizzare il backup a livello di disponibilità per 
 
 
 
+[[configuring-log-backup-in-snapcenter]]
 == Configurazione del backup del registro in SnapCenter
 
 Se il gruppo di disponibilità è impostato su un'installazione autonoma di SQL Server, è necessario montare un disco dedicato su ciascun nodo di un cluster di failover del server Windows. Utilizzare un disco dedicato per configurare la directory del registro per salvare i backup del registro delle transazioni.
@@ -43,6 +45,7 @@ Se il gruppo di disponibilità è impostato sul cluster di failover di SQL Serve
 
 
 
+[[restoring-database-in-availability-group-setup-with-snapcenter]]
 == Ripristino del database nella configurazione del gruppo di disponibilità con SnapCenter
 
 * SnapCenter fornisce l'opzione di reseeding per ripristinare automaticamente il database dall'ultimo snapshot disponibile nella replica secondaria. L'operazione di risigillatura ripristinerà automaticamente e unirà il backup del database al gruppo di disponibilità.

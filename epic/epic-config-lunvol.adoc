@@ -27,6 +27,7 @@ Per massimizzare le performance di un carico di lavoro, ad esempio Epic ODB o Cl
 
 
 
+[[scaling-options]]
 == Opzioni di scalabilità
 
 Se il server richiede più storage, l'opzione più semplice è aumentare le LUN che contengono volumi. La seconda opzione consiste nell'aggiungere LUN ai gruppi di volumi in multipli di due alla volta (uno per volume per nodo).
@@ -35,6 +36,7 @@ Esempio:
 
 
 
+[[volume-and-8-lun-layout]]
 == Volume e layout di 8 LUN
 
 image:epic-8lun.png["Layout EPIC a 8 LUN"]
@@ -44,6 +46,7 @@ NOTE: Se in un ambiente di grandi dimensioni che richiede più di 4 nodi o 8 LUN
 
 
 
+[[best-practices]]
 == Best practice
 
 * Utilizzare 8 LUN in volumi 8 per iniziare, aggiungendo 2 LUN alla volta, in tutti i nodi del cluster.

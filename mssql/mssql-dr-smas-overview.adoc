@@ -22,6 +22,7 @@ Gli host SQL Server accedono allo storage utilizzando LUN Fiber Channel (FC) o i
 
 
 
+[[architecture-of-snapmirror-active-sync-with-symmetric-activeactive]]
 == Architettura di sincronizzazione attiva SnapMirror con Active/Active simmetrico
 
 image:../media/mssql-smas-architecture.png["Architettura SnapMirror Active Sync"]

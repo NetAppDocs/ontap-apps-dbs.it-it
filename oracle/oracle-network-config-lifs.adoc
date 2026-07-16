@@ -30,6 +30,7 @@ Gli argomenti trattati sono relativi alla soluzione end-to-end, dall'host fino a
 
 
 
+[[lif-types]]
 == Tipi di LIF
 
 Esistono diversi tipi di LIF. link:https://docs.netapp.com/us-en/ontap/networking/lif_compatibility_with_port_types.html["Documentazione ONTAP sui tipi di LIF"] Fornisci informazioni più complete su questo argomento, ma da un punto di vista funzionale le LIF possono essere divise in gruppi:
@@ -44,6 +45,7 @@ NOTE: Una LIF dati utilizzata per il traffico NFS può anche essere utilizzata p
 
 
 
+[[san-lif-design]]
 == Progettazione della SAN LIF
 
 Il design di LIF in un ambiente SAN è relativamente semplice per un motivo: Il multipathing. Tutte le moderne implementazioni SAN consentono a un client di accedere ai dati su più percorsi di rete indipendenti e di selezionare i percorsi migliori per l'accesso. Di conseguenza, le performance rispetto alla progettazione LIF sono più semplici da gestire, perché i client SAN bilanciano automaticamente il carico dell'i/o nei migliori percorsi disponibili.
@@ -52,24 +54,28 @@ Se un percorso non è disponibile, il client seleziona automaticamente un percor
 
 
 
+[[performance]]
 === Performance
 
 La considerazione più importante riguardo le performance di una LIF in un ambiente SAN è la larghezza di banda. Ad esempio, un cluster ONTAP AFF a due nodi con due porte FC da 16GB GB per nodo offre fino a 32GB Gbps di larghezza di banda da/per ciascun nodo.
 
 
 
+[[resiliency]]
 === Resilienza
 
 Le LIF SAN non eseguono il failover su un sistema storage AFF. In caso di guasto di una LIF SAN a causa del failover del controller, il software multipath del client rileva la perdita di un percorso e reindirizza l'i/o a una diversa LIF. Con i sistemi storage ASA, il failover delle LIF dopo un breve ritardo, ma ciò non interrompe l'io perché ci sono percorsi già attivi sull'altro controller. Il processo di failover viene eseguito per ripristinare l'accesso dell'host su tutte le porte definite.
 
 
 
+[[manageability]]
 === Gestibilità
 
 La migrazione LIF è un task molto più comune in un ambiente NFS, perché la migrazione LIF è spesso associata alla riallocazione dei volumi nel cluster. Non è necessario migrare una LIF in un ambiente SAN quando i volumi vengono ricollocati nella coppia ha. Questo perché, una volta completato lo spostamento del volume, ONTAP invia una notifica alla SAN in merito a una modifica dei percorsi e i client SAN vengono automaticamente risottimizzati. La migrazione LIF con SAN è associata principalmente a importanti modifiche hardware fisiche. Ad esempio, per eseguire un upgrade senza interruzioni dei controller, viene eseguita la migrazione di una SAN LIF nel nuovo hardware. Se una porta FC è guasta, una LIF può essere migrata a una porta inutilizzata.
 
 
 
+[[design-recommendations]]
 === Raccomandazioni di progettazione
 
 NetApp formula i seguenti consigli:
@@ -84,12 +90,14 @@ NetApp formula i seguenti consigli:
 
 
 
+[[nfs-lif-design]]
 == Progettazione della LIF NFS
 
 A differenza dei protocolli SAN, NFS ha una capacità limitata di definire percorsi multipli ai dati. Le estensioni Parallel NFS (pNFS) a NFSv4 risolvono questo limite, ma poiché le velocità ethernet hanno raggiunto 100GB Mbps e oltre, raramente è utile aggiungere altri percorsi.
 
 
 
+[[performance-and-resiliency]]
 === Performance e resilienza
 
 Sebbene la misurazione delle performance SAN LIF si debba principalmente calcolare la larghezza di banda totale da tutti i percorsi primari, la determinazione delle performance NFS LIF richiede un'analisi più approfondita dell'esatta configurazione di rete. Ad esempio, è possibile configurare due porte 10Gb come porte fisiche grezze oppure come gruppo di interfacce LACP (link Aggregation Control Protocol). Se sono configurati come gruppo di interfacce, sono disponibili più criteri di bilanciamento del carico che funzionano in modo diverso a seconda che il traffico sia commutato o instradato. Infine, Oracle Direct NFS (DNFS) offre configurazioni di bilanciamento del carico attualmente inesistenti in nessun client NFS del sistema operativo.

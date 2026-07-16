@@ -18,6 +18,7 @@ Questa sezione descrive l'implementazione della migrazione live di Hyper-V all'e
 
 
 
+[[prerequisites]]
 == Prerequisiti
 
 * Server Hyper-V standalone con storage indipendente o storage SMB condiviso.
@@ -27,6 +28,7 @@ Questa sezione descrive l'implementazione della migrazione live di Hyper-V all'e
 
 
 
+[[deployment]]
 == Implementazione
 
 Per eseguire la migrazione live in un ambiente non in cluster, configurare i server Hyper-V di origine e di destinazione in modo che possano inviare e ricevere operazioni di migrazione live. Su entrambi i server Hyper-V, completare la seguente procedura:

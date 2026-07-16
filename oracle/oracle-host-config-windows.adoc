@@ -14,12 +14,14 @@ Argomenti di configurazione per database Oracle su Microsoft Windows con ONTAP.
 
 
 
+[[nfs]]
 == NFS
 
 Oracle supporta l'utilizzo di Microsoft Windows con il client NFS diretto. Questa funzionalità offre un percorso verso i vantaggi di gestione di NFS, inclusa la possibilità di visualizzare i file tra ambienti, ridimensionare dinamicamente i volumi NFS e sfruttare un protocollo IP meno costoso. Consultare la documentazione ufficiale di Oracle per informazioni sull'installazione e la configurazione di un database su Microsoft Windows utilizzando DNFS. Non esistono best practice specifiche.
 
 
 
+[[san]]
 == SAN
 
 Per un'efficienza di compressione ottimale, assicurarsi che il file system NTFS utilizzi un'unità di allocazione di 8K GB o superiore. L'utilizzo di un'unità di allocazione 4K, generalmente predefinita, influisce negativamente sull'efficienza della compressione.

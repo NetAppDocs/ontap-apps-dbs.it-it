@@ -26,6 +26,7 @@ Il posizionamento ottimale delle LUN del database all'interno dei volumi ONTAP s
 ====
 
 
+[[volumes]]
 == Volumi
 
 Un punto comune di confusione tra i clienti che non conoscono ONTAP è l'utilizzo di FlexVol, comunemente denominati semplicemente "volumi".
@@ -34,6 +35,7 @@ Un volume non è un LUN. Questi termini vengono utilizzati in maniera anonima co
 
 
 
+[[volumes-and-luns]]
 == Volumi e LUN
 
 I LUN correlati sono normalmente collocati in una stessa posizione in un singolo volume. Ad esempio, un database che richiede 10 LUN solitamente conterrà tutte le 10 LUN dello stesso volume.
@@ -48,6 +50,7 @@ I LUN correlati sono normalmente collocati in una stessa posizione in un singolo
 ====
 
 
+[[volumes-luns-and-snapshots]]
 == Volumi, LUN e snapshot
 
 I criteri e le pianificazioni degli Snapshot vengono posizionati sul volume, non sul LUN. Un set di dati composto da 10 LUN richiederebbe una singola policy di snapshot quando le LUN sono collocate contemporaneamente nello stesso volume.
@@ -58,6 +61,7 @@ In alcuni casi, potrebbe essere necessario suddividere una serie di LUN correlat
 
 
 
+[[volumes-luns-and-snapmirror]]
 == Volumi, LUN e SnapMirror
 
 Le policy e le operazioni di SnapMirror, come le operazioni di Snapshot, vengono eseguite sul volume, non sul LUN.
@@ -66,6 +70,7 @@ La co-localizzazione dei LUN correlati in un singolo volume consente di creare u
 
 
 
+[[volumes-luns-and-qos]]
 == Volumi, LUN e QoS
 
 Mentre la qualità del servizio può essere applicata in modo selettivo alle singole LUN, in genere è più semplice impostarla a livello di volume. Ad esempio, tutte le LUN utilizzate dai guest di un determinato server ESX possono essere collocate su un singolo volume e successivamente può essere applicata una policy di QoS adattiva di ONTAP. In questo modo si ottiene un limite di IOPS per TB autoscalabile valido per tutte le LUN.
@@ -74,6 +79,7 @@ Analogamente, se un database richiedeva 100K IOPS e occupava 10 LUN, sarebbe pi�
 
 
 
+[[multi-volume-layouts]]
 == Layout a più volumi
 
 Vi sono alcuni casi in cui la distribuzione delle LUN su più volumi può essere vantaggiosa. Il motivo principale è lo striping dei controller. Ad esempio, un sistema storage ha potrebbe ospitare un singolo database in cui è richiesto il potenziale completo di elaborazione e caching di ogni controller. In questo caso, una progettazione tipica sarebbe quella di collocare metà dei LUN in un singolo volume sul controller 1, e l'altra metà dei LUN in un singolo volume sul controller 2.

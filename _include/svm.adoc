@@ -10,6 +10,7 @@ Come per altri aspetti dell'architettura dello storage, le migliori opzioni per 
 
 
 
+[[svms]]
 == SVM
 
 Non esistono Best practice ufficiali per il provisioning di SVM per ONTAP. Il giusto approccio dipende dai requisiti di gestione e sicurezza.

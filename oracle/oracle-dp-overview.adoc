@@ -21,6 +21,7 @@ NOTE: Questa documentazione sostituisce il report tecnico precedentemente pubbli
 
 
 
+[[planning]]
 == Pianificazione
 
 La corretta architettura di protezione dei dati aziendali dipende dai requisiti di business correlati a conservazione dei dati, ripristinabilità e tolleranza per le interruzioni durante i vari eventi.

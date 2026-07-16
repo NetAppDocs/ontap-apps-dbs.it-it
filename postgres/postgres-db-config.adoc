@@ -32,6 +32,7 @@ Consultare la documentazione di PostgreSQL per un elenco completo dei parametri 
 
 
 
+[[toast]]
 == TOAST
 
 TOAST è l'acronimo di OVERSIZED-Attribute Storage Technique. PostgreSQL utilizza una dimensione di pagina fissa (in genere 8KB) e non consente alle tuple di occupare più pagine. Pertanto, non è possibile memorizzare direttamente valori di campo grandi. Quando si tenta di memorizzare una riga che supera queste dimensioni, TOAST suddivide i dati delle colonne di grandi dimensioni in "pezzi" più piccoli e li memorizza in una tabella TOAST.
@@ -40,6 +41,7 @@ I valori elevati degli attributi tostati vengono estratti (se selezionati) solo 
 
 
 
+[[vacuum]]
 == VUOTO
 
 Nelle normali operazioni PostgreSQL, le tuple eliminate o rese obsolete da un aggiornamento non vengono fisicamente rimosse dalla tabella; rimangono presenti fino all'esecuzione di VACUUM. Pertanto, è necessario eseguire il VUOTO periodicamente, soprattutto nelle tabelle aggiornate di frequente. Lo spazio occupato deve quindi essere recuperato per essere riutilizzato da nuove righe, per evitare di esaurire lo spazio su disco. Tuttavia, non restituisce lo spazio al sistema operativo.

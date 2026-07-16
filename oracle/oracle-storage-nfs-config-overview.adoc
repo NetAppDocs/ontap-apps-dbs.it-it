@@ -21,6 +21,7 @@ Il protocollo NFS include diverse versioni con diversi requisiti. Per una descri
 
 
 
+[[nfs-versions]]
 == Versioni di NFS
 
 Il client NFS del sistema operativo deve essere supportato da NetApp.
@@ -37,6 +38,7 @@ NOTE: Il link:https://imt.netapp.com/matrix/#search["Matrice di supporto di NetA
 
 
 
+[[linux-nfsv3-tcp-slot-tables]]
 == Tabelle degli slot TCP per Linux NFSv3
 
 Le tabelle degli slot TCP sono l'equivalente di NFSv3 della profondità della coda degli HBA (host Bus Adapter). Queste tabelle controllano il numero di operazioni NFS che possono essere in sospeso in qualsiasi momento. Il valore predefinito è di solito 16, che è troppo basso per ottenere prestazioni ottimali. Il problema opposto si verifica sui kernel Linux più recenti, che possono aumentare automaticamente il limite della tabella degli slot TCP a un livello che satura il server NFS con le richieste.
@@ -57,6 +59,7 @@ CAUTION: La mancata impostazione di questi parametri può avere effetti signific
 
 
 
+[[adr-and-nfs]]
 == ADR e NFS
 
 Alcuni clienti hanno segnalato problemi di prestazioni derivanti da una quantità eccessiva di i/o sui dati in `ADR` posizione. Il problema generalmente non si verifica finché non si sono accumulati molti dati sulle prestazioni. Il motivo dell'eccessivo i/o è sconosciuto, ma questo problema sembra essere dovuto ai processi Oracle che eseguono ripetutamente la scansione della directory di destinazione per rilevare eventuali modifiche.
@@ -68,6 +71,7 @@ TIP: *NetApp consiglia* di non piazzare `ADR` dati su un file system con `noac` 
 
 
 
+[[nfs-rootonly-and-mount-rootonly]]
 == nfs-rootonly e mount-rootonly
 
 ONTAP include un'opzione NFS denominata `nfs-rootonly` Che controlla se il server accetta connessioni di traffico NFS da porte elevate. Come misura di sicurezza, solo l'utente root è autorizzato ad aprire connessioni TCP/IP utilizzando una porta di origine inferiore a 1024, poiché tali porte sono normalmente riservate all'uso del sistema operativo, non ai processi utente. Questa restrizione aiuta a garantire che il traffico NFS provenga da un client NFS del sistema operativo effettivo e non da un processo dannoso che emula un client NFS. Il client Oracle DNFS è un driver userspace, ma il processo viene eseguito come root, quindi in genere non è necessario modificare il valore di `nfs-rootonly`. I collegamenti sono costituiti da porte basse.
@@ -97,6 +101,7 @@ NOTE: In situazioni rare, potrebbe essere necessario modificare sia nfs-rootonly
 
 
 
+[[nfs-export-polices-superuser-and-setuid]]
 == Policy di esportazione NFS: Superuser e setuid
 
 Se i file binari Oracle si trovano in una condivisione NFS, la policy di esportazione deve includere autorizzazioni superser e setuid.
@@ -113,6 +118,7 @@ vserver1  orabin     1         sys       true
 ....
 
 
+[[nfsv44-1-configuration]]
 == Configurazione NFSv4/4,1
 
 Per la maggior parte delle applicazioni, la differenza tra NFSv3 e NFSv4 è minima. L'i/o delle applicazioni è di solito un i/o molto semplice e non trae alcun vantaggio significativo da alcune delle funzionalità avanzate disponibili in NFSv4. Le versioni più elevate di NFS non devono essere considerate come un "aggiornamento" dal punto di vista dello storage dei database, ma come versioni di NFS che includono funzionalità aggiuntive. Ad esempio, se è richiesta la protezione end-to-end della modalità di privacy Kerberos (krb5p), è necessario NFSv4.
@@ -124,6 +130,7 @@ Il passaggio a NFSv4 è più complicato che cambiare semplicemente le opzioni di
 
 
 
+[[nfsv4-domain]]
 === Dominio NFSv4
 
 Una spiegazione completa della configurazione NFSv4/4,1 esula dall'ambito di questo documento, ma un problema comunemente riscontrato è una mancata corrispondenza nella mappatura del dominio. Dal punto di vista di sysadmin, i file system NFS sembrano comportarsi normalmente, ma le applicazioni segnalano errori relativi ai permessi e/o setuid su determinati file. In alcuni casi, gli amministratori hanno concluso erroneamente che le autorizzazioni dei binari dell'applicazione sono state danneggiate e hanno eseguito comandi chown o chmod quando il problema effettivo era il nome di dominio.

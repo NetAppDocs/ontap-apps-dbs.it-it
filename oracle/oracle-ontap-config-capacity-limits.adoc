@@ -23,6 +23,7 @@ Di seguito sono riportate le raccomandazioni NetApp per i sistemi storage utiliz
 
 
 
+[[aff-ssd-aggregates-and-asa-storage-availability-zones]]
 == Aggregati SSD AFF e zone di disponibilità di archiviazione ASA
 
 
@@ -32,6 +33,7 @@ Il consiglio di liberare il 10% dello spazio è molto conservativo. Gli aggregat
 
 
 
+[[hdd-aggregates-including-flash-pool-aggregates]]
 == Aggregati HDD, compresi gli aggregati Flash Pool
 
 

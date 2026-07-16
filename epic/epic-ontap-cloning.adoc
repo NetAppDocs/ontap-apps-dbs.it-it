@@ -17,6 +17,7 @@ Per il processo di refresh vengono utilizzati i volumi FlexClone.
 
 
 
+[[data-management]]
 == Gestione dei dati
 
 Nell'ambito della soluzione, NetApp fornisce una soluzione di backup e test refresh completamente automatizzata, utilizzando strumenti ONTAP nativi. Questa soluzione è stata progettata per semplificare la gestione dei dati Epic in particolare per la grande comunità degli amministratori dei database Epic (DBA):
@@ -38,6 +39,7 @@ Per ulteriori informazioni sul CGS, fare riferimento a. link:https://docs.netapp
 
 
 
+[[configuring-consistency-groups-for-epic]]
 == Configurazione dei gruppi di coerenza per Epic
 
 Una volta eseguito il provisioning di volumi e LUN come descritto nelle precedenti sezioni di questo documento, è possibile configurarli in un set di CGS. La procedura consigliata consiste nel configurarli come illustrato nella figura seguente:
@@ -46,6 +48,7 @@ image:epic-cg-layout.png["Gruppi EPIC e di coerenza"]
 
 
 
+[[consistency-group-snapshots]]
 == Snapshot del gruppo di coerenza
 
 È necessario impostare una pianificazione degli snapshot del CG notturno su ciascuno dei CGS figlio associati ai volumi che forniscono spazio di archiviazione per il database di produzione. Ciò comporterà una nuova serie di backup coerenti di questi CGS ogni notte. Questi possono essere utilizzati per il cloning del database di produzione per l'utilizzo in ambienti non di produzione, come test e sviluppo. NetApp ha sviluppato workflow Ansible automatizzati basati su CG proprietari per Epic per automatizzare il backup dei database di produzione, il refresh e gli ambienti di test.

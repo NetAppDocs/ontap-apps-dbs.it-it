@@ -20,6 +20,7 @@ L'ottimizzazione di una soluzione SQL Server su ONTAP richiede la comprensione d
 
 
 
+[[data-storage-design]]
 == Progettazione dello storage dei dati
 
 Per i database SQL Server che non utilizzano SnapCenter per eseguire i backup, Microsoft consiglia di posizionare i file di dati e di log su dischi separati. Per le applicazioni che aggiornano e richiedono contemporaneamente i dati, il file di log è intensivo in scrittura e il file di dati (a seconda dell'applicazione) è intensivo in lettura/scrittura. Per il recupero dei dati, il file di log non è necessario. Pertanto, le richieste di dati possono essere soddisfatte dal file di dati posto sul proprio disco.
@@ -28,6 +29,7 @@ Quando si crea un nuovo database, Microsoft consiglia di specificare unità sepa
 
 
 
+[[aff-aggregates]]
 == Aggregati AFF
 
 Gli aggregati sono i contenitori di storage di livello più basso per le configurazioni di storage AFF. Esiste della documentazione obsoleta su internet che raccomanda di separare l'I/O su diversi set di unità sottostanti. Questa pratica non è consigliata con ONTAP. NetApp ha eseguito diversi test di caratterizzazione del carico di lavoro I/O utilizzando aggregati condivisi e dedicati con file di dati e file di log delle transazioni separati. I test dimostrano che un singolo grande aggregato con più gruppi RAID e unità ottimizza e migliora le performance dello storage ed è più facile da gestire per gli amministratori per due motivi:
@@ -40,12 +42,14 @@ Per l'high Availability (ha), posiziona la replica sincrona secondaria di SQL Se
 
 
 
+[[volumes]]
 == Volumi
 
 i volumi vengono creati e risiedono all'interno degli aggregati. Questo termine talvolta causa confusione perché un volume ONTAP non è un LUN. Un volume ONTAP è un container di gestione per i dati. Un volume può contenere file, LUN o persino oggetti S3. Un volume non occupa spazio, ma viene utilizzato solo per la gestione dei dati contenuti.
 
 
 
+[[volume-design-considerations]]
 === Considerazioni sulla progettazione dei volumi
 
 Prima di creare una progettazione di volumi di database, è importante comprendere in che modo il modello i/o di SQL Server e le relative caratteristiche variano in base al carico di lavoro e ai requisiti di backup e ripristino. Consulta i seguenti consigli NetApp per i volumi flessibili:
@@ -63,6 +67,7 @@ Prima di creare una progettazione di volumi di database, è importante comprende
 
 
 
+[[luns]]
 == LUN
 
 * Assicurarsi che i file del database utente e la directory di registro per l'archiviazione del backup del registro si trovino su volumi separati per evitare che il criterio di conservazione sovrascriva gli snapshot quando vengono utilizzati con la tecnologia SnapVault.

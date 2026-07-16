@@ -10,6 +10,7 @@ Esistono due tipi di quality of service (QoS) in ONTAP: IOPS e larghezza di band
 
 
 
+[[iops-qos]]
 == QoS (IOPS)
 
 Un controllo della qualità del servizio IOPS si basa ovviamente sugli IOPS totali di una data risorsa, ma esistono alcuni aspetti della qualità del servizio IOPS che potrebbero non essere intuitivi. Alcuni clienti sono rimasti colpiti dall'apparente aumento della latenza al raggiungimento di una soglia IOPS. L'aumento della latenza è il risultato naturale della limitazione degli IOPS. Logicamente, funziona in modo simile a un sistema token. Ad esempio, se un dato volume contenente file di dati ha un limite di 10K IOPS, ogni i/o che arriva deve prima ricevere un token per continuare l'elaborazione. Fino a quando non sono stati consumati più di 10K gettoni in un dato secondo, non sono presenti ritardi. Se le operazioni io devono attendere per ricevere il token, questa attesa viene visualizzata come latenza aggiuntiva. Più un carico di lavoro supera il limite di qualità del servizio, più a lungo ogni i/o deve attendere in coda per l'elaborazione del proprio turno, che appare all'utente come una latenza più elevata.
@@ -19,6 +20,7 @@ NOTE: Prestare attenzione nell'applicazione dei controlli QoS ai dati dei log di
 
 
 
+[[bandwidth-qos]]
 == QoS della larghezza di banda
 
 Non tutte le dimensioni i/o sono uguali. Ad esempio, un database potrebbe eseguire un elevato numero di piccoli blocchi di lettura con il raggiungimento della soglia IOPS, tuttavia, è possibile che i database eseguano anche un'operazione di scansione completa della tabella, che consisterebbe in un numero molto ridotto di letture di blocchi di grandi dimensioni, consumando una grande quantità di larghezza di banda ma con un numero relativamente basso di IOPS.
@@ -29,6 +31,7 @@ Una gestione efficace delle performance a volte richiede limiti di qualità del 
 
 
 
+[[minimumguaranteed-qos]]
 == Qualità del servizio minima/garantita
 
 Molti clienti cercano una soluzione che includa QoS garantita, che sia più difficile da raggiungere di quanto possa sembrare e che sia potenzialmente abbastanza dispendiosa. Ad esempio, collocare 10 database con una garanzia di 10K IOPS richiede il dimensionamento di un sistema per uno scenario in cui tutti i 10 database vengono eseguiti contemporaneamente a 10K IOPS, per un totale di 100K.
@@ -37,6 +40,7 @@ L'utilizzo ottimale per i controlli minimi della qualità del servizio è la pro
 
 
 
+[[adaptive-qos]]
 == QoS adattiva
 
 La qualità del servizio adattiva fa riferimento alla funzionalità ONTAP, in cui il limite della qualità del servizio si basa sulla capacità dell'oggetto storage. Viene utilizzata raramente con i database perché di solito non esiste alcun collegamento tra le dimensioni di un database e i relativi requisiti prestazionali. I database di grandi dimensioni possono essere quasi inerti, mentre quelli di dimensioni inferiori possono utilizzare un numero elevato di IOPS.

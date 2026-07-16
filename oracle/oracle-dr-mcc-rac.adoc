@@ -21,12 +21,14 @@ NOTE: Se con Oracle RAC vengono utilizzate LUN di avvio, compresi i dischi di av
 
 
 
+[[two-site-configuration]]
 == Configurazione a due siti
 
 Una configurazione RAC estesa a due siti può fornire servizi di database Active-Active che possono sopravvivere a molti scenari ma non a tutti.
 
 
 
+[[rac-voting-files]]
 === File di voto RAC
 
 La prima considerazione da prendere in considerazione per la distribuzione di RAC esteso su MetroCluster deve essere la gestione del quorum. Oracle RAC dispone di due meccanismi per gestire il quorum: Heartbeat del disco e heartbeat della rete. L'heartbeat del disco controlla l'accesso allo storage utilizzando i file di voto. Con una configurazione RAC a sito singolo, una singola risorsa di voto è sufficiente fintanto che il sistema storage sottostante offre funzionalità ha.
@@ -47,6 +49,7 @@ I gruppi di dischi ASM hanno tre opzioni di ridondanza `external`, `normal`, e. 
 
 
 
+[[rac-network-heartbeat]]
 === Heartbeat rete RAC
 
 L'heartbeat della rete Oracle RAC monitora la raggiungibilità dei nodi in tutta l'interconnessione cluster. Per rimanere nel cluster, un nodo deve essere in grado di contattare più della metà degli altri nodi. In un'architettura a due siti, questo requisito crea le seguenti scelte per il numero di nodi RAC:
@@ -120,6 +123,7 @@ Poiché ci sono solo due siti, non è possibile utilizzare alcun tipo di softwar
 
 
 
+[[three-site-configurations]]
 == Configurazioni a tre siti
 
 Un cluster RAC esteso è molto più semplice da progettare con tre siti. I due siti che ospitano ciascuna metà del sistema MetroCluster supportano anche i carichi di lavoro del database, mentre il terzo sito funge da tiebreaker sia per il database che per il sistema MetroCluster. La configurazione di Oracle Tiebreaker può essere semplice come collocare un membro del gruppo di dischi ASM utilizzato per il voto su un sito 3rd e può anche includere un'istanza operativa sul sito 3rd per garantire che vi sia un numero dispari di nodi nel cluster RAC.

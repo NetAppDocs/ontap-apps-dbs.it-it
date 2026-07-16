@@ -19,18 +19,21 @@ Tra le altre opzioni, questo consente di eseguire Oracle RAC come cluster esteso
 
 
 
+[[synchronous-replication]]
 == Replica sincrona
 
 Durante il funzionamento normale, la sincronizzazione attiva di SnapMirror fornisce sempre RPO=0 replica sincrona, con un'eccezione. Se i dati non possono essere replicati, ONTAP rilascerà il requisito di replicare i dati e riprendere la distribuzione io su un sito mentre le LUN dell'altro sito vengono portate offline.
 
 
 
+[[storage-hardware]]
 == Hardware per lo storage
 
 A differenza di altre soluzioni di disaster recovery per lo storage, SnapMirror Active Sync offre una flessibilità asimmetrica della piattaforma. Non è necessario che l'hardware di ciascun sito sia identico. Questa funzionalità consente di dimensionare correttamente l'hardware utilizzato per supportare la sincronizzazione attiva di SnapMirror. Il sistema di storage remoto può essere identico al sito primario se deve supportare un carico di lavoro di produzione completo, ma se un disastro determina una riduzione dell'i/o, rispetto a un sistema più piccolo nel sito remoto potrebbe risultare più conveniente.
 
 
 
+[[ontap-mediator]]
 == Mediatore ONTAP
 
 ONTAP Mediator è un'applicazione software che viene scaricata dal supporto NetApp e che viene in genere distribuita su una piccola macchina virtuale. Il ONTAP Mediator non è un Tiebreaker quando viene utilizzato con la sincronizzazione attiva di SnapMirror. È un canale di comunicazione alternativo per i due cluster che partecipano alla replica sincrona attiva SnapMirror. Le operazioni automatizzate sono gestite da ONTAP in base alle risposte ricevute dal partner tramite connessioni dirette e tramite il mediatore.

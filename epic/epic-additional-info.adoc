@@ -20,6 +20,7 @@ Per ulteriori informazioni sulle informazioni descritte in questo documento, con
 
 
 
+[[epic-customer-guidance-documents]]
 == Documenti di orientamento epici per i clienti
 
 EPIC fornisce ai clienti i seguenti documenti per la guida su server, storage e rete. Questi documenti sono citati in questo report tecnico.

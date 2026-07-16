@@ -14,6 +14,7 @@ La virtualizzazione dei database con VMware, Oracle OLVM o KVM è una scelta sem
 
 
 
+[[supportability]]
 == Supportabilità
 
 Esistono numerosi preconcetti sui criteri di supporto Oracle per la virtualizzazione, in particolare per i prodotti VMware. Non è raro che Oracle Outright non supporti la virtualizzazione. Questa nozione non è corretta e porta alla perdita di opportunità per trarre vantaggio dalla virtualizzazione. Oracle Doc ID 249212,1 illustra i requisiti effettivi e raramente viene considerato un problema da parte dei clienti.
@@ -22,6 +23,7 @@ Se si verifica un problema su un server virtualizzato e il supporto di Oracle no
 
 
 
+[[storage-presentation]]
 == Presentazione storage
 
 I clienti che stanno considerando la virtualizzazione dei propri database devono basare le proprie decisioni di storage sulle esigenze aziendali. Sebbene questa affermazione sia generalmente vera per tutte le decisioni IT, è particolarmente importante per i progetti di database, poiché le dimensioni e l'ambito dei requisiti variano notevolmente.
@@ -36,12 +38,14 @@ Sono disponibili tre opzioni di base per la presentazione dello storage:
 
 
 
+[[performance]]
 === Performance
 
 Il metodo di presentazione dello storage a un guest virtualizzato non influisce in genere sulle prestazioni. I sistemi operativi host, i driver di rete virtualizzati e le implementazioni del datastore degli hypervisor sono tutti altamente ottimizzati e generalmente possono consumare tutta la larghezza di banda della rete FC o IP disponibile tra l'hypervisor e il sistema storage, purché vengano seguite le Best practice di base. In alcuni casi, ottenere prestazioni ottimali può essere leggermente più semplice utilizzando un approccio di presentazione dello storage rispetto a un altro, ma il risultato finale dovrebbe essere comparabile.
 
 
 
+[[manageability]]
 === Gestibilità
 
 Il fattore chiave nella scelta di come presentare lo storage a un guest virtualizzato è la manovrabilità. Non esiste un metodo giusto o sbagliato. L'approccio migliore dipende dalle esigenze operative, dalle competenze e dalle preferenze DELL'IT.
@@ -64,18 +68,21 @@ L'utilizzo di file system guest facilita a volte l'utilizzo di backup e ripristi
 
 
 
+[[paravirtualized-drivers]]
 == Driver paravirtualizzati
 
 Per prestazioni ottimali, l'uso di driver di rete paravirtualizzati è fondamentale. Quando si utilizza un datastore, è necessario un driver SCSI paravirtualizzato. Un driver di dispositivo paravirtualizzato consente a un guest di integrarsi più profondamente nell'hypervisor, invece di un driver emulato in cui l'hypervisor spende più tempo CPU che imita il comportamento dell'hardware fisico.
 
 
 
+[[overcommitting-ram]]
 == Overcommit RAM
 
 L'overcommit della RAM implica la configurazione di una quantità di RAM virtualizzata su vari host superiore a quella presente sull'hardware fisico. In caso contrario, si potrebbero verificare problemi di prestazioni imprevisti. Quando si virtualizza un database, i blocchi sottostanti di Oracle SGA non devono essere sostituiti con lo storage dall'hypervisor. Ciò causa risultati di prestazioni altamente instabili.
 
 
 
+[[datastore-striping]]
 == Striping dei datastore
 
 Quando si utilizzano database con datastore, c'è un fattore critico da considerare in relazione allo striping delle performance.

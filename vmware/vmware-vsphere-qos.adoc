@@ -18,6 +18,7 @@ I limiti di throughput sono utili per controllare i livelli di servizio, gestire
 
 
 
+[[ontap-qos-policy-support]]
 == Supporto della policy QoS di ONTAP
 
 I sistemi che eseguono ONTAP possono utilizzare la funzionalità di qualità del servizio di storage per limitare il throughput in Mbps e/o i/o al secondo (IOPS) per diversi oggetti di storage come file, LUN, volumi o intere SVM.
@@ -42,6 +43,7 @@ Fare riferimento a. link:https://docs.netapp.com/us-en/ontap/performance-admin/i
 
 
 
+[[non-vvols-nfs-datastores]]
 == Datastore NFS non vVol
 
 È possibile applicare una policy di QoS ONTAP all'intero datastore o ai singoli file VMDK al suo interno. Tuttavia, è importante comprendere che tutte le macchine virtuali di un datastore NFS tradizionale (non vVol) condividono una coda i/o comune da un determinato host. Se una macchina virtuale viene rallentata da una policy di QoS ONTAP, in pratica tutto l'i/o del datastore sembrerà rallentato per quell'host.
@@ -72,12 +74,14 @@ Gli archivi dati FlexGroup offrono funzionalità QoS avanzate quando si utilizza
 
 
 
+[[vmfs-datastores]]
 == Datastore VMFS
 
 Utilizzando le LUN di ONTAP, le policy di QoS possono essere applicate al volume FlexVol che contiene le LUN o le singole LUN, ma non ai singoli file VMDK perché ONTAP non conosce il file system VMFS.
 
 
 
+[[vvols-datastores]]
 == Datastore vVol
 
 È possibile impostare facilmente una qualità del servizio minima e/o massima su singole macchine virtuali o VMDK senza impatti su altre macchine virtuali o VMDK grazie alla gestione basata su policy di storage e ai vVol.
@@ -89,6 +93,7 @@ NOTE: vVols richiede l'utilizzo di ONTAP tools for VMware vSphere, che funziona 
 
 
 
+[[ontap-qos-and-vmware-sioc]]
 == QoS ONTAP e SIOC VMware
 
 ONTAP QoS e VMware vSphere Storage i/o Control (SIOC) sono tecnologie complementari che gli amministratori di vSphere e dello storage possono utilizzare insieme per gestire le performance delle VM vSphere ospitate in sistemi che eseguono ONTAP. Ogni strumento ha i propri punti di forza, come mostrato nella tabella seguente. A causa dei diversi ambiti di VMware vCenter e ONTAP, alcuni oggetti possono essere visti e gestiti da un sistema e non dall'altro.
@@ -128,6 +133,7 @@ ONTAP QoS e VMware vSphere Storage i/o Control (SIOC) sono tecnologie complement
 |===
 
 
+[[vmware-storage-distributed-resource-scheduler]]
 == VMware Storage Distributed Resource Scheduler
 
 VMware Storage Distributed Resource Scheduler (SDR) è una funzionalità vSphere che consente di posizionare le macchine virtuali sullo storage in base alla latenza i/o corrente e all'utilizzo dello spazio. Quindi, sposta le VM o i VMDK senza interruzioni tra gli archivi dati in un cluster di datastore (noto anche come pod), selezionando il migliore datastore in cui posizionare le VM o i VMDK nel cluster di datastore. Un cluster di datastore è un insieme di datastore simili che vengono aggregati in una singola unità di consumo dal punto di vista dell'amministratore di vSphere.
@@ -148,6 +154,7 @@ Altre Best practice ONTAP per I DSP includono:
 
 
 
+[[storage-policy-based-management-and-vvols]]
 == Gestione basata su criteri di archiviazione e vVol
 
 Le API VMware vSphere per Storage Awareness (VASA) consentono a un amministratore dello storage di configurare con facilità i datastore con funzionalità ben definite, consentendo all'amministratore delle macchine virtuali di utilizzare tali dati quando necessario per eseguire il provisioning delle macchine virtuali senza dover interagire tra loro. Vale la pena di dare un'occhiata a questo approccio per scoprire in che modo può semplificare le operazioni di virtualizzazione dello storage ed evitare un lavoro molto banale.

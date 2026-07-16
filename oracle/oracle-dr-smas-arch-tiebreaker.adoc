@@ -18,12 +18,14 @@ La link:oracle-dr-smas-mediator.html["Mediatore ONTAP"] soddisfa questo requisit
 
 
 
+[[oracle-tiebreakers]]
 == Gli Oracle Tiebreaker
 
 Il metodo migliore per gestire i rischi di Oracle RAC split-brain consiste nell'utilizzare un numero dispari di nodi RAC, preferibilmente utilizzando un Tiebreaker a 3rd siti. Se un sito 3rd non è disponibile, l'istanza di Tiebreaker potrebbe essere posizionata in un sito dei due siti, designando effettivamente un sito di sopravvivenza preferito.
 
 
 
+[[oracle-and-csscritical]]
 == Oracle e css_Critical
 
 Con un numero pari di nodi, il comportamento predefinito di Oracle RAC è che uno dei nodi nel cluster sarà considerato più importante degli altri nodi. Il sito con tale nodo con priorità più alta sopravviverà all'isolamento del sito, mentre i nodi sull'altro sito verranno eliminati. La priorità si basa su più fattori, ma è anche possibile controllare questo comportamento utilizzando l' `css_critical`impostazione.

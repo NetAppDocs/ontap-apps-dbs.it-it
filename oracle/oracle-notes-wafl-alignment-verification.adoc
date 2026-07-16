@@ -29,6 +29,7 @@ I seguenti esempi sono specifici per Linux, ma la procedura può essere adattata
 
 
 
+[[aligned]]
 == Allineato
 
 L'esempio seguente mostra un controllo dell'allineamento su un singolo LUN con una singola partizione.
@@ -135,6 +136,7 @@ lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.7:0%
 
 
 
+[[misaligned]]
 == Disallineato
 
 L'esempio seguente mostra i/o disallineati:
@@ -183,6 +185,7 @@ Inoltre, il `read_partial_blocks` Le statistiche sono diverse da zero, il che si
 
 
 
+[[redo-logging]]
 == Ripristina la logging
 
 Le procedure qui spiegate sono applicabili ai file di dati. I log di ripristino e gli archivi di Oracle hanno modelli di i/o diversi. Ad esempio, il redo logging è una sovrascrittura circolare di un singolo file. Se si utilizza la dimensione predefinita del blocco da 512 byte, le statistiche di scrittura sono simili a queste:

@@ -4,6 +4,7 @@
 
 
 
+[[snapshot-only]]
 == Solo snapshot
 
 Il `snapshot-only` `tiering-policy` si applica solo ai blocchi non condivisi con il file system attivo. Essenzialmente si traduce in tiering dei backup del database. I blocchi diventano candidati per il tiering dopo la creazione di uno snapshot e il blocco viene quindi sovrascritto, generando un blocco presente solo all'interno dello snapshot. Il ritardo prima di un `snapshot-only` il blocco è considerato freddo e controllato da `tiering-minimum-cooling-days` impostazione del volume. L'intervallo a partire da ONTAP 9,8 è compreso tra 2 e 183 giorni.
@@ -12,6 +13,7 @@ Molti set di dati hanno tassi di cambiamento bassi, con conseguenti risparmi min
 
 
 
+[[auto]]
 == Automatico
 
 Il `auto` la policy di tiering estende il tiering sia a blocchi specifici di snapshot che a blocchi nel file system attivo. Il ritardo prima che un blocco venga considerato freddo è controllato dall' `tiering-minimum-cooling-days` impostazione del volume. L'intervallo a partire da ONTAP 9,8 è compreso tra 2 e 183 giorni.
@@ -20,6 +22,7 @@ Questo approccio abilita opzioni di tiering che non sono disponibili con `snapsh
 
 
 
+[[none]]
 == Nessuno
 
 Il `none` la policy di tiering impedisce il tiering di blocchi aggiuntivi dal layer di storage, ma i dati ancora presenti nel tier di capacità rimangono nel tier di capacità fino a quando non vengono letti. Se quindi il blocco viene letto, viene tirato indietro e posizionato nel Tier di performance.
@@ -28,6 +31,7 @@ Il motivo principale per cui si utilizza `none` la policy di tiering impedisce i
 
 
 
+[[all]]
 == Tutto
 
 Il `all` la policy di tiering sostituisce `backup` Policy in data ONTAP 9,6. Il `backup` Policy applicata solo ai volumi di data Protection, che significa destinazione SnapMirror o NetApp SnapVault. Il `all` le funzioni dei criteri sono identiche, ma non si limitano ai volumi di protezione dei dati.

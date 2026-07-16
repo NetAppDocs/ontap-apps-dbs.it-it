@@ -20,6 +20,7 @@ In qualità di partner di progettazione tecnologica, NetApp ha fornito un input 
 
 
 
+[[virtual-volumes-vvols]]
 == Volumi virtuali (vVol)
 
 I vVol sono una rivoluzionaria architettura di storage che consente la gestione granulare dello storage delle macchine virtuali, consentendo la gestione dello storage non solo in base alle macchine virtuali (compresi i metadati delle macchine virtuali) ma anche in base ai VMDK. I vVol sono un componente chiave della strategia SDDC (Software Defined Data Center) che costituisce la base di VMware Cloud Foundation (VCF), fornendo un'architettura di storage più efficiente e scalabile per gli ambienti virtualizzati.
@@ -28,6 +29,7 @@ I vVol consentono alle macchine virtuali di utilizzare lo storage per ogni macch
 
 
 
+[[storage-policy-based-management-spbm]]
 == Gestione basata su criteri storage (SPBM)
 
 SPBM fornisce un framework che funge da layer di astrazione tra i servizi di storage disponibili per l'ambiente di virtualizzazione e gli elementi di storage sottoposti a provisioning tramite policy. Questo approccio consente agli storage architect di progettare pool di storage con funzionalità differenti. Questi pool possono essere facilmente utilizzati dagli amministratori VM. Gli amministratori possono quindi abbinare i requisiti dei carichi di lavoro delle macchine virtuali ai pool di storage di cui è stato eseguito il provisioning. Questo approccio semplifica la gestione dello storage e permette un utilizzo più efficiente delle risorse di storage.
@@ -36,6 +38,7 @@ SPBM è un componente chiave di vVol, che fornisce un framework basato su criter
 
 
 
+[[netapp-ontap-and-vvols]]
 == NetApp ONTAP e vVol
 
 NetApp ONTAP è leader nel settore dello storage nella scalabilità dei vVol, supportando centinaia di migliaia di vVol in un singolo cluster*. Al contrario, gli array Enterprise e i vendor di flash array più piccoli supportano fino a diverse migliaia di vVol per array. ONTAP offre una soluzione storage scalabile ed efficiente per ambienti VMware vSphere, supportando i vVol con un ricco set di servizi storage, tra cui deduplica dei dati, compressione, thin provisioning e protezione dei dati. SPBM consente un'integrazione perfetta con gli ambienti VMware vSphere.

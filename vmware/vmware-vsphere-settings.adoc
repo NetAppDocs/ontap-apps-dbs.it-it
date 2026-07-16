@@ -150,6 +150,7 @@ Gli strumenti ONTAP specificano anche alcune impostazioni predefinite durante la
 |===
 
 
+[[multipath-settings-for-performance]]
 == Impostazioni multipath per performance superiori
 
 Sebbene non sia attualmente configurato dagli strumenti ONTAP disponibili, NetApp suggerisce le seguenti opzioni di configurazione:
@@ -160,6 +161,7 @@ Sebbene non sia attualmente configurato dagli strumenti ONTAP disponibili, NetAp
 
 
 
+[[additional-documentation]]
 == Documentazione aggiuntiva
 
 Per FCP e iSCSI con vSphere 7, è possibile trovare ulteriori dettagli all'indirizzo link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_7.html["Utilizzo di VMware vSphere 7.x con ONTAP"^] per FCP e iSCSI con vSphere 8. Per ulteriori dettagli, visitare la pagina link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_8.html["Utilizzo di VMware vSphere 8.x con ONTAP"^] relativa a NVMe-of con vSphere 7. Per ulteriori dettagli, visitare il sito link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 7.x con ONTAP"^] per NVMe-of con vSphere 8, ulteriori dettagli sono disponibili all'indirizzo link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_8.html["Per NVMe-of, ulteriori dettagli sono disponibili nella pagina NVMe-of host Configuration per ESXi 8.x con ONTAP"^]

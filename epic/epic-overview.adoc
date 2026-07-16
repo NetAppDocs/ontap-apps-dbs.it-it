@@ -24,6 +24,7 @@ Utilizza questo documento come guida per costruire e implementare con successo E
 
 
 
+[[purpose]]
 == Scopo
 
 Questo documento descrive le Best practice per l'integrazione dello storage NetApp in un ambiente software Epic. Contiene le seguenti sezioni:
@@ -35,6 +36,7 @@ Questo documento descrive le Best practice per l'integrazione dello storage NetA
 
 
 
+[[scope]]
 == Scopo
 
 Questo documento non tratta i seguenti argomenti:
@@ -44,6 +46,7 @@ Questo documento non tratta i seguenti argomenti:
 
 
 
+[[audience]]
 == Pubblico
 
 NetApp presuppone che il lettore disponga delle seguenti conoscenze di base:

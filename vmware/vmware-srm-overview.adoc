@@ -27,6 +27,7 @@ Questo documento si concentra sulle funzionalità delle versioni recenti di ONTA
 
 
 
+[[why-use-ontap-with-vlsr-or-srm]]
 == Perché utilizzare ONTAP con VLSR o SRM?
 
 Le piattaforme di gestione dati NetApp basate su ONTAP sono tra le soluzioni di storage più ampiamente adottate per VLSR.  Le ragioni sono molteplici: una piattaforma di gestione dei dati sicura, ad alte prestazioni e con protocollo unificato (NAS e SAN insieme) che fornisce efficienza di archiviazione senza pari nel settore, multi-tenancy, controlli della qualità del servizio, protezione dei dati con snapshot efficienti in termini di spazio e replica con SnapMirror.  Tutto ciò sfrutta l'integrazione nativa multi-cloud ibrida per la protezione dei carichi di lavoro VMware e una miriade di strumenti di automazione e orchestrazione a portata di mano.
@@ -37,6 +38,7 @@ Indipendentemente dal fatto che si utilizzino datastore tradizionali collegati a
 
 
 
+[[how-vlsr-leverages-ontap-9]]
 == In che modo VLSR sfrutta ONTAP 9
 
 VLSR sfrutta le tecnologie avanzate di gestione dei dati dei sistemi ONTAP integrandosi con i tool ONTAP per VMware vSphere, un'appliance virtuale che include tre componenti principali:
@@ -59,6 +61,7 @@ NOTE: Mentre i sistemi ONTAP permettono di accoppiare le SVM nello stesso cluste
 
 
 
+[[vlsr-with-ontap-and-other-use-cases-hybrid-cloud-and-migration]]
 == VLSR con ONTAP e altri casi di utilizzo: Cloud ibrido e migrazione
 
 L'integrazione della distribuzione VLSR con le funzionalità avanzate di gestione dei dati ONTAP consente di ottenere prestazioni e scalabilità notevolmente migliorate rispetto alle opzioni di archiviazione locale. Ma più di questo, offre la flessibilità del cloud ibrido. Il cloud ibrido consente di risparmiare denaro suddividendo i blocchi di dati inutilizzati dal tuo array ad alte prestazioni al tuo hyperscaler preferito tramite FabricPool, che potrebbe essere un archivio S3 locale come NetApp StorageGRID. È inoltre possibile utilizzare SnapMirror per sistemi edge-based con ONTAP Select definito dal software o DR basato su cloud utilizzando https://www.equinix.com/partners/netapp["NetApp Storage su Equinix Metal"^]o altri servizi ONTAP ospitati.

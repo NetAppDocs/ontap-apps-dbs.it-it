@@ -18,6 +18,7 @@ Informazioni sulla distribuzione di Microsoft Windows Nano Server.
 
 
 
+[[deployment]]
 == Implementazione
 
 Per distribuire un Nano Server come host Hyper-V, attenersi alla seguente procedura:
@@ -91,6 +92,7 @@ Invoke-Command -VMName $nanoserver -Credential $nanosecurecred -ArgumentList @($
 
 
 
+[[connect-to-nano-server]]
 == Connettersi a Nano Server
 
 Per connettersi a Nano Server in remoto utilizzando PowerShell, attenersi alla seguente procedura:

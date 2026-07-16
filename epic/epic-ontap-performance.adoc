@@ -24,6 +24,7 @@ A partire dall'anno 2020, tutti i workload Epic ODB devono trovarsi su storage a
 
 
 
+[[nvme]]
 == NVMe
 
 Quando le performance sono di primaria importanza, NetApp supporta anche NVMe/FC, il protocollo FC SAN di nuova generazione.

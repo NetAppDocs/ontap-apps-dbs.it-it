@@ -18,6 +18,7 @@ In questa appendice viene descritta la distribuzione di replica Hyper-V all'este
 
 
 
+[[prerequisites]]
 == Prerequisiti
 
 * Sono necessari server Hyper-V standalone ubicati in posizioni geografiche identiche o separate che servono come server primari e di replica.
@@ -27,6 +28,7 @@ In questa appendice viene descritta la distribuzione di replica Hyper-V all'este
 
 
 
+[[deployment]]
 == Implementazione
 
 . Configurare il server di replica.
@@ -58,6 +60,7 @@ In questa appendice viene descritta la distribuzione di replica Hyper-V all'este
 
 
 
+[[replication]]
 == Replica
 
 . Eseguire un failover di test per assicurarsi che la VM di replica funzioni correttamente sul server di replica. Il test crea una VM temporanea sul server di replica.

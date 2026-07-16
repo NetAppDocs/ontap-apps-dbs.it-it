@@ -15,12 +15,14 @@ Se il collegamento di replica sincrona attiva di SnapMirror, l'io in scrittura n
 
 
 
+[[site-a]]
 == Sito A
 
 Il risultato sul sito A di un errore del collegamento di replica sarà una pausa di circa 15 secondi nell'elaborazione io in scrittura, poiché ONTAP tenta di replicare le scritture prima di determinare che il collegamento di replica è veramente inutilizzabile. Trascorsi i 15 secondi, il cluster ONTAP sul sito A riprende l'elaborazione i/o in lettura e scrittura. I percorsi SAN non vengono modificati e i LUN rimangono online.
 
 
 
+[[site-b]]
 == Sito B
 
 Poiché il sito B non è il sito preferito di sincronizzazione attiva SnapMirror, i relativi percorsi LUN non saranno più disponibili dopo circa 15 secondi.

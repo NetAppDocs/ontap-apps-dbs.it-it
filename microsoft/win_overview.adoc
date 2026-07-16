@@ -42,6 +42,7 @@ Insieme, Windows Server e ONTAP sono in grado di operare in ambienti di grandi d
 
 
 
+[[intended-audience]]
 == Pubblico previsto
 
 Il presente documento è destinato agli architetti di sistema e di storage che progettano soluzioni di storage NetApp per server Windows.
