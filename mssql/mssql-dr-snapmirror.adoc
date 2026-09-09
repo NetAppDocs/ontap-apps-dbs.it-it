@@ -22,5 +22,3 @@ Di seguito sono riportati alcuni consigli su SnapMirror per SQL Server:
 * Distribuire volumi che contengono dati SQL Server tra diversi nodi nel cluster per consentire a tutti i nodi del cluster di condividere l'attività di replica di SnapMirror. Questa distribuzione ottimizza l'utilizzo delle risorse dei nodi.
 * Utilizza la replica sincrona in cui la richiesta di un rapido data recovery è maggiore e soluzioni asincrone per la flessibilità negli RPO.
 
-
-Per ulteriori informazioni su SnapMirror, vedere link:https://www.netapp.com/us/media/tr-4015.pdf["TR-4015: Guida alle Best practice e alla configurazione di SnapMirror per ONTAP 9"^].

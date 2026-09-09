@@ -36,7 +36,7 @@ La registrazione esegue una scrittura sequenziale del file di registro con scrit
 
 Verificare l'allineamento utilizzando utility come  `sio` o  `dd` che possono generare I/O a una dimensione di blocco definita. Le statistiche di allineamento I/O sul sistema storage possono essere visualizzate con il comando  `stats`. Vedere link:../oracle/oracle-notes-wafl-alignment-verification.html["Verifica dell'allineamento di WAFL"] per ulteriori informazioni.
 
-L'allineamento negli ambienti Solaris è più complicato. Fare riferimento a. http://support.netapp.com/documentation/productlibrary/index.html?productID=61343["Configurazione host SAN ONTAP"^] per ulteriori informazioni.
+L'allineamento negli ambienti Solaris è più complesso. Consulta  https://kb.netapp.com/on-prem/ontap/da/SAN/SAN-KBs/How_to_identify_unaligned_IO_on_LUNs["Come identificare gli IO non allineati sulle LUN"] per maggiori informazioni.
 
 |===
 | Attenzione 
