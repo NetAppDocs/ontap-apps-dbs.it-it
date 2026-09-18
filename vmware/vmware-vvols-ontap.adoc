@@ -87,7 +87,6 @@ https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["Tool ONT
 
 ==== Proteggere e gestire i datastore
 
-* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/protect-cluster.html["Configurare vSphere Metro Storage Cluster (vMSC) utilizzando gli strumenti ONTAP e la sincronizzazione attiva SnapMirror"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/enable-storage-replication-adapter.html["Proteggere le macchine virtuali"^] Con SRM
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/reports.html["Monitorare cluster, datastore e macchine virtuali"^]
 

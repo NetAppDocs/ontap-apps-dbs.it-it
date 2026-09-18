@@ -46,7 +46,7 @@ Quando si utilizza ONTAP NFS con vSphere, si consiglia di seguire le seguenti Be
 ** Fare riferimento alle note della tabella di interoperabilità NFS v4,1 nella link:https://mysupport.netapp.com/matrix/["Tool di matrice di interoperabilità NetApp"^] per i livelli di patch ESXi specifici richiesti per il supporto.
 
 
-* Come menzionato in link:vmware-vsphere-settings.html["impostazioni"], se non stai utilizzando il vSphere CSI per Kubernetes, dovresti impostare il newSyncInterval per  https://knowledge.broadcom.com/external/article/386364/reducing-excessive-vsan-cnssync-warnings.html["VMware KB 386364"^]
+* Come menzionato in link:vmware-vsphere-settings.html["impostazioni"], se non stai utilizzando il vSphere CSI per Kubernetes, dovresti impostare il newSyncInterval per  https://knowledge.broadcom.com/external/article/415074/reducing-or-disabling-excessive-vsan-cns.html["VMware KB 415074"^]
 * Regole delle policy di esportazione NFS vengono utilizzate per controllare l'accesso dagli host vSphere. È possibile utilizzare un criterio con più volumi (datastore). Con NFS, ESXi utilizza lo stile di sicurezza sys (UNIX) e richiede l'opzione di montaggio root per eseguire le macchine virtuali. In ONTAP, questa opzione viene definita superutente e, quando viene utilizzata l'opzione superutente, non è necessario specificare l'ID utente anonimo. Tenere presente che le regole delle policy di esportazione con valori diversi per `-anon` e `-allow-suid` possono causare problemi di rilevamento SVM con gli strumenti ONTAP. Gli indirizzi IP devono essere un elenco separato da virgole senza spazi degli indirizzi della porta vmkernel che montano gli archivi dati. Ecco un esempio di regola dei criteri:
 +
 ** Access Protocol: nfs (che include sia nfs3 che nfs4)

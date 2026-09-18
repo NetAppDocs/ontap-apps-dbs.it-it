@@ -39,7 +39,7 @@ Di seguito sono riportate le impostazioni dell'host consigliate per tutte le ver
 3+| *Impostazioni NFS* 
 
 
-| NewSyncInterval | Se non si utilizza vSphere CSI per Kubernetes, impostare come indicato in https://knowledge.broadcom.com/external/article/386364/reducing-excessive-vsan-cnssync-warnings.html["VMware KB 386364"^] | No 
+| NewSyncInterval | Se non stai utilizzando il vSphere CSI per Kubernetes, imposta per https://knowledge.broadcom.com/external/article/415074/reducing-or-disabling-excessive-vsan-cns.html["VMware KB 415074"^] | No 
 
 
 | NET.TcpipelHeapSize | VSphere 6.0 o versione successiva, impostato su 32.
