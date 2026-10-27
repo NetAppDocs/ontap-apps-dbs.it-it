@@ -35,6 +35,24 @@ CAUTION: La mancata impostazione di questi parametri può avere effetti signific
 
 
 
+[[linux-nfsv4-x-session-slots]]
+== Slot di sessione NFSv4.X per Linux
+
+Gli slot di sessione NFS sono l'equivalente NFSv4.X delle tabelle degli slot NFSv3. Il valore predefinito è solitamente 64. Un valore di 180 è ottimale perché corrisponde al limite di sessione in ONTAP.
+
+Esempio di impostazione del parametro max_session_slots:
+
+....
+# cat /etc/modprobe.d/nfsclient.conf
+ options nfs max_session_slots=180
+....
+Questo parametro viene utilizzato da un modulo del kernel che viene caricato all'avvio. A differenza del parametro della tabella degli slot NFSv3, non è dinamico. Per rendere effettiva questa modifica, è necessario riavviare il sistema.
+
+
+CAUTION: La mancata impostazione di questi parametri può avere effetti significativi sulle prestazioni. Le prestazioni possono essere notevolmente limitate perché il sistema operativo Linux non emette un numero sufficiente di operazioni di I/O.
+
+
+
 [[linux-nfs-mount-options]]
 == Opzioni di montaggio NFS Linux
 
@@ -52,7 +70,7 @@ timeo=600,rsize=262144,wsize=262144`
 File di dati
 Registri di ripristino | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
 timeo=600,rsize=262144,wsize=262144,
-nointr` 
+nointr,[nconnect=]` 
 
 
 | ORACLE_HOME | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
@@ -74,7 +92,7 @@ actimeo=0`
 File di dati
 Registri di ripristino | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
 timeo=600,rsize=262144,wsize=262144,
-nointr,actimeo=0` 
+nointr,actimeo=0,[nconnect=]` 
 
 
 | CRS/votazione | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
@@ -105,6 +123,15 @@ Alcuni clienti hanno notato che un livello estremamente elevato di altri IOPS, c
 
 
 
+[[nconnect]]
+=== nconnect
+
+nconnect è un'opzione di mount relativamente nuova. Consente al client NFS di aprire più connessioni TCP/IP indipendenti per un determinato mountpoint e quindi di multiplexare le operazioni di I/O. Il risultato è un numero maggiore di operazioni in corso, che migliora le prestazioni, soprattutto su reti a elevata larghezza di banda. Il valore massimo supportato su linux è 16, ma NetApp consiglia un valore di 4-8. Il risultato è una prestazione a istanza singola paragonabile a quella del client dNFS quando è configurato per un singolo percorso. A differenza di dNFS, nconnect non può essere configurato per multiplexare su più indirizzi IP e collegamenti TCP/IP.
+
+Con RAC, nconnect comporta un overhead prestazionale maggiore rispetto a dNFS a causa del traffico di metadati aggiuntivo. Per ulteriori informazioni, consulta link:#Linux%20Direct%20NFS%20and Oracle %20AC[Linux Direct NFS and Oracle RAC].
+
+
+
 [[linux-direct-nfs]]
 === Linux Direct NFS
 
@@ -117,9 +144,9 @@ Il sistema operativo può rilevare che  `/oracle` e  `/oracle/home` risiedono su
 [[linux-direct-nfs-and-oracle-rac]]
 === Linux Direct NFS e Oracle RAC
 
-L'uso di DNFS offre speciali vantaggi in termini di prestazioni per Oracle RAC sul sistema operativo Linux, poiché Linux non dispone di un metodo per forzare l'i/o diretto, necessario con RAC per la coerenza tra i nodi. Come soluzione, Linux richiede l'uso di `actimeo=0` Opzione di montaggio, che fa sì che i dati dei file scadano immediatamente dalla cache del sistema operativo. Questa opzione a sua volta obbliga il client NFS Linux a rileggere costantemente i dati degli attributi, danneggiando la latenza e aumentando il carico sullo storage controller.
+L'utilizzo di DNFS offre particolari vantaggi in termini di prestazioni per Oracle RAC sul sistema operativo Linux, perché Linux non dispone di un metodo per forzare l'I/O diretto, necessario con RAC per garantire la coerenza tra i nodi. Come soluzione alternativa, Linux richiede l'utilizzo dell'opzione di mount  `actimeo=0`, che fa sì che i dati dei file scadano immediatamente dalla cache del sistema operativo. Questa opzione, a sua volta, costringe il client NFS di Linux a rileggere costantemente i dati degli attributi, aumentando la latenza e il carico sullo storage controller.
 
-Abilitando DNFS si ignora il client NFS dell'host ed evita questo danno. Diversi clienti hanno segnalato significativi miglioramenti delle performance sui cluster RAC e una significativa riduzione del carico ONTAP (soprattutto in relazione ad altri IOPS) quando si attiva DNFS.
+L'attivazione di DNFS bypassa il client NFS host ed evita questo problema. Diversi clienti hanno segnalato miglioramenti significativi delle prestazioni sui cluster RAC e riduzioni considerevoli del carico di ONTAP (soprattutto per quanto riguarda altri IOPS) con l'attivazione di DNFS.
 
 
 

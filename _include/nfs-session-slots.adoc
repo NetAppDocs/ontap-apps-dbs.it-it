@@ -1,0 +1,16 @@
+= 
+:allow-uri-read: 
+
+
+Gli slot di sessione NFS sono l'equivalente NFSv4.X delle tabelle degli slot NFSv3. Il valore predefinito è solitamente 64. Un valore di 180 è ottimale perché corrisponde al limite di sessione in ONTAP.
+
+Esempio di impostazione del parametro max_session_slots:
+
+....
+# cat /etc/modprobe.d/nfsclient.conf
+ options nfs max_session_slots=180
+....
+Questo parametro viene utilizzato da un modulo del kernel che viene caricato all'avvio. A differenza del parametro della tabella degli slot NFSv3, non è dinamico. Per rendere effettiva questa modifica, è necessario riavviare il sistema.
+
+
+CAUTION: La mancata impostazione di questi parametri può avere effetti significativi sulle prestazioni. Le prestazioni possono essere notevolmente limitate perché il sistema operativo Linux non emette un numero sufficiente di operazioni di I/O.
