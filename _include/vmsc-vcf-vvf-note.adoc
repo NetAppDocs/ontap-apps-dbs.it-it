@@ -1,0 +1,6 @@
+= 
+:allow-uri-read: 
+
+
+
+NOTE: Le linee guida relative a vSphere Metro Storage Cluster (vMSC) contenute in questa documentazione si applicano allo stesso modo sia a VMware Cloud Foundation (VCF) che a VMware vSphere Foundation (VVF). VCF e VVF sono diversi modelli di licenza Broadcom, ma l'architettura di storage sottostante di vSphere e ONTAP per vMSC è la stessa.

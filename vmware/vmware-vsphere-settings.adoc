@@ -111,7 +111,7 @@ L'impostazione di questo valore aiuta a prevenire gli errori di i/O. | No
 
 NOTE: L'opzione di configurazione avanzata NFS MaxQueueDepth potrebbe non funzionare come previsto quando si utilizzano VMware vSphere ESXi 7.0.1 e VMware vSphere ESXi 7,0.2. Per ulteriori informazioni, fare riferimento link:https://kb.vmware.com/s/article/86331?lang=en_US["Tastiera VMware 86331"]a.
 
-Gli strumenti ONTAP specificano anche alcune impostazioni predefinite durante la creazione di ONTAP FlexVol Volumes e LUN:
+ONTAP tools specifica anche alcune impostazioni predefinite durante la creazione di volumi ONTAP FlexVol e LUN:
 
 |===
 
@@ -146,8 +146,10 @@ Gli strumenti ONTAP specificano anche alcune impostazioni predefinite durante la
 | Prenotazione di spazio LUN | Disattivato 
 
 
-| Allocazione dello spazio del LUN | Attivato 
+| Allocazione dello spazio del LUN | Abilitato* 
 |===
+*Nota che, a causa del difetto COTV-9223, le versioni 10.0-10.6P1 di ONTAP tools non riescono a impostare correttamente l'allocazione dello spazio LUN. Puoi leggere ulteriori informazioni qui link:https://kb.netapp.com/data-mgmt/OTV/VSC_Kbs/OTV_10.x_creates_iSCSI_LUNs_with_space-allocation_disabled["ONTAP tools crea LUN con l'allocazione dello spazio disabilitata"] Dovrai abilitare l'allocazione dello spazio utilizzando System Manager, CLI o la piattaforma di automazione che preferisci tramite le API REST di ONTAP. Puoi anche scegliere di utilizzare il NetApp ONTAP MCP Server con il tuo ambiente AI preferito. link:https://community.netapp.com/community/discussion/465968/new-ontap-mcp-ai-that-modernizes-your-storage-operations["Nuovo ONTAP MCP: l'intelligenza artificiale che modernizza le operazioni di storage"]
+
 
 
 [[multipath-settings-for-performance]]
