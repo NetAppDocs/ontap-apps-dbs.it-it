@@ -6,7 +6,12 @@ summary: Ripristino automatico di Oracle senza modalità di backup.
 searchtitle: Ripristino automatico di Oracle senza modalità di backup. 
 ---
 = Ripristino automatico di Oracle senza modalità di backup
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -36,7 +41,7 @@ Durante il ripristino, il database legge i metadati dai datafile per identificar
 
 Questo approccio può approssimare un recovery point-in-time, ma con una granularità limitata. Ad esempio, se inizi con i datafile in modalità backup, puoi far avanzare il database fino a qualsiasi transazione arbitraria.
 
-Se usi l'approccio di ripristino automatico, senza usare la modalità di backup, devi ripristinare il database al punto dello snapshot del log. In circostanze normali, l'RPO sarebbe comunque pari a zero perché i log di archivio originali, i redo log e i controlfile sarebbero ancora disponibili nel filesystem attivo. Se fosse necessario eseguire un ripristino interamente dagli snapshot a causa della perdita di tutti i dati nei filesystem attivi, allora l'RPO sarebbe di un'ora.
++ Se utilizzi l'approccio di ripristino automatico, senza usare la modalità di backup, devi ripristinare il database fino al punto dello snapshot del log. In circostanze normali, l'RPO sarebbe comunque pari a zero perché i log di archivio originali, i log di redo e i file di controllo sarebbero ancora disponibili nel filesystem attivo. Se fosse necessario eseguire un ripristino interamente dagli snapshot a causa della perdita di tutti i dati nei filesystem attivi, l'RPO sarebbe di un'ora.
 
 []
 ====
